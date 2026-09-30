@@ -1,4 +1,4 @@
-function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast)
+function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus)
 %POSITION_SWEEP  One round of element-wise MM updates of the antenna positions
 %   (Section IV-C of main.tex, eqs. (49)-(53)). For each MA n:
 %     1) gradient g = grad_{t_n} F at the current point (Appendix B);
@@ -7,12 +7,18 @@ function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast)
 %     4) backtracking: delta_n <- 2 delta_n until F(new) >= surrogate(new).
 %   deltaLast (N x 1) stores the last accepted delta_n; the next search starts
 %   from max(delta0, deltaLast/2).
+%   plus = true: the objective is sum_m [f_m]^+ (equal-power benchmarks, for which
+%   the LUs cannot be switched off); the surrogate is then built from the minorizer
+%   sum_{m: f_m > 0} f_m, which is tight at the current point.
 
 N = sc.N;
 if nargin < 6 || isempty(deltaLast), deltaLast = prm.delta0*ones(N,1); end
-Fcur = objective_F(sc, T, p, q);
+if nargin < 7, plus = false; end
+[Fcur, Rb, Re] = objective_F(sc, T, p, q, plus);
 for n = 1:N
-    g = grad_F_n(sc, T, p, q, n);
+    act = [];
+    if plus, act = (Rb - Re) > 0; end
+    g = grad_F_n(sc, T, p, q, n, act);
     [Acon, bcon] = lin_constraints(sc, T, n);
     tn = T(n,:).';
     delta = max(prm.delta0, deltaLast(n)/2);
@@ -20,7 +26,7 @@ for n = 1:N
     for k = 1:60
         tnew = proj_polygon(tn + g/delta, Acon, bcon);
         Tn = T;  Tn(n,:) = tnew.';
-        Fnew = objective_F(sc, Tn, p, q);
+        [Fnew, Rbn, Ren] = objective_F(sc, Tn, p, q, plus);
         sur = Fcur + g.'*(tnew - tn) - delta/2*sum((tnew - tn).^2);
         if Fnew >= sur - 1e-12
             accepted = true;  break;
@@ -28,7 +34,7 @@ for n = 1:N
         delta = 2*delta;
     end
     if accepted && Fnew >= Fcur
-        T = Tn;  Fcur = Fnew;  deltaLast(n) = delta;
+        T = Tn;  Fcur = Fnew;  Rb = Rbn;  Re = Ren;  deltaLast(n) = delta;
     end
 end
 end

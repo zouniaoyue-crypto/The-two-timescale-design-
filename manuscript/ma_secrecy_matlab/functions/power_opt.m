@@ -3,6 +3,8 @@ function [p, q, Gbest] = power_opt(sc, T, prm, mode)
 %   mode = 'full'  : {p_m} by secrecy water-filling, q by one-dimensional search (proposed)
 %   mode = 'noan'  : q = 0 (no AN), {p_m} by secrecy water-filling
 %   mode = 'epa'   : equal power p_m = alpha P/M, q = (1-alpha) P/(N-M), alpha by 1-D search
+%   mode = 'fix'   : equal power with the fixed power-splitting factor alpha = prm.alphaFix
+%                    (no power optimization; benchmark of Section V)
 %
 %   The one-dimensional search uses a coarse grid followed by a fine grid around the
 %   best coarse point (both with prm.nGrid points).
@@ -25,6 +27,11 @@ switch mode
         [alpha, Gbest] = search1d(G, 0, 1, prm.nGrid);
         p = alpha*P/M*ones(M,1);
         q = (1 - alpha)*P/(N - M);
+    case 'fix'
+        alpha = prm.alphaFix;
+        Gbest = Gepa(alpha);
+        p = alpha*P/M*ones(M,1);
+        q = (1 - alpha)*P/(N - M);
     otherwise
         error('unknown mode');
 end
@@ -35,12 +42,12 @@ end
         pp = secrecy_wf(eta, th, P - (N - M)*qv, prm.nBisect);
         val = sum(log2(1 + repmat(eta,1,numel(qv)).*pp) - log2(1 + th.*pp), 1);
     end
-    function val = Gepa(av)                  % objective of the equal-power baseline (vectorized)
-        av = reshape(av, 1, []);
-        pp = repmat(av*P/M, M, 1);
+    function val = Gepa(av)                  % objective of the equal-power baselines (vectorized):
+        av = reshape(av, 1, []);              % sum of [.]^+ terms, since with equal user power an
+        pp = repmat(av*P/M, M, 1);            % LU with a negative term cannot be switched off
         qq = (1 - av)*P/(N - M);
-        val = sum(log2(1 + repmat(eta,1,numel(av)).*pp) ...
-                  - log2(1 + xi.*pp ./ repmat(qq*psi + sc.sbe, M, 1)), 1);
+        val = sum(max(log2(1 + repmat(eta,1,numel(av)).*pp) ...
+                      - log2(1 + xi.*pp ./ repmat(qq*psi + sc.sbe, M, 1)), 0), 1);
     end
 end
 

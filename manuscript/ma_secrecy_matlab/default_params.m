@@ -30,9 +30,10 @@ prm.delta0     = 1;      % smallest initial MM curvature parameter delta_0
 prm.nGrid      = 41;     % grid size of the one-dimensional search (coarse and fine stage)
 prm.nBisect    = 60;     % bisection iterations for the water level nu
 prm.numInit    = 3;      % initializations of Algorithm 2: UPA + (numInit-1) random
+prm.alphaFix   = 0.5;    % fixed power-splitting factor of the benchmark without power optimization
 
 % ---------------- evaluation ----------------
 prm.S          = 5000;   % Monte Carlo channel realizations per evaluation
-prm.numDrops   = 50;     % random user/Eve drops per point
+prm.numDrops   = 100;    % random user/Eve drops per point
 prm.seed       = 2026;   % base random seed
 end

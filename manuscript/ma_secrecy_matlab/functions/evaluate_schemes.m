@@ -4,11 +4,15 @@ function out = evaluate_schemes(sc, prm, schemes, seed)
 %
 %   schemes : cell array with entries among
 %     'MA_full'  - proposed: MA positions + long-term power allocation {p_m}, q (Algorithm 2)
-%     'MA_EPA'   - MA positions + equal user power, power-splitting factor alpha only
+%     'MA_rate'  - rate-oriented MA [ZhengTCOM2025]: positions maximize the ergodic sum
+%                  rate (Eve ignored), then {p_m}, q optimized by Algorithm 1
 %     'MA_noAN'  - MA positions + {p_m}, no AN (q = 0)
-%     'FPA_full' - lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
-%     'FPA_EPA'  - lambda/2 UPA + equal user power, alpha optimized
-%     'FPA_noAN' - lambda/2 UPA + {p_m}, q = 0
+%     'MA_EPA'   - MA positions + equal user power, power-splitting factor alpha optimized
+%     'MA_fix'   - MA positions + equal user power, fixed alpha = prm.alphaFix
+%     'FPA_full' - compact lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
+%     'FPA_EPA'  - compact lambda/2 UPA + equal user power, alpha optimized
+%     'FPA_fix'  - compact lambda/2 UPA + equal user power, fixed alpha
+%     'FPA_noAN' - compact lambda/2 UPA + {p_m}, q = 0
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
 %   out.<scheme> has fields essr (Monte Carlo ESSR), Rb, Re, F (approximate ESSR),
 %   anfrac ((N-M) q / P_tot), T, p, q, hist.
@@ -28,8 +32,8 @@ for k = 1:numel(schemes)
     name = schemes{k};
     hist = [];
     switch name
-        case {'MA_full', 'MA_EPA', 'MA_noAN'}
-            mode = lower(name(4:end));          % 'full', 'epa' or 'noan'
+        case {'MA_full', 'MA_EPA', 'MA_noAN', 'MA_fix'}
+            mode = lower(name(4:end));          % 'full', 'epa', 'noan' or 'fix'
             best = -inf;
             for i = 1:numel(inits)
                 [Ti, pi_, qi, hi] = ao_optimize(sc, inits{i}, prm, mode);
@@ -37,7 +41,10 @@ for k = 1:numel(schemes)
                     best = hi(end);  T = Ti;  p = pi_;  q = qi;  hist = hi;
                 end
             end
-        case {'FPA_full', 'FPA_EPA', 'FPA_noAN'}
+        case 'MA_rate'
+            T = rate_oriented_positions(sc, inits, prm);
+            [p, q] = power_opt(sc, T, prm, 'full');
+        case {'FPA_full', 'FPA_EPA', 'FPA_noAN', 'FPA_fix'}
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, lower(name(5:end)));
         case 'SPA_full'

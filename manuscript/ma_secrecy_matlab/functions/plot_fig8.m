@@ -1,32 +1,31 @@
-function plot_fig8(res)
-%PLOT_FIG8  Relative ESSR gain (%) of the long-term per-user power allocation over the
-%   equal user power allocation (alpha only), versus the spread of the large-scale
-%   fading coefficients of the LUs, for the MA and FPA designs and each SNR in res.Plist.
-if ~isfield(res, 'Plist')           % single-SNR results: plot the ESSR curves directly
-    names = {'Proposed MA', 'MA, equal power', 'FPA (\lambda/2 UPA)', 'FPA, equal power'};
-    plot_sweep(res, res.values, 'Spread \varsigma of \beta_m among the LUs (dB)', ...
-               'Ergodic secrecy sum rate (bps/Hz)', 'essr', names, 'southwest', 1:4, [1 2 4 6]);
-    save_figure('fig8_power_allocation');
-    return;
+function plot_fig8(res0, res1)
+%PLOT_FIG8  Fig. 8: ESSR versus the transmit SNR for different long-term power
+%   allocations (PA), for identical LUs (res0, solid lines) and for LUs with a
+%   20-dB spread of the large-scale fading (res1, dashed lines).
+%   Color/marker: PA scheme; line style: spread.
+s = fig_style();
+keys = {'MA_full', 'MA_EPA', 'MA_fix'};
+names = {'Proposed PA', 'Equal power, optimized {\it\alpha}', 'Equal power, {\it\alpha} = 0.5'};
+ax = new_figure();
+R = {res0, res1};  lsp = {'-', '--'};
+for r = 1:2
+    for k = 1:3
+        st = scheme_style(keys{k});  st.ls = lsp{r};
+        plot_curve(ax, R{r}.values, R{r}.essr(:, k), st);
+    end
 end
-new_figure();
-col = {[0 0.447 0.741], [0.494 0.184 0.556]};     % MA, FPA
-mk = {'-o', '--s'; '-^', '--d'};                  % rows: SNR index, columns: MA/FPA
-leg = {};
-gmin = 0;  gmax = 0;
-for j = 1:numel(res.Plist)
-    E = res.essr(:, :, j);
-    gMA  = 100*(E(:,1)./E(:,2) - 1);
-    gFPA = 100*(E(:,3)./E(:,4) - 1);
-    gmin = min([gmin; gMA; gFPA]);  gmax = max([gmax; gMA; gFPA]);
-    plot(res.values, gMA,  mk{j,1}, 'Color', col{1}, 'LineWidth', 1.6, 'MarkerSize', 7);
-    plot(res.values, gFPA, mk{j,2}, 'Color', col{2}, 'LineWidth', 1.6, 'MarkerSize', 7);
-    leg{end+1} = sprintf('MA, P_{tot}/\\sigma^2 = %d dB', res.Plist(j));  %#ok<AGROW>
-    leg{end+1} = sprintf('FPA, P_{tot}/\\sigma^2 = %d dB', res.Plist(j)); %#ok<AGROW>
+h = zeros(1, 5);                                      % factorized legend
+for k = 1:3
+    st = scheme_style(keys{k});
+    h(k) = plot(ax, NaN, NaN, 'LineStyle', 'none', 'Marker', st.marker, 'Color', st.color, ...
+                'MarkerSize', s.ms, 'MarkerFaceColor', 'w', 'LineWidth', s.lw);
 end
-xlabel('Spread \varsigma of \beta_m among the LUs (dB)');
-ylabel('ESSR gain over equal power (%)');
-ylim([min(-5, floor(gmin) - 1), 5*ceil((gmax + 5)/5)]);
-legend(leg, 'Location', 'northwest', 'FontSize', 9);
+h(4) = plot(ax, NaN, NaN, 'LineStyle', lsp{1}, 'Marker', 'none', 'Color', [0.2 0.2 0.2], 'LineWidth', s.lw);
+h(5) = plot(ax, NaN, NaN, 'LineStyle', lsp{2}, 'Marker', 'none', 'Color', [0.2 0.2 0.2], 'LineWidth', s.lw);
+label_axes(ax, 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)', 'ESSR (bps/Hz)');
+xlim(ax, [res0.values(1) res0.values(end)]);
+ylim(ax, [0 1.4*max([res0.essr(:); res1.essr(:)])]);
+add_legend(ax, h, [names, {sprintf('Identical LUs ({\\it\\varsigma} = %d dB)', res0.spread), ...
+                           sprintf('Heterogeneous LUs ({\\it\\varsigma} = %d dB)', res1.spread)}], 'northwest');
 save_figure('fig8_power_allocation');
 end

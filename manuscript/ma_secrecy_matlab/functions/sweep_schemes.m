@@ -2,13 +2,15 @@ function res = sweep_schemes(prm, field, values, schemes)
 %SWEEP_SCHEMES  Averages evaluate_schemes over prm.numDrops random drops for each
 %   value of the parameter prm.(field). The same drops (seeds) are used for all
 %   values and all schemes.
-%   res.essr(i, k), res.anfrac(i, k), res.F(i, k): averages for value i and scheme k.
+%   res.essr(i, k), res.anfrac(i, k), res.F(i, k): averages for value i and scheme k;
+%   res.essrDrops(i, k, d): ESSR of drop d (for statistics beyond the average).
 
 K = numel(schemes);
 res.values = values;  res.schemes = schemes;
 res.essr = zeros(numel(values), K);
 res.anfrac = zeros(numel(values), K);
 res.F = zeros(numel(values), K);
+res.essrDrops = zeros(numel(values), K, prm.numDrops);
 for i = 1:numel(values)
     pr = prm;  pr.(field) = values(i);
     t0 = tic;
@@ -18,6 +20,7 @@ for i = 1:numel(values)
         for k = 1:K
             r = out.(schemes{k});
             res.essr(i, k)   = res.essr(i, k)   + r.essr/prm.numDrops;
+            res.essrDrops(i, k, dI) = r.essr;
             res.anfrac(i, k) = res.anfrac(i, k) + r.anfrac/prm.numDrops;
             res.F(i, k)      = res.F(i, k)      + r.F/prm.numDrops;
         end

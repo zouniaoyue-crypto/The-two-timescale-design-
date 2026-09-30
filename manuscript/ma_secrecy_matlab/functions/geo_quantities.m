@@ -6,7 +6,7 @@ function g = geo_quantities(sc, T)
 %   v     = L^H gbar                              (Proposition 1)
 %   omega_m = [Omega]_{mm}                        (LU decorrelation, Lemma 1, eq. (17))
 %   c_m   = (|[Omega v]_m|^2 + N [Omega^2]_{mm}) / omega_m   (leakage, eq. (24))
-%   d     = (N - v^H Omega v)(1 - tr(Omega))                  (AN at Eve, eq. (25))
+%   d     = (N - M)(N - v^H Omega v) / (N - M + N tr(Omega))   (AN at Eve, eq. (25))
 
 N = sc.N;  M = sc.M;
 k0 = 2*pi/sc.lambda;
@@ -25,5 +25,6 @@ g.v   = v;
 g.w   = w;                                    % Omega v
 g.vOv = real(v'*w);                           % v^H Omega v
 g.c   = (abs(w).^2 + N*g.o2) ./ g.om;         % c_m(t)
-g.d   = (N - g.vOv) * (1 - g.tr);             % d(t)
+g.gam = (N - M) / (N - M + N*g.tr);          % trace-matched null-space fraction (Appendix A)
+g.d   = (N - g.vOv) * g.gam;                  % d(t)
 end

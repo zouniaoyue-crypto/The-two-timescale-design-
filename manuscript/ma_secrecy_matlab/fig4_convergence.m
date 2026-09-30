@@ -1,8 +1,8 @@
-function res = fig2_convergence(prm)
-%FIG2_CONVERGENCE  Convergence of Algorithm 2 (objective of (P3) versus AO iterations)
-%   for one random drop and three initializations (UPA and two random positions),
-%   at P_tot/sigma^2 = 10, 20, and 30 dB. The Monte Carlo ESSR of each final
-%   solution is printed for reference.
+function res = fig4_convergence(prm)
+%FIG4_CONVERGENCE  Fig. 4 of main.tex: convergence of Algorithm 2 (objective of (P3)
+%   versus the AO iterations) for one random drop and three initializations (UPA and
+%   two random feasible positions), at P_tot/sigma^2 = 10, 20, and 30 dB. The Monte
+%   Carlo ESSR of each final solution is printed for reference.
 
 if nargin < 1, prm = default_params(); end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
@@ -19,10 +19,10 @@ for ip = 1:numel(res.Plist)
         res.hist{ip, i} = hist;
         [~, ~, essr] = mc_rates(sc, T, p, q, max(prm.S, 10000), prm.seed);
         res.essrMC(ip, i) = essr;
-        fprintf('fig2: P = %d dB, init %d: %d iterations, F = %.3f, MC ESSR = %.3f\n', ...
-                res.Plist(ip), i, numel(hist) - 1, hist(end), res.essrMC(ip, i));
+        fprintf('fig4: P = %d dB, init %d: %d iterations, F = %.3f, MC ESSR = %.3f\n', ...
+                res.Plist(ip), i, numel(hist) - 1, hist(end), essr);
     end
 end
-save(fullfile(results_dir(), 'fig2_convergence.mat'), 'res', 'prm', '-v7');
-plot_fig2(res);
+save(fullfile(results_dir(), 'fig4_convergence.mat'), 'res', 'prm', '-v7');
+plot_fig4(res);
 end

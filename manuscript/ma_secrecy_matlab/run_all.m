@@ -1,7 +1,8 @@
-%RUN_ALL  Reproduces all figures of the simulation package (see readme.pdf).
+%RUN_ALL  Reproduces all numerical results of main.tex (Figs. 3-8; see readme.pdf).
 %   Set QUICK = true for a fast functional test (few drops, few Monte Carlo samples).
-%   Results (.mat, .pdf, .png, .eps, and .fig in MATLAB) are written to ./results.
-%   To re-draw the figures from saved results without re-running, use replot_all.
+%   Results (.mat) and figures (.pdf/.eps/.png/.fig in MATLAB, .png in Octave) are
+%   written to ./results. To re-draw the figures without re-running, use replot_all.
+%   The scripts are independent and can be run in parallel MATLAB sessions.
 
 QUICK = false;
 
@@ -13,11 +14,13 @@ if QUICK
     prm.numDrops = 3;  prm.S = 2000;  prm.numInit = 2;  prm.aoMaxIter = 20;
 end
 t0 = tic;
-fig1_accuracy(prm);           % Figs. 1a-1d: accuracy of the closed-form rates
-fig2_convergence(prm);        % Fig. 2: convergence of Algorithm 2
-fig3_essr_vs_power(prm);      % Fig. 3: ESSR vs P_tot/sigma^2, and Fig. 6: AN power fraction
-fig4_essr_vs_angle(prm);      % Fig. 4: ESSR vs angular offset Delta
-fig5_essr_vs_region(prm);     % Fig. 5: ESSR vs region size A
-fig7_single_user(prm);        % Figs. 7a-7b: single LU (M = 1)
-fig8_power_allocation(prm);   % Fig. 8: per-user power allocation vs equal power
+fig3_accuracy(prm);                 % Fig. 3: accuracy of the closed-form rates
+fig4_convergence(prm);              % Fig. 4: convergence of Algorithm 2
+fig5_snr(prm);                      % Fig. 5: ESSR and AN power fraction vs. SNR
+fig6a_angle(prm);                   % Fig. 6(a): ESSR vs. angular offset, M = 3
+fig6b_single_user(prm);             % Fig. 6(b): ESSR vs. angular offset, M = 1
+fig7_region(prm);                   % Fig. 7: ESSR vs. region size
+fig8_power_allocation(prm, 0);      % Fig. 8: power allocation, identical LUs
+fig8_power_allocation(prm, 20);     % Fig. 8: power allocation, 20-dB spread of beta_m
+close all;
 fprintf('All simulations finished in %.1f min.\n', toc(t0)/60);
