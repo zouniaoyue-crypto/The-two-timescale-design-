@@ -25,17 +25,17 @@
 \maketitle
 
 \section{概述}
-本代码包复现 \code{main.tex} 第 V 节的关键仿真，包括：
+本代码包复现 \code{main.tex} 第 V 节的全部仿真（Fig.~3--Fig.~8），包括：
 \begin{enumerate}
 \item 闭式近似的精度验证（LU 遍历速率：引理 1，式 (17)；Eve 遍历窃听速率：命题 1，式 (26)）；
 \item 算法 2（交替优化 AO）的收敛性；
-\item 遍历保密和速率（ESSR）随发射信噪比、Eve 与 LU 1 的角度偏差 $\Delta$、可移动区域边长 $A$ 的变化；
-\item 最优 AN 功率占比（AN 节省效应，注 4）以及单用户情形（注 3）。
+\item 遍历保密和速率（ESSR）随发射信噪比、Eve 与 LU 1 的角度偏差 $\Delta$、可移动区域边长 $A$ 的变化，以及最优 AN 功率占比（AN 节省效应，注 4）和单用户情形（注 3）；
+\item 长时功率分配（每用户保密注水 + AN 功率优化）相对等功率方案的收益（同质 / 异质用户）。
 \end{enumerate}
-所有优化只使用统计 CSI（式 (17)、(26) 的闭式近似）；所有性能曲线（除图 1 的“closed form”曲线外）均用\textbf{精确的} ZF 预编码 + 零空间 AN（式 (12)、(13)）进行蒙特卡洛评估。
+所有优化只使用统计 CSI（式 (17)、(26) 的闭式近似）；所有性能曲线（除 Fig.~3 的 closed-form 曲线外）均用\textbf{精确的} ZF 预编码 + 零空间 AN（式 (12)、(13)）做蒙特卡洛评估。
 代码不依赖任何工具箱（不需要 CVX）：功率分配用二分法 + 一维网格搜索，位置子问题 (52) 是二维凸 QP，用“枚举边与顶点”的方法精确求解。
 
-\textbf{运行环境：} MATLAB R2018b 及以上（已按 MATLAB 语法编写），或 GNU Octave $\ge$ 7（作者用 Octave 8.4 实测通过全部脚本）。
+\textbf{运行环境：} MATLAB R2018b 及以上（导出矢量 PDF 推荐 R2020a 及以上，会自动使用 \code{exportgraphics}），或 GNU Octave $\ge$ 7（本次全部结果用 Octave 8.4 算出）。
 
 \section{快速开始}
 \begin{enumerate}
@@ -46,15 +46,17 @@ check_implementation
 \end{lstlisting}
 它会输出：解析梯度与有限差分的相对误差（应 $<10^{-5}$）、保密注水解的 KKT 检验、算法 2 的单调性、闭式速率与蒙特卡洛的对比。
 \item \textbf{快速功能测试：}打开 \code{run\_all.m}，把第一行改为 \code{QUICK = true;} 后运行（每个点只用 3 个随机场景，几分钟内跑完，曲线较粗糙）。
-\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 50 个随机场景。
-实测（Octave 8.4，单线程）：图 1 约 1 分钟，图 2 约 0.2 分钟，图 3/6 约 45 分钟，图 4 约 22 分钟，图 5 约 18 分钟，图 7 约 17 分钟，图 8 约 26 分钟，
-合计约 2 小时（MATLAB 一般更快；多开几个 MATLAB 会话分别运行不同的图即可并行）。也可以单独运行某一张图，例如
+\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 100 个随机场景（\code{numDrops}）。
+RUNTIMES
+各脚本互相独立，可以多开几个 MATLAB 会话并行运行，例如
 \begin{lstlisting}
-prm = default_params();      % 读取默认参数
-prm.numDrops = 20;           % 修改参数（这里减少随机场景数以加快速度）
-fig3_essr_vs_power(prm);     % 只跑图 3（同时生成 AN 功率占比图）
+prm = default_params();         % 读取默认参数
+prm.numDrops = 30;              % 修改参数（这里减少随机场景数以加快速度）
+fig5_snr(prm);                  % 只跑 Fig. 5（同时生成 (a) ESSR 与 (b) AN 功率占比）
+fig8_power_allocation(prm, 0);  % Fig. 8 需要运行两次：同质用户 (0 dB) ...
+fig8_power_allocation(prm, 20); % ... 与异质用户 (20 dB)，两次都完成后自动画图
 \end{lstlisting}
-\item 结果保存在 \code{results/} 文件夹：\code{.mat}（数据）、\code{.png}/\code{.eps}/\code{.pdf}（图），MATLAB 下还会保存 \code{.fig}。
+\item 结果保存在 \code{results/} 文件夹：\code{.mat}（数据）以及图。MATLAB 下每张图导出矢量 \code{.pdf}（嵌入字体，稿件直接引用）、\code{.eps}、600 dpi \code{.png} 与 \code{.fig}；Octave 下只导出 600 dpi \code{.png}（Octave 的矢量导出在小字号下字符间距不准）。
 只想重画图（不重新仿真）时运行 \code{replot\_all}。
 \end{enumerate}
 
@@ -65,35 +67,41 @@ fig3_essr_vs_power(prm);     % 只跑图 3（同时生成 AN 功率占比图）
 run\_all.m & 主脚本：依次运行全部仿真（\code{QUICK} 开关）。\\
 default\_params.m & 默认参数（见第 4 节表格）。\\
 check\_implementation.m & 自检：梯度、注水 KKT、单调性、闭式 vs 蒙特卡洛。\\
-fig1\_accuracy.m & 图 1：闭式近似精度（LU/Eve 遍历和速率 vs 发射 SNR、vs 莱斯因子）。\\
-fig2\_convergence.m & 图 2：算法 2 的收敛曲线（3 个初始化 $\times$ 3 个 SNR）。\\
-fig3\_essr\_vs\_power.m & 图 3：ESSR vs $P_{\rm tot}/\sigma^2$（6 种方案）；图 6：AN 功率占比。\\
-fig4\_essr\_vs\_angle.m & 图 4：ESSR vs Eve 与 LU 1 的角度偏差 $\Delta$。\\
-fig5\_essr\_vs\_region.m & 图 5：ESSR vs 可移动区域边长 $A/\lambda$。\\
-fig7\_single\_user.m & 图 7：单用户（$M=1$）的 ESSR 与 AN 功率占比 vs $\Delta$。\\
-fig8\_power\_allocation.m & 图 8：每用户功率分配相对等功率（只优化 $\alpha$）的 ESSR 增益，横轴为 LU 路损差异，两个 SNR。\\
+fig3\_accuracy.m & Fig.~3：闭式近似精度，(a) vs 发射 SNR，(b) vs 莱斯因子。\\
+fig4\_convergence.m & Fig.~4：算法 2 的收敛曲线（3 个初始化 $\times$ 3 个 SNR）。\\
+fig5\_snr.m & Fig.~5：(a) ESSR 与 (b) AN 功率占比 vs 发射 SNR。\\
+fig6a\_angle.m & Fig.~6(a)：ESSR vs 角度偏差 $\Delta$（$M=3$）。\\
+fig6b\_single\_user.m & Fig.~6(b)：单用户（$M=1$）保密速率 vs $\Delta$。\\
+fig7\_region.m & Fig.~7：ESSR vs 可移动区域边长 $A/\lambda$。\\
+fig8\_power\_allocation.m & Fig.~8：不同长时功率分配的 ESSR vs 发射 SNR；参数 \code{spread}（dB）为 LU 大尺度衰落的差异，需分别以 0 与 20 运行。\\
 replot\_all.m & 只从 \code{results/*.mat} 重画全部图。\\ \midrule
-\multicolumn{2}{l}{\textbf{functions/}（核心函数）}\\
+\multicolumn{2}{l}{\textbf{functions/}（算法与评估）}\\
 gen\_scenario.m & 随机生成 LU 的 AoD，Eve 位于 LU 1 附近（角度偏差 $\Delta$）。\\
 build\_scenario.m & 由 AoD 组装统计 CSI 结构体 \code{sc}：$\mathbf a_m,\mathbf a_e,\kappa,\beta,\zeta_m,\bar\sigma_e^2$。\\
-geo\_quantities.m & 三个几何量：$\boldsymbol\Phi,\boldsymbol\Omega$（式 (16)）、$\mathbf v$、$\omega_m$、$c_m$（式 (24)）、$d$（式 (25)）。\\
+geo\_quantities.m & 三个几何量：$\boldsymbol\Phi,\boldsymbol\Omega$（式 (16)）、$\mathbf v$、$\omega_m$、$c_m$（式 (24)）、$d$（式 (25)，迹匹配形式）。\\
 rate\_coeffs.m & $\eta_m$（式 (17)）、$\xi_m$、$\psi$（式 (26)）。\\
 objective\_F.m & 目标函数 $F(\bt,\mathbf p,q)$（式 (33a)），可选带 $[\cdot]^+$（式 (27)）。\\
-grad\_F\_n.m & 对 $\bt_n$ 的解析梯度（式 (41)--(48)，附录 B 式 (57)--(63)）。\\
+grad\_F\_n.m & 对 $\bt_n$ 的解析梯度（式 (41)--(48)，附录 B 式 (58)--(64)）；可只对部分 LU 求导（等功率基准用）。\\
 secrecy\_wf.m & 保密注水（命题 3，式 (38)），对多个 $q$ 向量化二分求水位 $\nu$。\\
-power\_opt.m & 算法 1：固定位置下的功率分配（\code{'full'} 所提；\code{'epa'} 等功率 + $\alpha$；\code{'noan'} 无 AN）。\\
+power\_opt.m & 算法 1：固定位置下的功率分配（\code{'full'} 所提；\code{'epa'} 等功率 + 搜索 $\alpha$；\code{'fix'} 等功率 + 固定 $\alpha$；\code{'noan'} 无 AN）。\\
 lin\_constraints.m & 子问题 (52) 的线性约束：区域盒约束 + 线性化最小间距（式 (51)）。\\
 proj\_polygon.m & 二维凸 QP 的精确解（点到凸多边形的投影）。\\
 position\_sweep.m & 一轮逐天线 MM 更新（式 (49)--(53)，含回溯）。\\
-ao\_optimize.m & 算法 2：功率分配与位置更新交替迭代。\\
+ao\_optimize.m & 算法 2：功率分配与位置更新交替迭代（等功率模式下目标为 $\sum_m[\cdot]^+$）。\\
+rate\_oriented\_positions.m & 基准“速率导向 MA”：按文献 [16]（Zheng 等）最大化 LU 遍历和速率的位置（忽略 Eve）。\\
 mc\_rates.m & 蒙特卡洛精确评估（ZF + 零空间 AN，Eve 最坏情况，式 (12)(13)）。\\
 batch\_inv\_hpd.m & 对 $S$ 个 $M\times M$ Hermitian 正定矩阵批量求逆（向量化 Gauss--Jordan）。\\
-analytic\_rates.m & 闭式近似速率（引理 1、命题 1），用于图 1。\\
+analytic\_rates.m & 闭式近似速率（引理 1、命题 1），用于 Fig.~3。\\
 evaluate\_schemes.m & 对一个场景优化并评估各方案（见第 6 节方案表）。\\
-sweep\_schemes.m & 对某个参数的取值扫描，并对随机场景取平均。\\
-power\_allocation\_sweep.m & 图 8 的计算核心：给定 SNR，对路损差异扫描并平均。\\
-upa\_positions.m, random\_positions.m & UPA 位置、随机可行位置（满足最小间距）。\\
-plot\_sweep.m, plot\_*.m, save\_figure.m, results\_dir.m & 绘图与保存。\\
+main\_schemes.m & Fig.~5--7 统一使用的 5 种方案。\\
+sweep\_schemes.m & 对某个参数的取值扫描，并对随机场景取平均（同时保存每个场景的 ESSR）。\\
+upa\_positions.m, random\_positions.m & UPA 位置、随机可行位置（满足最小间距）。\\ \midrule
+\multicolumn{2}{l}{\textbf{functions/}（绘图，IEEE 风格）}\\
+fig\_style.m & 全局样式：单栏宽 3.5 in、Times New Roman、字号 8/9/7.5 pt、线宽、标记大小。\\
+scheme\_style.m, scheme\_name.m & 每种方案固定的图例名、颜色、线型、标记（所有图一致）。\\
+new\_figure.m, plot\_curve.m, plot\_schemes.m, label\_axes.m, add\_legend.m & 建图、画线、坐标轴标签、图例。\\
+plot\_fig3.m -- plot\_fig8.m & 各图的绘制（图例位置、坐标范围、文字标注）。\\
+save\_figure.m, results\_dir.m & 导出（MATLAB：矢量 PDF/EPS + PNG + FIG；Octave：PNG）。\\
 \bottomrule
 \end{longtable}
 
@@ -106,22 +114,23 @@ N & 8 & $N$ & BS 的 MA 数（需 $N\ge M+1$）\\
 M & 3 & $M$ & LU 数 \\
 A & 4 & $A/\lambda$ & 可移动区域 $\mathcal C=[-A/2,A/2]^2$ 的边长 \\
 Dmin & 0.5 & $D_{\min}/\lambda$ & 最小天线间距 \\
-upaRows, upaCols & 2, 4 & -- & FPA 基准：$2\times4$ UPA，间距 $\lambda/2$（也是算法 2 的初始化之一）\\
+upaRows, upaCols & 2, 4 & -- & 紧凑 FPA 基准：$2\times4$ UPA，间距 $\lambda/2$（也是算法 2 的初始化之一）\\
 kappa\_dB & 10 & $\kappa_m$ & LU 的莱斯因子（dB，标量或 $1\times M$ 向量）\\
 kappae\_dB & 10 & $\kappa_e$ & Eve 的莱斯因子（dB）\\
 beta\_dB, betae\_dB & 0, 0 & $\beta_m,\beta_e$ & 大尺度衰落（dB，可设不同 LU 不同值）\\
 sigma2, sigma2e & 1, 1 & $\sigma_m^2,\sigma_e^2$ & 噪声功率 \\
 P\_dB & 20 & $P_{\rm tot}/\sigma^2$ & 发射 SNR（dB）\\
 angMax & $\pi/3$ & -- & LU 的 $\theta_m,\phi_m\sim\mathcal U[-{\tt angMax},{\tt angMax}]$ \\
-Delta & 0.1 & $\Delta$ & Eve 与 LU 1 的角度偏差（rad）：$\theta_e=\theta_1+\Delta\cos\vartheta$，$\phi_e=\phi_1+\Delta\sin\vartheta$ \\
+Delta & 0.1 & $\Delta$ & Eve 与 LU 1 的角度偏差（rad）：$\theta_e=\theta_1+\Delta\cos\tilde\phi$，$\phi_e=\phi_1+\Delta\sin\tilde\phi$ \\
 aoMaxIter & 60 & -- & 算法 2 的最大迭代次数 \\
 aoTol & $10^{-4}$ & $\epsilon$ & 算法 2 的相对增量停止阈值 \\
 delta0 & 1 & $\delta_0$ & MM 曲率参数的下限/初值（回溯从 $\max\{\delta_0,\delta_n^{\rm pre}/2\}$ 开始）\\
 nGrid & 41 & $Q$ & 一维搜索（$q$ 或 $\alpha$）的粗、细网格点数 \\
 nBisect & 60 & $I_{\rm b}$ & 水位 $\nu$ 的二分次数 \\
-numInit & 3 & -- & 算法 2 的初始化个数：UPA + (numInit$-1$) 组随机位置，取目标值最大者 \\
-S & 5000 & -- & 每次蒙特卡洛评估的信道样本数（图 1 至少用 $10^4$）\\
-numDrops & 50 & -- & 每个横轴点平均的随机场景（AoD）数 \\
+numInit & 3 & -- & 算法 2（以及速率导向 MA 基准）的初始化个数：UPA + (numInit$-1$) 组随机位置，取目标值最大者 \\
+alphaFix & 0.5 & $\alpha$ & “等功率、固定 $\alpha$”基准（Fig.~8）的功率分割因子 \\
+S & 5000 & -- & 每次蒙特卡洛评估的信道样本数（Fig.~3 至少用 $10^4$）\\
+numDrops & 100 & -- & 每个横轴点平均的随机场景（AoD）数，所有方案共用同一批场景 \\
 seed & 2026 & -- & 随机种子（保证可复现；第 $i$ 个场景用 \code{seed}$+i$）\\
 \bottomrule
 \end{longtable}
@@ -135,13 +144,14 @@ seed & 2026 & -- & 随机种子（保证可复现；第 $i$ 个场景用 \code{s
 \node[box,below=of a] (b) {\code{sweep\_schemes}：对每个横轴取值\\ 循环随机场景 $i=1,\dots,$\code{numDrops}};
 \node[box,below=of b] (c) {\code{gen\_scenario}：生成统计 CSI\\（LU/Eve 的 AoD、$\kappa$、$\beta$）};
 \node[box,below=of c] (d) {\code{evaluate\_schemes}：对每种方案优化 $(\bt,\mathbf p,q)$};
-\node[box,below=8mm of d,xshift=-37mm] (e) {MA 方案：\code{ao\_optimize}（算法 2）\\ 多个初始化取最优};
-\node[box,below=8mm of d,xshift=37mm] (f) {FPA 方案：位置固定\\ 只做 \code{power\_opt}（算法 1）};
-\node[box,below=26mm of d] (g) {\code{mc\_rates}：蒙特卡洛精确评估 ESSR\\（ZF + 零空间 AN，与近似无关）};
+\node[box,below=8mm of d,xshift=-45mm] (e) {所提 MA：\code{ao\_optimize}\\（算法 2，多初始化取最优）};
+\node[box,below=8mm of d] (e2) {速率导向 MA：\\ \code{rate\_oriented\_positions}\\ + \code{power\_opt}};
+\node[box,below=8mm of d,xshift=45mm] (f) {FPA：位置固定\\ 只做 \code{power\_opt}（算法 1）};
+\node[box,below=30mm of d] (g) {\code{mc\_rates}：蒙特卡洛精确评估 ESSR\\（ZF + 零空间 AN，与近似无关）};
 \node[box,below=of g] (h) {对场景取平均 $\to$ 保存 \code{.mat} $\to$ 画图};
 \draw[->] (a)--(b); \draw[->] (b)--(c); \draw[->] (c)--(d);
-\draw[->] (d.south)--(e.north); \draw[->] (d.south)--(f.north);
-\draw[->] (e.south)--(g.north); \draw[->] (f.south)--(g.north); \draw[->] (g)--(h);
+\draw[->] (d.south)--(e.north); \draw[->] (d.south)--(e2.north); \draw[->] (d.south)--(f.north);
+\draw[->] (e.south)--(g.north); \draw[->] (e2.south)--(g.north); \draw[->] (f.south)--(g.north); \draw[->] (g)--(h);
 \end{tikzpicture}
 \end{center}
 
@@ -158,12 +168,15 @@ seed & 2026 & -- & 随机种子（保证可复现；第 $i$ 个场景用 \code{s
 \item \textbf{功率更新}（\code{power\_opt}，算法 1）：对 $q$ 做“粗网格 + 细网格”一维搜索，每个 $q$ 下用 \code{secrecy\_wf} 的保密注水 (38) 得到 $\mathbf p$；只有当目标值不下降时才接受新的 $(\mathbf p,q)$。
 \item 若目标值的相对增量小于 \code{aoTol}，或达到 \code{aoMaxIter}，停止；否则回到第 2 步。
 \end{enumerate}
-由于每一步都不降低 $F$，目标值序列单调不减（图 2 可以验证）。
+由于每一步都不降低 $F$，目标值序列单调不减（Fig.~4 可以验证）。
+
+\textbf{等功率基准（\code{'epa'}, \code{'fix'}）的区别：}等功率时无法关断保密速率为负的 LU，命题 2 不成立，因此目标取 $\sum_m[\tilde R_m-\tilde R_{e,m}]^+$。
+位置更新时只对当前保密速率为正的 LU 求梯度：$\sum_{m:\,f_m>0}f_m$ 是 $\sum_m[f_m]^+$ 的下界且在当前点处相等，所以 MM 的单调性仍然成立。
 
 \subsection{保密注水（\code{secrecy\_wf.m}）}
-给定 $q$，令 $\vartheta_m=\xi_m/(q\psi+\bar\sigma_e^2)$。$\eta_m\le\vartheta_m$ 的 LU 直接关断（$p_m=0$）；其余 LU 按式 (38)
+给定 $q$，令 $\eta_{e,m}=\xi_m/(q\psi+\bar\sigma_e^2)$（Eve 的等效增益）。$\eta_m\le\eta_{e,m}$ 的 LU 直接关断（$p_m=0$）；其余 LU 按式 (38)
 \[
-p_m(\nu)=\Big[\tfrac{2(\rho_m-1)}{\sqrt{(\eta_m-\vartheta_m)^2+4\eta_m\vartheta_m\rho_m}+\eta_m+\vartheta_m}\Big]^+,\quad \rho_m=\tfrac{\eta_m-\vartheta_m}{\nu\ln2},
+p_m(\nu)=\Big[\tfrac{2(\rho_m-1)}{\sqrt{(\eta_m-\eta_{e,m})^2+4\eta_m\eta_{e,m}\rho_m}+\eta_m+\eta_{e,m}}\Big]^+,\quad \rho_m=\tfrac{\eta_m-\eta_{e,m}}{\nu\ln2},
 \]
 $\sum_mp_m(\nu)$ 关于 $\nu$ 单调递减，用二分法使之等于 $P_{\rm I}(q)=P_{\rm tot}-(N-M)q$。代码对网格上的所有 $q$ 同时二分（向量化），速度很快。
 
@@ -190,7 +203,7 @@ Eve 近似速率 $\tilde R_{e,m}$、$\xi_m$、$\psi$ & (26) & \code{rate\_coeffs
 保密注水 & 命题 3，(38) & \code{secrecy\_wf.m} \\
 $q$ 的一维搜索 & (39)、算法 1 & \code{power\_opt.m}（\code{'full'}）\\
 $\mathbf l_n$、秩一结构、梯度 & (41)--(48) & \code{grad\_F\_n.m} \\
-$\dot\omega_m,\dot c_m,\dot d$ & 附录 B，(57)--(63) & \code{grad\_F\_n.m}（\code{dom}, \code{dc}, \code{dd}）\\
+$\dot\omega_m,\dot c_m,\dot d$ & 附录 B，(58)--(64) & \code{grad\_F\_n.m}（\code{dom}, \code{dc}, \code{dd}）\\
 二次下界、回溯 & (49) & \code{position\_sweep.m} \\
 线性化最小间距 & (50)、(51) & \code{lin\_constraints.m} \\
 子问题 (P3.2.$n$) & (52) & \code{proj\_polygon.m} \\
@@ -201,74 +214,79 @@ AO 总算法 & 算法 2 & \code{ao\_optimize.m} \\
 \noindent 说明：论文中用 Sherman--Morrison 公式 (44) 把每次函数计算降到 $\mathcal O(M^2)$；代码为了清晰，直接重新计算 $\boldsymbol\Phi^{-1}$（$\mathcal O(NM^2+M^3)$），两者数值上完全等价。
 
 \section{方案（图例）说明}
-\begin{longtable}{>{\ttfamily}p{2.0cm}p{4.2cm}p{8.8cm}}
+\begin{longtable}{>{\ttfamily}p{2.0cm}p{4.0cm}p{9.0cm}}
 \toprule
 代码名 & 图例 & 含义 \\ \midrule
-MA\_full & Proposed MA (opt. $\bt,\mathbf p,q$) & 所提方案：算法 2 联合优化位置、每用户功率 $p_m$ 与 AN 功率 $q$ \\
-MA\_EPA & MA, equal power (opt. $\bt,\alpha$) & 位置 + 功率分割因子 $\alpha$（$p_m=\alpha P_{\rm tot}/M$，$q=(1-\alpha)P_{\rm tot}/(N-M)$），即“只优化功率分配因子”的设计 \\
-MA\_noAN & MA without AN & 位置 + $p_m$，$q=0$ \\
-FPA\_full & FPA ($\lambda/2$ UPA), opt. $\mathbf p,q$ & $2\times4$ 紧凑 UPA，功率由算法 1 优化 \\
-SPA\_full & Sparse FPA, opt. $\mathbf p,q$ & 铺满区域 $\mathcal C$ 的稀疏 $2\times4$ UPA（间距 $A/3$ 与 $A$），功率由算法 1 优化 \\
-FPA\_noAN & FPA without AN & 紧凑 UPA，$q=0$ \\
+\multicolumn{3}{l}{\textbf{Fig.~5--7 统一使用的 5 种方案}（\code{main\_schemes.m}）}\\
+MA\_full & Proposed & 所提方案：算法 2 联合优化位置、每用户功率 $p_m$ 与 AN 功率 $q$ \\
+MA\_rate & Rate-oriented MA & 文献 [16] 的双时间尺度设计：位置最大化 LU 的近似遍历和速率（等功率、忽略 Eve），再用算法 1 优化 $(\mathbf p,q)$。它等价于“现有双时间尺度 MA + AN”，用来体现 Eve 分析（命题 1）带来的位置增益 \\
+SPA\_full & Sparse FPA & 铺满区域 $\mathcal C$ 的稀疏 $2\times4$ UPA（间距 $A/3$ 与 $A$），功率由算法 1 优化 \\
+FPA\_full & Compact FPA & $2\times4$ 紧凑 UPA（间距 $\lambda/2$），功率由算法 1 优化 \\
+MA\_noAN & Proposed w/o AN & 算法 2，但 $q=0$（位置 + $p_m$）\\ \midrule
+\multicolumn{3}{l}{\textbf{Fig.~8 的功率分配对比}（位置均由算法 2 针对各自的功率分配优化）}\\
+MA\_full & Proposed PA & 每用户保密注水 + 一维搜索 $q$ \\
+MA\_EPA & Equal power, optimized $\alpha$ & $p_m=\alpha P_{\rm tot}/M$，$q=(1-\alpha)P_{\rm tot}/(N-M)$，一维搜索 $\alpha$ \\
+MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha$ 固定为 0.5（不做功率优化）\\
 \bottomrule
 \end{longtable}
+另外 \code{evaluate\_schemes} 还支持 \code{FPA\_EPA}、\code{FPA\_fix}、\code{FPA\_noAN}（紧凑 FPA 的对应版本），稿件未使用。
 
 \section{代码输出与稿件图号的对应}
 \begin{center}\small
 \begin{tabular}{lll}
 \toprule
 代码输出文件（\code{results/}） & 稿件图号 & 内容 \\ \midrule
-\code{fig1a\_accuracy\_lus}, \code{fig1b\_accuracy\_eve} & Fig.~3(a)(b) & 近似精度 vs 发射 SNR \\
-\code{fig1c\_accuracy\_lus}, \code{fig1d\_accuracy\_eve} & Fig.~4(a)(b) & 近似精度 vs 莱斯因子 \\
-\code{fig2\_convergence} & Fig.~5 & 算法 2 收敛性 \\
-\code{fig3\_essr\_vs\_power} & Fig.~6 & ESSR vs 发射 SNR \\
-\code{fig6\_an\_fraction} & Fig.~7 & AN 功率占比 vs 发射 SNR \\
-\code{fig4\_essr\_vs\_angle} & Fig.~8 & ESSR vs 角度偏差 $\Delta$ \\
-\code{fig5\_essr\_vs\_region} & Fig.~9 & ESSR vs 区域边长 $A$ \\
-\code{fig8\_power\_allocation} & Fig.~10 & 每用户功率分配 vs 等功率 \\
-\code{fig7a\_single\_user\_essr}, \code{fig7b\_single\_user\_an} & Fig.~11(a)(b) & 单用户情形 \\
+\code{fig3a\_accuracy\_snr}, \code{fig3b\_accuracy\_kappa} & Fig.~3(a)(b) & 近似精度 vs 发射 SNR / 莱斯因子 \\
+\code{fig4\_convergence} & Fig.~4 & 算法 2 收敛性 \\
+\code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs 发射 SNR \\
+\code{fig6a\_essr\_angle}, \code{fig6b\_essr\_single\_user} & Fig.~6(a)(b) & ESSR vs 角度偏差（$M=3$ / $M=1$）\\
+\code{fig7\_essr\_region} & Fig.~7 & ESSR vs 区域边长 $A$ \\
+\code{fig8\_power\_allocation} & Fig.~8 & 长时功率分配的收益 \\
 \bottomrule
 \end{tabular}
 \end{center}
-\code{main.tex} 通过 \code{\textbackslash graphicspath\{\{ma\_secrecy\_matlab/results/\}\}} 直接引用这些 PDF，重新运行 MATLAB 后重新编译稿件即可更新图。
+\code{main.tex} 通过 \code{\textbackslash graphicspath\{\{ma\_secrecy\_matlab/results/\}\}} 直接引用这些图（不带扩展名：有 PDF 时 pdf\LaTeX{} 优先用矢量 PDF，否则用 PNG）。在 MATLAB 中重新运行后重新编译稿件即可更新图。
 
 \section{各图说明与预期现象}
 \begin{description}
-\item[图 1（\code{fig1\_accuracy}）] 固定功率分割 $\alpha=0.5$，UPA 与随机 MA 位置两种布局；横轴为发射 SNR（1a/1b）或莱斯因子 $\kappa=\kappa_e$（1c/1d）。
-预期：Eve 的闭式近似（命题 1）与蒙特卡洛高度吻合；LU 的闭式近似（引理 1，现有结果）是偏保守的下界型近似，其差距随 $\kappa$ 增大而增大，但对两种布局几乎相同（即对位置不敏感，支撑注 1）。
-\item[图 2（\code{fig2\_convergence}）] 算法 2 的目标值随迭代单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
-\item[图 3、图 6（\code{fig3\_essr\_vs\_power}）] ESSR 与 AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化。预期：所提 MA 方案最好；无 AN 的方案在高 SNR 饱和；MA 的 AN 占比低于 FPA（AN 节省效应，注 4）。
-\item[图 4（\code{fig4\_essr\_vs\_angle}）] ESSR 随 $\Delta$ 的变化。$\Delta$ 很小时（Eve 与 LU 1 几乎同向）任何阵列都难以区分二者；MA 在中等 $\Delta$ 下增益最明显。
-\item[图 5（\code{fig5\_essr\_vs\_region}）] ESSR 随区域边长 $A$ 增大而增大（空间自由度增加）；紧凑 FPA 与 $A$ 无关；稀疏 FPA 也随孔径增大而改善，但始终低于 MA（其固定几何无法随 LU/Eve 方向调整，且栅瓣可能指向 Eve）。
-\item[图 7（\code{fig7\_single\_user}）] $M=1$：LU 的遍历速率与位置无关（注 3），但 MA 仍能显著提升保密速率并减少 AN 功率。
-\item[图 8] （\code{fig8\_power\_allocation}）LU 的大尺度衰落 $\beta_m=[0,-\varsigma/2,-\varsigma]$ dB，横轴为差异 $\varsigma$，$P_{\rm tot}/\sigma^2$ 取 5 dB 与 15 dB。
-纵轴是所提的每用户功率分配（命题 2、3）相对“等功率 + 只优化功率分割因子 $\alpha$”的 ESSR 增益（\%），MA 与 FPA 各一条。
-实测：用户越不对称、SNR 越低，增益越大（$\varsigma=20$ dB、5 dB 时 MA $+36.7\%$，FPA $+78.6\%$）；对称用户、高 SNR 时增益很小。
+\item[Fig.~3（\code{fig3\_accuracy}）] 固定功率分割 $\alpha=0.5$，紧凑 UPA 与随机 MA 位置两种布局；(a) 横轴为发射 SNR，(b) 横轴为莱斯因子 $\kappa=\kappa_e$。上面一组曲线是 LU 的遍历和速率（引理 1），下面一组是 Eve 的遍历窃听和速率（命题 1）；标记为蒙特卡洛，线为闭式。
+预期：Eve 的闭式近似与蒙特卡洛高度吻合；LU 的闭式近似（现有结果）偏保守，差距随 $\kappa$ 增大，但两种布局几乎相同（支撑注 1：对位置优化影响很小）。
+\item[Fig.~4（\code{fig4\_convergence}）] 算法 2 的目标值随迭代单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
+\item[Fig.~5（\code{fig5\_snr}）] (a) ESSR 与 (b) AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化，5 种方案。预期：所提方案最好；速率导向 MA 与稀疏 FPA 相近（只考虑 LU 去相关、不考虑 Eve 的位置对保密帮助有限）；无 AN 方案在高 SNR 饱和；所提方案的 AN 占比明显低于所有基准，而速率导向 MA 的 AN 占比与紧凑 FPA 几乎相同（AN 节省来自“针对 Eve 的位置设计”，注 4）。
+\item[Fig.~6（\code{fig6a\_angle}, \code{fig6b\_single\_user}）] ESSR 随 $\Delta$ 的变化（横轴对数刻度）。(a) $M=3$：$\Delta$ 很小时任何阵列都难以区分 Eve 与 LU 1，各方案接近；中等 $\Delta$ 时所提方案增益最大；$\Delta$ 很大时 Eve 本身容易分开，速率导向 MA 追上一部分。(b) $M=1$：LU 的速率与位置无关（注 3），速率导向 MA 保持初始 UPA，与紧凑 FPA 完全重合；所提方案仍有显著增益。
+\item[Fig.~7（\code{fig7\_region}）] ESSR 随区域边长 $A$ 增大而增大；紧凑 FPA 与 $A$ 无关；速率导向 MA 随 $A$ 改善很少；稀疏 FPA 随阵元间距变化而起伏（栅瓣位置相对 Eve 变化）。
+\item[Fig.~8（\code{fig8\_power\_allocation}）] 位置均由算法 2 针对各自的功率分配优化。实线：同质 LU（$\varsigma=0$）；虚线：异质 LU（$[\beta_1,\beta_2,\beta_3]=[0,-10,-20]$ dB）。颜色/标记：所提功率分配（每用户保密注水 + 优化 $q$）、等功率 + 优化 $\alpha$、等功率 + $\alpha=0.5$。
+预期：同质 LU 时前两者几乎重合（对称用户 + 高 SNR 下注水趋于等功率，且优化 $\alpha$ 已抓住主要的信息/AN 功率折中）；异质 LU、中低 SNR 时所提功率分配明显更好（关断/降低保密能力差的 LU）；固定 $\alpha$ 始终更差。
 \end{description}
+
+\section{绘图风格（IEEE 期刊常见格式）}
+\begin{itemize}
+\item 每个子图按单栏宽度 3.5 in $\times$ 2.6 in 导出，插入稿件时（\code{\textbackslash columnwidth} 或 \code{0.48\textbackslash textwidth}）字号即为实际字号：刻度 8 pt、坐标轴标签 9 pt、图例 7.5 pt，字体 Times New Roman（与 IEEEtran 正文一致）。
+\item 同一方案在所有图中颜色、线型、标记固定（\code{scheme\_style.m}）：MA 类方案实线，FPA 类方案虚线，无 AN 方案点划线；空心标记（白色填充）。
+\item 细虚线网格、刻度朝内、坐标框在曲线之上；图例放在空白区域，必要时双栏或“分解式”图例（颜色 = 方案，线型 = 参数）。
+\item 想整体改风格（如字体、线宽、配色）时只需修改 \code{fig\_style.m} 与 \code{scheme\_style.m}，然后运行 \code{replot\_all}。
+\end{itemize}
 
 \section{常见修改}
 \begin{itemize}
 \item \textbf{改系统参数：}例如
 \begin{lstlisting}
 prm = default_params();  prm.N = 6;  prm.kappa_dB = 5;
-fig3_essr_vs_power(prm);
+fig5_snr(prm);
 \end{lstlisting}
-\item \textbf{不同用户不同路损：}\code{prm.beta\_dB = [0 -5 -10];}（长度须等于 $M$）。此时每用户功率分配相对等功率的增益更明显。
-\item \textbf{改扫描范围：}在对应 \code{figX\_*.m} 中修改 \code{Pvec}、\code{Dvec}、\code{Avec}。
+\item \textbf{不同用户不同路损：}\code{prm.beta\_dB = [0 -5 -10];}（长度须等于 $M$）。此时每用户功率分配相对等功率的增益更明显（见 Fig.~8）。
+\item \textbf{改扫描范围：}在对应 \code{figX\_*.m} 中修改 \code{sweep\_schemes} 的取值向量。
 \item \textbf{加速：}减小 \code{numDrops}、\code{S}、\code{numInit}；或在 \code{sweep\_schemes.m} 中把随机场景循环改为 \code{parfor}（需要 Parallel Computing Toolbox，并把循环内的累加改为先存入数组、循环结束后再求平均）。
 \item \textbf{只重画图：}运行 \code{replot\_all}（读取 \code{results/*.mat}）。
-\item \textbf{Octave 用户：}无图形界面时先执行下面两行，并安装 Ghostscript 以导出 EPS/PDF：
-\begin{lstlisting}
-graphics_toolkit('gnuplot');  set(0, 'defaultfigurevisible', 'off');
-\end{lstlisting}
+\item \textbf{Octave 用户：}需要 qt 图形工具包才能得到与 MATLAB 接近的图；无显示器的服务器上可用 \code{xvfb-run -a octave --no-gui}，并在脚本开头执行 \code{graphics\_toolkit('qt')}。
 \end{itemize}
 
 \section{已完成的正确性检验}
 \begin{itemize}
-\item 解析梯度（式 (48)、附录 B）与中心差分的最大相对误差约 $10^{-7}$；
-\item 保密注水解满足 KKT 条件（活跃用户的边际收益相等、功率预算用满、关断用户满足 $f_m'(0)\le\nu$）；
-\item 算法 2 在所有测试中单调不减；
-\item 与独立的 Python 实现逐项对比：目标函数与梯度在 $10^{-10}$ 精度内一致，功率分配与蒙特卡洛结果一致（统计误差内）。
+\item 解析梯度（式 (48)、附录 B，含迹匹配后的 $\dot d$）与中心差分的最大相对误差约 $10^{-7}$；等功率模式下的部分梯度同样验证（约 $10^{-8}$）；
+\item 保密注水解满足 KKT 条件（活跃用户的边际收益相等、功率预算用满、关断用户满足 $f_m'(0)\le\nu$），并与通用求解器（SLSQP）结果一致；
+\item 算法 2 在所有模式（\code{'full'}, \code{'epa'}, \code{'fix'}）下单调不减；
+\item 与独立的 Python 实现逐项对比：引理 2 的条件均值、条件独立性，引理 3 的精确/渐近精确性，命题 1 的闭式与蒙特卡洛，均一致。
 \end{itemize}
 
 \end{document}
