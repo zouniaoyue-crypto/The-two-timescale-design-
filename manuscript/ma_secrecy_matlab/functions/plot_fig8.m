@@ -1,31 +1,26 @@
 function plot_fig8(res0, res1)
-%PLOT_FIG8  Fig. 8: ESSR versus the transmit SNR for different long-term power
-%   allocations (PA), for identical LUs (res0, solid lines) and for LUs with a
-%   20-dB spread of the large-scale fading (res1, dashed lines).
-%   Color/marker: PA scheme; line style: spread.
-s = fig_style();
-keys = {'MA_full', 'MA_EPA', 'MA_fix'};
-names = {'Proposed PA', 'Equal power, optimized {\it\alpha}', 'Equal power, {\it\alpha} = 0.5'};
+%PLOT_FIG8  Fig. 8: ESSR loss of the equal-power benchmarks with respect to the proposed
+%   long-term power allocation (PA), 100 (1 - ESSR_benchmark / ESSR_proposed) in %,
+%   versus the transmit SNR, for identical LUs (res0, solid lines) and for LUs with a
+%   heterogeneous large-scale fading (res1, dashed lines). Blue squares: equal power
+%   with optimized alpha; gray triangles: equal power with alpha = 0.5.
+%   res.essr(:, k): k = 1 proposed PA ('MA_full'), 2 'MA_EPA', 3 'MA_fix'.
+loss = @(r, k) 100*(1 - r.essr(:, k)./r.essr(:, 1));
 ax = new_figure();
-R = {res0, res1};  lsp = {'-', '--'};
-for r = 1:2
-    for k = 1:3
+R = {res0, res1};  lsp = {'-', '--'};  keys = {'MA_EPA', 'MA_fix'};
+h = zeros(2, 2);
+for k = 1:2
+    for r = 1:2
         st = scheme_style(keys{k});  st.ls = lsp{r};
-        plot_curve(ax, R{r}.values, R{r}.essr(:, k), st);
+        h(k, r) = plot_curve(ax, R{r}.values, loss(R{r}, k + 1), st);
     end
 end
-h = zeros(1, 5);                                      % factorized legend
-for k = 1:3
-    st = scheme_style(keys{k});
-    h(k) = plot(ax, NaN, NaN, 'LineStyle', 'none', 'Marker', st.marker, 'Color', st.color, ...
-                'MarkerSize', s.ms, 'MarkerFaceColor', 'w', 'LineWidth', s.lw);
-end
-h(4) = plot(ax, NaN, NaN, 'LineStyle', lsp{1}, 'Marker', 'none', 'Color', [0.2 0.2 0.2], 'LineWidth', s.lw);
-h(5) = plot(ax, NaN, NaN, 'LineStyle', lsp{2}, 'Marker', 'none', 'Color', [0.2 0.2 0.2], 'LineWidth', s.lw);
-label_axes(ax, 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)', 'ESSR (bps/Hz)');
 xlim(ax, [res0.values(1) res0.values(end)]);
-ylim(ax, [0 1.4*max([res0.essr(:); res1.essr(:)])]);
-add_legend(ax, h, [names, {sprintf('Identical LUs ({\\it\\varsigma} = %d dB)', res0.spread), ...
-                           sprintf('Heterogeneous LUs ({\\it\\varsigma} = %d dB)', res1.spread)}], 'northwest');
+top = max([loss(res0, 2); loss(res0, 3); loss(res1, 2); loss(res1, 3)]);
+ylim(ax, [0 10*ceil(1.1*top/10)]);
+label_axes(ax, 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)', 'ESSR loss w.r.t. proposed PA (%)');
+add_legend(ax, [h(1,1) h(1,2) h(2,1) h(2,2)], ...
+           {'Opt. {\it\alpha}, identical LUs', 'Opt. {\it\alpha}, heterogeneous LUs', ...
+            '{\it\alpha} = 0.5, identical LUs', '{\it\alpha} = 0.5, heterogeneous LUs'}, 'northeast');
 save_figure('fig8_power_allocation');
 end

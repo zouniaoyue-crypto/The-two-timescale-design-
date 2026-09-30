@@ -10,7 +10,7 @@ drawnow;
 if exist('OCTAVE_VERSION', 'builtin')
     print(fig, [f '.png'], '-dpng', '-r600');
 else
-    if exist('exportgraphics', 'file')                                   % R2020a+
+    if ~isempty(which('exportgraphics'))                                 % R2020a+
         exportgraphics(fig, [f '.pdf'], 'ContentType', 'vector');
         exportgraphics(fig, [f '.png'], 'Resolution', 600);
     else

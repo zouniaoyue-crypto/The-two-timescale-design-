@@ -119,7 +119,7 @@ $\varsigma$（附录 B 与第 V 节）$\to$ 附录 B 改用 $\varpi$；$\varthet
 \begin{longtable}{p{2.3cm}p{13.4cm}}
 \toprule
 位置 & 修改与理由 \\ \midrule
-摘要 & 按“问题 $\to$ 框架（大/小时间尺度分开写）$\to$ 分析 $\to$ 算法 $\to$ 结果”重组；去掉“By exploiting the conditional independence \ldots\ we derive”这一因果不成立的说法；精确说明近似“building blocks are exact in the NLoS-dominant regime and asymptotically exact in the LoS-dominant regime”；结果部分加入与速率导向 MA 的对比及具体数字。\\
+摘要 & 按“问题 $\to$ 框架（大/小时间尺度分开写）$\to$ 分析 $\to$ 算法 $\to$ 结果”重组；去掉“By exploiting the conditional independence \ldots\ we derive”这一因果不成立的说法；精确说明近似的适用范围（“based on approximations of the average leakage and AN energies that are exact in the NLoS-dominant regime and asymptotically exact in the LoS-dominant regime”）；结果部分加入与速率导向 MA 的对比及具体数字。\\
 引言第 2 段 & 对 [14]（Xie 等）的描述改为其真实设定（只知道 Eve 的 LoS 分量与 NLoS 统计量、用随机矩阵理论得到 ESR 的确定性等价），突出与本文（双时间尺度、多用户、ZF+AN）的区别；CSI、NLoS 在首次出现处定义。\\
 引言第 3 段 & \old{``are hardly practical''}、\old{``can hardly keep pace''} $\to$ \new{``are difficult to implement in practice''}、\new{``cannot keep pace with fast channel variations''}（避免口语化和重复）。\\
 贡献第 2 条 & \old{``first-order approximations \ldots\ that are exact in both the NLoS- and LoS-dominant regimes''} $\to$ \new{``exact in the NLoS-dominant regime and asymptotically exact in the LoS-dominant regime''}（原句不准确）；在此定义 ESSR。\\
@@ -146,7 +146,7 @@ Fig.~5 收敛 & Fig.~4 收敛 & 保留（审稿人通常会要求）。\\
 Fig.~6 ESSR vs SNR；Fig.~7 AN 占比 & Fig.~5(a)(b) & 合并为一张双子图。\\
 Fig.~8 ESSR vs $\Delta$；Fig.~11(a)(b) 单用户 & Fig.~6(a) $M=3$、(b) $M=1$ & 同一横轴、同一组方案并排，单用户的“速率导向 MA 与紧凑 FPA 重合”一目了然；单用户的 AN 占比改为正文给数字。\\
 Fig.~9 ESSR vs $A$ & Fig.~7 & 保留，方案统一。\\
-Fig.~10 功率分配增益（\%） & Fig.~8 功率分配消融 & 改为绝对 ESSR vs SNR，同质/异质用户两组，三种功率分配。\\
+Fig.~10 功率分配增益（\%） & Fig.~8 功率分配消融 & 等功率方案（优化 $\alpha$ / 固定 $\alpha=0.5$）相对所提功率分配的 ESSR 损失 vs SNR，同质/异质用户两组；原稿的等功率基准实现有误（见问题 4），数字已全部更新。\\
 \bottomrule
 \end{longtable}
 
@@ -176,15 +176,15 @@ Proposed w/o AN & 去掉 AN：体现 AN 的必要性以及 MA 与 AN 的相互�
 \toprule
 选项 & 好处 & 问题 \\ \midrule
 {(a)} 在主图中保留“等功率 + 优化 $\alpha$” & 透明 & 在对称场景中与所提曲线重合，占用图例、且确实会让人觉得每用户功率分配没用。\\
-{(b)} 改成“等功率 + 固定 $\alpha$”放进主图 & 曲线差距变大（本轮实测固定 $\alpha=0.5$ 损失 XXFIXLOSSXX） & 差距主要来自“是否优化 AN 功率”，而不是“每用户功率分配”；把它当主基准会混淆贡献来源，有经验的审稿人会认为是“稻草人”基准，并追问“为什么不优化 $\alpha$”。\\
+{(b)} 改成“等功率 + 固定 $\alpha$”放进主图 & 曲线差距变大（本轮实测固定 $\alpha=0.5$ 损失 ：同质用户 2.1\%--31.0\%，异质用户 3.0\%--54.2\%） & 差距主要来自“是否优化 AN 功率”，而不是“每用户功率分配”；把它当主基准会混淆贡献来源，有经验的审稿人会认为是“稻草人”基准，并追问“为什么不优化 $\alpha$”。\\
 {(c)} 主图删去等功率方案，另做一张功率分配消融图 & 主图聚焦位置设计（核心贡献）；消融图如实给出每个组成部分在什么条件下起作用 & 需要一张额外的图（已用合并子图的方式把总图数降下来）。\\
 \bottomrule
 \end{longtable}
-\textbf{决定：采用 (c)，并把 (a)(b) 两种等功率方案都放进消融图 Fig.~8}（同质用户 $\varsigma=0$ 与异质用户 $\varsigma=20$ dB，横轴为 SNR）。这样：
+\textbf{决定：采用 (c)，并把 (a)(b) 两种等功率方案都放进消融图 Fig.~8}（同质用户与异质用户 $[\beta_1,\beta_2,\beta_3]=[0,-10,-20]$ dB 两种情形，纵轴为等功率方案相对所提功率分配的 ESSR 损失，横轴为 SNR）。这样：
 \begin{itemize}
-\item 同质用户时所提功率分配与“等功率 + 优化 $\alpha$”重合——这在图中如实呈现，并在正文用上面的三条原因解释，主动回答审稿人必然会提的问题；
-\item 异质用户、中低 SNR 时所提功率分配明显更好（关断/降低保密能力差的 LU，命题 2、3）：XXPAGAINXX；
-\item 固定 $\alpha$ 在所有情形都更差：XXFIXALLXX，说明长时功率分配中\emph{AN 功率的优化}是不可省略的。
+\item 同质用户时“等功率 + 优化 $\alpha$”几乎就是最优的：损失在 10 dB 以上低于 1\%，全范围最大 3.5\%（0 dB）。这在图中如实呈现，并在正文用上面的三条原因解释，主动回答审稿人必然会提的问题；
+\item 异质用户、中低 SNR 时所提功率分配明显更好（关断/降低保密能力差的 LU，命题 2、3）：“等功率 + 优化 $\alpha$”在 0 dB、5 dB、10 dB 的损失分别为 30.5\%、15.7\%、11.9\%（换算成所提方案的增益分别为 43.9\%、18.7\%、13.5\%），20 dB 以上低于 0.6\%；
+\item 固定 $\alpha$ 在所有情形都更差：同质用户损失 2.1\%--31.0\%，异质用户 3.0\%--54.2\%，低 SNR 时最严重（此时几乎不需要 AN，固定一半功率给 AN 浪费最大），说明长时功率分配中\emph{AN 功率的优化}是不可省略的。
 \end{itemize}
 同时在正文中把每用户功率分配的定位写准确：它是算法的组成部分（使 $[\cdot]^+$ 可以无损去掉、给出闭式注水解、自动关断无保密能力的 LU），其\emph{性能}增益依赖场景，而不是本文的主要性能来源。建议作者在投稿时也按这个口径表述，比夸大它更安全。
 
@@ -198,7 +198,19 @@ Proposed w/o AN & 去掉 AN：体现 AN 的必要性以及 MA 与 AN 的相互�
 \end{itemize}
 
 \subsection{主要数值结果（每点 100 个随机场景，全部为蒙特卡洛精确评估）}
-XXRESULTSXX
+\begin{longtable}{p{2.6cm}p{13.1cm}}
+\toprule
+图 & 结论与数字 \\ \midrule
+Fig.~3 精度 & Eve 遍历窃听和速率的闭式近似（命题 1）与蒙特卡洛的最大误差 0.16 bps/Hz，$\kappa=-5$ dB 时几乎为 0。LU 的近似（引理 1）偏保守，20 dB、$\kappa=10$ dB 时紧凑 UPA 与随机 MA 的差距分别为 1.55 与 1.66 bps/Hz，与位置几乎无关。在算法 2 的优化解处，近似 ESSR 比蒙特卡洛低 1.73 bps/Hz，仍是保守估计，说明优化没有“钻近似误差的空子”。\\
+Fig.~4 收敛 & 目标值单调上升；第 1 次迭代完成总提升的约 30\%--50\%，20--60 次迭代达到 95\%；3 个初始化的最终目标值最多相差 4.5\%，UPA 初始化在三个 SNR 下都最好。另外检验了把稀疏 UPA 作为第 4 个初始点：ESSR 最多只提高约 1\%（20 个场景），因此保留 3 个初始点。\\
+Fig.~5 SNR & 20 dB 时：所提 20.10，速率导向 MA 17.87（所提高 12.5\%），稀疏 FPA 17.75（高 13.3\%），紧凑 FPA 15.82（高 27.1\%）bps/Hz。100 个场景中，所提方案逐场景优于速率导向 MA 与紧凑 FPA（优于稀疏 FPA 的场景占 93\%）。速率导向 MA 与稀疏 FPA 相当 $\Rightarrow$ 增益来自“针对 Eve 的位置”。高 SNR 下绝对增益趋于约 4.5（对紧凑 FPA）与 2.3 bps/Hz（对速率导向 MA）。20 dB 时 AN 功率占比：所提 0.31，速率导向 MA 0.44，稀疏 FPA 0.40，紧凑 FPA 0.47。\\
+Fig.~6(a) $\Delta$ & $\Delta=0.02$ 时与速率导向 MA 只差 0.9\%（Eve 与 LU 1 几乎同向，任何位置都分不开）；$\Delta=0.2$ 时增益最大，为 14.4\%；$\Delta=0.5$ 时为 10.9\%。对稀疏 FPA 的增益 6.4\%--17.6\%。\\
+Fig.~6(b) $M=1$ & 速率导向 MA 与紧凑 FPA 完全重合（注 3、文献 [16]）；$\Delta=0.1$ 时所提方案比紧凑 / 稀疏 FPA 高 76.6\% / 15.5\%；AN 占比由 0.84（紧凑 FPA）降到 0.51（$\Delta=0.1$），$\Delta\ge0.2$ 时约 0.28。\\
+Fig.~7 $A$ & $A=1.5\lambda$ 时比紧凑 FPA 高 8.8\%，$A=6\lambda$ 时高 33.1\%；对速率导向 MA 的增益随 $A$ 由 2.6\% 增至 14.2\%；对稀疏 FPA 为 7.6\%--14.3\%。\\
+Fig.~8 功率分配 & 同质用户：“等功率 + 优化 $\alpha$”的损失在 10 dB 以上低于 1\%，最大 3.5\%。异质用户：0/10/20 dB 时损失 30.5\% / 11.9\% / 0.5\%。固定 $\alpha=0.5$：同质 2.1\%--31.0\%，异质 3.0\%--54.2\%。\\
+\bottomrule
+\end{longtable}
+\textbf{与上一轮结果的差别：}上一轮报告的“每用户功率分配在 5 dB、20 dB 路损差异下对 MA/FPA 提升 $+36.7\%$/$+78.6\%$”是在等功率基准实现有误（未加 $[\cdot]^+$，见问题 4）的情况下得到的，\textbf{高估了增益}；以本轮修正后的 Fig.~8 为准。上一轮的主图数字（如 20 dB 时相对紧凑 FPA $+28.1\%$）与本轮（$+27.1\%$）的差别来自：近似式 (23) 的修正、每点场景数由 50 增至 100。
 
 % =============================================================================
 \section{需要作者确认的事项}
