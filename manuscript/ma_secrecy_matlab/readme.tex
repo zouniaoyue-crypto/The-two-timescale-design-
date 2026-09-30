@@ -47,7 +47,7 @@ check_implementation
 它会输出：解析梯度与有限差分的相对误差（应 $<10^{-5}$）、保密注水解的 KKT 检验、算法 2 的单调性、闭式速率与蒙特卡洛的对比。
 \item \textbf{快速功能测试：}打开 \code{run\_all.m}，把第一行改为 \code{QUICK = true;} 后运行（每个点只用 3 个随机场景，几分钟内跑完，曲线较粗糙）。
 \item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 100 个随机场景（\code{numDrops}）。
-RUNTIMES
+实测耗时（Octave 8.4，4 核机器上 5 个脚本并行、每个约占 0.75 个核，每点 100 个场景）：Fig.~3 约 2 分钟，Fig.~4 约 1 分钟，Fig.~5 约 90 分钟，Fig.~6(a) 约 78 分钟，Fig.~6(b) 约 30 分钟，Fig.~7 约 78 分钟，Fig.~8 两次运行各约 95 分钟；折合单线程共约 6 小时。MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
 各脚本互相独立，可以多开几个 MATLAB 会话并行运行，例如
 \begin{lstlisting}
 prm = default_params();         % 读取默认参数

@@ -622,7 +622,7 @@ The benchmarks for the long-term power allocation are introduced in Section~\ref
 \label{fig:acc}
 \end{figure*}
 
-SECTIONVB
+Fig.~\ref{fig:acc} evaluates the accuracy of the closed-form approximations in Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} for the compact $\lambda/2$ UPA and for random feasible MA positions, where the power is split equally between the confidential signals and the AN, i.e., $\alpha=0.5$ in Remark~\ref{rem:highsnr}. It is observed that the closed-form ergodic wiretap rate in Proposition~\ref{prop:eve} agrees well with the Monte Carlo results over the entire ranges of the transmit SNR and the Rician factor, with a maximum error of 0.16~bps/Hz in the ergodic wiretap sum rate. In particular, the error is negligible in the NLoS-dominant regime, e.g., for $\kappa=-5$~dB, where Lemma~\ref{lem:det} is exact, and it remains small in the LoS-dominant regime. Moreover, the random MA positions yield a lower wiretap rate than the compact UPA, since the enlarged aperture reduces the LoS correlation between Eve and LU~1. As discussed in Remark~\ref{rem:lu}, Lemma~\ref{lem:lu} underestimates the ergodic rates of the LUs, and the gap increases with the Rician factor. Nevertheless, the gap is almost the same for the two configurations, e.g., 1.55 and 1.66~bps/Hz for the ergodic sum rate at $\kappa=10$~dB and $\Ptot/\sigma^2=20$~dB, which confirms that it depends only weakly on the antenna positions and thus has a marginal impact on the optimization of $\bt$. Furthermore, at the solutions obtained by Algorithm~\ref{alg:ao} in Fig.~\ref{fig:snr}(a), the approximate ESSR in~\eqref{eq:esrapprox} is lower than the Monte Carlo ESSR by 1.73~bps/Hz on average at $\Ptot/\sigma^2=20$~dB, i.e., it remains a conservative estimate at the optimized positions.
 
 \subsection{Convergence of Algorithm~\ref{alg:ao}}
 
@@ -633,7 +633,7 @@ SECTIONVB
 \label{fig:conv}
 \end{figure}
 
-SECTIONVC
+Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao} for one realization of the AoDs, three initializations, and $\Ptot/\sigma^2\in\{10,20,30\}$~dB. The objective value increases monotonically in all cases, which verifies the convergence analysis in Section~\ref{sec:opt}-D. About $30\%$--$50\%$ of the total improvement is achieved in the first iteration, after which the antenna positions are gradually fine-tuned, and $95\%$ of the total improvement is attained within $20$--$60$ iterations. Moreover, the final objective values obtained from different initializations differ by at most 4.5\%, and the UPA initialization yields the best solution in all three cases, which indicates that a few initializations suffice in practice.
 
 \subsection{ESSR and AN Power Versus Transmit SNR}
 
@@ -645,7 +645,9 @@ SECTIONVC
 \label{fig:snr}
 \end{figure*}
 
-SECTIONVD
+Fig.~\ref{fig:snr}(a) shows the ESSR versus the transmit SNR. The proposed design achieves the highest ESSR over the entire SNR range. At $\Ptot/\sigma^2=20$~dB, it improves the ESSR by 12.5\%, 13.3\%, and 27.1\% compared with the rate-oriented MA, the sparse FPA, and the compact FPA, respectively, and it outperforms the rate-oriented MA and the compact FPA in every one of the $100$ AoD realizations. Notably, the rate-oriented MA, whose antenna positions decorrelate the channels of the LUs but ignore Eve, performs comparably to the sparse FPA, which simply enlarges the aperture. This shows that the secrecy gain of the proposed design stems mainly from the Eve-aware positioning enabled by Proposition~\ref{prop:eve}, rather than from the enlarged aperture or the decorrelation among the LUs. As the SNR increases, the absolute gains of the proposed design over the compact FPA and the rate-oriented MA saturate at about 4.5 and 2.3~bps/Hz, respectively, i.e., the curves become parallel. This agrees with Remark~\ref{rem:highsnr}: the antenna positions do not change the high-SNR slope of the ESSR but improve its constant term. In contrast, the ESSR of the proposed design without AN saturates at high SNR, since the wiretap rates of Eve increase with the transmit power as fast as the rates of the LUs. At low SNR, the optimized AN power is (almost) zero, and the designs with and without AN achieve similar ESSRs.
+
+Fig.~\ref{fig:snr}(b) shows the corresponding optimized AN power fraction $(N-M)q/\Ptot$, which increases with the SNR and saturates at high SNR, in agreement with the asymptotically optimal power splitting in~\eqref{eq:alphastar}. More importantly, the proposed design requires considerably less AN power than all the benchmarks, e.g., 0.31 versus 0.44, 0.40, and 0.47 for the rate-oriented MA, the sparse FPA, and the compact FPA, respectively, at $\Ptot/\sigma^2=20$~dB. Moreover, the rate-oriented MA reduces the AN power only marginally compared with the compact FPA, i.e., decorrelating the LUs alone does not save AN power. This verifies the AN-saving effect revealed in Remark~\ref{rem:highsnr}: by decorrelating the LoS component of Eve from those of the LUs, the proposed positions reduce the information leakage and increase the AN received by Eve, so that more power can be allocated to the confidential signals.
 
 \subsection{Impact of the Angular Offset and the Single-LU Case}
 
@@ -657,7 +659,9 @@ SECTIONVD
 \label{fig:angle}
 \end{figure*}
 
-SECTIONVE
+Fig.~\ref{fig:angle}(a) shows the ESSR versus the angular offset $\Delta$ between Eve and LU~1. When $\Delta$ is small, e.g., $\Delta=0.02$~rad, Eve is almost aligned with LU~1, and their LoS components can hardly be decorrelated by any array whose aperture is limited by the region size. In this case, the ESSR is mainly determined by the decorrelation among the LUs, and the rate-oriented MA performs close to the proposed design, i.e., within 0.9\%. As $\Delta$ increases, the ESSR of the proposed design increases rapidly, whereas those of the benchmarks increase slowly, and the gain over the rate-oriented MA reaches 14.4\% at $\Delta=0.2$~rad. For large $\Delta$, Eve becomes more separable even with Eve-unaware positions, and this gain decreases to 10.9\% at $\Delta=0.5$~rad. Moreover, the gain over the sparse FPA increases from 6.4\% at $\Delta=0.02$~rad to 17.6\% at $\Delta=0.3$~rad, since the fixed geometry of the sparse FPA cannot adapt to the directions of the LUs and Eve, and its grating lobes may be steered toward Eve.
+
+Fig.~\ref{fig:angle}(b) shows the single-LU case, i.e., $M=1$. As discussed in Remark~\ref{rem:special}, the ergodic rate of the LU does not depend on the antenna positions for a given power. Hence, the rate-oriented design cannot improve the antenna positions, and the rate-oriented MA coincides with the compact FPA, which is consistent with~\cite{ZhengTCOM2025}. In contrast, the proposed design substantially improves the ergodic secrecy rate, e.g., by 76.6\% and 15.5\% compared with the compact and sparse FPAs, respectively, for $\Delta=0.1$~rad. This gain stems from the reduced LoS correlation $|\hb_1^H(\bt)\gb(\bt)|^2$ between the LU and Eve, which simultaneously reduces the information leakage and increases the AN received by Eve according to~\eqref{eq:c1} and~\eqref{eq:d1}. Accordingly, the optimized AN power fraction decreases from 0.84 for the compact FPA to 0.51 for the proposed design at $\Delta=0.1$~rad, and to about 0.28 for $\Delta\ge0.2$~rad, i.e., the AN-saving effect is even more pronounced for a single LU.
 
 \subsection{Impact of the Region Size}
 
@@ -668,7 +672,7 @@ SECTIONVE
 \label{fig:region}
 \end{figure}
 
-SECTIONVF
+Fig.~\ref{fig:region} shows the ESSR versus the side length $A$ of the movable region. The ESSR of the proposed design increases with $A$, since a larger region provides more spatial degrees of freedom for decorrelating the LoS components of the LUs and Eve. Even for $A=1.5\lambda$, where the region is only slightly larger than the footprint of the compact UPA, the proposed design improves the ESSR by 8.8\% over the compact FPA by rearranging the antennas within the region, and the gain increases to 33.1\% for $A=6\lambda$. In contrast, the ESSR of the rate-oriented MA increases much more slowly with $A$, and thus the gain of the proposed design over it increases from 2.6\% to 14.2\%, which again shows that the region size is exploited for secrecy mainly through Eve-aware positioning. The sparse FPA also benefits from the enlarged aperture, but the proposed design outperforms it by 7.6\%--14.3\%.
 
 \subsection{Benefit of the Long-Term Power Allocation}\label{sec:sim_pa}
 

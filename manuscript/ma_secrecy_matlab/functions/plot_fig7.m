@@ -5,7 +5,8 @@ names = cellfun(@scheme_name, keys, 'UniformOutput', false);
 [ax, h] = plot_schemes(res.values, res.essr, keys);
 label_axes(ax, 'Side length of the movable region {\itA}/{\it\lambda}', 'ESSR (bps/Hz)');
 xlim(ax, [res.values(1) res.values(end)]);
-yl = ylim(ax);  ylim(ax, [yl(1) yl(2) + 0.35*(yl(2) - yl(1))]);
+yl = ylim(ax);  ymax = max(res.essr(:));
+ylim(ax, [yl(1), ymax + 0.6*(ymax - yl(1))]);        % head room for the legend
 add_legend(ax, h, names, 'north', 2);
 save_figure('fig7_essr_region');
 end
