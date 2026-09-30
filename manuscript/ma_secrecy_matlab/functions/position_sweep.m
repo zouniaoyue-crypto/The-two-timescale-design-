@@ -1,6 +1,6 @@
 function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast)
 %POSITION_SWEEP  One round of element-wise MM updates of the antenna positions
-%   (Section IV-C of main.tex). For each MA n:
+%   (Section IV-C of main.tex, eqs. (49)-(53)). For each MA n:
 %     1) gradient g = grad_{t_n} F at the current point (Appendix B);
 %     2) surrogate  F(t^(l)) + g^T (t_n - t_n^(l)) - delta_n/2 ||t_n - t_n^(l)||^2;
 %     3) maximizer = projection of t_n^(l) + g/delta_n onto the polygon (P3.2.n);

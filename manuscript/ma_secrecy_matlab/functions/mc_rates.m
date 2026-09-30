@@ -1,6 +1,6 @@
 function [Rb, Re, essr, stats] = mc_rates(sc, T, p, q, S, seed)
 %MC_RATES  Monte Carlo evaluation of the exact ergodic rates under ZF precoding and
-%   null-space AN (eqs. (9)-(10) of main.tex), with S channel realizations.
+%   null-space AN (eqs. (10)-(13) of main.tex), with S channel realizations.
 %   Rb(m)  = E{ log2(1 + p_m / (sigma_m^2 [(H^H H)^{-1}]_mm)) }
 %   Re(m)  = E{ log2(1 + p_m |g^H wbar_m|^2 / (q g^H P_H^perp g + sigma_e^2)) }
 %   essr   = sum_m [Rb(m) - Re(m)]^+

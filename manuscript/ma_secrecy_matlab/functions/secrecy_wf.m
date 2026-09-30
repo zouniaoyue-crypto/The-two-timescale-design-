@@ -1,5 +1,5 @@
 function p = secrecy_wf(eta, th, PI, nBisect)
-%SECRECY_WF  Secrecy water-filling (Proposition 3 of main.tex), vectorized over
+%SECRECY_WF  Secrecy water-filling (Proposition 3, eq. (38), of main.tex), vectorized over
 %   Q candidate AN powers:
 %       max_{p >= 0} sum_m log2(1 + eta_m p_m) - log2(1 + th_m p_m)
 %       s.t. sum_m p_m <= PI

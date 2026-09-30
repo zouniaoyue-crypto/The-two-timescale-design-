@@ -71,7 +71,7 @@ fig3\_essr\_vs\_power.m & 图 3：ESSR vs $P_{\rm tot}/\sigma^2$（6 种方案�
 fig4\_essr\_vs\_angle.m & 图 4：ESSR vs Eve 与 LU 1 的角度偏差 $\Delta$。\\
 fig5\_essr\_vs\_region.m & 图 5：ESSR vs 可移动区域边长 $A/\lambda$。\\
 fig7\_single\_user.m & 图 7：单用户（$M=1$）的 ESSR 与 AN 功率占比 vs $\Delta$。\\
-fig8\_power\_allocation.m & 图 8：每用户功率分配 vs 等功率（只优化 $\alpha$），横轴为 LU 路损差异。\\
+fig8\_power\_allocation.m & 图 8：每用户功率分配相对等功率（只优化 $\alpha$）的 ESSR 增益，横轴为 LU 路损差异，两个 SNR。\\
 replot\_all.m & 只从 \code{results/*.mat} 重画全部图。\\ \midrule
 \multicolumn{2}{l}{\textbf{functions/}（核心函数）}\\
 gen\_scenario.m & 随机生成 LU 的 AoD，Eve 位于 LU 1 附近（角度偏差 $\Delta$）。\\
@@ -91,6 +91,7 @@ batch\_inv\_hpd.m & 对 $S$ 个 $M\times M$ Hermitian 正定矩阵批量求逆�
 analytic\_rates.m & 闭式近似速率（引理 1、命题 1），用于图 1。\\
 evaluate\_schemes.m & 对一个场景优化并评估各方案（见第 6 节方案表）。\\
 sweep\_schemes.m & 对某个参数的取值扫描，并对随机场景取平均。\\
+power\_allocation\_sweep.m & 图 8 的计算核心：给定 SNR，对路损差异扫描并平均。\\
 upa\_positions.m, random\_positions.m & UPA 位置、随机可行位置（满足最小间距）。\\
 plot\_sweep.m, plot\_*.m, save\_figure.m, results\_dir.m & 绘图与保存。\\
 \bottomrule
@@ -238,10 +239,11 @@ FPA\_noAN & FPA without AN & 紧凑 UPA，$q=0$ \\
 \item[图 2（\code{fig2\_convergence}）] 算法 2 的目标值随迭代单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
 \item[图 3、图 6（\code{fig3\_essr\_vs\_power}）] ESSR 与 AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化。预期：所提 MA 方案最好；无 AN 的方案在高 SNR 饱和；MA 的 AN 占比低于 FPA（AN 节省效应，注 4）。
 \item[图 4（\code{fig4\_essr\_vs\_angle}）] ESSR 随 $\Delta$ 的变化。$\Delta$ 很小时（Eve 与 LU 1 几乎同向）任何阵列都难以区分二者；MA 在中等 $\Delta$ 下增益最明显。
-\item[图 5（\code{fig5\_essr\_vs\_region}）] ESSR 随区域边长 $A$ 增大而增大（空间自由度增加）；紧凑 FPA 与 $A$ 无关；稀疏 FPA 因栅瓣而波动。
+\item[图 5（\code{fig5\_essr\_vs\_region}）] ESSR 随区域边长 $A$ 增大而增大（空间自由度增加）；紧凑 FPA 与 $A$ 无关；稀疏 FPA 也随孔径增大而改善，但始终低于 MA（其固定几何无法随 LU/Eve 方向调整，且栅瓣可能指向 Eve）。
 \item[图 7（\code{fig7\_single\_user}）] $M=1$：LU 的遍历速率与位置无关（注 3），但 MA 仍能显著提升保密速率并减少 AN 功率。
-\item[图 8（\code{fig8\_power\_allocation}）] $P_{\rm tot}/\sigma^2=15$ dB，LU 的大尺度衰落为 $\beta_m=[0,-\varsigma/2,-\varsigma]$ dB，横轴为差异 $\varsigma$。
-比较所提的每用户功率分配（命题 2、3）与“等功率 + 只优化功率分割因子 $\alpha$”。预期：用户越不对称，每用户功率分配的增益越大。
+\item[图 8] （\code{fig8\_power\_allocation}）LU 的大尺度衰落 $\beta_m=[0,-\varsigma/2,-\varsigma]$ dB，横轴为差异 $\varsigma$，$P_{\rm tot}/\sigma^2$ 取 5 dB 与 15 dB。
+纵轴是所提的每用户功率分配（命题 2、3）相对“等功率 + 只优化功率分割因子 $\alpha$”的 ESSR 增益（\%），MA 与 FPA 各一条。
+实测：用户越不对称、SNR 越低，增益越大（$\varsigma=20$ dB、5 dB 时 MA $+36.7\%$，FPA $+78.6\%$）；对称用户、高 SNR 时增益很小。
 \end{description}
 
 \section{常见修改}

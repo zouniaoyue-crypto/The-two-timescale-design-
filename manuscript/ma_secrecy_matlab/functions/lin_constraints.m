@@ -2,7 +2,7 @@ function [Acon, bcon] = lin_constraints(sc, T, n)
 %LIN_CONSTRAINTS  Linear constraints of subproblem (P3.2.n) in main.tex:
 %   box:       -A/2 <= x_n, y_n <= A/2
 %   distance:  (t_n^(l) - t_i)^T t_n >= (t_n^(l) - t_i)^T t_n^(l) + (Dmin^2 - ||t_n^(l) - t_i||^2)/2,
-%              i ~= n   (first-order inner approximation of ||t_n - t_i|| >= Dmin, eq. (41)).
+%              i ~= n   (first-order inner approximation of ||t_n - t_i|| >= Dmin, eq. (51)).
 %   Returned in the form Acon * t_n >= bcon.
 
 N = sc.N;  A2 = sc.A/2;

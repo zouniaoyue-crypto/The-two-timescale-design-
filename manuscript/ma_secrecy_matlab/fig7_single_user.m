@@ -10,7 +10,6 @@ prm.M = 1;
 Dvec = [0.02 0.05 0.1 0.2 0.3 0.5];
 schemes = {'MA_full', 'FPA_full', 'SPA_full'};
 res = sweep_schemes(prm, 'Delta', Dvec, schemes);
-res.names = {'Proposed MA (opt. t, p, q)', 'FPA (\lambda/2 UPA), opt. p, q', 'Sparse FPA, opt. p, q'};
 save(fullfile(results_dir(), 'fig7_single_user.mat'), 'res', 'prm', '-v7');
 plot_fig7(res);
 end

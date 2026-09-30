@@ -1,5 +1,5 @@
 function [eta, xi, psi, g] = rate_coeffs(sc, T)
-%RATE_COEFFS  Effective coefficients of problem (P3) in main.tex (eq. (26)):
+%RATE_COEFFS  Effective coefficients of problem (P3) in main.tex (eqs. (17), (26)):
 %   eta_m(t) = zeta_m (N - M) / (N omega_m(t))      effective ZF gain of LU m
 %   xi_m(t)  = kappa_e c_m(t) + 1                   normalized leakage to Eve
 %   psi(t)   = kappa_e d(t) + N - M                 normalized AN power at Eve

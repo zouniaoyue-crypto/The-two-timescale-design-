@@ -2,11 +2,11 @@ function g = geo_quantities(sc, T)
 %GEO_QUANTITIES  LoS-dependent quantities of main.tex for antenna positions T (N x 2).
 %
 %   L     = Hbar K^{1/2}                         (weighted LoS matrix, N x M)
-%   Phi   = L^H L + N I_M,   Omega = Phi^{-1}     (eq. (14))
-%   v     = L^H gbar                              (eq. (22))
-%   omega_m = [Omega]_{mm}                        (LU decorrelation, eq. (15))
-%   c_m   = (|[Omega v]_m|^2 + N [Omega^2]_{mm}) / omega_m   (leakage, eq. (21))
-%   d     = (N - v^H Omega v)(1 - tr(Omega))                  (AN at Eve, eq. (22))
+%   Phi   = L^H L + N I_M,   Omega = Phi^{-1}     (eq. (16))
+%   v     = L^H gbar                              (Proposition 1)
+%   omega_m = [Omega]_{mm}                        (LU decorrelation, Lemma 1, eq. (17))
+%   c_m   = (|[Omega v]_m|^2 + N [Omega^2]_{mm}) / omega_m   (leakage, eq. (24))
+%   d     = (N - v^H Omega v)(1 - tr(Omega))                  (AN at Eve, eq. (25))
 
 N = sc.N;  M = sc.M;
 k0 = 2*pi/sc.lambda;

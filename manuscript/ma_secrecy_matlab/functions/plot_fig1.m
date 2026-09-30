@@ -3,6 +3,8 @@ function plot_fig1(res)
 xl = {'P_{tot}/\sigma^2 (dB)', '\kappa = \kappa_e (dB)'};
 data = {res.vsP, res.vsK};  xv = {res.Pvec, res.Kvec};
 tags = {'a', 'b'; 'c', 'd'};  who = {'LUs', 'Eve'};
+ylab = {'Ergodic sum rate of LUs (bps/Hz)', 'Ergodic wiretap sum rate (bps/Hz)'};
+loc = {'southeast', 'southeast'; 'southwest', 'southeast'};   % legend positions (free areas)
 col = {[0 0.447 0.741], [0.850 0.325 0.098]};
 for sweep = 1:2
     for w = 1:2                                   % w = 1: LUs, w = 2: Eve
@@ -13,10 +15,12 @@ for sweep = 1:2
         plot(X, Y(:,2,j),   's',  'Color', col{2}, 'MarkerSize', 8, 'LineWidth', 1.5);
         plot(X, Y(:,2,j+1), '--', 'Color', col{2}, 'LineWidth', 1.8);
         xlabel(xl{sweep});
-        ylabel(sprintf('Ergodic sum rate of the %s (bps/Hz)', who{w}));
-        legend({'\lambda/2 UPA, Monte Carlo', '\lambda/2 UPA, closed form', ...
-                'Random MA positions, Monte Carlo', 'Random MA positions, closed form'}, ...
-               'Location', 'northwest');
+        ylabel(ylab{w});
+        yl = ylim;                                % extend the y-axis downward so that the
+        ylim([max(0, yl(1) - 0.35*(yl(2) - yl(1))), yl(2)]);   % legend does not cover the curves
+        legend({'UPA, Monte Carlo', 'UPA, closed form', ...
+                'Random MA, Monte Carlo', 'Random MA, closed form'}, ...
+               'Location', loc{sweep, w}, 'FontSize', 9);
         save_figure(sprintf('fig1%s_accuracy_%s', tags{sweep, w}, lower(who{w})));
     end
 end

@@ -13,10 +13,12 @@ new_figure();
 col = {[0 0.447 0.741], [0.494 0.184 0.556]};     % MA, FPA
 mk = {'-o', '--s'; '-^', '--d'};                  % rows: SNR index, columns: MA/FPA
 leg = {};
+gmin = 0;  gmax = 0;
 for j = 1:numel(res.Plist)
     E = res.essr(:, :, j);
     gMA  = 100*(E(:,1)./E(:,2) - 1);
     gFPA = 100*(E(:,3)./E(:,4) - 1);
+    gmin = min([gmin; gMA; gFPA]);  gmax = max([gmax; gMA; gFPA]);
     plot(res.values, gMA,  mk{j,1}, 'Color', col{1}, 'LineWidth', 1.6, 'MarkerSize', 7);
     plot(res.values, gFPA, mk{j,2}, 'Color', col{2}, 'LineWidth', 1.6, 'MarkerSize', 7);
     leg{end+1} = sprintf('MA, P_{tot}/\\sigma^2 = %d dB', res.Plist(j));  %#ok<AGROW>
@@ -24,6 +26,7 @@ for j = 1:numel(res.Plist)
 end
 xlabel('Spread \varsigma of \beta_m among the LUs (dB)');
 ylabel('ESSR gain over equal power (%)');
+ylim([min(-5, floor(gmin) - 1), 5*ceil((gmax + 5)/5)]);
 legend(leg, 'Location', 'northwest', 'FontSize', 9);
 save_figure('fig8_power_allocation');
 end
