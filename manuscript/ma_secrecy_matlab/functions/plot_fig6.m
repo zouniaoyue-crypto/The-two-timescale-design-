@@ -17,7 +17,7 @@ if part == 'a'                % all curves lie well above zero: legend in the lo
     ylim(ax, [0 1.12*ymax]);
     add_legend(ax, h, names, 'south', 2);
 else                          % single LU: legend above the curves
-    ylim(ax, [0 1.55*ymax]);
+    ylim(ax, [0 1.75*ymax]);
     add_legend(ax, h, names, 'north', 2);
 end
 if part == 'a', save_figure('fig6a_essr_angle'); else, save_figure('fig6b_essr_single_user'); end
