@@ -46,8 +46,9 @@ check_implementation
 \end{lstlisting}
 它会输出：解析梯度与有限差分的相对误差（应 $<10^{-5}$）、保密注水解的 KKT 检验、算法 2 的单调性、闭式速率与蒙特卡洛的对比。
 \item \textbf{快速功能测试：}打开 \code{run\_all.m}，把第一行改为 \code{QUICK = true;} 后运行（每个点只用 3 个随机场景，几分钟内跑完，曲线较粗糙）。
-\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 50 个随机场景，
-在 4 核 CPU 的 Octave 上全部图约需 1.5--2 小时（MATLAB 一般更快）。也可以单独运行某一张图，例如
+\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 50 个随机场景。
+实测（Octave 8.4，单线程）：图 1 约 1 分钟，图 2 约 0.2 分钟，图 3/6 约 45 分钟，图 4 约 22 分钟，图 5 约 18 分钟，图 7 约 17 分钟，图 8 约 26 分钟，
+合计约 2 小时（MATLAB 一般更快；多开几个 MATLAB 会话分别运行不同的图即可并行）。也可以单独运行某一张图，例如
 \begin{lstlisting}
 prm = default_params();      % 读取默认参数
 prm.numDrops = 20;           % 修改参数（这里减少随机场景数以加快速度）
