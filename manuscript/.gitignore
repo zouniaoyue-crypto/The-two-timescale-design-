@@ -1,0 +1,12 @@
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+# compiled PDFs are distributed as main_preview.pdf and ma_secrecy_matlab/readme.pdf
+main.pdf

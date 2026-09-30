@@ -1,0 +1,259 @@
+# Created by Octave 8.4.0, Wed Sep 30 03:02:21 2026 UTC <root@vm>
+# name: res
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 6
+# name: values
+# type: matrix
+# rows: 1
+# columns: 6
+ 0.02 0.050000000000000003 0.10000000000000001 0.20000000000000001 0.29999999999999999 0.5
+
+
+# name: schemes
+# type: cell
+# rows: 1
+# columns: 4
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 7
+MA_full
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 6
+MA_EPA
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+FPA_full
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+SPA_full
+
+
+
+
+
+# name: essr
+# type: matrix
+# rows: 6
+# columns: 4
+ 17.168781045009489 16.746930564592191 15.514325371474907 16.120011183474787
+ 18.355546840135386 18.044942228680366 15.558556647138444 16.649145709821411
+ 20.125347915445207 20.044854330089318 15.706029363232918 17.7147079416469
+ 21.724984673486926 21.71555509487353 16.140292458082442 18.980545866668606
+ 22.05977666961731 22.068637916811323 16.585529046416021 19.019864860378085
+ 22.273911682113564 22.275280516105052 17.304036701793272 18.7723494629399
+
+
+# name: anfrac
+# type: matrix
+# rows: 6
+# columns: 4
+ 0.43302499999999983 0.43647499999999984 0.47637500000000021 0.46244999999999997
+ 0.38567499999999993 0.39462499999999989 0.47570000000000001 0.44767500000000005
+ 0.30232500000000001 0.30865000000000004 0.47180000000000011 0.40050000000000002
+ 0.20185 0.20227500000000009 0.4553250000000002 0.32035000000000008
+ 0.17947500000000005 0.17920000000000005 0.43377500000000008 0.31262499999999988
+ 0.16722500000000007 0.16717500000000005 0.38855000000000006 0.32297500000000001
+
+
+# name: F
+# type: matrix
+# rows: 6
+# columns: 4
+ 15.809733452457857 15.398997505557402 13.902421043950163 14.605234804466072
+ 16.805692731727934 16.494841073519069 13.948803583843754 15.118262387978836
+ 18.411131108845009 18.325322674905408 14.105643864499344 16.151278874053244
+ 19.95132617666383 19.940411078572197 14.571513516069322 17.393742496141854
+ 20.279213140652832 20.287312245876393 15.0550061983001 17.463522766497103
+ 20.486000120242053 20.485906532383467 15.838149272555102 17.251532019470186
+
+
+# name: names
+# type: cell
+# rows: 1
+# columns: 4
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 26
+Proposed MA (opt. t, p, q)
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 32
+MA, equal power (opt. t, \alpha)
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 30
+FPA (\lambda/2 UPA), opt. p, q
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 21
+Sparse FPA, opt. p, q
+
+
+
+
+
+
+
+# name: prm
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 25
+# name: N
+# type: scalar
+8
+
+
+# name: M
+# type: scalar
+3
+
+
+# name: lambda
+# type: scalar
+1
+
+
+# name: A
+# type: scalar
+4
+
+
+# name: Dmin
+# type: scalar
+0.5
+
+
+# name: upaRows
+# type: scalar
+2
+
+
+# name: upaCols
+# type: scalar
+4
+
+
+# name: kappa_dB
+# type: scalar
+10
+
+
+# name: kappae_dB
+# type: scalar
+10
+
+
+# name: beta_dB
+# type: scalar
+0
+
+
+# name: betae_dB
+# type: scalar
+0
+
+
+# name: sigma2
+# type: scalar
+1
+
+
+# name: sigma2e
+# type: scalar
+1
+
+
+# name: P_dB
+# type: scalar
+20
+
+
+# name: angMax
+# type: scalar
+1.0471975511965976
+
+
+# name: Delta
+# type: scalar
+0.10000000000000001
+
+
+# name: aoMaxIter
+# type: scalar
+60
+
+
+# name: aoTol
+# type: scalar
+0.0001
+
+
+# name: delta0
+# type: scalar
+1
+
+
+# name: nGrid
+# type: scalar
+41
+
+
+# name: nBisect
+# type: scalar
+60
+
+
+# name: numInit
+# type: scalar
+3
+
+
+# name: S
+# type: scalar
+5000
+
+
+# name: numDrops
+# type: scalar
+50
+
+
+# name: seed
+# type: scalar
+2026
+
+
+
+
