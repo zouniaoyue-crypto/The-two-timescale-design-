@@ -12,4 +12,5 @@ addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 res = sweep_schemes(prm, 'P_dB', 0:5:30, [main_schemes(), {'MA_noAN'}]);
 save(fullfile(results_dir(), 'fig5_snr.mat'), 'res', 'prm', '-v7');
 plot_fig5(res);
+print_table2(res, [10 20 30]);    % Table II (both eavesdropper models)
 end

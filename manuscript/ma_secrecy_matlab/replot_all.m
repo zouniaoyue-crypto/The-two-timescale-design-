@@ -26,3 +26,8 @@ if exist(fa, 'file') && exist(fb, 'file')
     plot_fig8(Sa.res, Sb.res);  close all;
     fprintf('replotted fig8_power_allocation\n');
 end
+f5 = fullfile(results_dir(), 'fig5_snr.mat');
+if exist(f5, 'file')
+    S = load(f5);
+    if isfield(S.res, 'essr_tin'), print_table2(S.res, [10 20 30]); end
+end
