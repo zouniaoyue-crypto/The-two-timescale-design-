@@ -19,8 +19,9 @@ for k = 1:size(list, 1)
         fprintf('skipped %s (no results file)\n', list{k,1});
     end
 end
-fa = fullfile(results_dir(), 'fig8_pa_10dB.mat');
-fb = fullfile(results_dir(), 'fig8_pa_20dB.mat');
+prm = default_params();
+fa = fullfile(results_dir(), sprintf('fig8_pa_%ddB.mat', prm.fig8SNR(1)));
+fb = fullfile(results_dir(), sprintf('fig8_pa_%ddB.mat', prm.fig8SNR(2)));
 if exist(fa, 'file') && exist(fb, 'file')
     Sa = load(fa);  Sb = load(fb);
     plot_fig8(Sa.res, Sb.res);  close all;

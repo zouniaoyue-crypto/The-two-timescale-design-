@@ -34,6 +34,7 @@ prm.nBisect    = 60;     % bisection iterations for the water level nu
 prm.numInit    = 3;      % initializations of Algorithm 2: UPA + (numInit-1) random
 prm.asGrid     = 21;     % coarse grid of q used to rank the antenna subsets of the AS benchmark
 prm.alphaFix   = 0.5;    % fixed power-splitting factor of the benchmark without power optimization
+prm.fig8SNR    = [0 10]; % transmit SNRs (dB) of Fig. 8(a) and 8(b)
 
 % ---------------- evaluation ----------------
 prm.S          = 5000;   % Monte Carlo channel realizations per evaluation

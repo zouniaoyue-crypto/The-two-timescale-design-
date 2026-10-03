@@ -8,7 +8,7 @@ names = cellfun(@scheme_name, keys, 'UniformOutput', false);
 [ax, h] = plot_schemes(res.values, Y, keys);
 label_axes(ax, xl, 'ESSR (bps/Hz)');
 xlim(ax, [res.values(1) res.values(end)]);
-yl = ylim(ax);  ylim(ax, [0 yl(2)]);
+ymax = max(Y(:));  ylim(ax, [0 5*ceil(1.15*ymax/5)]);  % upper-left corner kept free for the legend
 add_legend(ax, h, names, 'northwest');
 save_figure('fig5a_essr_snr');
 % (b) AN power fraction
@@ -17,7 +17,7 @@ names = cellfun(@scheme_name, keys, 'UniformOutput', false);
 [ax, h] = plot_schemes(res.values, Y, keys);
 label_axes(ax, xl, 'AN power fraction ({\itN}-{\itM}){\itq}/{\itP}_{tot}');
 xlim(ax, [res.values(1) res.values(end)]);
-ylim(ax, [0 0.6]);
-add_legend(ax, h, names, 'southeast');
+ylim(ax, [0 0.75]);                                 % head room for a two-column legend
+add_legend(ax, h, names, 'north', 2);
 save_figure('fig5b_an_fraction');
 end

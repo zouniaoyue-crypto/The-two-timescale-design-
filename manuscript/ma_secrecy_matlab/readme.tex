@@ -32,7 +32,7 @@
 \item 算法 2（交替优化 AO）的收敛性；
 \item 遍历保密和速率（ESSR）随发射信噪比、Eve 与 LU 1 的角度偏差 $\Delta$、可移动区域边长 $A$ 的变化，以及最优 AN 功率占比（AN 节省效应，注 4）和单用户情形（注 3）；对比方案包括速率导向 MA、天线选择（AS）、稀疏 FPA 与紧凑 FPA；
 \item 两种 Eve 模型（最坏情况 Eve 与“把其他 LU 信号当噪声”的 TIN Eve）下的 ESSR（稿件表 II，含无 AN 方案）；
-\item 长时功率分配（每用户保密注水 + AN 功率优化）相对两种等功率方案的收益随 LU 大尺度衰落差异 $\varsigma$ 的变化（Fig.~8，10 dB 与 20 dB）。
+\item 长时功率分配（每用户保密注水 + AN 功率优化）相对两种等功率方案的收益随 LU 大尺度衰落差异 $\varsigma$ 的变化（Fig.~8：0 dB 与 10 dB 两个子图；20 dB 的结果在正文中引用）。
 \end{enumerate}
 所有优化只使用统计 CSI（式 (17)、(26) 的闭式近似）；所有性能曲线（除 Fig.~3 的 closed-form 曲线外）均用\textbf{精确的} ZF 预编码 + 零空间 AN（式 (12)、(13)）做蒙特卡洛评估。
 代码不依赖任何工具箱（不需要 CVX）：功率分配用二分法 + 一维网格搜索，位置子问题 (52) 是二维凸 QP，用“枚举边与顶点”的方法精确求解。
@@ -49,14 +49,15 @@ check_implementation
 它会输出：解析梯度与有限差分的相对误差（应 $<10^{-5}$）、保密注水解的 KKT 检验、算法 2 的单调性、闭式速率与蒙特卡洛的对比。
 \item \textbf{快速功能测试：}打开 \code{run\_all.m}，把第一行改为 \code{QUICK = true;} 后运行（每个点只用 3 个随机场景，几分钟内跑完，曲线较粗糙）。
 \item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。默认每个点平均 100 个随机场景（\code{numDrops}）。
-实测耗时（Octave 8.4，4 核机器上 5 个脚本并行、每个约占 0.75 个核，每点 100 个场景）：Fig.~3 约 2 分钟，Fig.~4 约 1 分钟，Fig.~5 约 90 分钟，Fig.~6(a) 约 78 分钟，Fig.~6(b) 约 30 分钟，Fig.~7 约 78 分钟，Fig.~8 两次运行各约 95 分钟；折合单线程共约 6 小时。MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
+实测耗时（Octave 8.4，4 核机器上 4 个脚本并行、每个约占 1 个核，每点 100 个场景）：Fig.~3 约 2 分钟，Fig.~4 约 1 分钟，Fig.~5 约 110 分钟（含 AS、无 AN 与 TIN 评估），Fig.~6(a) 约 100 分钟，Fig.~6(b) 约 40 分钟，Fig.~7 约 100 分钟，Fig.~8 三次运行（0/10/20 dB）各约 50--90 分钟；折合单线程共约 9--10 小时。AS 基准每个场景约 2 s（$\binom{16}{8}=12870$ 个子集，向量化）。MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
 各脚本互相独立，可以多开几个 MATLAB 会话并行运行，例如
 \begin{lstlisting}
 prm = default_params();         % 读取默认参数
 prm.numDrops = 30;              % 修改参数（这里减少随机场景数以加快速度）
 fig5_snr(prm);                  % 只跑 Fig. 5（同时生成 (a) ESSR 与 (b) AN 功率占比）
-fig8_power_allocation(prm, 10); % Fig. 8 需要运行两次：(a) P_tot/sigma^2 = 10 dB ...
-fig8_power_allocation(prm, 20); % ... 与 (b) 20 dB，两次都完成后自动画图
+fig8_power_allocation(prm, 0);  % Fig. 8 需要运行两次：(a) P_tot/sigma^2 = 0 dB ...
+fig8_power_allocation(prm, 10); % ... 与 (b) 10 dB（prm.fig8SNR），两次都完成后自动画图
+fig8_power_allocation(prm, 20); % 可选：20 dB 的结果只在正文中引用
 \end{lstlisting}
 \item 结果保存在 \code{results/} 文件夹：\code{.mat}（数据）以及图。MATLAB 下每张图导出矢量 \code{.pdf}（嵌入字体，稿件直接引用）、\code{.eps}、600 dpi \code{.png} 与 \code{.fig}；Octave 下只导出 600 dpi \code{.png}（Octave 的矢量导出在小字号下字符间距不准）。
 只想重画图（不重新仿真）时运行 \code{replot\_all}。
@@ -75,7 +76,7 @@ fig5\_snr.m & Fig.~5：(a) ESSR 与 (b) AN 功率占比 vs 发射 SNR；同时�
 fig6a\_angle.m & Fig.~6(a)：ESSR vs 角度偏差 $\Delta$（$M=3$）。\\
 fig6b\_single\_user.m & Fig.~6(b)：单用户（$M=1$）保密速率 vs $\Delta$。\\
 fig7\_region.m & Fig.~7：ESSR vs 可移动区域边长 $A/\lambda$。\\
-fig8\_power\_allocation.m & Fig.~8：三种长时功率分配的 ESSR vs LU 大尺度衰落差异 $\varsigma$（$[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$ dB）；第二个参数为发射 SNR，需分别以 10 与 20 运行。\\
+fig8\_power\_allocation.m & Fig.~8：三种长时功率分配的 ESSR vs LU 大尺度衰落差异 $\varsigma$（$[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$ dB）；第二个参数为发射 SNR，两个子图分别以 0 与 10 运行（\code{prm.fig8SNR}），20 dB 的结果在正文中引用。\\
 replot\_all.m & 只从 \code{results/*.mat} 重画全部图。\\ \midrule
 \multicolumn{2}{l}{\textbf{functions/}（算法与评估）}\\
 gen\_scenario.m & 随机生成 LU 的 AoD，Eve 位于 LU 1 附近（角度偏差 $\Delta$）。\\
@@ -98,6 +99,7 @@ analytic\_rates.m & 闭式近似速率（引理 1、命题 1），用于 Fig.~3�
 evaluate\_schemes.m & 对一个场景优化并评估各方案（见第 6 节方案表）。\\
 main\_schemes.m & Fig.~5--7 统一使用的 5 种方案。\\
 pick\_schemes.m & 从结果中按方案名取列（画图只画 \code{main\_schemes} 中的方案）。\\
+print\_table2.m & 打印稿件表 II（两种 Eve 模型下各方案的 ESSR）。\\
 sweep\_schemes.m & 对某个参数的取值扫描，并对随机场景取平均（同时保存每个场景的 ESSR 与 TIN Eve 下的 ESSR）；字段 \code{'spread'} 表示 LU 大尺度衰落差异。\\
 upa\_positions.m, random\_positions.m & UPA 位置、随机可行位置（满足最小间距）。\\ \midrule
 \multicolumn{2}{l}{\textbf{functions/}（绘图，IEEE 风格）}\\
@@ -135,6 +137,7 @@ numInit & 3 & -- & 算法 2（以及速率导向 MA 基准）的初始化个数�
 alphaFix & 0.5 & $\alpha$ & “等功率、固定 $\alpha$”基准（Fig.~8）的功率分割因子 \\
 asRows, asCols & 4, 4 & -- & AS 基准的候选阵列：$4\times4$ UPA，间距 $\lambda/2$（$2N=16$ 个天线）\\
 asGrid & 21 & -- & AS 基准中 $q$ 的网格点数（对每个子集做算法 1；只在选择时使用粗网格，选定子集后用 \code{power\_opt} 精确优化）\\
+fig8SNR & [0 10] & $P_{\rm tot}/\sigma^2$ & Fig.~8(a)(b) 两个子图的发射 SNR（dB）\\
 S & 5000 & -- & 每次蒙特卡洛评估的信道样本数（Fig.~3 至少用 $10^4$）\\
 numDrops & 100 & -- & 每个横轴点平均的随机场景（AoD）数，所有方案共用同一批场景 \\
 seed & 2026 & -- & 随机种子（保证可复现；第 $i$ 个场景用 \code{seed}$+i$）\\
@@ -255,7 +258,7 @@ MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha$ 固定为 0.5（不做�
 \code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs 发射 SNR \\
 \code{fig6a\_essr\_angle}, \code{fig6b\_essr\_single\_user} & Fig.~6(a)(b) & ESSR vs 角度偏差（$M=3$ / $M=1$）\\
 \code{fig7\_essr\_region} & Fig.~7 & ESSR vs 区域边长 $A$ \\
-\code{fig8a\_pa\_10dB}, \code{fig8b\_pa\_20dB} & Fig.~8(a)(b) & 三种功率分配的 ESSR vs 衰落差异 $\varsigma$ \\
+\code{fig8a\_pa\_0dB}, \code{fig8b\_pa\_10dB} & Fig.~8(a)(b) & 三种功率分配的 ESSR vs 衰落差异 $\varsigma$ \\
 \code{fig5\_snr.mat}（字段 \code{essr\_tin}） & 表 II & 两种 Eve 模型下的 ESSR \\
 \bottomrule
 \end{tabular}
@@ -267,11 +270,11 @@ MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha$ 固定为 0.5（不做�
 \item[Fig.~3（\code{fig3\_accuracy}）] 固定功率分割 $\alpha=0.5$，紧凑 UPA 与随机 MA 位置两种布局；(a) 横轴为发射 SNR，(b) 横轴为莱斯因子 $\kappa=\kappa_e$。上面一组曲线是 LU 的遍历和速率（引理 1），下面一组是 Eve 的遍历窃听和速率（命题 1）；标记为蒙特卡洛，线为闭式。
 预期：Eve 的闭式近似与蒙特卡洛高度吻合；LU 的闭式近似（现有结果）偏保守，差距随 $\kappa$ 增大，但两种布局几乎相同（支撑注 1：对位置优化影响很小）。
 \item[Fig.~4（\code{fig4\_convergence}）] 算法 2 的目标值随迭代单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
-\item[Fig.~5（\code{fig5\_snr}）] (a) ESSR 与 (b) AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化，5 种方案。预期：所提方案最好；速率导向 MA 与稀疏 FPA 相近（只考虑 LU 去相关、不考虑 Eve 的位置对保密帮助有限）；无 AN 方案在高 SNR 饱和；所提方案的 AN 占比明显低于所有基准，而速率导向 MA 的 AN 占比与紧凑 FPA 几乎相同（AN 节省来自“针对 Eve 的位置设计”，注 4）。
-\item[Fig.~6（\code{fig6a\_angle}, \code{fig6b\_single\_user}）] ESSR 随 $\Delta$ 的变化（横轴对数刻度）。(a) $M=3$：$\Delta$ 很小时任何阵列都难以区分 Eve 与 LU 1，各方案接近；中等 $\Delta$ 时所提方案增益最大；$\Delta$ 很大时 Eve 本身容易分开，速率导向 MA 追上一部分。(b) $M=1$：LU 的速率与位置无关（注 3），速率导向 MA 保持初始 UPA，与紧凑 FPA 完全重合；所提方案仍有显著增益。
-\item[Fig.~7（\code{fig7\_region}）] ESSR 随区域边长 $A$ 增大而增大；紧凑 FPA 与 $A$ 无关；速率导向 MA 随 $A$ 改善很少；稀疏 FPA 随阵元间距变化而起伏（栅瓣位置相对 Eve 变化）。
-\item[Fig.~8（\code{fig8\_power\_allocation}）] 横轴为 LU 大尺度衰落的差异 $\varsigma$（$[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$ dB，$\varsigma=0$ 即前面各图的同质 LU），纵轴为 ESSR（绝对值，不再画“损失百分比”）；(a) 10 dB，(b) 20 dB。红色圆圈：所提功率分配；蓝色方块：等功率 + 优化 $\alpha$；灰色三角：等功率 + $\alpha=0.5$。位置均由算法 2 针对各自的功率分配优化。
-预期：$\varsigma=0$ 时“等功率 + 优化 $\alpha$”接近最优（对称用户，注水趋于等功率）；$\varsigma$ 增大时所提功率分配的优势增大（关断/降低保密能力差的 LU），且在 10 dB 比 20 dB 更明显；固定 $\alpha=0.5$ 始终最差。具体数字见稿件第 V-G 节。
+\item[Fig.~5（\code{fig5\_snr}）] (a) ESSR 与 (b) AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化，5 种方案。预期：所提方案最好；速率导向 MA 与稀疏 FPA 相近（只考虑 LU 去相关、不考虑 Eve 的位置对保密帮助有限）；AS 比紧凑 FPA 好，但受限于 $\lambda/2$ 网格与小孔径；所提方案的 AN 占比明显低于所有基准，而速率导向 MA 的 AN 占比与紧凑 FPA 几乎相同（AN 节省来自“针对 Eve 的位置设计”，注 4）。同一次运行还计算无 AN 方案与 TIN Eve 下的 ESSR，并打印表 II：无 AN 方案只在最坏情况 Eve 下高 SNR 饱和，在 TIN Eve 下随 SNR 增长；所提方案在两种模型下都最好。
+\item[Fig.~6（\code{fig6a\_angle}, \code{fig6b\_single\_user}）] ESSR 随 $\Delta$ 的变化（横轴对数刻度）。(a) $M=3$：$\Delta$ 很小时任何阵列都难以区分 Eve 与 LU 1，各方案接近；中等 $\Delta$ 时所提方案增益最大；$\Delta$ 很大时 Eve 本身容易分开，速率导向 MA 追上一部分。(b) $M=1$：LU 的速率与位置无关（注 3），速率导向 MA 保持初始 UPA，与紧凑 FPA 完全重合；所提方案仍有显著增益；AS 随 $\Delta$ 增大而改善，$\Delta=0.5$ rad 时接近所提方案。
+\item[Fig.~7（\code{fig7\_region}）] ESSR 随区域边长 $A$ 增大而增大；紧凑 FPA 与 AS 与 $A$ 无关（AS 的候选阵列是 $1.5\lambda\times1.5\lambda$ 的 $4\times4$ UPA，$A=1.5\lambda$ 时与所提方案相当，$A\ge2\lambda$ 后被超过）；速率导向 MA 随 $A$ 改善很少；稀疏 FPA 随阵元间距变化而起伏（栅瓣位置相对 Eve 变化）。
+\item[Fig.~8（\code{fig8\_power\_allocation}）] 横轴为 LU 大尺度衰落的差异 $\varsigma$（$[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$ dB，$\varsigma=0$ 即前面各图的同质 LU），纵轴为 ESSR（绝对值，不再画“损失百分比”）；(a) 0 dB，(b) 10 dB。红色圆圈：所提功率分配；蓝色方块：等功率 + 优化 $\alpha$；灰色三角：等功率 + $\alpha=0.5$。位置均由算法 2 针对各自的功率分配优化。
+预期：$\varsigma$ 较小时“等功率 + 优化 $\alpha$”接近最优（用户近似对称，注水趋于等功率）；当最弱 LU 的等效增益接近 Eve 时（0 dB 下约 $\varsigma\ge10$ dB，10 dB 下约 $\varsigma\ge15$ dB），所提功率分配将其关断或降功率，优势明显增大；20 dB 时所有 LU 都有正的保密速率，优势消失（因此不作为子图）；固定 $\alpha=0.5$ 始终最差，低 SNR 时最严重。具体数字见稿件第 V-G 节。
 \end{description}
 
 \section{绘图风格（IEEE 期刊常见格式）}
@@ -289,7 +292,7 @@ MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha$ 固定为 0.5（不做�
 prm = default_params();  prm.N = 6;  prm.kappa_dB = 5;
 fig5_snr(prm);
 \end{lstlisting}
-\item \textbf{不同用户不同路损：}\code{prm.beta\_dB = [0 -5 -10];}（长度须等于 $M$）。此时每用户功率分配相对等功率的增益更明显（见 Fig.~8）。
+\item \textbf{不同用户不同路损：}\code{prm.beta\_dB = [0 -10 -20];}（长度须等于 $M$）。用户差异大、SNR 较低时，每用户功率分配相对等功率的增益更明显（见 Fig.~8）。
 \item \textbf{改扫描范围：}在对应 \code{figX\_*.m} 中修改 \code{sweep\_schemes} 的取值向量。
 \item \textbf{加速：}减小 \code{numDrops}、\code{S}、\code{numInit}；或在 \code{sweep\_schemes.m} 中把随机场景循环改为 \code{parfor}（需要 Parallel Computing Toolbox，并把循环内的累加改为先存入数组、循环结束后再求平均）。
 \item \textbf{只重画图：}运行 \code{replot\_all}（读取 \code{results/*.mat}）。
@@ -301,7 +304,9 @@ fig5_snr(prm);
 \item 解析梯度（式 (48)、附录 B，含迹匹配后的 $\dot d$）与中心差分的最大相对误差约 $10^{-7}$；等功率模式下的部分梯度同样验证（约 $10^{-8}$）；
 \item 保密注水解满足 KKT 条件（活跃用户的边际收益相等、功率预算用满、关断用户满足 $f_m'(0)\le\nu$），并与通用求解器（SLSQP）结果一致；
 \item 算法 2 在所有模式（\code{'full'}, \code{'epa'}, \code{'fix'}）下单调不减；
-\item 与独立的 Python 实现逐项对比：引理 2 的条件均值、条件独立性，引理 3 的精确/渐近精确性，命题 1 的闭式与蒙特卡洛，均一致。
+\item 与独立的 Python 实现逐项对比：引理 2 的条件均值、条件独立性，引理 3 的精确/渐近精确性，命题 1 的闭式与蒙特卡洛，均一致；
+\item AS 的向量化选择（\code{as\_select.m}）与逐子集调用 \code{geo\_quantities}/\code{power\_opt} 的标量实现结果一致（相对误差约 $10^{-15}$）；
+\item 新旧结果使用相同随机种子：第三轮新增 AS 后，原有方案在 Fig.~5--7 所有点上的数值与第二轮完全相同。
 \end{itemize}
 
 \end{document}
