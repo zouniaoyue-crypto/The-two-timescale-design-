@@ -1,0 +1,335 @@
+% =============================================================================
+%  revision_notes.tex -- 审稿式核查与修改说明（main.tex 第二、三轮修改）
+%  编译：xelatex revision_notes.tex （需要 ctex 宏包）
+% =============================================================================
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs,longtable,array}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\setlist{itemsep=2pt,topsep=3pt}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\old}[1]{{\color{red!70!black}#1}}
+\newcommand{\new}[1]{{\color{blue!60!black}#1}}
+\newcommand{\bOm}{\bm\Omega}
+\newcommand{\bPhi}{\bm\Phi}
+\newcommand{\tr}{\mathrm{tr}}
+
+\title{审稿式核查与修改说明\\[2pt]\large main.tex（Two-Timescale Secure Transmission for MA-Enabled Multiuser Systems）第二、三轮修改}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{阅读指引}
+本文档按“审稿人意见 $\to$ 修改 $\to$ 理由”的方式，说明本轮对 \code{main.tex} 与 MATLAB 代码所做的全部修改。
+正文中\old{红色}表示原稿内容，\new{蓝色}表示修改后的内容；式号均为修改后稿件的式号。
+第 1 节是推导核查（最关键）；第 2 节是英文写作与逻辑；第 3 节是第二轮对仿真部分的重新设计（含“等功率 MA 为何与所提方案接近”的分析与决策）；\textbf{第 4 节是第三轮修改}：天线选择（AS）对比、“无 AN 方案 + 最坏情况 Eve”的问题与表 II、功率分配的对比框架、Fig.~8 重画，以及修改后的完整仿真框架（建议优先阅读）；第 5 节列出需要作者确认的事项。第 4 节与第 3 节有冲突时以第 4 节为准。
+
+\section*{修改总览}
+\begin{longtable}{p{3.1cm}p{12.6cm}}
+\toprule
+类别 & 主要修改 \\ \midrule
+推导（必须改） & 引理 3 式 (23)、命题 1 式 (25) 的零空间近似违反恒等式 $\tr(\mathbf P_{\mathbf F}^\perp)=N-k$，改为“迹匹配”形式，并同步修改附录 A、附录 B 式 (64)、注 2、式 (30) 与代码。\\
+推导（严谨性） & 引理 2 增加条件方差，重写比值均值近似的依据（原依据“$X$ 由多个独立项组成”对 $X_m$ 不成立）；注 1 中“$\kappa_m=0$ 时退化为 Rayleigh 下界”不准确，改为 $\mathbf K=\mathbf 0$。\\
+基准实现（必须改） & 等功率基准原来用不带 $[\cdot]^+$ 的目标优化（命题 2 只对每用户功率分配成立），高估了每用户功率分配的增益；已改为 $\sum_m[\cdot]^+$。\\
+符号 & $\varsigma$ 同时表示附录 B 的 $\mathbf v^H\bOm\mathbf v$ 与第 V 节的路损差异 $\Rightarrow$ 附录 B 改为 $\varpi$；Eve 的等效增益 $\vartheta_m$ 与仰角 $\theta_m$ 易混 $\Rightarrow$ 改为 $\eta_{e,m}$；附录 A 的酉矩阵 $\mathbf U$ 与引理 2 证明中的 $\mathbf U$ 冲突 $\Rightarrow$ 改为 $\mathbf Q$。\\
+写作 & 摘要重写（去掉过度表述、增加对比对象）；引言第 2、3 段措辞；贡献第 2、4 条；首次出现的缩写（NLoS、CSI、ESSR、SNR）按出现顺序定义；新增 $\mathrm{Var}\{\cdot\}$ 记号；第 IV-A 节补充“等功率时 $[\cdot]^+$ 不能去掉”。\\
+参考文献 & 在线核对并补全 [13]（Hu 等，TMC）、[14]（Xie 等，arXiv 作者）、[16]（Zheng 等，TCOM 卷期页），删除 TODO。\\
+仿真 & 数值图从 9 张（13 个子图）精简为 6 张（9 个子图）；Fig.~5--7 统一使用同一组 5 种方案；新增最关键的基准“速率导向 MA”（文献 [16] 的双时间尺度设计 + AN）；等功率方案移到专门的功率分配消融图 Fig.~8（同质/异质用户，优化 $\alpha$ 与固定 $\alpha$）；每点平均场景数由 50 增至 100；绘图代码按 IEEE 期刊风格重写。\\
+\textbf{第三轮}（仿真） & 新增天线选择（AS）基准（$\lambda/2$ 的 $4\times4$ UPA 中选 8 个，统计 CSI 穷举，目标与所提方案相同）；“无 AN”方案移出 Fig.~5--7，新增表 II（最坏情况 Eve 与 TIN Eve 下所有方案的 ESSR）；第 II-C 节补充最坏情况模型的理由；第 V-A 节说明“Fig.~5--7 控制功率分配、Fig.~8 控制位置”的对比框架；Fig.~8 改为 ESSR vs 用户衰落差异 $\varsigma$（0 dB / 10 dB）；Fig.~5 图例重排；摘要、贡献、结论同步更新。详见第 4 节。\\
+\bottomrule
+\end{longtable}
+
+% =============================================================================
+\section{推导核查（审稿人角度）}
+% =============================================================================
+\subsection{核查方法}
+\begin{enumerate}
+\item \textbf{逐式手工重推}：第 II--IV 节与两个附录的每一步代数、每个极限论断、每个不等式。
+\item \textbf{独立数值验证}：另写一套与 MATLAB 代码不共享任何函数的 Python 实现（\code{numpy}/\code{scipy}），对每个引理/命题做蒙特卡洛或数值优化验证。
+\item \textbf{代码自检}：\code{check\_implementation.m}（梯度 vs 有限差分、注水 KKT、算法单调性、闭式 vs 蒙特卡洛）。
+\item \textbf{文献核对}：对照仓库中 Zheng 等论文的 PDF 核对“引理 1 与文献 [16] 式 (37)--(39) 等价”的论断。
+\end{enumerate}
+
+\subsection{逐项核查结果}
+\begin{longtable}{p{2.6cm}p{7.6cm}p{5.2cm}}
+\toprule
+对象 & 核查内容 & 结论 \\ \midrule
+式 (10)--(13) & ZF 方向、零空间 AN、$|\mathbf h_m^H\bar{\mathbf w}_m|^2=1/[(\mathbf H^H\mathbf H)^{-1}]_{m,m}$ & 正确 \\
+式 (15)、(16) & $\mathbf H=(\mathbf L+\tilde{\mathbf H})\mathbf B^{1/2}$，$\bPhi=\mathbb E\{(\mathbf L+\tilde{\mathbf H})^H(\mathbf L+\tilde{\mathbf H})\}$ & 正确 \\
+引理 1 & Jensen 方向、中心 Wishart 逆的均值 $N\bPhi^{-1}/(N-M)$、$\eta_m$ 表达式；与 [16] 式 (37)--(39) 逐项对照：$\bm\Sigma(\mathbf t)=\frac1N(\mathbf K+\mathbf I)^{-1/2}\bPhi(\mathbf K+\mathbf I)^{-1/2}$，两者完全等价，且出处确为 [16, Sec.~IV-A] & 正确 \\
+式 (18) & $\zeta_m(N-M)\le\eta_m\le\zeta_m(N-M)(\kappa_m+1)$ 及取等条件；数值验证 $1/(N\omega_m)\in[1,\kappa_m+1]$ & 正确 \\
+引理 2 & 条件独立性（$[\bar{\mathbf w}_m,\mathbf U]$ 列正交 $\Rightarrow$ 投影独立）、条件均值；Python 固定 $\mathbf H$ 做 $4\times10^5$ 次蒙特卡洛：均值误差 $<0.1\%$，$X_m$ 与 $Y$ 的相关系数 $<0.003$ & 正确（本轮补充条件方差）\\
+式 (21) & 比值均值近似的代数；$\bar\sigma_e^2=\sigma_e^2(\kappa_e+1)/\beta_e$ & 代数正确，\textbf{依据的表述需修改}（问题 2）\\
+引理 3 式 (22) & (54)、(55) 的期望计算；$\bar{\mathbf F}=\mathbf 0$ 时精确、$\varrho\to\infty$ 渐近精确；取值范围 & 正确 \\
+引理 3 式 (23) & 同上 & \textbf{存在缺陷，已修改}（问题 1）\\
+命题 1 & $c_m$、$d$ 由引理 3 代入 & 随式 (23) 修改 \\
+注 2--注 4 & $\mathbf v=\mathbf 0$ 时的极值；$M=1$ 时式 (29)(30)（数值验证与一般式一致到 $10^{-6}$）；高 SNR 展开与 $\alpha^\star=1/(1+\sqrt\Theta)$（与数值最优逐点一致）& 正确（式 (30) 随 $d$ 更新）\\
+命题 2 & 去掉 $[\cdot]^+$ 不损失最优性 & 正确；\textbf{但只对每用户功率分配成立}（问题 4）\\
+命题 3 & 导数 (36)(37)、KKT、二次方程正根的数值稳定形式、水位唯一性；与 SLSQP 数值最优在 $10^{-5}$ 内一致 & 正确 \\
+式 (41)--(48) & 秩一结构、Sherman--Morrison（误差 $10^{-17}$）、$\dot{\mathbf l}_n,\dot{\mathbf v},\dot\bOm$、链式法则 & 正确 \\
+附录 B & $\dot\omega_m,\dot o_m,\dot\tau,\dot{\tilde{\mathbf v}},\dot c_m,\dot\varpi,\dot d$；独立 Python 实现与中心差分最大相对误差 $1.2\times10^{-7}$ & 正确（$\dot d$ 随 $d$ 更新后重新验证，$1.3\times10^{-7}$）\\
+式 (49)--(53) & 下降引理代理函数、回溯、最小间距线性化为内近似、单调性链 & 正确 \\
+收敛性与复杂度 & 单调有界 $\Rightarrow$ 目标值收敛；$\mathcal O(\cdot)$ 各项 & 正确 \\
+\bottomrule
+\end{longtable}
+
+\subsection{发现的问题与修改}
+\paragraph{问题 1（必须修改）：式 (23) 违反恒等式 $\tr(\mathbf P_{\mathbf F}^\perp)=N-k$。}
+原稿 (23) 为
+\[
+\old{\mathbb E\{\mathbf b^H\mathbf P_{\mathbf F}^\perp\mathbf b\}\approx\big(\|\mathbf b\|^2-\mathbf b^H\bar{\mathbf F}\bPhi^{-1}\bar{\mathbf F}^H\mathbf b\big)\big(1-\tr(\bPhi^{-1})\big)},
+\]
+其依据是“为避免重复计算，把 NLoS 捕获比例 $\tr(\bPhi^{-1})$ 只作用于 $\mathbf I-\bm\Pi$”。这一步是启发式的，而且可以验证它破坏了对任意实现都成立的恒等式 $\tr(\mathbf P_{\mathbf F}^\perp)=N-k$：
+由 $\tr(\bm\Pi)=k-N\tau$（$\tau\triangleq\tr(\bPhi^{-1})$）可得原近似的迹为 $N-k+\tau(k-N\tau)$，在 LoS 与 NLoS 之间的中间区间系统性偏大（$N=8,k=3$ 时最多偏大 $0.28$）。审稿人很容易用这个恒等式检查出来。
+
+\textbf{修改：}保留“NLoS 只能占据 LoS 尚未占据的方向”这一合理结构，即 $\mathbb E\{\mathbf P_{\mathbf F}\}\approx\bm\Pi+\epsilon(\mathbf I-\bm\Pi)$，但比例 $\epsilon$ 不再人为指定，而是\textbf{由恒等式 $\tr(\mathbf P_{\mathbf F})=k$ 唯一确定}：$\epsilon=N\tau/(N-k+N\tau)$，于是
+\[
+\new{\mathbb E\{\mathbf b^H\mathbf P_{\mathbf F}^\perp\mathbf b\}\approx\frac{(N-k)\big(\|\mathbf b\|^2-\mathbf b^H\bar{\mathbf F}\bPhi^{-1}\bar{\mathbf F}^H\mathbf b\big)}{N-k+N\tr(\bPhi^{-1})}},\qquad
+\new{d(\mathbf t)=\frac{(N-M)\big(N-\mathbf v^H\bOm\mathbf v\big)}{N-M+N\tr(\bOm)}}.
+\]
+修改后的近似：(i) 迹精确；(ii) 在 $\bar{\mathbf F}=\mathbf 0$ 时仍精确、在强 LoS 时仍渐近精确（原稿的两个论断保持成立）；(iii) 取值仍在 $[0,\|\mathbf b\|^2]$；(iv) 数值上更准：Python 蒙特卡洛（每种情形 60 个场景）中 $d$ 的平均误差由 $+0.18$ 降到 $+0.13$（$\kappa=10$ dB、随机位置）、由 $+0.37$ 降到 $+0.17$（$\kappa=0$ dB），Eve 遍历速率的平均绝对误差不变或略小。
+同步修改：附录 A（新增式 (57) 及其推导）、附录 B 式 (64)（$\dot d=-(1-\epsilon)[\dot\varpi+N(N-\varpi)\dot\tau/(N-M+N\tau)]$）、注 2（$d$ 的最大值）、式 (30)（$M=1$ 特例）、表 I、代码 \code{geo\_quantities.m} 与 \code{grad\_F\_n.m}（梯度重新通过有限差分检验）。
+
+\paragraph{问题 2（严谨性）：比值均值近似的依据表述不当。}
+原稿写“the approximation \ldots\ becomes increasingly accurate as $X$ and $Y$ consist of more independent nonnegative terms”。但分子 $X_m=|\mathbf g^H\bar{\mathbf w}_m|^2$ 只有一项，这个理由对 $X_m$ 不成立；而且原稿中引理 2 的“条件独立”与该近似之间的逻辑关系没有交代清楚。
+\textbf{修改：}引理 2 增加条件方差 $\mathrm{Var}\{X_m|\mathbf H\}=\tilde\beta_e^2(2\kappa_ex_m+1)$、$\mathrm{Var}\{Y|\mathbf H\}=\tilde\beta_e^2(2\kappa_ey+N-M)$（证明改为用正交基 $[\bar{\mathbf w}_m,\mathbf U]$，更短也更严格），由此给出相对方差 $(2\kappa_ex_m+1)/(\kappa_ex_m+1)^2$ 与 $(2\kappa_ey+N-M)/(\kappa_ey+N-M)^2$：泄漏强（这正是决定窃听速率的情形）时 $X_m$ 集中，$N-M$ 或 $\kappa_ey$ 大时 $Y$ 集中，并指出近似在 $\kappa_e,\kappa_m\to\infty$ 时渐近精确。这样引理 2 在推导中真正起作用，且每个论断都可验证。
+同时，摘要与贡献中“By exploiting the conditional independence \ldots, we derive \ldots”这种把近似说成由独立性推出的表述，改为“We prove that \ldots\ are conditionally independent \ldots, and derive a closed-form approximation \ldots”。
+
+\paragraph{问题 3（表述不准确）：注 1。}
+\old{``For $\kappa_m=0$, it reduces to the well-known lower bound \ldots\ for Rayleigh fading''}：只有当\emph{所有} LU 都是 Rayleigh（$\mathbf K=\mathbf 0$）时中心 Wishart 近似才精确；仅 $\kappa_m=0$ 而其他 LU 有 LoS 时并不成立。改为 \new{``For Rayleigh fading, i.e., $\mathbf K=\mathbf 0$, the central Wishart approximation is exact, and (17) reduces to \ldots''}；“gap approaches $\log_2(N/(N-M))$”补充条件“as $\kappa_i\to\infty,\forall i$”。
+
+\paragraph{问题 4（必须修改，影响结论）：等功率基准的目标函数。}
+命题 2 能去掉 $[\cdot]^+$，前提是可以把保密速率为负的 LU 关断（$p_m=0$）。等功率方案做不到这一点，因此其目标必须是 $\sum_m[\tilde R_m-\tilde R_{e,m}]^+$。原代码中等功率基准用的是不带 $[\cdot]^+$ 的目标，导致它会为了压低“本来就为 0 的”负项而牺牲其他用户，\textbf{系统性地低估了等功率基准，从而高估了每用户功率分配的增益}（原稿 Fig.~10 中的 “$+36.7\%$ / $+78.6\%$” 就受此影响）。
+\textbf{修改：}\code{power\_opt.m} 的等功率目标改为 $\sum_m[\cdot]^+$；位置更新用下界 $\sum_{m:f_m>0}f_m$ 构造 MM 代理函数（它在当前点与 $\sum_m[f_m]^+$ 相等，单调性仍然严格成立，已数值验证）；正文第 IV-A 节补充一句“under equal power allocation among the LUs, the operator $[\cdot]^+$ must be retained”。
+
+\paragraph{问题 5：符号冲突。}
+$\varsigma$（附录 B 与第 V 节）$\to$ 附录 B 改用 $\varpi$；$\vartheta_m(q)$（与仰角 $\theta_m$、比值 $\Theta_m$ 三个 theta 并存）$\to$ 改为 $\eta_{e,m}(q)$，与 LU 的 $\eta_m$ 对应，(35)--(38)、算法 1、表 I 同步；附录 A 的酉矩阵 $\mathbf U\to\mathbf Q$。
+
+\paragraph{结论。}
+除问题 1（近似式本身）和问题 4（基准实现）外，其余推导均正确；问题 1 的修改使相应论断更严格、数值上也更准，问题 4 的修改使对比更公平。两处修改都已同步到代码并重新运行了全部仿真。
+
+% =============================================================================
+\section{英文写作与逻辑}
+% =============================================================================
+以 IEEE TCOM/TWC 的标准（结论先行、论断可验证、不夸大、缩写按出现顺序定义、每个引理后解释其含义），主要修改如下。
+\begin{longtable}{p{2.3cm}p{13.4cm}}
+\toprule
+位置 & 修改与理由 \\ \midrule
+摘要 & 按“问题 $\to$ 框架（大/小时间尺度分开写）$\to$ 分析 $\to$ 算法 $\to$ 结果”重组；去掉“By exploiting the conditional independence \ldots\ we derive”这一因果不成立的说法；精确说明近似的适用范围（“based on approximations of the average leakage and AN energies that are exact in the NLoS-dominant regime and asymptotically exact in the LoS-dominant regime”）；结果部分加入与速率导向 MA 的对比及具体数字。\\
+引言第 2 段 & 对 [14]（Xie 等）的描述改为其真实设定（只知道 Eve 的 LoS 分量与 NLoS 统计量、用随机矩阵理论得到 ESR 的确定性等价），突出与本文（双时间尺度、多用户、ZF+AN）的区别；CSI、NLoS 在首次出现处定义。\\
+引言第 3 段 & \old{``are hardly practical''}、\old{``can hardly keep pace''} $\to$ \new{``are difficult to implement in practice''}、\new{``cannot keep pace with fast channel variations''}（避免口语化和重复）。\\
+贡献第 2 条 & \old{``first-order approximations \ldots\ that are exact in both the NLoS- and LoS-dominant regimes''} $\to$ \new{``exact in the NLoS-dominant regime and asymptotically exact in the LoS-dominant regime''}（原句不准确）；在此定义 ESSR。\\
+贡献第 4 条 & 按新仿真重写：给出相对速率导向 MA、稀疏 FPA、紧凑 FPA 的增益；把“per-user power allocation is essential”改为有条件的准确表述（异质用户、中低 SNR）；在此定义 SNR。\\
+记号 & 增加 $\mathrm{Var}\{\cdot\}$。\\
+第 III-B 节 & 注 1 的修正（见问题 3），补充引用 [16][17] 说明该近似被广泛采用。\\
+第 III-C 节 & 引理 2 与其后的解释段（见问题 2）；式 (21) 用 $x_m,y$ 表示，前后一致；引理 3 之后的解释段说明迹匹配（见问题 1）。\\
+第 IV-A 节 & 命题 2 之后补充等功率时 $[\cdot]^+$ 不能去掉（与问题 4 对应，也为第 V-G 节的基准做铺垫）。\\
+第 V 节 & 全部重写（见第 3 节）：先交代统一的对比方案及其各自“隔离”的因素，再按“精度 $\to$ 收敛 $\to$ SNR $\to$ 角度与单用户 $\to$ 区域大小 $\to$ 功率分配”展开；每段先给现象、再给原因、最后联系到对应的引理/注；所有百分比均由数据计算。\\
+结论 & 按新结果重写，补充“Eve 统计 CSI 不完美”的未来方向。\\
+参考文献 & [13][14][16] 补全（已在线核对），删除 TODO 注释。\\
+\bottomrule
+\end{longtable}
+
+% =============================================================================
+\section{仿真部分的重新设计}
+% =============================================================================
+\subsection{精简后的图}
+\begin{longtable}{p{4.2cm}p{4.3cm}p{7.0cm}}
+\toprule
+原稿（9 张、13 个子图） & 修改后（6 张、9 个子图） & 说明 \\ \midrule
+Fig.~3(a)(b) 精度 vs SNR；Fig.~4(a)(b) 精度 vs $\kappa$ & Fig.~3(a) vs SNR、(b) vs $\kappa$ & 每个子图同时画 LU 与 Eve（上下两组曲线，文字标注），用“分解式”图例（颜色 = 天线配置，标记/线 = 蒙特卡洛/闭式）。\\
+Fig.~5 收敛 & Fig.~4 收敛 & 保留（审稿人通常会要求）。\\
+Fig.~6 ESSR vs SNR；Fig.~7 AN 占比 & Fig.~5(a)(b) & 合并为一张双子图。\\
+Fig.~8 ESSR vs $\Delta$；Fig.~11(a)(b) 单用户 & Fig.~6(a) $M=3$、(b) $M=1$ & 同一横轴、同一组方案并排，单用户的“速率导向 MA 与紧凑 FPA 重合”一目了然；单用户的 AN 占比改为正文给数字。\\
+Fig.~9 ESSR vs $A$ & Fig.~7 & 保留，方案统一。\\
+Fig.~10 功率分配增益（\%） & Fig.~8 功率分配消融 & 等功率方案（优化 $\alpha$ / 固定 $\alpha=0.5$）相对所提功率分配的 ESSR 损失 vs SNR，同质/异质用户两组；原稿的等功率基准实现有误（见问题 4），数字已全部更新。\\
+\bottomrule
+\end{longtable}
+
+\subsection{对比方案：统一、且每个方案隔离一个因素}
+原稿中 Fig.~6 有 6 种方案，Fig.~8 有 4 种，Fig.~9、Fig.~11 只有 3 种，读者无法跨图比较，也容易被质疑“挑选对比对象”。修改后 Fig.~5--7 统一使用下面 5 种方案（颜色/线型/标记在所有图中固定：MA 类实线、FPA 类虚线、无 AN 点划线）：
+\begin{longtable}{p{3.2cm}p{12.5cm}}
+\toprule
+方案 & 作用（隔离的因素）\\ \midrule
+Proposed & 所提方案。\\
+Rate-oriented MA & \textbf{新增、最重要的基准}：文献 [16] 的双时间尺度设计（最大化 LU 遍历和速率、等功率、忽略 Eve）得到位置，再用算法 1 优化 $(\mathbf p,q)$。它就是“把现有双时间尺度 MA 直接加上 AN”，二者只差\emph{位置是否考虑 Eve}，因此直接量化本文核心贡献（Eve 的遍历分析，命题 1）带来的增益。审稿人一定会问“直接用 [16] 的位置 + AN 行不行”，这个基准正面回答了这个问题。\\
+Sparse FPA & 孔径与 MA 区域相同的固定阵列：区分“孔径变大”与“位置自适应”两种增益。\\
+Compact FPA & 传统 $\lambda/2$ 阵列。\\
+Proposed w/o AN & 去掉 AN：体现 AN 的必要性以及 MA 与 AN 的相互作用。\textbf{（第三轮：已从主图移到表 II，并由 AS 替换，原因见第 4.2 节。）}\\
+\bottomrule
+\end{longtable}
+
+\subsection{关于“等功率分配的 MA 为何与所提功率分配几乎相同”}
+\paragraph{原因（这是预期现象，不是缺陷）。}
+\begin{enumerate}
+\item 默认场景中三个 LU 统计上完全对称（相同 $\beta_m,\kappa_m$，AoD 独立同分布），而且优化后的位置会进一步“拉平”各 LU 的等效增益 $\eta_m$ 与泄漏 $\xi_m$；
+\item 在 20 dB 这样的高 SNR 下，（保密）注水解本身就趋于等功率——这与经典注水的性质相同；
+\item 原稿的“MA, equal power”对功率分割因子 $\alpha$ 做了一维搜索，而注 4 已经说明，高 SNR 下决定性能的正是信息/AN 功率分割（$\alpha^\star=1/(1+\sqrt\Theta)$）。所以在该场景下它几乎就是所提功率分配的一个“近似最优特例”，而不是一个真正的竞争者。
+\end{enumerate}
+
+\paragraph{三个选项的权衡。}三个选项的利弊比较如下。\par
+\begin{longtable}{p{3.6cm}p{5.7cm}p{6.2cm}}
+\toprule
+选项 & 好处 & 问题 \\ \midrule
+{(a)} 在主图中保留“等功率 + 优化 $\alpha$” & 透明 & 在对称场景中与所提曲线重合，占用图例、且确实会让人觉得每用户功率分配没用。\\
+{(b)} 改成“等功率 + 固定 $\alpha$”放进主图 & 曲线差距变大（本轮实测固定 $\alpha=0.5$ 损失 ：同质用户 2.1\%--31.0\%，异质用户 3.0\%--54.2\%） & 差距主要来自“是否优化 AN 功率”，而不是“每用户功率分配”；把它当主基准会混淆贡献来源，有经验的审稿人会认为是“稻草人”基准，并追问“为什么不优化 $\alpha$”。\\
+{(c)} 主图删去等功率方案，另做一张功率分配消融图 & 主图聚焦位置设计（核心贡献）；消融图如实给出每个组成部分在什么条件下起作用 & 需要一张额外的图（已用合并子图的方式把总图数降下来）。\\
+\bottomrule
+\end{longtable}
+\textbf{决定：采用 (c)，并把 (a)(b) 两种等功率方案都放进消融图 Fig.~8}（\textbf{第三轮已把 Fig.~8 改为“ESSR vs 用户衰落差异 $\varsigma$”，见第 4.4 节；下面的描述为第二轮版本}）（同质用户与异质用户 $[\beta_1,\beta_2,\beta_3]=[0,-10,-20]$ dB 两种情形，纵轴为等功率方案相对所提功率分配的 ESSR 损失，横轴为 SNR）。这样：
+\begin{itemize}
+\item 同质用户时“等功率 + 优化 $\alpha$”几乎就是最优的：损失在 10 dB 以上低于 1\%，全范围最大 3.5\%（0 dB）。这在图中如实呈现，并在正文用上面的三条原因解释，主动回答审稿人必然会提的问题；
+\item 异质用户、中低 SNR 时所提功率分配明显更好（关断/降低保密能力差的 LU，命题 2、3）：“等功率 + 优化 $\alpha$”在 0 dB、5 dB、10 dB 的损失分别为 30.5\%、15.7\%、11.9\%（换算成所提方案的增益分别为 43.9\%、18.7\%、13.5\%），20 dB 以上低于 0.6\%；
+\item 固定 $\alpha$ 在所有情形都更差：同质用户损失 2.1\%--31.0\%，异质用户 3.0\%--54.2\%，低 SNR 时最严重（此时几乎不需要 AN，固定一半功率给 AN 浪费最大），说明长时功率分配中\emph{AN 功率的优化}是不可省略的。
+\end{itemize}
+同时在正文中把每用户功率分配的定位写准确：它是算法的组成部分（使 $[\cdot]^+$ 可以无损去掉、给出闭式注水解、自动关断无保密能力的 LU），其\emph{性能}增益依赖场景，而不是本文的主要性能来源。建议作者在投稿时也按这个口径表述，比夸大它更安全。
+
+\paragraph{顺带修正的实现问题。}见第 1.3 节问题 4：原等功率基准没有使用 $[\cdot]^+$，会高估每用户功率分配的增益；修正后的数字更可信。
+
+\subsection{绘图风格}
+\begin{itemize}
+\item 每个子图按 IEEE 单栏宽 3.5 in 导出（2.6 in 高），插入时字号即实际字号：刻度 8 pt、坐标轴 9 pt、图例 7.5 pt，Times New Roman（与 IEEEtran 正文一致）；MATLAB 下导出嵌入字体的矢量 PDF。
+\item 空心标记、1.2 pt 线宽、细点状网格、刻度朝内；纵轴从 0 开始（Fig.~7 除外）；图例放在空白处，必要时双栏或分解式图例；角度轴用对数刻度，使 $0.02$--$0.1$ rad 的点不挤在一起。
+\item 所有样式集中在 \code{fig\_style.m}、\code{scheme\_style.m} 两个文件，改一次即可 \code{replot\_all} 重画全部图。
+\end{itemize}
+
+\subsection{主要数值结果（每点 100 个随机场景，全部为蒙特卡洛精确评估）}
+\begin{longtable}{p{2.6cm}p{13.1cm}}
+\toprule
+图 & 结论与数字 \\ \midrule
+Fig.~3 精度 & Eve 遍历窃听和速率的闭式近似（命题 1）与蒙特卡洛的最大误差 0.16 bps/Hz，$\kappa=-5$ dB 时几乎为 0。LU 的近似（引理 1）偏保守，20 dB、$\kappa=10$ dB 时紧凑 UPA 与随机 MA 的差距分别为 1.55 与 1.66 bps/Hz，与位置几乎无关。在算法 2 的优化解处，近似 ESSR 比蒙特卡洛低 1.73 bps/Hz，仍是保守估计，说明优化没有“钻近似误差的空子”。\\
+Fig.~4 收敛 & 目标值单调上升；第 1 次迭代完成总提升的约 30\%--50\%，20--60 次迭代达到 95\%；3 个初始化的最终目标值最多相差 4.5\%，UPA 初始化在三个 SNR 下都最好。另外检验了把稀疏 UPA 作为第 4 个初始点：ESSR 最多只提高约 1\%（20 个场景），因此保留 3 个初始点。\\
+Fig.~5 SNR & 20 dB 时：所提 20.10，速率导向 MA 17.87（所提高 12.5\%），稀疏 FPA 17.75（高 13.3\%），紧凑 FPA 15.82（高 27.1\%）bps/Hz。100 个场景中，所提方案逐场景优于速率导向 MA 与紧凑 FPA（优于稀疏 FPA 的场景占 93\%）。速率导向 MA 与稀疏 FPA 相当 $\Rightarrow$ 增益来自“针对 Eve 的位置”。高 SNR 下绝对增益趋于约 4.5（对紧凑 FPA）与 2.3 bps/Hz（对速率导向 MA）。20 dB 时 AN 功率占比：所提 0.31，速率导向 MA 0.44，稀疏 FPA 0.40，紧凑 FPA 0.47。\\
+Fig.~6(a) $\Delta$ & $\Delta=0.02$ 时与速率导向 MA 只差 0.9\%（Eve 与 LU 1 几乎同向，任何位置都分不开）；$\Delta=0.2$ 时增益最大，为 14.4\%；$\Delta=0.5$ 时为 10.9\%。对稀疏 FPA 的增益 6.4\%--17.6\%。\\
+Fig.~6(b) $M=1$ & 速率导向 MA 与紧凑 FPA 完全重合（注 3、文献 [16]）；$\Delta=0.1$ 时所提方案比紧凑 / 稀疏 FPA 高 76.6\% / 15.5\%；AN 占比由 0.84（紧凑 FPA）降到 0.51（$\Delta=0.1$），$\Delta\ge0.2$ 时约 0.28。\\
+Fig.~7 $A$ & $A=1.5\lambda$ 时比紧凑 FPA 高 8.8\%，$A=6\lambda$ 时高 33.1\%；对速率导向 MA 的增益随 $A$ 由 2.6\% 增至 14.2\%；对稀疏 FPA 为 7.6\%--14.3\%。\\
+Fig.~8 功率分配（第二轮版本，第三轮见第 4 节） & 同质用户：“等功率 + 优化 $\alpha$”的损失在 10 dB 以上低于 1\%，最大 3.5\%。异质用户：0/10/20 dB 时损失 30.5\% / 11.9\% / 0.5\%。固定 $\alpha=0.5$：同质 2.1\%--31.0\%，异质 3.0\%--54.2\%。\\
+\bottomrule
+\end{longtable}
+\textbf{与上一轮结果的差别：}上一轮报告的“每用户功率分配在 5 dB、20 dB 路损差异下对 MA/FPA 提升 $+36.7\%$/$+78.6\%$”是在等功率基准实现有误（未加 $[\cdot]^+$，见问题 4）的情况下得到的，\textbf{高估了增益}；以本轮修正后的 Fig.~8 为准。上一轮的主图数字（如 20 dB 时相对紧凑 FPA $+28.1\%$）与本轮（$+27.1\%$）的差别来自：近似式 (23) 的修正、每点场景数由 50 增至 100。
+
+% =============================================================================
+\section{第三轮：仿真对比框架（AS、无 AN 方案与 Eve 模型、功率分配对比、Fig.~8）}
+% =============================================================================
+本节回答第三轮的四个问题，并给出修改后的完整对比框架。所有数字均为 100 个随机场景（AoD）的平均、蒙特卡洛精确评估；新旧结果使用同一批随机种子，旧方案的数值与第二轮完全相同（已逐项核对），因此新增方案可以直接与原有曲线比较。
+
+\subsection{问题 1：为什么之前没有天线选择（AS）对比？——已补上}
+\paragraph{结论：这是第二轮框架的一个遗漏，审稿人很可能会提。}
+AS 是 MA 文献中最常用的“非机械”对照（例如 Zhu、Ma 等人的 MA 系列论文以及本文引用的 Chen 等 [15]）：用 $2N$ 个固定天线加射频开关、只选 $N$ 个接入 $N$ 条射频链，不需要机械移动就能获得一定的空间分集。因此审稿人自然会问：“\emph{多放一倍天线做选择，能不能达到同样的保密增益？}”如果不比较 AS，MA 的增益究竟来自“连续移动”还是仅仅来自“有更多候选位置”就说不清。
+
+\paragraph{实现（尽量强的 AS，避免“稻草人”）。}
+\begin{itemize}
+\item 候选阵列：$\lambda/2$ 间距的 $4\times4$ UPA（$2N=16$ 个天线），选 $N=8$ 个，与 [15] 等文献中 AS 基准的设定类似；
+\item 选择准则：与所提方案\emph{完全相同}的统计 CSI 目标——近似 ESSR (P3)，并对每个子集用算法 1（保密注水 + AN 功率）计算；对全部 $\binom{16}{8}=12870$ 个子集穷举（\code{as\_select.m}，对子集向量化，每个场景约 2 s），选定子集后再用算法 1 精确优化功率；
+\item 这样 AS 与所提方案的\emph{唯一}区别是“天线只能取 $\lambda/2$ 网格上的离散位置”，所以它隔离的是“连续移动 + 大区域”这一因素。
+\end{itemize}
+
+\paragraph{结果。}
+20 dB 时 AS 的 ESSR 为 17.24 bps/Hz，所提方案比它高 \textbf{16.6\%}（100 个场景中逐场景优于 AS 的比例为 100\%）；AS 比紧凑 FPA 高 9.0\%，但略低于速率导向 MA 与稀疏 FPA。原因：AS 的候选位置局限在 $1.5\lambda\times1.5\lambda$ 的 $\lambda/2$ 网格上，既不能利用 $A=4\lambda$ 的大区域，也不能连续微调位置去对 Eve 的 LoS 方向“去相关”。
+\begin{itemize}
+\item Fig.~7：AS 与 $A$ 无关（水平线）。$A=1.5\lambda$ 时 AS 的候选阵列恰好占满整个区域，并且用 $2N$ 个天线做穷举选择，此时它与所提方案\textbf{相当}（相差 0.2\%）；$A\ge2\lambda$ 后所提方案超过它，$A=6\lambda$ 时高 22.1\%。即：所提方案不增加天线数就能利用更大的区域，这正是 MA 相对 AS 的本质优势。
+\item Fig.~6(a)：对 AS 的增益由 $\Delta=0.02$ rad 时的 3.5\% 增至 $\Delta=0.2$ rad 时的 18.8\%，$\Delta=0.5$ rad 时为 9.3\%。
+\item Fig.~6(b) 单用户：$\Delta=0.1$ rad 时所提方案比 AS 高 57.4\%（AS 比紧凑 FPA 高 12.2\%）；$\Delta=0.5$ rad（Eve 很容易分开）时 AS 接近所提方案（差 3.6\%）。
+\end{itemize}
+这些情况（$A=1.5\lambda$ 与大 $\Delta$ 时 AS 接近所提方案）在正文中如实写出并给出解释。审稿人看到“基准在某些条件下能追上来、且原因可解释”，反而会认为比较是公正的。总体结论：本文的增益不能通过“多放一倍天线 + 选择”得到，而依赖于针对 Eve 的连续位置设计与更大的移动区域。
+
+\paragraph{关于 AS 候选阵列的选择。}采用 $\lambda/2$ 间距的 $4\times4$ UPA 是 MA 文献中的标准设定（[15] 等）。若把 $2N$ 个候选天线铺满 $4\lambda\times4\lambda$ 区域，间距约 $1.33\lambda$，会产生严重栅瓣，而且需要与 MA 同样大的天线面板，已不是通常意义上的 AS；因此本文不采用。若审稿人提出，可作为补充实验（代码中只需修改 \code{as\_select.m} 的候选位置 \code{Tc}）。
+
+\subsection{问题 2：把“无 AN 的所提方案”作为对比、同时假设 Eve 能消除用户间干扰，会不会反而让审稿人质疑假设？}
+\paragraph{结论：会，而且是一个实际的风险。原因有三。}
+\begin{enumerate}
+\item \textbf{在最坏情况 Eve 下，“无 AN 在高 SNR 饱和”是模型的数学必然，与 MA 无关。}无 AN 时 Eve 的 SINR 为 $p_m|\mathbf g^H\bar{\mathbf w}_m|^2/\sigma_e^2$，与 LU 的 SINR 一样随功率线性增长，保密速率趋于常数（Goel--Negi [4] 早已证明）。把它画进主图，审稿人看到的是“一个由假设注定最差的方案”，既不能说明 MA 的作用，又像是刻意设置的弱基准。
+\item \textbf{它把审稿人的注意力引向系统模型。}单天线、被动的 Eve 要消除其他 $M-1$ 个 LU 的信号，需要知道它们的码本并做多用户检测，这在实际中并不容易。审稿人很自然会追问：“如果 Eve 只是把其他用户的信号当噪声（TIN），用户间干扰本身就相当于 AN，无 AN 方案还会饱和吗？AN 还需要吗？本文的‘AN 节省’结论还成立吗？”——讨论就从本文的 MA 贡献转到了 Eve 模型的合理性上。
+\item \textbf{数值上确实如此。}我们用同一批设计（全部按最坏情况优化）分别在两种 Eve 模型下评估（表 II）：无 AN 方案在 20/30 dB 时，最坏情况下只有 12.13/12.94 bps/Hz，而在 TIN 下为 17.75/26.06 bps/Hz，差别巨大；而所提方案在两种模型下只差 3.0\%（20 dB）。也就是说，“无 AN 很差”这一结论几乎完全由 Eve 模型决定。
+\end{enumerate}
+
+\paragraph{处理方式（已在稿件中完成）。}
+\begin{itemize}
+\item \textbf{保留最坏情况模型}：这是 [20]（Zhu--Schober--Bhargava）等保密文献的标准做法；BS 不知道被动 Eve 的接收机，最坏情况给出的是“与 Eve 解码能力无关的保密保证”。第 II-C 节式 (6) 后补充了这一理由，并说明第 V 节会检验该假设的影响。
+\item \textbf{无 AN 方案从 Fig.~5--7 中移除}：这些图比较的是\emph{天线配置}（位置设计），所有方案使用同一功率分配（算法 1）；无 AN 方案改变的是传输方式而不是天线，本来就不属于这组对比。第 V-A 节明确说明了移除的原因。
+\item \textbf{新增表 II}：所有方案（含无 AN）在两种 Eve 模型、10/20/30 dB 下的 ESSR。它把潜在的质疑变成了鲁棒性证据：(i) 所提方案在两种模型下都最好；(ii) 按最坏情况设计、在 TIN Eve 下的损失很小（3.0\%），即“保证”的代价很低；(iii) 无 AN 时性能依赖 Eve 的能力，所以要获得\emph{有保证}的保密速率必须用 AN；(iv) 所提方案在 TIN 下仍优于所有基准（20 dB 时比速率导向 MA 高 6.9\%、比紧凑 FPA 高 20.2\%），各基准之间的排序不变；增益比最坏情况下（12.5\%、27.1\%）小，原因是 Eve 处的用户间干扰部分抵消了基准方案更大的信息泄漏——这一点在正文中也如实说明。因此 MA 的增益不是最坏情况假设的产物。
+\item 另外一个有利的观察：10 dB 时，在最坏情况模型下，\emph{无 AN} 的所提方案（9.33 bps/Hz）已经超过所有\emph{带 AN} 的基准（最好的为 9.27 bps/Hz；TIN 模型下二者相当），说明针对 Eve 的位置设计本身就能提供保密增益。
+\end{itemize}
+
+\subsection{问题 3：功率分配没有对比方案，会不会是问题？Fig.~8 是否足够？}
+\paragraph{结论：只要把框架说清楚，Fig.~8 是足够的，而且这正是审稿人期望的做法。}
+本文的设计变量有两部分：天线位置（核心贡献，依赖命题 1）与长时功率分配。规范的做法是“\textbf{控制变量 / 消融}”：
+\begin{itemize}
+\item \textbf{Fig.~5--7 隔离位置}：所有方案（所提、速率导向 MA、AS、稀疏 FPA、紧凑 FPA）都用\emph{同一个}功率分配（算法 1），因此曲线间的差距\emph{完全}来自天线位置。反过来，如果基准用等功率而所提方案用优化功率，审稿人会说“增益是功率分配和位置混在一起的”。第 V-A 节已明确写出这一点。
+\item \textbf{Fig.~8 隔离功率分配}：三种功率分配下都用算法 2 重新优化位置，只比较功率分配。两个基准是文献中标准的、也是最强的简单方案：(a) 等功率 + \emph{优化}信息/AN 功率分割 $\alpha$（Zhou--McKay [5] 的最优功率分割思想，也就是作者原稿的方案）；(b) 等功率 + 固定 $\alpha=0.5$（[15] 的 MRT-ZF 基准采用固定的功率分割）。因此功率分配\emph{有}对比方案，只是放在专门的消融图里。
+\item \textbf{为什么不把功率分配基准放进 Fig.~5--7}：默认场景中三个 LU 统计对称，20 dB 时“等功率 + 优化 $\alpha$”与所提功率分配只差 XXPA20S0XX\%，曲线重合，只会占用图例并让人误以为功率分配无效。其物理原因是：对称用户、高 SNR 下保密注水趋于等功率，而决定性能的主要是信息/AN 功率分割（注 4）。功率分配的价值体现在\emph{用户不对称}时，这正是新 Fig.~8 的横轴。
+\item 此外，每用户功率分配还是算法的组成部分：它使命题 2 中去掉 $[\cdot]^+$ 成立（等功率时不能去掉），给出闭式注水解，复杂度可忽略。正文按“在异质用户、中等 SNR 下有明显收益”的口径表述，不夸大。
+\end{itemize}
+
+\subsection{问题 4：Fig.~8 重新设计}
+\paragraph{原 Fig.~8 的问题。}纵轴是“相对所提方案的 ESSR 损失（\%）”，4 条曲线（2 个基准 $\times$ 同质/异质），颜色表示方案、线型表示用户情形：(1) 相对损失不是常见的纵轴，读者看不到绝对性能；(2) 同质用户的曲线贴近 0，挤在底部，并且视觉上强调了“功率分配几乎没用”；(3) 两种编码（颜色 + 线型）叠加，不易读；(4) 横轴为 SNR，但功率分配的作用主要取决于用户的不对称程度，而不是 SNR。
+
+\paragraph{新 Fig.~8。}横轴改为 LU 大尺度衰落的差异 $\varsigma\in\{0,5,10,15,20\}$ dB（$[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$ dB），纵轴为绝对 ESSR，(a) 0 dB、(b) 10 dB 两个子图，每个子图只有 3 条曲线，配色与标记和其他图一致（所提为红色圆圈）；图例放在右上角的空白处，SNR 标在左下角；两个子图上下排列为单栏图，与 Fig.~7 排在同一页、紧跟第 V-G 节正文（双栏的 figure* 受 \LaTeX{} 浮动体顺序限制会被推到结论之后）；$\varsigma=0$ 的点就是 Fig.~5 中的同质场景，便于前后对照。实测（相对“等功率 + 优化 $\alpha$”的增益，$\varsigma=0,5,10,15,20$ dB）：
+\begin{itemize}
+\item 0 dB：3.6\%、0.9\%、23.0\%、28.4\%、43.9\%；固定 $\alpha=0.5$ 的损失为 29.7\%--54.2\%。
+\item 10 dB：0.9\%、0.7\%、0.2\%、5.5\%、13.5\%；固定 $\alpha=0.5$ 的损失为 7.2\%--18.6\%。
+\item 20 dB（只在正文中给出数字）：XXPA20LISTXX，即所有 $\varsigma$ 下都低于 XXPA20MAXXX\%。
+\end{itemize}
+\paragraph{现象与机理（已核对）。}增益不是随 $\varsigma$ 平滑增加，而是在某个 $\varsigma$ 之后“突然出现”：当最弱 LU 的等效增益接近 Eve 时，所提功率分配按命题 3 把它关断或降功率，而等功率只能把功率浪费在它身上。抽查 12 个场景：10 dB、$\varsigma=20$ dB 时 LU 3 在全部 12 个场景中被关断；0 dB、$\varsigma=20$ dB 时 LU 3 全部关断、LU 2 在 10 个场景中关断；20 dB 时没有任何 LU 被关断，这正是 20 dB 下增益消失的原因。SNR 越低，这一“拐点”出现得越早（0 dB 时 $\varsigma=10$ dB，10 dB 时 $\varsigma=15$ dB）。
+
+\paragraph{为什么选 0 dB 与 10 dB，而不是 10 dB 与 20 dB。}20 dB 时三种方案中前两条曲线完全重合，图上不提供一句话以外的信息，反而会强化“功率分配无效”的印象；而高 SNR 下注水趋于等功率是理论上的必然（与经典注水相同），用一句话加数字说明即可。消融图应当展示\emph{各组成部分在什么条件下起作用}，同时在正文中如实给出不起作用的条件——这是审稿人认可的写法，不属于挑选结果。
+
+\subsection{修改后的完整仿真框架}
+\begin{longtable}{p{2.0cm}p{3.4cm}p{4.9cm}p{4.6cm}}
+\toprule
+图/表 & 回答的问题 & 对比方案 & 控制的变量 \\ \midrule
+Fig.~3 & 闭式近似是否准确 & 蒙特卡洛 vs 闭式（紧凑 UPA、随机 MA） & 固定 $\alpha=0.5$ \\
+Fig.~4 & 算法 2 是否收敛 & 3 个初始化 $\times$ 3 个 SNR & -- \\
+Fig.~5(a)(b) & ESSR 与 AN 节省随 SNR & 所提、速率导向 MA、\textbf{AS}、稀疏 FPA、紧凑 FPA & 功率分配相同（算法 1），只比位置 \\
+\textbf{表 II} & 结论是否依赖 Eve 模型；AN 是否必要 & 上述 5 种 + 无 AN；最坏情况 Eve vs TIN Eve & 设计相同，只改变评估用的 Eve 模型 \\
+Fig.~6(a)(b) & Eve 与 LU 的角度间隔；单用户（注 3） & 同 Fig.~5 & 同上 \\
+Fig.~7 & 区域大小 & 同 Fig.~5（紧凑 FPA 与 AS 与 $A$ 无关） & 同上 \\
+Fig.~8(a)(b) & 长时功率分配的作用（0 dB / 10 dB，横轴为用户不对称程度 $\varsigma$） & 所提功率分配、等功率 + 优化 $\alpha$、等功率 + $\alpha=0.5$ & 位置均由算法 2 针对各自的功率分配优化 \\
+\bottomrule
+\end{longtable}
+每个基准只隔离一个因素：速率导向 MA $\to$ 位置是否考虑 Eve（直接量化命题 1 的作用）；AS $\to$ 连续移动 vs 离散选择（且 AS 用了两倍天线）；稀疏 FPA $\to$ 孔径 vs 自适应；紧凑 FPA $\to$ 传统阵列；无 AN（表 II）$\to$ AN 的必要性与 Eve 模型；两种等功率（Fig.~8）$\to$ 每用户功率分配与信息/AN 功率分割。
+
+\subsection{本轮的代码修改}
+\begin{longtable}{>{\ttfamily\small}p{4.6cm}p{11.0cm}}
+\toprule
+文件（\code{functions/} 下的函数省略目录名） & 修改 \\ \midrule
+as\_select.m（新） & AS 基准：$\binom{2N}{N}$ 子集穷举，统计 CSI，目标与所提方案相同，按子集向量化。\\
+evaluate\_schemes.m & 新增方案 \code{'AS'}；保存 TIN Eve 下的 ESSR。\\
+mc\_rates.m & 同一批信道样本上同时计算 TIN Eve 的窃听速率与 ESSR。\\
+secrecy\_wf.m & 支持对多个子集同时注水（$\eta$ 为矩阵、$P_{\rm I}$ 为标量）。\\
+main\_schemes.m, scheme\_style.m & Fig.~5--7 的 5 种方案改为 所提 / 速率导向 MA / AS / 稀疏 FPA / 紧凑 FPA；AS 为橙色点划线倒三角。\\
+pick\_schemes.m（新） & 画图时按方案名取列（结果文件中可包含不画的方案，如无 AN）。\\
+print\_table2.m（新） & 打印表 II。\\
+sweep\_schemes.m & 新增扫描字段 \code{'spread'}（LU 衰落差异）与 TIN 结果。\\
+fig8\_power\_allocation.m, plot\_fig8.m & 新 Fig.~8：ESSR vs $\varsigma$，参数为 SNR；\code{prm.fig8SNR = [0 10]} 为两个子图，\code{run\_all} 另跑 20 dB 供正文引用。\\
+plot\_fig5--7.m & 加入 AS；图例与纵轴范围按 5 条曲线重新布置。\\
+default\_params.m, run\_all.m, replot\_all.m, fig5\_snr.m & AS 参数（\code{asRows}, \code{asCols}, \code{asGrid}）；新 Fig.~8 的两次运行；表 II 打印。\\
+\bottomrule
+\end{longtable}
+
+\subsection{稿件中的对应修改}
+\begin{itemize}
+\item 第 II-C 节（式 (6) 后）：补充最坏情况 Eve 模型的理由，并说明第 V 节检验其影响。
+\item 第 V-A 节：基准中加入 AS（替换无 AN）；新增一段说明“所有方案用同一功率分配、功率分配单独在第 V-G 节检验”以及“无 AN 不进主图的原因、其结果见表 II”。
+\item 第 V-D 节：加入 AS 的数字与解释；删除无 AN 的句子；新增表 II 及“对 Eve 模型的鲁棒性”一段。
+\item 第 V-E、V-F 节：加入 AS 的数字与解释。
+\item 第 V-G 节与 Fig.~8：按新图重写。
+\item 摘要、贡献第 4 条、结论：加入 AS 与 Eve 模型鲁棒性的结论。
+\end{itemize}
+
+% =============================================================================
+\section{需要作者确认的事项}
+% =============================================================================
+\begin{enumerate}
+\item 作者信息与基金信息仍为占位符。
+\item 参考文献已在线核对 [13][14][15][16][17] 的作者、题目与卷期；其余经典文献（[1]--[11]、[18]--[26]）为标准引用，建议投稿前再用 IEEE Xplore 统一格式核对一遍。
+\item 本轮全部结果由 Octave 8.4 计算（图为 Octave 渲染的 600 dpi PNG）。在 MATLAB 中运行 \code{run\_all} 或 \code{replot\_all} 会生成矢量 PDF，稿件会自动优先使用 PDF；数值应在统计误差内一致。
+\item 若作者希望主图的默认场景更“真实”（例如按距离生成不同路损的 LU），每用户功率分配的收益会在主图中自然体现；本轮为了与文献 [16][17] 的设定一致，默认场景保持同质 LU，异质情形放在 Fig.~8。
+\end{enumerate}
+
+\end{document}
