@@ -5,6 +5,9 @@ function [Rb, Re, essr, stats] = mc_rates(sc, T, p, q, S, seed)
 %   Re(m)  = E{ log2(1 + p_m |g^H wbar_m|^2 / (q g^H P_H^perp g + sigma_e^2)) }
 %   essr   = sum_m [Rb(m) - Re(m)]^+
 %   stats.leak(m) = E{|g^H wbar_m|^2},  stats.an = E{g^H P_H^perp g}  (for validation)
+%   stats.Re_tin, stats.essr_tin: the same rates for an eavesdropper that treats the
+%   signals of the other LUs as noise (TIN), i.e., without the worst-case assumption
+%   of Section II-C:  p_m |g^H wbar_m|^2 / (sum_{i~=m} p_i |g^H wbar_i|^2 + q g^H P_H^perp g + sigma_e^2).
 
 if nargin < 6, seed = 1; end
 rng(seed);
@@ -48,4 +51,8 @@ Re = mean(log2(1 + sinr), 2);
 essr = sum(max(Rb - Re, 0));
 stats.leak = mean(leak, 2);
 stats.an   = mean(an);
+rx  = repmat(p, 1, S) .* leak;                                    % received power of each stream
+itf = repmat(sum(rx, 1), M, 1) - rx;                               % inter-user interference at Eve
+stats.Re_tin   = mean(log2(1 + rx ./ (itf + repmat(q*an + sc.sigma2e, M, 1))), 2);
+stats.essr_tin = sum(max(Rb - stats.Re_tin, 0));
 end

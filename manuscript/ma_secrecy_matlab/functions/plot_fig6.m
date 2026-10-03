@@ -2,9 +2,9 @@ function plot_fig6(res, part)
 %PLOT_FIG6  Fig. 6: ESSR versus the angular offset Delta between Eve and LU 1 for
 %   (a) M = 3 and (b) M = 1 (for M = 1, the rate-oriented MA coincides with the
 %   compact FPA). Logarithmic Delta axis.
-keys = res.schemes;
+[Y, keys] = pick_schemes(res, 'essr');
 names = cellfun(@scheme_name, keys, 'UniformOutput', false);
-[ax, h] = plot_schemes(res.values, res.essr, keys);
+[ax, h] = plot_schemes(res.values, Y, keys);
 set(ax, 'XScale', 'log', 'XTick', res.values, 'XTickLabel', arrayfun(@num2str, res.values, 'UniformOutput', false));
 xlim(ax, [res.values(1)*0.9 res.values(end)*1.1]);
 if part == 'a'
@@ -12,7 +12,7 @@ if part == 'a'
 else
     label_axes(ax, 'Angular offset {\Delta} between Eve and the LU (rad)', 'Ergodic secrecy rate (bps/Hz)');
 end
-ymax = max(res.essr(:));
+ymax = max(Y(:));
 if part == 'a'                % all curves lie well above zero: legend in the lower part
     ylim(ax, [0 1.12*ymax]);
     add_legend(ax, h, names, 'south', 2);

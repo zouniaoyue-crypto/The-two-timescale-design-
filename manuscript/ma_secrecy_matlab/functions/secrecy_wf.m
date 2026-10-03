@@ -3,7 +3,8 @@ function p = secrecy_wf(eta, th, PI, nBisect)
 %   Q candidate AN powers:
 %       max_{p >= 0} sum_m log2(1 + eta_m p_m) - log2(1 + th_m p_m)
 %       s.t. sum_m p_m <= PI
-%   eta : M x 1,  th : M x Q (th_m = vartheta_m(q)),  PI : 1 x Q  ->  p : M x Q
+%   eta : M x 1 or M x Q,  th : M x Q (th_m = eta_{e,m}(q)),  PI : 1 x Q or scalar  ->  p : M x Q
+%   (the Q columns are independent problems, e.g., different q or different antenna subsets)
 %
 %   p_m(nu) = [ 2 (rho_m - 1) / ( sqrt((eta_m - th_m)^2 + 4 eta_m th_m rho_m) + eta_m + th_m ) ]^+,
 %   rho_m = (eta_m - th_m) / (nu ln 2), for LUs with eta_m > th_m; p_m = 0 otherwise.
@@ -11,7 +12,8 @@ function p = secrecy_wf(eta, th, PI, nBisect)
 
 if nargin < 4, nBisect = 60; end
 [M, Q] = size(th);
-eta = repmat(eta(:), 1, Q);
+if size(eta, 2) == 1, eta = repmat(eta(:), 1, Q); end
+if numel(PI) == 1, PI = repmat(PI, 1, Q); end
 PI  = reshape(PI, 1, Q);
 act = (eta > th) & repmat(PI > 0, M, 1);
 gap = eta - th;

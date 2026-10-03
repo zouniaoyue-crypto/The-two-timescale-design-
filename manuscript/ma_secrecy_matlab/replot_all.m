@@ -19,10 +19,10 @@ for k = 1:size(list, 1)
         fprintf('skipped %s (no results file)\n', list{k,1});
     end
 end
-f0 = fullfile(results_dir(), 'fig8_power_allocation_0dB.mat');
-f1 = fullfile(results_dir(), 'fig8_power_allocation_20dB.mat');
-if exist(f0, 'file') && exist(f1, 'file')
-    S0 = load(f0);  S1 = load(f1);
-    plot_fig8(S0.res, S1.res);  close all;
+fa = fullfile(results_dir(), 'fig8_pa_10dB.mat');
+fb = fullfile(results_dir(), 'fig8_pa_20dB.mat');
+if exist(fa, 'file') && exist(fb, 'file')
+    Sa = load(fa);  Sb = load(fb);
+    plot_fig8(Sa.res, Sb.res);  close all;
     fprintf('replotted fig8_power_allocation\n');
 end

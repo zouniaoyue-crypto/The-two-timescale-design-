@@ -14,7 +14,11 @@ function out = evaluate_schemes(sc, prm, schemes, seed)
 %     'FPA_fix'  - compact lambda/2 UPA + equal user power, fixed alpha
 %     'FPA_noAN' - compact lambda/2 UPA + {p_m}, q = 0
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
-%   out.<scheme> has fields essr (Monte Carlo ESSR), Rb, Re, F (approximate ESSR),
+%     'AS'       - antenna selection: N of the 2N antennas of a lambda/2 UPA are selected
+%                  by exhaustive search based on the statistical CSI (as_select.m),
+%                  then {p_m}, q optimized by Algorithm 1
+%   out.<scheme> has fields essr (Monte Carlo ESSR, worst-case Eve), essr_tin (Eve treating
+%   the other LUs' signals as noise), Rb, Re, F (approximate ESSR),
 %   anfrac ((N-M) q / P_tot), T, p, q, hist.
 
 if nargin < 4, seed = 1; end
@@ -47,14 +51,18 @@ for k = 1:numel(schemes)
         case {'FPA_full', 'FPA_EPA', 'FPA_noAN', 'FPA_fix'}
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, lower(name(5:end)));
+        case 'AS'
+            T = as_select(sc, prm);
+            [p, q] = power_opt(sc, T, prm, 'full');
         case 'SPA_full'
             T = upa_positions(N, prm.upaRows, prm.upaCols, sc.A/(prm.upaCols - 1), sc.A/(prm.upaRows - 1));
             [p, q] = power_opt(sc, T, prm, 'full');
         otherwise
             error('unknown scheme %s', name);
     end
-    [Rb, Re, essr] = mc_rates(sc, T, p, q, prm.S, seed);
+    [Rb, Re, essr, st] = mc_rates(sc, T, p, q, prm.S, seed);
     r.essr = essr;  r.Rb = Rb;  r.Re = Re;
+    r.essr_tin = st.essr_tin;                  % eavesdropper treating interference as noise
     r.F = objective_F(sc, T, p, q, true);
     r.anfrac = (sc.N - sc.M)*q/sc.P;
     r.T = T;  r.p = p;  r.q = q;  r.hist = hist;

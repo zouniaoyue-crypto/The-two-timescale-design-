@@ -11,6 +11,8 @@ prm.A        = 4;        % side length of the square movable region C = [-A/2, A
 prm.Dmin     = 0.5;      % minimum inter-MA distance (in lambda)
 prm.upaRows  = 2;        % FPA benchmark: rows x cols UPA with lambda/2 spacing
 prm.upaCols  = 4;
+prm.asRows   = 4;        % AS benchmark: N antennas selected from a 4 x 4 UPA (2N candidates)
+prm.asCols   = 4;        %   with lambda/2 spacing
 
 % ---------------- channels ----------------
 prm.kappa_dB  = 10;      % Rician factor of the LUs (scalar or 1 x M), dB
@@ -30,6 +32,7 @@ prm.delta0     = 1;      % smallest initial MM curvature parameter delta_0
 prm.nGrid      = 41;     % grid size of the one-dimensional search (coarse and fine stage)
 prm.nBisect    = 60;     % bisection iterations for the water level nu
 prm.numInit    = 3;      % initializations of Algorithm 2: UPA + (numInit-1) random
+prm.asGrid     = 21;     % coarse grid of q used to rank the antenna subsets of the AS benchmark
 prm.alphaFix   = 0.5;    % fixed power-splitting factor of the benchmark without power optimization
 
 % ---------------- evaluation ----------------
