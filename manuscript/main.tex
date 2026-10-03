@@ -219,7 +219,7 @@ where the dependence of the channels on $\bt$ is omitted for brevity. The signal
 \begin{equation}\label{eq:sinre_gen}
 \gamma_{e,m}=\frac{|\bg^H\bw_m|^2}{\bg^H\bSig\bg+\sigma_e^2},
 \end{equation}
-which upper-bounds the SINR of Eve when the signals of the other LUs are treated as interference.
+which upper-bounds the SINR of Eve when the signals of the other LUs are treated as interference. Since the receiver of a passive Eve is unknown to the BS, this worst-case model yields a secrecy guarantee that holds regardless of the decoding capability of Eve~\cite{ZhuTWC2014}. Under this model, the inter-user interference provides no protection against Eve, and secrecy has to be guaranteed by the precoding and the AN. The impact of this assumption is evaluated in Section~\ref{sec:sim}, where the obtained designs are also tested against an Eve that treats the signals of the other LUs as interference.
 
 \subsection{Ergodic Secrecy Rate and Problem Formulation}
 
@@ -608,9 +608,9 @@ Unless otherwise specified, the BS is equipped with $N=8$ MAs to serve $M=3$ LUs
 \item \textit{Rate-oriented MA:} The antenna positions are optimized to maximize the approximate ergodic sum rate of the LUs with equal power allocation as in~\cite{ZhengTCOM2025}, i.e., $\sum_{m=1}^M\log_2(1+\eta_m(\bt)\Ptot/M)$, which does not take Eve into account. This problem is solved by the element-wise MM method in Section~\ref{sec:position} with the same initializations, and then $(\bp,q)$ is optimized by Algorithm~\ref{alg:power} for the obtained positions. This benchmark combines the existing two-timescale MA design with AN, and thus reveals the gain of the secrecy-aware antenna positioning enabled by Proposition~\ref{prop:eve}.
 \item \textit{Sparse FPA:} The BS adopts a $2\times4$ UPA that spans the entire region $\mathcal C$, i.e., with spacings $A/3$ and $A$ along the $x$- and $y$-axes, respectively, and $(\bp,q)$ is optimized by Algorithm~\ref{alg:power}.
 \item \textit{Compact FPA:} The BS adopts the $2\times4$ UPA with $\lambda/2$ spacing, and $(\bp,q)$ is optimized by Algorithm~\ref{alg:power}.
-\item \textit{Proposed w/o AN:} The antenna positions and $\bp$ are optimized by Algorithm~\ref{alg:ao} with $q=0$.
+\item \textit{Antenna selection (AS):} The BS is equipped with a $4\times4$ UPA with $\lambda/2$ spacing, i.e., $2N$ antennas, and selects $N$ of them based on the statistical CSI by an exhaustive search over all the $\binom{2N}{N}$ subsets, where the selection metric is the approximate ESSR in (P3) with the power allocation of Algorithm~\ref{alg:power}, similar to~\cite{ChenArxiv2026}. AS exploits spatial diversity without antenna movement, at the cost of twice as many antennas and an RF switching network.
 \end{itemize}
-The benchmarks for the long-term power allocation are introduced in Section~\ref{sec:sim_pa}.
+All the schemes adopt the same long-term power allocation, i.e., Algorithm~\ref{alg:power}, so that Figs.~\ref{fig:snr}--\ref{fig:region} isolate the effect of the antenna positions, whereas the power allocation is examined separately in Section~\ref{sec:sim_pa}. Note that the proposed design without AN is not included as a benchmark in these figures. Under the worst-case model in~\eqref{eq:sinre_gen}, Eve can remove the inter-user interference, so that the ESSR without AN necessarily saturates at high SNR~\cite{Goel2008}, which reflects the eavesdropper model rather than the antenna design. Instead, its ESSR under both eavesdropper models is reported in Table~\ref{tab:eve}.
 
 \subsection{Accuracy of the Closed-Form Approximations}
 
