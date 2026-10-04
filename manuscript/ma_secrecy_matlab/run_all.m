@@ -1,5 +1,5 @@
 %RUN_ALL  Reproduces all numerical results of main.tex (Figs. 3-7, Table I, and the
-%   results quoted in the text of Section V; see readme.pdf).
+%   results quoted in the text of Section V; see readme.pdf for the run times).
 %   Set QUICK = true for a fast functional test (few drops, few Monte Carlo samples).
 %   Results (.mat) and figures (.pdf/.eps/.png/.fig in MATLAB, .png in Octave) are
 %   written to ./results. To re-draw the figures without re-running, use replot_all.
@@ -28,6 +28,5 @@ extra_angle_offset(prm);            % Sec. V-E: ESSR vs. angular offset (M = 3)
 extra_single_user(prm);             % Sec. V-E: single LU (M = 1)
 extra_pa_spread(prm, 0);            % Sec. V-F: power allocation vs. fading spread, 0 dB
 extra_pa_spread(prm, 10);           %           ... 10 dB
-extra_pa_spread(prm, 20);           %           ... 20 dB
 close all;
 fprintf('All simulations finished in %.1f min.\n', toc(t0)/60);

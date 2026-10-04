@@ -14,7 +14,7 @@ save_figure('fig5a_essr_snr');
 [Y, keys] = pick_schemes(res, 'anfrac');
 [ax, h] = plot_schemes(res.values, Y, keys);
 label_axes(ax, xl, 'AN power fraction');
-set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 0.6], 'YTick', 0:0.1:0.6);
-add_legend(ax, h, names, 'southeast');               % the curves rise from the lower left
+set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 0.7], 'YTick', 0:0.1:0.7);
+add_legend(ax, h, names, 'northwest');               % free area above the low-SNR part
 save_figure('fig5b_an_fraction');
 end
