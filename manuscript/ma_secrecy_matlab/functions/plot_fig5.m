@@ -7,17 +7,14 @@ xl = 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)';
 names = cellfun(@scheme_name, keys, 'UniformOutput', false);
 [ax, h] = plot_schemes(res.values, Y, keys);
 label_axes(ax, xl, 'ESSR (bps/Hz)');
-xlim(ax, [res.values(1) res.values(end)]);
-ymax = max(Y(:));  ylim(ax, [0 5*ceil(1.15*ymax/5)]);  % upper-left corner kept free for the legend
+set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 35], 'YTick', 0:5:35);
 add_legend(ax, h, names, 'northwest');
 save_figure('fig5a_essr_snr');
 % (b) AN power fraction
 [Y, keys] = pick_schemes(res, 'anfrac');
-names = cellfun(@scheme_name, keys, 'UniformOutput', false);
 [ax, h] = plot_schemes(res.values, Y, keys);
-label_axes(ax, xl, 'AN power fraction ({\itN}-{\itM}){\itq}/{\itP}_{tot}');
-xlim(ax, [res.values(1) res.values(end)]);
-ylim(ax, [0 0.75]);                                 % head room for a two-column legend
-add_legend(ax, h, names, 'north', 2);
+label_axes(ax, xl, 'AN power fraction');
+set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 0.6], 'YTick', 0:0.1:0.6);
+add_legend(ax, h, names, 'southeast');               % the curves rise from the lower left
 save_figure('fig5b_an_fraction');
 end

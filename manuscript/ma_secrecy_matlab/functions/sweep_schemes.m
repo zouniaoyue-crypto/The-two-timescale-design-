@@ -6,6 +6,8 @@ function res = sweep_schemes(prm, field, values, schemes)
 %   res.essrDrops(i, k, d): ESSR of drop d (for statistics beyond the average);
 %   res.essr_tin(i, k): ESSR for an eavesdropper treating interference as noise.
 %   field = 'spread': beta_m (dB) = -value (m-1)/(M-1), i.e., [0, -value/2, -value] for M = 3.
+%   field = 'eveAoDErr': error (rad) of the AoD of Eve known at the BS (design_scenario.m);
+%   the designs are evaluated for the true AoD.
 
 K = numel(schemes);
 res.values = values;  res.schemes = schemes;
@@ -23,8 +25,9 @@ for i = 1:numel(values)
     end
     t0 = tic;
     for dI = 1:prm.numDrops
-        sc = gen_scenario(pr, prm.seed + dI);
-        out = evaluate_schemes(sc, pr, schemes, prm.seed + dI);
+        sc  = gen_scenario(pr, prm.seed + dI);                 % true statistical CSI
+        scD = design_scenario(pr, sc, prm.seed + dI);          % statistical CSI at the BS
+        out = evaluate_schemes(scD, pr, schemes, prm.seed + dI, sc);
         for k = 1:K
             r = out.(schemes{k});
             res.essr(i, k)   = res.essr(i, k)   + r.essr/prm.numDrops;

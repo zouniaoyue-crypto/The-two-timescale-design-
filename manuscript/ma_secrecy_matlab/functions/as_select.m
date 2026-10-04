@@ -1,4 +1,4 @@
-function [T, best, idx] = as_select(sc, prm)
+function [T, best, idx] = as_select(sc, prm, Tc)
 %AS_SELECT  Benchmark "antenna selection (AS)" with statistical CSI: N of the 2N
 %   antennas of a lambda/2-spaced UPA (prm.asRows x prm.asCols, e.g., 4 x 4 for N = 8)
 %   are selected by exhaustive search over all nchoosek(2N, N) subsets. The selection
@@ -6,9 +6,12 @@ function [T, best, idx] = as_select(sc, prm)
 %   the long-term power allocation of Algorithm 1 (secrecy water-filling for each q on
 %   a coarse grid of prm.asGrid points, evaluated for all subsets in a vectorized way).
 %   The power allocation of the selected subset is then refined by power_opt.m.
+%   The optional Tc (K x 2) overrides the candidate positions (e.g., a UPA spanning C).
 
 N = sc.N;  M = sc.M;  k0 = 2*pi/sc.lambda;
-Tc = upa_positions(prm.asRows*prm.asCols, prm.asRows, prm.asCols, 0.5);   % candidates
+if nargin < 3                                    % default candidates: lambda/2 UPA
+    Tc = upa_positions(prm.asRows*prm.asCols, prm.asRows, prm.asCols, 0.5);
+end
 K  = size(Tc, 1);
 idx = nchoosek(1:K, N);                         % S x N subsets
 S  = size(idx, 1);
