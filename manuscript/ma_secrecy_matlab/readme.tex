@@ -71,7 +71,7 @@ run\_all.m & 主脚本：依次运行全部仿真（\code{QUICK} 开关）。\\
 default\_params.m & 默认参数（见第 4 节表格）。\\
 check\_implementation.m & 自检：梯度、注水 KKT、单调性、闭式 vs 蒙特卡洛。\\
 fig3\_accuracy.m & Fig.~3：闭式近似精度，(a) vs 发射 SNR，(b) vs 莱斯因子。\\
-fig4\_convergence.m & Fig.~4：算法 2 的收敛曲线（3 个初始化 $\times$ 3 个 SNR）。\\
+fig4\_convergence.m & Fig.~4：算法 2 的收敛曲线（3 个初始化 $\times$ 3 个 SNR；为显示完整轨迹，关闭停止准则、固定 60 次迭代）。\\
 fig5\_snr.m & Fig.~5：(a) ESSR 与 (b) AN 功率占比 vs 发射 SNR；同时计算无 AN 方案与两种 Eve 模型下的 ESSR，并打印表 II。\\
 fig6a\_angle.m & Fig.~6(a)：ESSR vs 角度偏差 $\Delta$（$M=3$）。\\
 fig6b\_single\_user.m & Fig.~6(b)：单用户（$M=1$）保密速率 vs $\Delta$。\\
@@ -269,7 +269,7 @@ MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha$ 固定为 0.5（不做�
 \begin{description}
 \item[Fig.~3（\code{fig3\_accuracy}）] 固定功率分割 $\alpha=0.5$，紧凑 UPA 与随机 MA 位置两种布局；(a) 横轴为发射 SNR，(b) 横轴为莱斯因子 $\kappa=\kappa_e$。上面一组曲线是 LU 的遍历和速率（引理 1），下面一组是 Eve 的遍历窃听和速率（命题 1）；标记为蒙特卡洛，线为闭式。
 预期：Eve 的闭式近似与蒙特卡洛高度吻合；LU 的闭式近似（现有结果）偏保守，差距随 $\kappa$ 增大，但两种布局几乎相同（支撑注 1：对位置优化影响很小）。
-\item[Fig.~4（\code{fig4\_convergence}）] 算法 2 的目标值随迭代单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
+\item[Fig.~4（\code{fig4\_convergence}）] 三个 SNR（30/20/10 dB）上下排列为三个子图，共用横轴、纵轴各自缩放，使每条收敛曲线都清晰可见；颜色、线型与标记表示初始化（图上方一行图例）。仿真中关闭停止准则（\code{aoTol = 0}）以显示完整的 60 次迭代，\code{res.itStop} 记录默认停止准则（$\epsilon=10^{-4}$）下的终止迭代次数。预期：目标值单调上升并收敛；不同初始化收敛到相近的值；命令行同时打印最终解的蒙特卡洛 ESSR。
 \item[Fig.~5（\code{fig5\_snr}）] (a) ESSR 与 (b) AN 功率占比 $(N-M)q/P_{\rm tot}$ 随发射 SNR 的变化，5 种方案。预期：所提方案最好；速率导向 MA 与稀疏 FPA 相近（只考虑 LU 去相关、不考虑 Eve 的位置对保密帮助有限）；AS 比紧凑 FPA 好，但受限于 $\lambda/2$ 网格与小孔径；所提方案的 AN 占比明显低于所有基准，而速率导向 MA 的 AN 占比与紧凑 FPA 几乎相同（AN 节省来自“针对 Eve 的位置设计”，注 4）。同一次运行还计算无 AN 方案与 TIN Eve 下的 ESSR，并打印表 II：无 AN 方案只在最坏情况 Eve 下高 SNR 饱和，在 TIN Eve 下随 SNR 增长；所提方案在两种模型下都最好。
 \item[Fig.~6（\code{fig6a\_angle}, \code{fig6b\_single\_user}）] ESSR 随 $\Delta$ 的变化（横轴对数刻度）。(a) $M=3$：$\Delta$ 很小时任何阵列都难以区分 Eve 与 LU 1，各方案接近；中等 $\Delta$ 时所提方案增益最大；$\Delta$ 很大时 Eve 本身容易分开，速率导向 MA 追上一部分。(b) $M=1$：LU 的速率与位置无关（注 3），速率导向 MA 保持初始 UPA，与紧凑 FPA 完全重合；所提方案仍有显著增益；AS 随 $\Delta$ 增大而改善，$\Delta=0.5$ rad 时接近所提方案。
 \item[Fig.~7（\code{fig7\_region}）] ESSR 随区域边长 $A$ 增大而增大；紧凑 FPA 与 AS 与 $A$ 无关（AS 的候选阵列是 $1.5\lambda\times1.5\lambda$ 的 $4\times4$ UPA，$A=1.5\lambda$ 时与所提方案相当，$A\ge2\lambda$ 后被超过）；速率导向 MA 随 $A$ 改善很少；稀疏 FPA 随阵元间距变化而起伏（栅瓣位置相对 Eve 变化）。

@@ -629,11 +629,11 @@ Fig.~\ref{fig:acc} evaluates the accuracy of the closed-form approximations in L
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{fig4_convergence}
-\caption{Convergence of Algorithm~\ref{alg:ao} for one realization of the AoDs, different initializations, and different transmit SNRs.}
+\caption{Convergence of Algorithm~\ref{alg:ao} for one realization of the AoDs and different initializations, where $\Ptot/\sigma^2=30$, $20$, and $10$~dB from top to bottom.}
 \label{fig:conv}
 \end{figure}
 
-Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao} for one realization of the AoDs, three initializations, and $\Ptot/\sigma^2\in\{10,20,30\}$~dB. The objective value increases monotonically in all cases, which verifies the convergence analysis in Section~\ref{sec:opt}-D. About $30\%$--$50\%$ of the total improvement is achieved in the first iteration, after which the antenna positions are gradually fine-tuned, and $95\%$ of the total improvement is attained within $20$--$60$ iterations. Moreover, the final objective values obtained from different initializations differ by at most 4.5\%, and the UPA initialization yields the best solution in all three cases, which indicates that a few initializations suffice in practice.
+Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao} for one realization of the AoDs, three initializations, and $\Ptot/\sigma^2\in\{10,20,30\}$~dB, where the stopping criterion is disabled to show the complete trajectories over $60$ iterations. The objective value increases monotonically in all cases, which verifies the convergence analysis in Section~\ref{sec:opt}-D. About $30\%$--$55\%$ of the total improvement is achieved in the first iteration, after which the antenna positions are gradually fine-tuned, and $95\%$ of the total improvement is attained within $25$--$57$ iterations. With the stopping criterion, i.e., $\epsilon=10^{-4}$ and at most $60$ iterations, Algorithm~\ref{alg:ao} terminates after $32$--$60$ iterations in these cases. Moreover, the final objective values obtained from different initializations differ by at most 4.5\%, and the UPA initialization yields the best solution in all three cases, which indicates that a few initializations suffice in practice.
 
 \subsection{ESSR and AN Power Versus Transmit SNR}
 
