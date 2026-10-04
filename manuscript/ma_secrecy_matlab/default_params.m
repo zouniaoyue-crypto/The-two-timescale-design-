@@ -27,8 +27,12 @@ prm.Delta     = 0.1;     % angular offset (rad) between Eve and LU 1
 prm.eveAoDErr = 0;       % error (rad) of the AoD of Eve known at the BS (robustness study)
 
 % ---------------- algorithms ----------------
-prm.aoMaxIter  = 60;     % maximum number of AO iterations (Algorithm 2)
-prm.aoTol      = 1e-4;   % relative-increase stopping threshold
+prm.aoMaxIter  = 50;     % maximum number of AO iterations I_max (Algorithm 2)
+prm.aoTol      = 1e-4;   % relative-increase stopping threshold epsilon of Algorithm 2
+prm.gridStep   = 0.1;    % spacing of the candidate grid of the position search (in lambda);
+                         %   0 disables the global search (pure MM updates)
+prm.mmMaxIter  = 20;     % maximum number of MM iterations per MA and AO iteration
+prm.mmTol      = 1e-6;   % relative-increase stopping threshold of the MM refinement
 prm.delta0     = 1;      % smallest initial MM curvature parameter delta_0
 prm.nGrid      = 41;     % grid size of the one-dimensional search (coarse and fine stage)
 prm.nBisect    = 60;     % bisection iterations for the water level nu

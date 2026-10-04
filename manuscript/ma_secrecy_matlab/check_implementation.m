@@ -1,7 +1,8 @@
 function check_implementation()
 %CHECK_IMPLEMENTATION  Self-test of the implementation (about 1 minute):
 %   1) analytical gradient (Appendix B) versus central finite differences, for all LUs
-%      and for a subset of LUs (used by the equal-power benchmarks);
+%      and for a subset of LUs (used by the equal-power benchmarks), and the rank-one
+%      evaluation of F over candidate positions (objective_F_n) versus objective_F;
 %   2) secrecy water-filling (Proposition 3): KKT conditions and power budget;
 %   3) monotonic convergence of Algorithm 2;
 %   4) closed-form rates (Lemma 1, Proposition 1) versus Monte Carlo.
@@ -40,6 +41,13 @@ for n = 1:sc.N
     end
 end
 fprintf('   partial gradient (subset of LUs): %.2e  (should be < 1e-5)\n', worst);
+C = [T(2,:).', (rand(2, 50) - 0.5)*sc.A];             % candidate positions of MA 2
+Fn = objective_F_n(sc, T, 2, C, p, q);  worst = 0;
+for k = 1:size(C, 2)
+    Tk = T;  Tk(2,:) = C(:,k).';
+    worst = max(worst, abs(Fn(k) - objective_F(sc, Tk, p, q)));
+end
+fprintf('   rank-one evaluation of F over candidate positions (objective_F_n): max error %.2e\n', worst);
 
 % ---- 2) secrecy water-filling ----
 [eta, xi, psi] = rate_coeffs(sc, T);

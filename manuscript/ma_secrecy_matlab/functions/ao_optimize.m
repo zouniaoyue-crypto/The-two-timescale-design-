@@ -13,7 +13,7 @@ T = T0;
 hist = objective_F(sc, T, p, q, plus);
 deltaLast = [];
 for it = 1:prm.aoMaxIter
-    [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus);   % positions (MM)
+    [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus);   % positions (search + MM)
     [p2, q2] = power_opt(sc, T, prm, mode);                                % power allocation
     if objective_F(sc, T, p2, q2, plus) >= objective_F(sc, T, p, q, plus)
         p = p2;  q = q2;
