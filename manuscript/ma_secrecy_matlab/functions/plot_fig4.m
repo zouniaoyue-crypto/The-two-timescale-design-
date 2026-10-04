@@ -26,11 +26,11 @@ st = struct('color', [0.45 0.45 0.45], 'ls', ':', 'marker', 'x');
 draw(ax, it, mean(res.histMM, 1), st, s, 3);
 st.name = '{\itN} = 8, 20 dB, MM only';
 xlim(ax, [0 res.nIt]);  set(ax, 'XTick', 0:10:res.nIt);
-set(ax, 'YLim', [4 24], 'YTick', 4:4:24);
+set(ax, 'YLim', [0 24], 'YTick', 0:4:24);
 label_axes(ax, 'Number of iterations', 'Objective value of (P3) (bps/Hz)');
-% legend in the empty band between the 10-dB and the 20-dB curves (2 columns)
+% legend in the empty band below the 10-dB curves (2 columns)
 m = s.margins;
-manual_legend(gcf, [m(1) + 0.55, m(2) + 0.86, 2.30, 0.50], ...
+manual_legend(gcf, [m(1) + 0.55, m(2) + 0.06, 2.30, 0.50], ...
               {{items{1}, items{3}}, {items{2}, items{4}}, {st, []}}, 1.10, 0.145);
 save_figure('fig4_convergence');
 end

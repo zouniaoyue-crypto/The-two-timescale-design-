@@ -1,6 +1,6 @@
 function [F, Rb, Re] = objective_F(sc, T, p, q, plusFlag)
 %OBJECTIVE_F  Approximate ergodic secrecy sum rate.
-%   F  = sum_m [ Rb_m - Re_m ]            (objective (33a) of (P3), [.]^+ dropped)
+%   F  = sum_m [ Rb_m - Re_m ]            (objective (32a) of (P3), [.]^+ dropped)
 %   F  = sum_m [ Rb_m - Re_m ]^+          if plusFlag = true (eq. (27))
 %   Rb_m = log2(1 + eta_m p_m)                        (eq. (17))
 %   Re_m = log2(1 + xi_m p_m / (q psi + sbar_e^2))    (eq. (26))

@@ -6,16 +6,14 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %   evaluation, e.g., when the AoD of Eve known at the BS is erroneous (design_scenario.m).
 %
 %   schemes : cell array with entries among
-%     'MA_full'  - proposed: MA positions + long-term power allocation {p_m}, q (Algorithm 2)
+%     'MA_full'  - proposed: MA positions + long-term power allocation {p_m}, q (Algorithm 2,
+%                  best of prm.numInit initializations)
 %     'MA_rate'  - rate-oriented MA [ZhengTCOM2025]: positions maximize the ergodic sum
 %                  rate (Eve ignored), then {p_m}, q optimized by Algorithm 1
 %     'MA_noAN'  - MA positions + {p_m}, no AN (q = 0)
 %     'MA_EPA'   - MA positions + equal user power, power-splitting factor alpha optimized
 %     'MA_fix'   - MA positions + equal user power, fixed alpha = prm.alphaFix
 %     'FPA_full' - compact lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
-%     'FPA_EPA'  - compact lambda/2 UPA + equal user power, alpha optimized
-%     'FPA_fix'  - compact lambda/2 UPA + equal user power, fixed alpha
-%     'FPA_noAN' - compact lambda/2 UPA + {p_m}, q = 0
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
 %     'AS'       - antenna selection: N of the 2N antennas of a lambda/2 UPA are selected
 %                  by exhaustive search based on the statistical CSI (as_select.m),
@@ -54,9 +52,9 @@ for k = 1:numel(schemes)
         case 'MA_rate'
             T = rate_oriented_positions(sc, inits, prm);
             [p, q] = power_opt(sc, T, prm, 'full');
-        case {'FPA_full', 'FPA_EPA', 'FPA_noAN', 'FPA_fix'}
+        case 'FPA_full'
             T = Tupa;
-            [p, q] = power_opt(sc, T, prm, lower(name(5:end)));
+            [p, q] = power_opt(sc, T, prm, 'full');
         case 'AS'
             T = as_select(sc, prm);
             [p, q] = power_opt(sc, T, prm, 'full');

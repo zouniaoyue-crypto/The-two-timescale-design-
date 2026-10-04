@@ -1,15 +1,15 @@
 function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus)
 %POSITION_SWEEP  One round of element-wise updates of the antenna positions
-%   (Section IV-C of main.tex). For each MA n, with the other positions fixed:
+%   (Section IV-C and Algorithm 2 of main.tex). For each MA n, with the other positions fixed:
 %   Stage 1 (global search): F is evaluated by objective_F_n at all points of a uniform
 %     grid over C with spacing prm.gridStep (in lambda) that satisfy the minimum-distance
-%     constraints exactly; MA n moves to the best point if it improves F. This locates
-%     the best basin of the multimodal function F(t_n).
+%     constraints exactly; MA n moves to the best point if it improves F (eq. (45)). This
+%     locates the best basin of the multimodal function F(t_n).
 %   Stage 2 (MM refinement), repeated at most prm.mmMaxIter times or until the relative
 %     increase of F is below prm.mmTol:
 %     1) gradient g = grad_{t_n} F at the current point (Appendix B);
-%     2) surrogate  F(t^(l)) + g^T (t_n - t_n^(l)) - delta_n/2 ||t_n - t_n^(l)||^2;
-%     3) maximizer = projection of t_n^(l) + g/delta_n onto the polygon (P3.2.n);
+%     2) surrogate  F(t^(k)) + g^T (t_n - t_n^(k)) - delta_n/2 ||t_n - t_n^(k)||^2 (eq. (50));
+%     3) maximizer = projection of t_n^(k) + g/delta_n onto the polygon (eqs. (52), (53));
 %     4) backtracking: delta_n <- 2 delta_n until F(new) >= surrogate(new).
 %   deltaLast (N x 1) stores the last accepted delta_n; the next search starts
 %   from max(delta0, deltaLast/2). Both stages never decrease F.

@@ -1,7 +1,7 @@
 function F = objective_F_n(sc, T, n, C, p, q, plusFlag)
 %OBJECTIVE_F_N  Objective F of (P3) as a function of the position of MA n only, evaluated
 %   at all candidate positions in the columns of C (2 x K), with the other positions in T
-%   fixed (Section IV-C of main.tex, eqs. (37)-(39)). Uses the rank-one structure
+%   fixed (Section IV-C of main.tex, eqs. (41)-(44)). Uses the rank-one structure
 %       Phi(t) = Gamma_n + l_n l_n^H,   v(t) = r_n + l_n exp(j 2pi/lambda t_n^T a_e),
 %       Omega(t) = Gamma_n^{-1} - u u^H / s,   u = Gamma_n^{-1} l_n,  s = 1 + l_n^H u,
 %   so that each candidate costs O(M^2) operations (vectorized over the K candidates).

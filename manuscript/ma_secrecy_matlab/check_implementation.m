@@ -55,7 +55,7 @@ th = xi/(q*psi + sc.sbe);
 PI = sc.P - (sc.N - sc.M)*q;
 pw = secrecy_wf(eta, th, PI, 100);
 act = pw > 1e-9;
-fprime = (eta - th)./(log(2)*(1 + eta.*pw).*(1 + th.*pw));      % derivative (36)
+fprime = (eta - th)./(log(2)*(1 + eta.*pw).*(1 + th.*pw));      % derivative (35)
 nu = mean(fprime(act));
 fprintf('2) water-filling: power used %.6f of %.6f; spread of df/dp over active LUs %.2e;\n', sum(pw), PI, ...
         (max(fprime(act)) - min(fprime(act)))/nu);
