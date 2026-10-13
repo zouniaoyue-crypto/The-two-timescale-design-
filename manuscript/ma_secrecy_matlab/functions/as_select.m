@@ -39,8 +39,8 @@ for m = 1:M
 end
 tr  = sum(om, 1);
 vOv = real(sum(conj(v) .* w, 1));
-c   = (abs(w).^2 + N*o2) ./ om;                 % c_m, eq. (24)
-d   = (N - vOv) .* (N - M) ./ (N - M + N*tr);   % d, eq. (25)
+c   = (abs(w).^2 + N*o2) ./ om;                 % c_m, eq. (22)
+d   = (N - vOv) .* (N - M) ./ (N - M + N*tr);   % d, eq. (23)
 eta = repmat(sc.zeta, 1, S) * (N - M) ./ (N*om);
 xi  = sc.kappa_e*c + 1;
 psi = sc.kappa_e*d + N - M;

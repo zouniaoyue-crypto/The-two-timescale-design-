@@ -1,6 +1,6 @@
 function res = extra_eve_aod_error(prm, errList, tag)
-%EXTRA_EVE_AOD_ERROR  Robustness to imperfect statistical CSI of Eve (quoted in Section V-D
-%   of main.tex, no figure): the BS designs all schemes with an AoD of Eve that deviates
+%EXTRA_EVE_AOD_ERROR  Robustness to imperfect statistical CSI of Eve (Table II of
+%   main.tex): the BS designs all schemes with an AoD of Eve that deviates
 %   from the true one by err (rad) in a random direction (design_scenario.m), and the
 %   designs are evaluated by Monte Carlo simulation for the true AoD.
 %   Default: err in {0, 0.01, 0.02, 0.05, 0.1} rad at P_tot/sigma^2 = 20 dB. For err = 0,

@@ -1,6 +1,6 @@
 function res = extra_as_region(prm, Avec)
-%EXTRA_AS_REGION  Antenna selection whose 2N candidates span the movable region (quoted
-%   in Section V-E of main.tex, no figure): N of the 2N antennas of a UPA spanning
+%EXTRA_AS_REGION  Antenna selection whose 2N candidates span the movable region
+%   ('AS, region-wide' in Fig. 6(a) of main.tex): N of the 2N antennas of a UPA spanning
 %   C = [-A/2, A/2]^2 are selected by the same statistical-CSI metric as the 'AS'
 %   benchmark, versus the side length A (the 'AS' benchmark uses a lambda/2 UPA).
 

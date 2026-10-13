@@ -5,8 +5,8 @@ function g = geo_quantities(sc, T)
 %   Phi   = L^H L + N I_M,   Omega = Phi^{-1}     (eq. (16))
 %   v     = L^H gbar                              (Proposition 1)
 %   omega_m = [Omega]_{mm}                        (LU decorrelation, Lemma 1, eq. (17))
-%   c_m   = (|[Omega v]_m|^2 + N [Omega^2]_{mm}) / omega_m   (leakage, eq. (24))
-%   d     = (N - M)(N - v^H Omega v) / (N - M + N tr(Omega))   (AN at Eve, eq. (25))
+%   c_m   = (|[Omega v]_m|^2 + N [Omega^2]_{mm}) / omega_m   (leakage, eq. (22))
+%   d     = (N - M)(N - v^H Omega v) / (N - M + N tr(Omega))   (AN at Eve, eq. (23))
 
 N = sc.N;  M = sc.M;
 k0 = 2*pi/sc.lambda;

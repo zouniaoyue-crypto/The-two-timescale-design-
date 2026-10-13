@@ -8,9 +8,8 @@ function res = fig7_power_allocation(prm, spread)
 %   For the equal-power schemes, the objective is the sum of [.]^+ terms, since an LU
 %   with a negative secrecy rate cannot be switched off. The large-scale fading of the
 %   LUs is beta_m (dB) = -spread (m-1)/(M-1), i.e., [0, -spread/2, -spread] dB for M = 3.
-%   Run once with spread = 0 (identical LUs, results/fig7_pa_identical.mat) and once with
-%   spread = 20 dB (heterogeneous LUs, results/fig7_pa_hetero.mat); the figure shows the
-%   relative ESSR loss of the equal-power schemes and is drawn when both runs exist.
+%   Fig. 7(a) uses spread = 20 dB (default, results/fig7_pa_hetero.mat); Fig. 7(b) uses the
+%   results of extra_pa_spread.m at 0 and 10 dB and is drawn when these are available.
 
 if nargin < 1 || isempty(prm), prm = default_params(); end
 if nargin < 2, spread = 20; end
@@ -20,10 +19,7 @@ res = sweep_schemes(prm, 'P_dB', 0:5:30, {'MA_full', 'MA_EPA', 'MA_fix'});
 res.spread = spread;
 if spread == 0, tag = 'identical'; else, tag = 'hetero'; end
 save(fullfile(results_dir(), ['fig7_pa_' tag '.mat']), 'res', 'prm', '-v7');
-f0 = fullfile(results_dir(), 'fig7_pa_identical.mat');
-f1 = fullfile(results_dir(), 'fig7_pa_hetero.mat');
-if exist(f0, 'file') && exist(f1, 'file')                % plot when both runs are available
-    S0 = load(f0);  S1 = load(f1);
-    plot_fig7(S0.res, S1.res);
+if spread == 20
+    plot_fig7(res, load_results('extra_pa_spread_0dB'), load_results('extra_pa_spread_10dB'));
 end
 end

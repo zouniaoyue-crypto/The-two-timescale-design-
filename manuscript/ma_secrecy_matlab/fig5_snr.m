@@ -3,7 +3,7 @@ function res = fig5_snr(prm)
 %   fraction (N-M) q / P_tot versus P_tot/sigma^2, averaged over prm.numDrops drops.
 %   Schemes (same in Figs. 5 and 6, main_schemes.m): proposed, rate-oriented MA, antenna
 %   selection, and FPA (compact lambda/2 UPA). The sparse FPA and the proposed design
-%   without AN are also evaluated (quoted in the text and in Table II, not plotted). For
+%   without AN are also evaluated (the latter in Table I, not plotted). For
 %   every scheme, res.essr_tin is the ESSR for an eavesdropper that treats the other LUs'
 %   signals as noise (robustness check of the worst-case assumption of Section II-C).
 

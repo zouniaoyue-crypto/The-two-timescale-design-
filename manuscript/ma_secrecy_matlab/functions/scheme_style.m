@@ -15,11 +15,11 @@ black  = [0.00 0.00 0.00];
 switch key
     case 'MA_full',   st = mk('Proposed',               red,    '-',  'o');
     case 'MA_rate',   st = mk('Rate-oriented MA',       blue,   '-',  's');
-    case 'AS',        st = mk('Antenna selection',      orange, '-.', '^');
+    case 'AS',        st = mk('AS',                     orange, '-.', '^');
     case 'FPA_full',  st = mk('FPA',                    gray,   '--', 'd');
     % evaluated but only quoted in the text
     case 'SPA_full',  st = mk('Sparse FPA',             green,  '--', 'v');
-    case 'AS_region', st = mk('AS (candidates span C)', orange, ':',  'v');
+    case 'AS_region', st = mk('AS, region-wide',        orange, ':',  'v');
     case 'MA_noAN',   st = mk('Proposed w/o AN',        gray,   ':',  'x');
     % power-allocation study (Fig. 7)
     case 'MA_EPA',    st = mk('Equal power, opt. {\it\alpha}', purple, '-', 'd');
