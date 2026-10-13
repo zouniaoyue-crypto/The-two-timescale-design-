@@ -227,7 +227,7 @@ seed & 2026 & -- & 随机种子（第 $i$ 个场景用 \code{seed}$+i$，结果�
 \end{enumerate}
 每一步都不降低 $F$，所以目标值序列单调不减（\code{check\_implementation} 与 Fig.~4 可以验证）。
 
-\textbf{为什么需要 Stage 1：}$F$ 关于 $\bt_n$ 含相位 $\frac{2\pi}{\lambda}\bt_n^T(\mathbf a_j-\mathbf a_i)$，周期约为 $\lambda/\|\mathbf a_j-\mathbf a_i\|$（本文参数下不小于约 $0.38\lambda$），因此 $F(\bt_n)$ 有大量局部极大值。纯 MM 只能爬到离当前位置最近的局部极大值，天线在区域内“挪动”得很慢（Fig.~4 的 “MM only” 曲线需要几十次迭代且终值更低）。Stage 1 用 $\lambda/10$ 的网格（每个周期至少 3--4 个点）直接找到最好的“山头”，Stage 2 再在山头内精确爬升，因此通常几次迭代就收敛。
+\textbf{为什么需要 Stage 1：}$F$ 关于 $\bt_n$ 含相位 $\frac{2\pi}{\lambda}\bt_n^T(\mathbf a_j-\mathbf a_i)$，周期约为 $\lambda/\|\mathbf a_j-\mathbf a_i\|$（本文参数下不小于约 $0.52\lambda$，因为 $\|\mathbf a_m\|\le1$），因此 $F(\bt_n)$ 有大量局部极大值。纯 MM 只能爬到离当前位置最近的局部极大值，天线在区域内“挪动”得很慢（Fig.~4 的 “MM only” 曲线需要几十次迭代且终值更低）。Stage 1 用 $\lambda/10$ 的网格（每个周期至少 5 个点）直接找到最好的“山头”，Stage 2 再在山头内精确爬升，因此通常几次迭代就收敛。
 
 \textbf{等功率基准（\code{'epa'}, \code{'fix'}）：}等功率时不能关断保密速率为负的 LU，第~IV-A 节中去掉 $[\cdot]^+$ 的等价变换不成立，目标取 $\sum_m[\tilde R_m-\tilde R_{e,m}]^+$。Stage 1 直接计算该目标；Stage 2 只对当前保密速率为正的 LU 求梯度（$\sum_{m:\,f_m>0}f_m$ 是 $\sum_m[f_m]^+$ 的下界且在当前点相等），因此单调性仍成立。
 
