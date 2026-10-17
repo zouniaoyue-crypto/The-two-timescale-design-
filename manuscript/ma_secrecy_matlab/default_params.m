@@ -23,7 +23,7 @@ prm.sigma2    = 1;       % noise power at the LUs
 prm.sigma2e   = 1;       % noise power at Eve
 prm.P_dB      = 20;      % P_tot / sigma^2 in dB
 prm.angMax    = pi/3;    % LU AoDs theta_m, phi_m ~ U[-angMax, angMax]
-prm.Delta     = 0.1;     % angular offset (rad) between Eve and LU 1
+prm.Delta     = 0.1;     % angular separation (rad) between Eve and LU 1 (Inf: independent)
 prm.eveAoDErr = 0;       % error (rad) of the AoD of Eve known at the BS (robustness study)
 
 % ---------------- algorithms ----------------

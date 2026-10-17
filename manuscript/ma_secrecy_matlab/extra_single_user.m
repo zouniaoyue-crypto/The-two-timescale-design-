@@ -1,6 +1,6 @@
 function res = extra_single_user(prm)
 %EXTRA_SINGLE_USER  Single-LU case (M = 1, Section III-D): ergodic secrecy rate (Monte Carlo)
-%   and AN power fraction versus the angular offset Delta between Eve and the LU. The
+%   and AN power fraction versus the angular separation Delta between Eve and the LU. The
 %   ergodic rate of the LU does not depend on the antenna positions for a given power, so
 %   that the rate-oriented MA design keeps its initial positions (compact UPA) and
 %   coincides with the FPA, whereas the proposed design reduces the leakage. Fig. 6(b) of

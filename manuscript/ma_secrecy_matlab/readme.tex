@@ -51,7 +51,7 @@ check_implementation
 \end{lstlisting}
 输出：(1) 解析梯度与中心差分的相对误差（应 $<10^{-5}$），以及秩一快速计算 \code{objective\_F\_n} 与直接计算 \code{objective\_F} 的误差（应 $\approx10^{-14}$）；(2) 保密注水解的 KKT 检验；(3) 算法~2 的单调性；(4) 闭式速率与蒙特卡洛的对比。
 \item \textbf{快速功能测试：}把 \code{run\_all.m} 中的 \code{QUICK = false;} 改为 \code{true} 后运行 \code{run\_all}（每点只用 3 个场景，几分钟跑完，曲线很粗糙，只用于检查代码能否运行）。
-\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。实测耗时（Octave 8.4，4 核机器上 4 个会话并行，每个会话约占 1 个核）：Fig.~3（13 个横轴点，每点对 100 个场景运行所提设计）约 60--85 分钟，Fig.~4 约 45 分钟，Fig.~5（含 AS、稀疏 FPA、无 AN 方案与 TIN Eve 评估）约 100 分钟，Fig.~6(a) 约 50 分钟，Fig.~7(a) 约 85--95 分钟；表~II 与 Fig.~6、7 的其余部分：\code{extra\_eve\_aod\_error} 约 45 分钟，\code{extra\_as\_region} 约 20 分钟，\code{extra\_angle\_offset} 约 50 分钟，\code{extra\_single\_user} 约 15 分钟，\code{extra\_pa\_spread} 两次运行（0 dB、10 dB）各约 55--80 分钟。4 个会话并行时全部仿真约 2.7 小时；MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
+\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。实测耗时（Octave 8.4，4 核机器上 4 个会话并行，每个会话约占 1 个核）：Fig.~3（13 个横轴点，每点对 100 个场景运行所提设计）约 60--85 分钟，Fig.~4 约 45 分钟，Fig.~5（含 AS、稀疏 FPA、无 AN 方案与 TIN Eve 评估）约 100 分钟，Fig.~6(a) 约 50 分钟，Fig.~7(a) 约 85--95 分钟；表~II 与 Fig.~6、7 的其余部分：\code{extra\_eve\_aod\_error} 约 45 分钟，\code{extra\_as\_region} 约 20 分钟，\code{extra\_angle\_offset} 约 50 分钟，\code{extra\_single\_user} 约 15 分钟，\code{extra\_random\_eve} 两次运行（$M=3$、$M=1$）约 10 分钟与 3 分钟，\code{extra\_pa\_spread} 两次运行（0 dB、10 dB）各约 55--80 分钟。4 个会话并行时全部仿真约 2.7 小时；MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
 \item 各脚本互相独立，可以开多个 MATLAB 会话并行运行，例如
 \begin{lstlisting}
 prm = default_params();          % 读取默认参数
@@ -82,8 +82,9 @@ fig6\_region.m & Fig.~6(a)：ESSR vs 区域边长 $A/\lambda$（同时计算稀�
 fig7\_power\_allocation.m & Fig.~7：三种长时功率分配（所提、等功率+优化 $\alpha$、等功率+$\alpha=0.5$）下的 ESSR vs SNR（图中画 0--20 dB），位置均由算法~2 针对各自的功率分配优化。第二个参数为 LU 衰落差异（默认 20：$[\beta_1,\beta_2,\beta_3]=[0,-10,-20]$ dB）。若 \code{extra\_pa\_spread} 的两组结果已存在，同时画出 Fig.~7(b)。\\ \midrule
 extra\_eve\_aod\_error.m & 表~II（第~V-E 节）：BS 已知的 Eve AoD 有误差 $\varepsilon_{\rm e}\in\{0,0.01,0.02,0.05,0.1\}$ rad 时各方案的 ESSR（20 dB）。\\
 extra\_as\_region.m & Fig.~6(a) 中的 “AS, region-wide”：$2N$ 个候选天线铺满区域（间距 $A/3$）的 AS，ESSR vs $A$（不涉及 MA 优化）。\\
-extra\_angle\_offset.m & Fig.~6(b)：ESSR vs Eve 与 LU 1 的角度偏差 $\Delta$（$M=3$）。\\
+extra\_angle\_offset.m & Fig.~6(b)：ESSR vs Eve 与 LU 1 的角度间隔 $\Delta$（$M=3$）。\\
 extra\_single\_user.m & Fig.~6(b)：单用户（$M=1$）的保密速率与 AN 占比 vs $\Delta$。\\
+extra\_random\_eve.m & \textbf{新增。}第~V-F 节：Eve 的 AoD 与 LU 无关（与 LU 同分布，\code{Delta = Inf}）时 4 种方案的 ESSR（20 dB）；第二个参数为 $M$，正文用 $M=3$ 与 $M=1$。\\
 extra\_pa\_spread.m & Fig.~7(b)：三种功率分配的 ESSR vs LU 衰落差异 $\varsigma$（第二个参数为 SNR，正文用 0 dB 与 10 dB）。\\
 \bottomrule
 \end{longtable}
@@ -91,7 +92,7 @@ extra\_pa\_spread.m & Fig.~7(b)：三种功率分配的 ESSR vs LU 衰落差异 
 \subsection{\code{functions/}：场景与信道}
 \begin{longtable}{>{\ttfamily\small}p{4.6cm}p{11.2cm}}
 \toprule
-gen\_scenario.m & 随机生成一个场景（drop）：LU 的 AoD $\theta_m,\phi_m\sim\mathcal U[-\pi/3,\pi/3]$，Eve 在 LU 1 附近（角度偏差 $\Delta$，方向随机）。第 $i$ 个场景用种子 \code{seed}$+i$，保证所有方案、所有横轴点使用同一批场景。\\
+gen\_scenario.m & 随机生成一个场景（drop）：LU 的 AoD $\theta_m,\phi_m\sim\mathcal U[-\pi/3,\pi/3]$，Eve 在 LU 1 附近（角度间隔 $\Delta$，方向随机）；\code{Delta = Inf} 时 Eve 的 AoD 与 LU 无关，按与 LU 相同的均匀分布生成。第 $i$ 个场景用种子 \code{seed}$+i$，保证所有方案、所有横轴点使用同一批场景。\\
 build\_scenario.m & 由 AoD 组装统计 CSI 结构体 \code{sc}：波矢 $\mathbf a_m,\mathbf a_e$（2$\times M$、2$\times$1），$\kappa_m,\kappa_e,\beta_m,\beta_e$，$\zeta_m$（引理~1），$\bar\sigma_e^2$（式 (21)）。\\
 design\_scenario.m & BS 已知的统计 CSI。默认与真实相同；\code{prm.eveAoDErr}$=\varepsilon_{\rm e}>0$ 时 Eve 的 AoD 有误差（用于鲁棒性仿真）：用有误差的 CSI 设计，用真实 CSI 评估。\\
 upa\_positions.m & 以原点为中心的 UPA 位置（FPA 基准与算法初始化）。\\
@@ -173,7 +174,7 @@ beta\_dB, betae\_dB & 0, 0 & $\beta_m,\beta_e$ & 大尺度衰落（dB；\code{be
 sigma2, sigma2e & 1, 1 & $\sigma_m^2,\sigma_e^2$ & 噪声功率 \\
 P\_dB & 20 & $\Ptot/\sigma^2$ & 发射 SNR（dB）\\
 angMax & $\pi/3$ & -- & LU 的 AoD 范围 $[-{\tt angMax},{\tt angMax}]$ \\
-Delta & 0.1 & $\Delta$ & Eve 与 LU 1 的角度偏差（rad）\\
+Delta & 0.1 & $\Delta$ & Eve 与 LU 1 的角度间隔（rad）；\code{Inf} 表示 Eve 的 AoD 与 LU 无关 \\
 eveAoDErr & 0 & $\varepsilon_{\rm e}$ & BS 已知的 Eve AoD 的误差（rad），只用于鲁棒性仿真 \\ \midrule
 aoMaxIter & 50 & $I_{\max}$ & 算法~2 的最大迭代次数 \\
 aoTol & $10^{-4}$ & $\epsilon$ & 算法~2 的相对增量停止阈值 \\
@@ -303,11 +304,12 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（黑色倒三角）\
 \code{fig4\_convergence} & Fig.~4 & 算法~2 的收敛性 \\
 \code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs SNR \\
 \code{fig5\_snr.mat}（字段 \code{essr\_tin}） & 表 I & 两种 Eve 模型下的 ESSR \\
-\code{fig6a\_essr\_region}, \code{fig6b\_essr\_offset} & Fig.~6(a)(b) & ESSR vs 区域边长 $A$ / 角度偏差 $\Delta$ \\
+\code{fig6a\_essr\_region}, \code{fig6b\_essr\_offset} & Fig.~6(a)(b) & ESSR vs 区域边长 $A$ / 角度间隔 $\Delta$ \\
 \code{fig7a\_pa\_snr}, \code{fig7b\_pa\_spread} & Fig.~7(a)(b) & 功率分配：ESSR vs SNR / 衰落差异 $\varsigma$ \\
 \code{extra\_eve\_aod\_error.mat} & 表~II & Eve 的 AoD 误差 \\
 \code{extra\_as\_region.mat} & Fig.~6(a) & 候选天线铺满区域的 AS \\
-\code{extra\_angle\_offset.mat}, \code{extra\_single\_user.mat} & Fig.~6(b) & 角度偏差 $\Delta$；单用户 \\
+\code{extra\_angle\_offset.mat}, \code{extra\_single\_user.mat} & Fig.~6(b) & 角度间隔 $\Delta$；单用户 \\
+\code{extra\_random\_eve\_M\{3,1\}.mat} & 第~V-F 节 & Eve 的 AoD 与 LU 无关 \\
 \code{extra\_pa\_spread\_\{0,10\}dB.mat} & Fig.~7(b) & 功率分配 vs 衰落差异 $\varsigma$ \\
 \bottomrule
 \end{tabular}
@@ -321,7 +323,7 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（黑色倒三角）\
 \item[Fig.~3] 蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（方块 = 蒙特卡洛，实线 = 引理~1），红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（三角 = 蒙特卡洛，虚线 = 命题~1），均在所提设计处计算。命题~1 与蒙特卡洛几乎重合；引理~1 偏保守，且差距随 SNR 与莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍（本文参数下 1.6 倍，对应和速率约 2 bps/Hz）。因此近似 ESSR 是实际 ESSR 的保守估计；各 AN 方案的这一差距在每个 SNR 下相差不到 0.3 bps/Hz，近似目标不改变方案间的比较结论。
 \item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记）。蓝色 = 10 dB，红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
 \item[Fig.~5] (a) ESSR、(b) AN 功率占比 vs SNR。所提方案红色实线圆圈，速率导向 MA 蓝色实线方块，AS 橙色点划线三角，FPA 灰色虚线菱形（所有图一致）。
-\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与（紧凑候选阵列的）AS 不随 $A$ 变化，“AS, region-wide”（橙色点线倒三角）的候选阵列随 $A$ 扩展。(b) ESSR vs 角度偏差 $\Delta$：上方一组曲线为 $M=3$，下方一组为 $M=1$（$M=1$ 时速率导向 MA 与 FPA 重合，不画）。
+\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与（紧凑候选阵列的）AS 不随 $A$ 变化，“AS, region-wide”（橙色点线倒三角）的候选阵列随 $A$ 扩展。(b) ESSR vs 角度间隔 $\Delta$：上方一组曲线为 $M=3$，下方一组为 $M=1$（$M=1$ 时速率导向 MA 与 FPA 重合，不画）。
 \item[Fig.~7] (a) ESSR vs SNR（0--20 dB，衰落差异 $\varsigma=20$ dB）；(b) ESSR vs 衰落差异 $\varsigma$，实线 = 10 dB，虚线 = 0 dB。红色圆圈 = 所提功率分配，紫色菱形 = EP + 优化 $\alpha$，黑色倒三角 = EP + $\alpha=0.5$。颜色刻意与 Fig.~5、6 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
 \end{description}
 
