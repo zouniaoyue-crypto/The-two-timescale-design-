@@ -8,7 +8,7 @@ function plot_fig7(resD3, resD1, resS0, resS10)
 %   fading spread varsigma, [beta_1, beta_2, beta_3] = [0, -varsigma/2, -varsigma] dB, at
 %   P_tot/sigma^2 = 10 dB (solid, resS10) and 0 dB (dashed, resS0) (extra_pa_spread.m);
 %   varsigma = 0 corresponds to identical LUs. The PA versus the SNR
-%   (fig7_power_allocation.m) is quoted in Section V-H without a figure.
+%   (fig7_power_allocation.m) is quoted in Section V-G without a figure.
 s = fig_style();
 m = s.margins;
 % ---------------- (a) angular separation, M = 3 and M = 1 ----------------

@@ -12,7 +12,7 @@ switch key
     case 'SPA_full',  st = mk('Sparse FPA',             c.ochre,  '--', 'v', 1.0);
     case 'FPA_full',  st = mk('FPA',                    c.gray,   '--', 'd', 1.0);
     case 'AS_region', st = mk('AS, region-wide',        c.teal,   ':',  '>', 1.2);
-    case 'MA_noAN',   st = mk('Proposed w/o AN',        c.gray,   ':',  'x', 1.0);
+    case 'MA_noAN',   st = mk('Proposed w/o AN',        c.red,    ':',  'x', 1.0);
     % power-allocation study (Fig. 7)
     case 'MA_EPA',    st = mk('Equal power, opt. {\it\alpha}', c.purple, '-', 'd', 1.0);
     case 'MA_fix',    st = mk('Equal power, {\it\alpha} = 0.5', c.dark,  '-', 'v', 1.0);

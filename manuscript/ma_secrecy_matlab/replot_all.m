@@ -1,6 +1,6 @@
 %REPLOT_ALL  Re-creates all figures from the saved results (results/*.mat) without
 %   re-running the simulations, e.g., after changing the plot styles (fig_style.m,
-%   scheme_style.m), and prints Table I. In Octave, run under a display with the qt
+%   scheme_style.m), and prints the TIN-Eve numbers of Section V-H. In Octave, run under a display with the qt
 %   toolkit, e.g., xvfb-run -a octave --no-gui --eval replot_all
 
 here = fileparts(mfilename('fullpath'));
@@ -24,5 +24,5 @@ if ~isempty(R.extra_angle_offset) || ~isempty(R.extra_pa_spread_10dB)
     close all;  disp('replotted Fig. 7');
 end
 if ~isempty(R.fig5_snr) && isfield(R.fig5_snr, 'essr_tin')
-    print_table_eve(R.fig5_snr, [10 20 30]);                 % Table I
+    print_table_eve(R.fig5_snr, [10 20 30]);                 % Section V-H
 end

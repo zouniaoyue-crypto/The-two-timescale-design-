@@ -1,6 +1,6 @@
 function res = fig7_power_allocation(prm, spread)
 %FIG7_POWER_ALLOCATION  Benefit of the long-term power allocation (PA), quoted in
-%   Section V-H of main.tex (no figure). ESSR (Monte Carlo) versus P_tot/sigma^2 for three
+%   Section V-G of main.tex (no figure). ESSR (Monte Carlo) versus P_tot/sigma^2 for three
 %   PAs, with the MA positions optimized by Algorithm 2 for each PA:
 %     'MA_full' : proposed PA, per-user secrecy water-filling + optimized q (Algorithm 1)
 %     'MA_EPA'  : equal user power, power-splitting factor alpha optimized (1-D search)
