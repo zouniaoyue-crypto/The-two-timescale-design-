@@ -2,9 +2,10 @@ function T = rate_oriented_positions(sc, inits, prm)
 %RATE_ORIENTED_POSITIONS  Benchmark "rate-oriented MA": antenna positions of the
 %   two-timescale design in [ZhengTCOM2025] (ZF, equal power p_m = P_tot/M), i.e.,
 %       max_t  sum_m log2(1 + eta_m(t) P_tot/M)   s.t. (9c), (9d),
-%   which ignores Eve. It is solved by the element-wise MM method of Section IV-B:
-%   with kappa_e = 0 and q = 0, the Eve-related terms of F(t,p,q) do not depend on t,
-%   so that maximizing F over t is equivalent to maximizing the ergodic sum rate.
+%   which ignores Eve. It is tackled by the two-stage position update of Section IV-B
+%   (grid search + MM): with kappa_e = 0 and q = 0, the Eve-related terms of F(t,p,q) do
+%   not depend on t, so that maximizing F over t is equivalent to maximizing the ergodic
+%   sum rate.
 %   The best of the given initializations is returned (for M = 1 the objective does
 %   not depend on t, and the first initialization, i.e., the UPA, is returned).
 
