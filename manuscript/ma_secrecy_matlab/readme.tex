@@ -110,7 +110,7 @@ geo\_quantities.m & 三个几何量：$\boldsymbol\Phi,\boldsymbol\Omega$（式 
 rate\_coeffs.m & 有效系数 $\eta_m$（引理~1）、$\xi_m$、$\psi$（命题~1）。\\
 objective\_F.m & 目标函数 $F(\bt,\mathbf p,q)$（式 (30a)）；第 5 个参数为 \code{true} 时为 $\sum_m[\cdot]^+$（等功率基准）。同时返回各 LU 的近似速率 $\tilde R_m$、$\tilde R_{e,m}$。\\
 objective\_F\_n.m & \textbf{新增。}只改变第 $n$ 根天线位置时，在 $K$ 个候选位置上\textbf{向量化}计算 $F$：利用秩一结构（式 (39)--(42)），每个候选位置只需 $\mathcal O(M^2)$ 运算。用于 Stage~1 的网格全局搜索。\\
-grad\_F\_n.m & $F$ 对 $\bt_n$ 的解析梯度（式 (44)--(47)，附录 B 式 (60)--(66)）；可只对部分 LU 求导（等功率基准的 $[\cdot]^+$ 目标）。\\
+grad\_F\_n.m & $F$ 对 $\bt_n$ 的解析梯度（式 (44)--(47)，附录 C 式 (59)--(65)）；可只对部分 LU 求导（等功率基准的 $[\cdot]^+$ 目标）。\\
 analytic\_rates.m & 闭式近似速率（引理~1、命题~1），用于 Fig.~3。\\
 accuracy\_point.m & \textbf{新增。}Fig.~3 的单个横轴点：对 \code{numDrops} 个场景运行所提设计（\code{evaluate\_schemes} 的 \code{'MA\_full'}），返回 LU 和速率、Eve 窃听和速率与 ESSR 的蒙特卡洛值和闭式近似值（均为场景平均）。\\
 \bottomrule
@@ -121,7 +121,7 @@ accuracy\_point.m & \textbf{新增。}Fig.~3 的单个横轴点：对 \code{numD
 \toprule
 secrecy\_wf.m & 保密注水（命题~2，式 (35)）：对网格上所有 $q$ 同时二分求水位 $\nu$（向量化）。\\
 power\_opt.m & 算法~1：固定位置下的功率分配。模式 \code{'full'}（所提：注水 + 搜索 $q$）、\code{'noan'}（$q=0$）、\code{'epa'}（等功率 + 搜索 $\alpha$）、\code{'fix'}（等功率 + 固定 $\alpha$）。\\
-position\_sweep.m & 一轮逐天线位置更新（第 IV-C 节）。对每根天线：\textbf{Stage 1} 在间距 \code{gridStep} 的网格中满足最小间距的点上调用 \code{objective\_F\_n}，取最优（候选集合包含当前位置，因此目标值不下降，式 (43)）；\textbf{Stage 2} 从该点出发做至多 \code{mmMaxIter} 次 MM 迭代（梯度 \code{grad\_F\_n}、二次下界 (48)、线性化约束 (50)、投影 \code{proj\_polygon}、回溯 $\delta_n\leftarrow2\delta_n$），相对增量小于 \code{mmTol} 时停止。\code{gridStep = 0} 时跳过 Stage 1（即纯 MM，Fig.~4 中的 “MM only”）。\\
+position\_sweep.m & 一轮逐天线位置更新（第 IV-B 节）。对每根天线：\textbf{Stage 1} 在间距 \code{gridStep} 的网格中满足最小间距的点上调用 \code{objective\_F\_n}，取最优（候选集合包含当前位置，因此目标值不下降，式 (43)）；\textbf{Stage 2} 从该点出发做至多 \code{mmMaxIter} 次 MM 迭代（梯度 \code{grad\_F\_n}、二次下界 (48)、线性化约束 (50)、投影 \code{proj\_polygon}、回溯 $\delta_n\leftarrow2\delta_n$），相对增量小于 \code{mmTol} 时停止。\code{gridStep = 0} 时跳过 Stage 1（即纯 MM，Fig.~4 中的 “MM only”）。\\
 lin\_constraints.m & 子问题 (51) 的线性约束：区域盒约束 + 线性化最小间距（式 (50)）。\\
 proj\_polygon.m & 二维凸 QP 的精确解（点到凸多边形的投影：枚举各约束线上的投影与两两交点）。若舍入误差使所有候选点都不可行（天线很密、多个相邻 MA 恰好相距 $D_{\min}$ 时多边形退化为线段），返回当前位置（可行，MM 步长为零，目标值不下降）；$N=16$ 时出现过这种情况。\\
 ao\_optimize.m & 算法~2：\code{position\_sweep} 与 \code{power\_opt} 交替迭代；新功率分配只在目标值不下降时接受；相对增量小于 \code{aoTol} 或达到 \code{aoMaxIter} 时停止。返回位置、功率与目标值历史 \code{hist}。\\
@@ -148,7 +148,7 @@ load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \cod
 \subsection{\code{functions/}：绘图（IEEE 风格）}
 \begin{longtable}{>{\ttfamily\small}p{4.6cm}p{11.2cm}}
 \toprule
-fig\_style.m & 全局样式：单栏宽 3.5 in $\times$ 2.45 in、Times New Roman、字号 8/9/7 pt（刻度/坐标轴标签/图例，均为整数）、线宽、标记大小、坐标轴边距。\\
+fig\_style.m & 全局样式：单栏宽 3.5 in $\times$ 2.45 in、Times New Roman、字号 8/9/7 pt（刻度/坐标轴标签/图例，均为整数）、线宽、标记大小、坐标轴边距。稿件中所有子图（含 figure* 中的 (a)(b)）都按 \code{width=\textbackslash columnwidth} 插入，即 100\% 原尺寸，因此各图的字号、标记与线宽完全一致。\\
 scheme\_style.m, scheme\_name.m & 每种方案固定的图例名、颜色、线型、标记（所有图一致）。\\
 new\_figure.m, style\_axes.m & 建图（固定边距，标签不会被裁切）与坐标轴样式。\\
 plot\_curve.m, plot\_schemes.m, curve\_style.m & 画一条曲线（细线、空心标记，线宽取自 \code{scheme\_style}）；按方案批量画曲线（逆序绘制，使所提方案位于最上层）。\\
@@ -234,7 +234,7 @@ seed & 2026 & -- & 随机种子（第 $i$ 个场景用 \code{seed}$+i$，结果�
 
 \textbf{为什么需要 Stage 1：}$F$ 关于 $\bt_n$ 含相位 $\frac{2\pi}{\lambda}\bt_n^T(\mathbf a_j-\mathbf a_i)$，周期约为 $\lambda/\|\mathbf a_j-\mathbf a_i\|$（本文参数下不小于约 $0.52\lambda$，因为 $\|\mathbf a_m\|\le1$），因此 $F(\bt_n)$ 有大量局部极大值。纯 MM 只能爬到离当前位置最近的局部极大值，天线在区域内“挪动”得很慢（Fig.~4 的 “MM only” 曲线需要几十次迭代且终值更低）。Stage 1 用 $\lambda/10$ 的网格（每个周期至少 5 个点）直接找到最好的“山头”，Stage 2 再在山头内精确爬升，因此通常几次迭代就收敛。
 
-\textbf{等功率基准（\code{'epa'}, \code{'fix'}）：}等功率时不能关断保密速率为负的 LU，第~IV-A 节中去掉 $[\cdot]^+$ 的等价变换不成立，目标取 $\sum_m[\tilde R_m-\tilde R_{e,m}]^+$。Stage 1 直接计算该目标；Stage 2 只对当前保密速率为正的 LU 求梯度（$\sum_{m:\,f_m>0}f_m$ 是 $\sum_m[f_m]^+$ 的下界且在当前点相等），因此单调性仍成立。
+\textbf{等功率基准（\code{'epa'}, \code{'fix'}）：}等功率时不能关断保密速率为负的 LU，第~III-D 节中去掉 $[\cdot]^+$ 的等价变换不成立，目标取 $\sum_m[\tilde R_m-\tilde R_{e,m}]^+$。Stage 1 直接计算该目标；Stage 2 只对当前保密速率为正的 LU 求梯度（$\sum_{m:\,f_m>0}f_m$ 是 $\sum_m[f_m]^+$ 的下界且在当前点相等），因此单调性仍成立。
 
 \subsection{保密注水（\code{secrecy\_wf.m}）}
 给定 $q$，令 $\eta_{e,m}=\xi_m/(q\psi+\bar\sigma_e^2)$。$\eta_m\le\eta_{e,m}$ 的 LU 直接关断；其余 LU 按式 (35) 计算 $p_m(\nu)$，$\sum_mp_m(\nu)$ 关于 $\nu$ 单调递减，用二分法使之等于 $\Ptot-(N-M)q$。代码对网格上所有 $q$ 同时二分（向量化）。
@@ -265,7 +265,7 @@ Eve 近似速率 $\tilde R_{e,m}$、$\xi_m$、$\psi$ & (24) & \code{rate\_coeffs
 $q$ 的一维搜索 & (36)、算法~1 & \code{power\_opt.m}（\code{'full'}）\\
 秩一结构（Sherman--Morrison）& (39)--(42) & \code{objective\_F\_n.m} \\
 Stage 1 全局搜索 & (43) & \code{position\_sweep.m}, \code{objective\_F\_n.m} \\
-梯度 & (44)--(47)；附录 B & \code{grad\_F\_n.m} \\
+梯度 & (44)--(47)；附录 C & \code{grad\_F\_n.m} \\
 二次下界、回溯 & (48) & \code{position\_sweep.m} \\
 线性化最小间距 & (49)、(50) & \code{lin\_constraints.m} \\
 MM 子问题（投影） & (51) & \code{proj\_polygon.m} \\
@@ -357,7 +357,7 @@ fig5_snr(prm);
 \section{已完成的正确性检验}
 % -----------------------------------------------------------------------------
 \begin{itemize}
-\item 解析梯度（含附录 B 的 $\dot d$）与中心差分的最大相对误差约 $1.3\times10^{-7}$（等功率模式下的部分梯度约 $1.2\times10^{-7}$）；
+\item 解析梯度（含附录 C 的 $\dot d$）与中心差分的最大相对误差约 $1.3\times10^{-7}$（等功率模式下的部分梯度约 $1.2\times10^{-7}$）；
 \item \code{objective\_F\_n}（秩一快速计算）与 \code{objective\_F} 的最大误差约 $10^{-14}$；
 \item 保密注水解满足 KKT 条件（活跃用户边际收益相等、功率用满、关断用户满足 $f_m'(0)\le\nu$）；
 \item 算法~2 在 \code{'full'}、\code{'epa'}、\code{'fix'} 模式下单调不减；

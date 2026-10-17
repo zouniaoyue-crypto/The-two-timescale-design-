@@ -25,6 +25,6 @@ g.v   = v;
 g.w   = w;                                    % Omega v
 g.vOv = real(v'*w);                           % v^H Omega v
 g.c   = (abs(w).^2 + N*g.o2) ./ g.om;         % c_m(t)
-g.gam = (N - M) / (N - M + N*g.tr);          % trace-matched null-space fraction (Appendix A)
+g.gam = (N - M) / (N - M + N*g.tr);          % trace-matched null-space fraction (Appendix B)
 g.d   = (N - g.vOv) * g.gam;                  % d(t)
 end

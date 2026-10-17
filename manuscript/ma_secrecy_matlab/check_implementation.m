@@ -1,6 +1,6 @@
 function check_implementation()
 %CHECK_IMPLEMENTATION  Self-test of the implementation (about 1 minute):
-%   1) analytical gradient (Appendix B) versus central finite differences, for all LUs
+%   1) analytical gradient (Appendix C) versus central finite differences, for all LUs
 %      and for a subset of LUs (used by the equal-power benchmarks), and the rank-one
 %      evaluation of F over candidate positions (objective_F_n) versus objective_F;
 %   2) secrecy water-filling (Proposition 2): KKT conditions and power budget;

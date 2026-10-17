@@ -1,8 +1,8 @@
 function s = fig_style()
 %FIG_STYLE  Common style of all figures (IEEE two-column format).
 %   Every panel is exported at the width of one IEEE column (3.5 in) and included with
-%   \includegraphics[width=\columnwidth] (or 0.48\textwidth in a figure*), so that the
-%   fonts appear at their nominal sizes: 8-pt tick labels, 9-pt axis labels, and 7-pt
+%   \includegraphics[width=\columnwidth], also as a subfigure of a figure*, so that all
+%   panels have the same size and the fonts appear at their nominal sizes: 8-pt tick labels, 9-pt axis labels, and 7-pt
 %   legends and annotations, in Times (Liberation Serif, which is metric-compatible,
 %   is used when Times New Roman is not installed). All font sizes are integers, which
 %   keeps the glyph spacing correct in all export formats.
