@@ -148,7 +148,8 @@ load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \cod
 fig\_style.m & 全局样式：单栏宽 3.5 in $\times$ 2.45 in、Times New Roman、字号 8/9/7 pt（刻度/坐标轴标签/图例，均为整数）、线宽、标记大小、坐标轴边距。\\
 scheme\_style.m, scheme\_name.m & 每种方案固定的图例名、颜色、线型、标记（所有图一致）。\\
 new\_figure.m, style\_axes.m & 建图（固定边距，标签不会被裁切）与坐标轴样式。\\
-plot\_curve.m, plot\_schemes.m & 画一条曲线（空心标记）；按方案批量画曲线。\\
+plot\_curve.m, plot\_schemes.m, curve\_style.m & 画一条曲线（线宽与标记填充色取自 \code{scheme\_style}）；按方案批量画曲线（逆序绘制，使所提方案位于最上层）。\\
+fig\_palette.m & \textbf{新增。}统一配色：Okabe--Ito 色盲友好色板（紫色换为 Tol 的深紫 \#AA3377），FPA 用中性灰；所有颜色组合均通过色觉缺陷（CVD）分离度与对比度检验，且每条曲线另有独立的标记与线型，灰度打印仍可区分。\\
 label\_axes.m, add\_legend.m, axes\_note.m & 坐标轴标签、内置图例、坐标轴内文字标注。\\
 manual\_legend.m & \textbf{新增。}在透明覆盖坐标轴上按英寸位置“手绘”图例（多行多列、符号与曲线完全一致），MATLAB 与 Octave 的显示效果相同。Fig.~3、4、6 与 7(b) 使用。\\
 plot\_fig3.m -- plot\_fig7.m & 各图的绘制（坐标范围、图例位置、文字标注）。\\
@@ -288,8 +289,8 @@ SPA\_full & Sparse FPA & 铺满区域的稀疏 $2\times4$ UPA（间距 $A/3$、$
 AS\_region & AS, region-wide & 候选天线为铺满区域的 $4\times4$ UPA（间距 $A/3$；Fig.~6(a)）\\ \midrule
 \multicolumn{3}{l}{\textbf{Fig.~7 的功率分配对比}（位置均由算法~2 针对各自的功率分配优化）}\\
 MA\_full & Proposed PA & 每用户保密注水 + 一维搜索 $q$ \\
-MA\_EPA & EP, opt.\ $\alpha$ & $p_m=\alpha\Ptot/M$，$q=(1-\alpha)\Ptot/(N-M)$，一维搜索 $\alpha$（紫色菱形）\\
-MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（黑色倒三角）\\
+MA\_EPA & EP, opt.\ $\alpha$ & $p_m=\alpha\Ptot/M$，$q=(1-\alpha)\Ptot/(N-M)$，一维搜索 $\alpha$（深紫色菱形）\\
+MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角）\\
 \bottomrule
 \end{longtable}
 
@@ -320,11 +321,11 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（黑色倒三角）\
 \section{各图说明}
 % -----------------------------------------------------------------------------
 \begin{description}
-\item[Fig.~3] 蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（方块 = 蒙特卡洛，实线 = 引理~1），红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（三角 = 蒙特卡洛，虚线 = 命题~1），均在所提设计处计算。命题~1 与蒙特卡洛几乎重合；引理~1 偏保守，且差距随 SNR 与莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍（本文参数下 1.6 倍，对应和速率约 2 bps/Hz）。因此近似 ESSR 是实际 ESSR 的保守估计；各 AN 方案的这一差距在每个 SNR 下相差不到 0.3 bps/Hz，近似目标不改变方案间的比较结论。
-\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记）。蓝色 = 10 dB，红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
-\item[Fig.~5] (a) ESSR、(b) AN 功率占比 vs SNR。所提方案红色实线圆圈，速率导向 MA 蓝色实线方块，AS 橙色点划线三角，FPA 灰色虚线菱形（所有图一致）。
-\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与（紧凑候选阵列的）AS 不随 $A$ 变化，“AS, region-wide”（橙色点线倒三角）的候选阵列随 $A$ 扩展。(b) ESSR vs 角度间隔 $\Delta$：上方一组曲线为 $M=3$，下方一组为 $M=1$（$M=1$ 时速率导向 MA 与 FPA 重合，不画）。
-\item[Fig.~7] (a) ESSR vs SNR（0--20 dB，衰落差异 $\varsigma=20$ dB）；(b) ESSR vs 衰落差异 $\varsigma$，实线 = 10 dB，虚线 = 0 dB。红色圆圈 = 所提功率分配，紫色菱形 = EP + 优化 $\alpha$，黑色倒三角 = EP + $\alpha=0.5$。颜色刻意与 Fig.~5、6 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
+\item[Fig.~3] 蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（方块 = 蒙特卡洛，实线 = 引理~1），朱红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（三角 = 蒙特卡洛，虚线 = 命题~1），均在所提设计处计算。命题~1 与蒙特卡洛几乎重合；引理~1 偏保守，且差距随 SNR 与莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍（本文参数下 1.6 倍，对应和速率约 2 bps/Hz）。因此近似 ESSR 是实际 ESSR 的保守估计；各 AN 方案的这一差距在每个 SNR 下相差不到 0.3 bps/Hz，近似目标不改变方案间的比较结论。
+\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记）。蓝色 = 10 dB，朱红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
+\item[Fig.~5] (a) ESSR、(b) AN 功率占比 vs SNR。所提方案为朱红色（vermillion）粗实线与实心圆，速率导向 MA 为蓝色实线与浅色填充方块，AS 为绿色点划线与三角，FPA 为灰色虚线与菱形（所有图一致）；网格为浅灰虚线。
+\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与（紧凑候选阵列的）AS 不随 $A$ 变化，“AS, region-wide”（绿色点线倒三角）的候选阵列随 $A$ 扩展。(b) ESSR vs 角度间隔 $\Delta$：上方一组曲线为 $M=3$，下方一组为 $M=1$（$M=1$ 时速率导向 MA 与 FPA 重合，不画）。
+\item[Fig.~7] (a) ESSR vs SNR（0--20 dB，衰落差异 $\varsigma=20$ dB）；(b) ESSR vs 衰落差异 $\varsigma$，实线 = 10 dB，虚线 = 0 dB。朱红色实心圆 = 所提功率分配，深紫色菱形 = EP + 优化 $\alpha$，深灰色倒三角 = EP + $\alpha=0.5$。颜色刻意与 Fig.~5、6 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
 \end{description}
 
 % -----------------------------------------------------------------------------

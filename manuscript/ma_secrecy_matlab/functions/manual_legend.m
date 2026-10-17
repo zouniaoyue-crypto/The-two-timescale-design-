@@ -13,7 +13,7 @@ fp = get(fig, 'Position');  W = fp(3);  H = fp(4);
 lax = axes('Parent', fig, 'Units', 'inches', 'Position', [0 0 W H], 'Visible', 'off', ...
            'XLim', [0 W], 'YLim', [0 H]);
 hold(lax, 'on');
-rectangle('Parent', lax, 'Position', pos, 'EdgeColor', s.edge, 'LineWidth', s.axLw, 'FaceColor', 'w');
+rectangle('Parent', lax, 'Position', pos, 'EdgeColor', s.legEdge, 'LineWidth', s.axLw, 'FaceColor', 'w');
 tok = 0.24;                                         % length of the line samples (in)
 nr = numel(items);
 y0 = pos(2) + pos(4)/2 + (nr - 1)*rowH/2;           % center of the first row
@@ -23,12 +23,13 @@ for r = 1:nr
         it = items{r}{c};
         if isempty(it), continue; end
         x = pos(1) + 0.06 + (c - 1)*colW;
+        [lw, mfc] = curve_style(it, s);
         if ~strcmp(it.ls, 'none')
-            plot(lax, x + [0 tok], [y y], 'LineStyle', it.ls, 'Color', it.color, 'LineWidth', s.lw);
+            plot(lax, x + [0 tok], [y y], 'LineStyle', it.ls, 'Color', it.color, 'LineWidth', lw);
         end
         if ~strcmp(it.marker, 'none')
             plot(lax, x + tok/2, y, 'LineStyle', 'none', 'Marker', it.marker, 'Color', it.color, ...
-                 'MarkerSize', s.ms, 'LineWidth', s.lw, 'MarkerFaceColor', 'w');
+                 'MarkerSize', s.ms, 'LineWidth', lw, 'MarkerFaceColor', mfc, 'MarkerEdgeColor', it.color);
         end
         text(x + tok + 0.06, y, it.name, 'Parent', lax, 'FontName', s.font, ...
              'FontSize', s.fsLegend, 'VerticalAlignment', 'middle');

@@ -13,10 +13,12 @@ s.font      = 'Times New Roman';
 s.fsTick    = 8;                   % tick labels
 s.fsLabel   = 9;                   % axis labels
 s.fsLegend  = 7;                   % legends and in-axes annotations
-s.lw        = 1.0;                 % line width of the curves
-s.ms        = 5;                   % marker size (hollow markers)
+s.lw        = 1.1;                 % default line width of the curves (benchmarks)
+s.ms        = 5;                   % marker size
 s.axLw      = 0.5;                 % axes and legend box line width
-s.gridAlpha = 0.18;                % light solid grid
-s.edge      = [0.15 0.15 0.15];    % axes and legend box color
+s.gridAlpha = 1;                   % grid drawn in a light gray (s.gridColor)
+s.gridColor = [0.84 0.84 0.84];    % light dashed grid
+s.legEdge   = [0.60 0.60 0.60];    % legend box color
+s.edge      = [0.15 0.15 0.15];    % axes color
 s.margins   = [0.46 0.40 0.12 0.08];   % axes margins [left bottom right top] (in)
 end

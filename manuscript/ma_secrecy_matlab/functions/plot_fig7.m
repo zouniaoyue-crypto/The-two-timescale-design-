@@ -17,7 +17,7 @@ end
 % ---------------- (a) versus SNR, heterogeneous LUs ----------------
 ax = new_figure();  h = zeros(1, 3);
 sel = res1.values <= 20;                      % low-to-moderate SNR, where the PA matters
-for k = 1:3
+for k = 3:-1:1                                 % reverse order: the proposed PA on top
     h(k) = plot_curve(ax, res1.values(sel), res1.essr(sel, k), sty{k});
 end
 label_axes(ax, 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)', 'ESSR (bps/Hz)');
@@ -29,7 +29,7 @@ if nargin < 3 || isempty(resS0) || isempty(resS10), return; end
 ax = new_figure();
 R = {resS10, resS0};  lsp = {'-', '--'};
 for r = 1:2
-    for k = 1:3
+    for k = 3:-1:1
         st = sty{k};  st.ls = lsp{r};
         plot_curve(ax, R{r}.values, R{r}.essr(:, k), st);
     end

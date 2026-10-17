@@ -12,10 +12,21 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 \usepackage{cite}
 \usepackage{graphicx}
+\usepackage{booktabs}
 \usepackage[caption=false,font=footnotesize]{subfig}
 \graphicspath{{ma_secrecy_matlab/results/}}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,decorations.pathreplacing,calc}
+\usetikzlibrary{arrows.meta,decorations.pathreplacing,calc,shapes.symbols}
+\definecolor{oiblue}{HTML}{0072B2}
+\definecolor{oiverm}{HTML}{D55E00}
+\definecolor{oigreen}{HTML}{009E73}
+\definecolor{oiorange}{HTML}{E69F00}
+\newcommand{\phoneicon}[2]{% handset icon at #1 with screen color #2 (Fig. 1)
+  \begin{scope}[shift={#1}]
+    \draw[rounded corners=1.3pt, line width=0.5pt, fill=white] (-0.135,-0.25) rectangle (0.135,0.25);
+    \fill[#2] (-0.1,-0.17) rectangle (0.1,0.2);
+    \fill[black!55] (0,-0.212) circle (0.02);
+  \end{scope}}
 
 % ------------------------------- theorem-like --------------------------------
 \newtheorem{lemma}{Lemma}
@@ -113,35 +124,57 @@ The rest of this paper is organized as follows. Sections~\ref{sec:model} and~\re
 
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[font=\footnotesize,>=Stealth,scale=0.92]
-  % BS baseband and RF chains
-  \draw[rounded corners=2pt] (-0.3,0.1) rectangle (1.1,2.3);
-  \node[align=center] at (0.4,1.2) {Digital\\signal\\processor};
-  \foreach \y in {1.9,1.2,0.5}{
-    \draw (1.3,\y-0.15) rectangle (1.9,\y+0.15);
-    \node at (1.6,\y) {\scriptsize RF};
-    \draw (1.1,\y) -- (1.3,\y);}
-  % movable region
-  \draw[dashed] (2.3,0.1) rectangle (4.5,2.3);
-  \node at (3.4,-0.15) {\scriptsize movable region $\mathcal C$};
-  \foreach \x/\y in {2.7/1.9, 3.4/1.2, 2.8/0.5}{\fill (\x,\y) circle (1.6pt);}
-  \draw (1.9,1.9) .. controls (2.2,2.0) .. (2.7,1.9);
-  \draw (1.9,1.2) .. controls (2.5,1.1) .. (3.4,1.2);
-  \draw (1.9,0.5) .. controls (2.2,0.6) .. (2.8,0.5);
-  \draw[->] (3.75,0.3) -- (4.3,0.3) node[above] {\scriptsize $x$};
-  \draw[->] (3.75,0.3) -- (3.75,0.85) node[right] {\scriptsize $y$};
-  % receivers
-  \coordinate (o) at (4.6,1.25);
-  \node[draw,circle,inner sep=2pt] (u1) at (7.0,2.35) {};
-  \node[anchor=west] at (u1.east) {LU $1$};
-  \node[draw,circle,fill=black,inner sep=2pt] (ev) at (7.0,1.75) {};
-  \node[anchor=west] at (ev.east) {Eve};
-  \node at (7.0,1.15) {$\vdots$};
-  \node[draw,circle,inner sep=2pt] (uM) at (7.0,0.35) {};
-  \node[anchor=west] at (uM.east) {LU $M$};
-  \draw[->] (o) -- (u1) node[pos=0.6,above,sloped] {\scriptsize $\mathbf h_1(\mathbf t)$};
-  \draw[->,dashed] (o) -- (ev) node[pos=0.78,below,sloped] {\scriptsize $\mathbf g(\mathbf t)$};
-  \draw[->] (o) -- (uM) node[pos=0.6,below,sloped] {\scriptsize $\mathbf h_M(\mathbf t)$};
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, x=1cm, y=0.9cm]
+  % BS: digital signal processor and RF chains
+  \draw[rounded corners=3pt, fill=black!7, draw=black!70] (0,1.2) rectangle (1.1,3.45);
+  \node[align=center, font=\scriptsize] at (0.55,2.32) {Digital\\signal\\processor};
+  \foreach \y in {3.05, 2.35, 1.6}{
+    \draw[black!70] (1.1,\y) -- (1.28,\y);
+    \draw[rounded corners=1pt, fill=oiorange!22, draw=oiorange!70!black] (1.28,\y-0.18) rectangle (2.3,\y+0.18);
+    \node[font=\scriptsize] at (1.79,\y) {RF chain};}
+  \node at (1.79,2.03) {$\vdots$};
+  \node[font=\footnotesize\bfseries] at (1.15,0.88) {BS};
+  % movable region (perspective view of the 2D plane) with the MAs
+  \coordinate (A) at (2.8,0.85); \coordinate (B) at (3.8,1.25);
+  \coordinate (C) at (3.8,3.75); \coordinate (D) at (2.8,3.35);
+  \fill[oiblue!7] (A) -- (B) -- (C) -- (D) -- cycle;
+  \foreach \u in {0.25,0.5,0.75}{\draw[oiblue!30, line width=0.3pt] ($(A)!\u!(B)$) -- ($(D)!\u!(C)$);}
+  \foreach \v in {0.2,0.4,0.6,0.8}{\draw[oiblue!30, line width=0.3pt] ($(A)!\v!(D)$) -- ($(B)!\v!(C)$);}
+  \draw[oiblue!70!black, line width=0.6pt] (A) -- (B) -- (C) -- (D) -- cycle;
+  \draw[->, line width=0.45pt] (2.88,0.99) -- (3.34,1.174) node[right, inner sep=1pt, font=\scriptsize] {$x$};
+  \draw[->, line width=0.45pt] (2.88,0.99) -- (2.88,1.38) node[left, inner sep=1pt, font=\scriptsize] {$y$};
+  \foreach \yr/\xa/\ya in {3.05/3.08/2.95, 2.35/3.5/2.32, 1.6/3.36/1.8}{
+    \draw[black!75, line width=0.5pt] (2.3,\yr) .. controls (2.68,\yr) and (\xa-0.38,\ya) .. (\xa,\ya);
+    \fill[black] (\xa,\ya) circle (1.6pt);}
+  \draw[black!80, line width=0.5pt, densely dotted] (3.55,3.25) circle (1.6pt);
+  \draw[->, black!80, line width=0.45pt, densely dashed] (3.55,3.13) -- (3.51,2.45);
+  \node[font=\scriptsize] at (3.3,4.05) {Movable region $\mathcal C$};
+  % LoS and NLoS paths to the LUs and Eve
+  \tikzset{scat/.style={cloud, cloud puffs=9, cloud puff arc=110, aspect=1.9, draw=black!40, fill=black!10,
+             minimum width=0.62cm, minimum height=0.34cm, inner sep=0pt},
+           nlos/.style={black!45, densely dashed, line width=0.5pt}, los/.style={->, line width=0.75pt}}
+  \coordinate (O) at (4.0,2.45);
+  \coordinate (U1) at (7.45,3.55); \coordinate (E) at (7.45,2.65); \coordinate (UM) at (7.45,1.2);
+  \node[scat] (S1) at (5.6,4.0) {};
+  \node[scat] (S2) at (5.8,0.62) {};
+  \draw[nlos] (O) -- (S1.south west);
+  \draw[nlos, ->] (S1.east) -- ($(U1)+(-0.18,0.1)$);
+  \draw[nlos, ->] (S1.south east) -- ($(E)+(-0.18,0.12)$);
+  \draw[nlos] (O) -- (S2.north west);
+  \draw[nlos, ->] (S2.east) -- ($(UM)+(-0.18,-0.08)$);
+  \draw[los, oiblue] (O) -- ($(U1)+(-0.18,0)$) node[pos=0.55, above, sloped, inner sep=1.5pt, text=black] {$\mathbf h_1(\mathbf t)$};
+  \draw[los, oiblue] (O) -- ($(UM)+(-0.18,0)$) node[pos=0.55, below, sloped, inner sep=1.5pt, text=black] {$\mathbf h_M(\mathbf t)$};
+  \draw[los, oiverm] (O) -- ($(E)+(-0.18,0)$) node[pos=0.62, below, sloped, inner sep=1.5pt, text=black] {$\mathbf g(\mathbf t)$};
+  \phoneicon{(U1)}{oiblue!45}  \node[right=4pt] at (U1) {LU $1$};
+  \phoneicon{(E)}{oiverm!75}   \node[right=4pt] at (E) {Eve};
+  \node at (7.45,1.98) {$\vdots$};
+  \phoneicon{(UM)}{oiblue!45}  \node[right=4pt] at (UM) {LU $M$};
+  % legend
+  \begin{scope}[shift={(0.25,0.08)}, font=\scriptsize]
+    \draw[los, oiblue] (0,0) -- (0.45,0);    \node[right] at (0.45,0) {LoS path to an LU};
+    \draw[los, oiverm] (2.7,0) -- (3.15,0);  \node[right] at (3.15,0) {LoS path to Eve};
+    \draw[nlos, ->] (5.3,0) -- (5.75,0);     \node[right] at (5.75,0) {NLoS path};
+  \end{scope}
 \end{tikzpicture}
 \caption{An MA-enabled multiuser downlink system in the presence of a passive Eve.}
 \label{fig:system}
@@ -167,23 +200,26 @@ where $\beta_e$, $\kappa_e$, and $\gtl\sim\CN(\mathbf 0,\bI_N)$ are defined simi
 
 \begin{figure}[t]
 \centering
-\begin{tikzpicture}[font=\scriptsize,yscale=0.9]
-  \draw (0,0) rectangle (2.3,0.6);
-  \node[align=center] at (1.15,0.3) {Optimize $\mathbf t$, $\mathbf p$, and $q$;\\move MAs};
-  \draw (2.3,0) rectangle (3.5,0.6); \node at (2.9,0.3) {CI $1$};
-  \draw (3.5,0) rectangle (4.7,0.6); \node at (4.1,0.3) {CI $2$};
-  \node at (5.2,0.3) {$\cdots$};
-  \draw (5.7,0) rectangle (6.9,0.6); \node at (6.3,0.3) {CI $N_{\mathrm{CI}}$};
-  \draw[decorate,decoration={brace,amplitude=4pt}] (0,0.7) -- (6.9,0.7)
-     node[midway,above=4pt] {one frame (large timescale): $\mathbf t$, $\mathbf p$, and $q$ remain fixed};
-  \draw[dashed] (2.3,0) -- (0.9,-0.7);
-  \draw[dashed] (3.5,0) -- (6.2,-0.7);
-  \draw (0.9,-1.3) rectangle (2.7,-0.7);
-  \node[align=center] at (1.8,-1.0) {Pilots: estimate\\$\mathbf H(\mathbf t)$};
-  \draw (2.7,-1.3) rectangle (6.2,-0.7);
-  \node[align=center] at (4.45,-1.0) {Precoding and AN design,\\data transmission};
-  \draw[decorate,decoration={brace,mirror,amplitude=4pt}] (0.9,-1.4) -- (6.2,-1.4)
-     node[midway,below=4pt] {one coherence interval (small timescale)};
+\begin{tikzpicture}[font=\scriptsize, >=Stealth, x=1cm, y=1cm]
+  % one frame (large timescale)
+  \draw[fill=oiblue!14, draw=oiblue!70!black, line width=0.5pt] (0,1.35) rectangle (2.75,1.95);
+  \node[align=center] at (1.375,1.65) {Statistical CSI: optimize\\$\mathbf t$, $\mathbf p$, and $q$; move MAs};
+  \foreach \a/\t in {2.75/CI $1$, 3.8/CI $2$, 5.55/CI $N_{\mathrm{CI}}$}{
+    \draw[fill=black!6, draw=black!65, line width=0.5pt] (\a,1.35) rectangle (\a+1.05,1.95);
+    \node at (\a+0.525,1.65) {\t};}
+  \node at (5.175,1.65) {$\cdots$};
+  \draw[->, black!70, line width=0.5pt] (6.6,1.65) -- (7.25,1.65) node[right, inner sep=1pt] {time};
+  \draw[decorate, decoration={brace, amplitude=4pt}, line width=0.5pt] (0,2.05) -- (6.6,2.05)
+     node[midway, above=4pt] {One frame (large timescale): $\mathbf t$, $\mathbf p$, and $q$ remain fixed};
+  % one CI (small timescale)
+  \draw[black!55, densely dashed, line width=0.45pt] (2.75,1.35) -- (0.6,0.6);
+  \draw[black!55, densely dashed, line width=0.45pt] (3.8,1.35) -- (6.6,0.6);
+  \draw[fill=oigreen!15, draw=oigreen!70!black, line width=0.5pt] (0.6,0) rectangle (2.9,0.6);
+  \node[align=center] at (1.75,0.3) {Uplink pilots:\\estimate $\mathbf H(\mathbf t)$};
+  \draw[fill=oiorange!18, draw=oiorange!75!black, line width=0.5pt] (2.9,0) rectangle (6.6,0.6);
+  \node[align=center] at (4.75,0.3) {ZF precoding and null-space AN;\\downlink data transmission};
+  \draw[decorate, decoration={brace, mirror, amplitude=4pt}, line width=0.5pt] (0.6,-0.1) -- (6.6,-0.1)
+     node[midway, below=4pt] {One CI (small timescale)};
 \end{tikzpicture}
 \caption{Two-timescale transmission protocol (CI: coherence interval).}
 \label{fig:protocol}
@@ -551,7 +587,7 @@ The overall algorithm is summarized in Algorithm~\ref{alg:ao}, whose convergence
 
 Unless otherwise specified, we set $N=8$, $M=3$, $A=4\lambda$, $\Dmin=\lambda/2$, $\kappa_m=\kappa_e=10$~dB, $\beta_m=\beta_e=1$, and $\sigma_m^2=\sigma_e^2=\sigma^2$, such that $\Ptot/\sigma^2$ is the transmit SNR, which is $20$~dB by default. The elevation and azimuth AoDs of the LUs are uniformly distributed within $[-\pi/3,\pi/3]$. Similar to~\cite{ChenArxiv2026}, Eve is located in a direction close to that of LU~$1$ to model the challenging case in Section~\ref{sec:intro}. Specifically, its AoDs are $\theta_e=\theta_1+\Delta\cos\tilde\phi$ and $\phi_e=\phi_1+\Delta\sin\tilde\phi$, i.e., they deviate from those of LU~$1$ by the angular separation $\Delta$ in the direction specified by $\tilde\phi$, which is uniformly distributed over $[0,2\pi)$. By default, $\Delta=0.1$~rad, for which the normalized LoS correlation $|\hb_1^H(\bt)\gb(\bt)|/N$ between Eve and LU~$1$ exceeds $0.94$ for the FPA, i.e., Eve lies well within the main lobe of the beam steered toward LU~$1$. The case where the AoDs of Eve are independent of those of the LUs is considered in Section~\ref{sec:sim_reg}.
 
-For Algorithm~\ref{alg:ao}, the grid spacing in Stage~1 is $d_{\mathrm g}=\lambda/10$, which is less than one third of the shortest phase period in Section~\ref{sec:position}. The MM refinement in Stage~2 uses $\delta_0=1$ and stops when the fractional increase of $F$ is below $\epsilon_{\mathrm{in}}=10^{-6}$ or after $I_{\mathrm{in}}=20$ iterations, and Algorithm~\ref{alg:ao} stops when the fractional increase of $F$ is below $\epsilon=10^{-4}$ or after $I_{\max}=50$ iterations. Algorithm~\ref{alg:power} uses $Q=41$ grid points and $60$ bisection iterations. Algorithm~\ref{alg:ao} is executed from three initializations, i.e., a $2\times4$ uniform planar array (UPA) with $\lambda/2$ spacing and two random feasible positions, and the best solution is selected. All the results are averaged over $100$ random realizations of the AoDs of the LUs and Eve shared by all the schemes, which is sufficient for the comparisons, since the standard error of the average ESSR of the proposed design at $20$~dB is $0.11$~bps/Hz, i.e., $0.5\%$ of its value. Since the closed-form approximations are used only for optimization, the ergodic rates of each design are evaluated by averaging the instantaneous rates based on the exact SINRs in~\eqref{eq:snr} and~\eqref{eq:sinre} over $5\times10^3$ channel realizations.
+For Algorithm~\ref{alg:ao}, the grid spacing in Stage~1 is $d_{\mathrm g}=\lambda/10$, i.e., less than one third of the shortest phase period in Section~\ref{sec:position}, and the remaining parameters are $\delta_0=1$, $\epsilon_{\mathrm{in}}=10^{-6}$, $I_{\mathrm{in}}=20$, $\epsilon=10^{-4}$, $I_{\max}=50$, and $Q=41$. Algorithm~\ref{alg:ao} is executed from a $2\times4$ uniform planar array (UPA) with $\lambda/2$ spacing and two random feasible positions, and the best solution is selected. All the results are averaged over $100$ random realizations of the AoDs shared by all the schemes, i.e., the comparisons are paired, and the standard error of the average ESSR of the proposed design at $20$~dB is $0.5\%$ of its value. Since the closed-form approximations are used only for optimization, the ergodic rates of each design are evaluated with the exact SINRs in~\eqref{eq:snr} and~\eqref{eq:sinre} over $5\times10^3$ channel realizations.
 
 We compare the proposed design with three benchmarks: 1) \textbf{Rate-oriented MA}: The antenna positions maximize the approximate ergodic sum rate of the LUs with equal power, i.e., $\sum_{m=1}^M\log_2(1+\eta_m(\bt)\Ptot/M)$, which ignores Eve~\cite{ZhengTCOM2025}. For a fair comparison, this problem is solved by the position update in Section~\ref{sec:position} with the same initializations. This benchmark reveals the gain of the secrecy-aware positioning enabled by Proposition~\ref{prop:eve}. 2) \textbf{AS}: Similar to~\cite{ChenArxiv2026}, the BS selects $N$ of $2N$ candidate antennas, which form a UPA with $4$ rows and $4$ columns and $\lambda/2$ spacing, by an exhaustive search over all the $12870$ possible subsets, where the selection metric is the approximate ESSR in (P3). AS requires no antenna movement but twice as many antennas and an RF switching network. 3) \textbf{FPA}: The BS adopts the $2\times4$ UPA with $\lambda/2$ spacing. All the schemes adopt the power allocation in Algorithm~\ref{alg:power}, so that their performance differences are caused only by the antenna positions.
 
@@ -565,7 +601,7 @@ We compare the proposed design with three benchmarks: 1) \textbf{Rate-oriented M
 \label{fig:acc}
 \end{figure*}
 
-Fig.~\ref{fig:acc} evaluates the accuracy of Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} at the designs obtained by Algorithm~\ref{alg:ao}, i.e., at the operating points selected by the optimization, where $10^4$ channel realizations are used for the Monte Carlo simulations. It is observed that Proposition~\ref{prop:eve} closely matches the Monte Carlo results over the entire ranges of the SNR and the Rician factor, with a maximum absolute error of $0.05$~bps/Hz. In contrast, Lemma~\ref{lem:lu} underestimates the ergodic sum rate of the LUs, and the gap increases with the Rician factor and saturates at high SNR. The gap is caused by Jensen's inequality and the central Wishart approximation in Lemma~\ref{lem:lu}, which is exact for Rayleigh fading but overestimates $\E\{[(\bH^H(\bt)\bH(\bt))^{-1}]_{m,m}\}$ by a factor approaching $N/(N-M)$ as the LoS components dominate, which leads to a gap of up to about $M\log_2(N/(N-M))\approx2$~bps/Hz in the sum rate for $N=8$ and $M=3$. Hence, the approximate ESSR in~\eqref{eq:esrapprox} is a conservative estimate of the actual ESSR. Nevertheless, at each SNR in Fig.~\ref{fig:snr}(a), this gap differs by less than $0.3$~bps/Hz among the four schemes, which is smaller than the ESSR gains of the proposed design. Hence, the approximation preserves the advantage of the proposed design over the benchmarks and is suitable as the design objective.
+Fig.~\ref{fig:acc} evaluates the accuracy of Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} at the designs obtained by Algorithm~\ref{alg:ao}, i.e., at the operating points selected by the optimization. Proposition~\ref{prop:eve} closely matches the Monte Carlo results over the entire ranges of the SNR and the Rician factor, which confirms that the LoS correlation between Eve and the LUs is accurately captured. In contrast, Lemma~\ref{lem:lu} underestimates the ergodic sum rate of the LUs, and the gap grows with the Rician factor. The reason is that, besides Jensen's inequality, the central Wishart approximation in Lemma~\ref{lem:lu} is exact for Rayleigh fading but overestimates $\E\{[(\bH^H(\bt)\bH(\bt))^{-1}]_{m,m}\}$ by a factor approaching $N/(N-M)$ as the LoS components dominate. Hence, the approximate ESSR in~\eqref{eq:esrapprox} is a conservative estimate of the actual ESSR. Nevertheless, this gap is similar for all the schemes in Fig.~\ref{fig:snr}(a) and smaller than the ESSR gains of the proposed design, so that the approximation preserves the advantage of the proposed design and is suitable as the design objective.
 
 \subsection{Convergence Behaviour of Algorithm~\ref{alg:ao}}\label{sec:sim_conv}
 
@@ -576,7 +612,7 @@ Fig.~\ref{fig:acc} evaluates the accuracy of Lemma~\ref{lem:lu} and Proposition~
 \label{fig:conv}
 \end{figure}
 
-Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao} for $N\in\{8,12\}$ and $\Ptot/\sigma^2\in\{10,20\}$~dB, where the UPA initialization is adopted ($3\times4$ UPA for $N=12$). To show the complete trajectories, Algorithm~\ref{alg:ao} is run for $50$ iterations without the stopping criterion. It is observed that, for all the settings, the objective value increases monotonically and converges within about $15$ iterations, where most of the improvement is achieved in the first few iterations. The fast convergence is due to the global search in Stage~1, which moves each MA directly to the best basin of $F(\bt_n)$, so that the positions do not need to traverse the movable region through local updates. In contrast, with only the MM updates, the objective value increases much more slowly and remains lower after $50$ iterations, since the MAs are trapped in the local maxima near their initial positions.
+Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao}, which is run without the stopping criterion to show the complete trajectories. For all the settings, the objective value increases monotonically and converges within about $15$ iterations, and most of the improvement is achieved in the first few iterations. The fast convergence is due to the global search in Stage~1, which moves each MA directly to the best basin of $F(\bt_n)$ instead of letting it traverse the movable region through local updates. In contrast, with only the MM updates, the objective value increases much more slowly and remains lower, since the MAs are trapped in the local maxima near their initial positions.
 
 \subsection{ESSR and AN Power Versus Transmit SNR}
 
@@ -588,9 +624,9 @@ Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of itera
 \label{fig:snr}
 \end{figure*}
 
-Fig.~\ref{fig:snr}(a) shows that the proposed design achieves the highest ESSR over the entire SNR range. At $\Ptot/\sigma^2=20$~dB, it improves the ESSR by $14.8\%$, $20.4\%$, and $31.2\%$ compared with the rate-oriented MA, AS, and the FPA, respectively. Although the rate-oriented MA exploits the same movable region, its gain over the FPA is less than half of that of the proposed design. The reason is that the rate-oriented positions only decorrelate the LUs, whereas the proposed positions additionally reduce the information leakage and increase the AN received by Eve (see Section~\ref{sec:discussion}). Moreover, AS improves the ESSR over the FPA by only $9.0\%$, since its $2N$ candidates form a compact UPA with an aperture of only $1.5\lambda\times1.5\lambda$, which provides limited spatial resolution for decorrelating the LoS components of Eve and LU~$1$. As the SNR increases, the ESSR gains of the proposed design approach constants, since the antenna positions improve the constant term rather than the slope of the ESSR at high SNR (see Section~\ref{sec:discussion}).
+Fig.~\ref{fig:snr}(a) shows that the proposed design achieves the highest ESSR over the entire SNR range, e.g., about $31\%$ higher than that of the FPA at $20$~dB. Although the rate-oriented MA exploits the same movable region, its gain over the FPA is less than half of that of the proposed design. The reason is that the rate-oriented positions only decorrelate the LUs, whereas the proposed positions additionally reduce the information leakage and increase the AN received by Eve (see Section~\ref{sec:discussion}). AS achieves an even smaller gain, since its $2N$ candidates form a compact array, whose spatial resolution is insufficient to decorrelate the LoS components of Eve and LU~$1$. Moreover, the gains of the proposed design approach constants at high SNR, since the antenna positions improve the constant term rather than the slope of the ESSR (see Section~\ref{sec:discussion}).
 
-Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates at high SNR, as predicted by~\eqref{eq:alphastar}. Moreover, the proposed design requires considerably less AN power than all the benchmarks, whereas the rate-oriented MA saves little AN power compared with the FPA. This result verifies the AN-saving effect in Section~\ref{sec:discussion}: since the proposed positions reduce the information leakage and increase the AN received by Eve, more power can be allocated to the confidential signals.
+Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates, as predicted by~\eqref{eq:alphastar}. The proposed design requires considerably less AN power than all the benchmarks, whereas the rate-oriented MA saves little AN power compared with the FPA. This result verifies the AN-saving effect in Section~\ref{sec:discussion}: since the proposed positions reduce the information leakage and increase the AN received by Eve, less AN suffices to suppress Eve, and more power can be allocated to the confidential signals.
 
 \subsection{Robustness to the Eavesdropper Model and the AoD Error of Eve}\label{sec:sim_rob}
 
@@ -600,18 +636,19 @@ Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with 
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4.2pt}
-\renewcommand{\arraystretch}{1.12}
 \begin{tabular}{lcccccc}
-\hline
+\toprule
  & \multicolumn{3}{c}{Worst-case Eve~\eqref{eq:sinre_gen}} & \multicolumn{3}{c}{TIN Eve~\eqref{eq:sinre_tin}}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
 $\Ptot/\sigma^2$ (dB) & $10$ & $20$ & $30$ & $10$ & $20$ & $30$\\
-\hline
+\midrule
 Proposed & \textbf{11.42} & \textbf{20.75} & \textbf{30.64} & \textbf{11.85} & \textbf{21.24} & \textbf{31.14}\\
 Rate-oriented MA & 9.38 & 18.08 & 27.84 & 10.53 & 19.55 & 29.38\\
 AS & 8.92 & 17.24 & 26.98 & 9.77 & 18.58 & 28.39\\
 FPA & 7.88 & 15.82 & 25.49 & 8.70 & 17.24 & 27.00\\
+\midrule
 Proposed w/o AN & 9.94 & 13.06 & 13.85 & 11.00 & 18.70 & 27.14\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -621,16 +658,15 @@ Proposed w/o AN & 9.94 & 13.06 & 13.85 & 11.00 & 18.70 & 27.14\\
 \centering
 \footnotesize
 \setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.12}
 \begin{tabular}{lccccc}
-\hline
+\toprule
 $\varepsilon_{\mathrm e}$ (rad) & $0$ & $0.01$ & $0.02$ & $0.05$ & $0.1$\\
-\hline
+\midrule
 Proposed & \textbf{20.75} & \textbf{20.73} & \textbf{20.65} & \textbf{20.13} & \textbf{18.73}\\
 Rate-oriented MA & 18.08 & 18.07 & 18.07 & 18.02 & 17.93\\
 AS & 17.24 & 17.24 & 17.22 & 17.16 & 16.97\\
 FPA & 15.82 & 15.82 & 15.81 & 15.81 & 15.80\\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -640,7 +676,7 @@ Tables~\ref{tab:eve} and~\ref{tab:aod} examine whether the performance of the de
 \end{equation}
 Two observations can be made. First, the proposed design achieves the highest ESSR under both models, which confirms that its gain is not an artifact of the worst-case assumption. Moreover, its ESSR under the worst-case model is only slightly lower than that against the TIN Eve, i.e., the secrecy guarantee of the worst-case model comes at a marginal cost. Second, for the proposed design without AN, i.e., Algorithm~\ref{alg:ao} with $q=0$, the ESSR increases with the SNR against the TIN Eve, for which the inter-user interference acts as AN, but saturates under the worst-case model~\cite{Goel2008}. Hence, the AN is indispensable for a secrecy performance that does not rely on the decoding capability of Eve.
 
-Table~\ref{tab:aod} considers imperfect statistical CSI of Eve, where all the schemes are designed with an AoD of Eve that deviates from the true one by $\varepsilon_{\mathrm e}$ in a random direction, and are evaluated with the true AoD. It is observed that the ESSR of the proposed design decreases only slightly for $\varepsilon_{\mathrm e}\le0.05$~rad, and the proposed design still outperforms all the benchmarks for $\varepsilon_{\mathrm e}=\Delta=0.1$~rad, i.e., an error as large as the angular separation between Eve and LU~$1$. This robustness is due to the smooth variation of the LoS correlations between Eve and the LUs with the AoD of Eve, so that the positions optimized for a moderately erroneous AoD still decorrelate the actual LoS components.
+Table~\ref{tab:aod} considers imperfect statistical CSI of Eve, where all the schemes are designed with an AoD of Eve that deviates from the true one by $\varepsilon_{\mathrm e}$ in a random direction, and are evaluated with the true AoD. The ESSR of the proposed design decreases only slightly for small errors, and the proposed design still outperforms all the benchmarks when the error is as large as the angular separation between Eve and LU~$1$, i.e., $\varepsilon_{\mathrm e}=\Delta$. This robustness is due to the smooth variation of the LoS correlations between Eve and the LUs with the AoD of Eve, so that the positions optimized for a moderately erroneous AoD still decorrelate the actual LoS components.
 
 \subsection{Impact of the Region Size and the Angular Separation}\label{sec:sim_reg}
 
@@ -652,9 +688,9 @@ Table~\ref{tab:aod} considers imperfect statistical CSI of Eve, where all the sc
 \label{fig:region}
 \end{figure*}
 
-Fig.~\ref{fig:region}(a) shows the ESSR versus the side length $A$ of the movable region, where we also consider AS with region-wide candidates, i.e., a $4\times4$ candidate UPA spanning $\mathcal C$ with spacing $A/3$. Note that the FPA and AS with the compact candidate array do not depend on $A$. It is observed that the gain of the proposed design over the FPA increases from $9.2\%$ to $38.9\%$ as $A$ increases from $1.5\lambda$ to $6\lambda$. The reason is that a larger region provides more spatial degrees of freedom for decorrelating the LoS components of Eve and the LUs. In contrast, the ESSR of the rate-oriented MA increases much more slowly with $A$, since it does not exploit the enlarged region to reduce the information leakage. AS with region-wide candidates also benefits from the enlarged aperture and the Eve-aware selection metric, but the proposed design still outperforms it for $A\ge2\lambda$ with half the number of antennas, since the MAs can be placed at arbitrary positions in $\mathcal C$ rather than at $2N$ fixed candidate positions. For $A=1.5\lambda$, the two AS schemes coincide and perform comparably to the proposed design, since the candidate array covers the entire region.
+Fig.~\ref{fig:region}(a) shows the ESSR versus the side length $A$ of the movable region, where we also consider AS with region-wide candidates, i.e., a $4\times4$ candidate UPA spanning $\mathcal C$, whereas the FPA and AS with the compact candidate array do not depend on $A$. The gain of the proposed design grows with $A$, since a larger region provides more spatial degrees of freedom for decorrelating the LoS components of Eve and the LUs. In contrast, the ESSR of the rate-oriented MA increases much more slowly, since the enlarged region is exploited only to decorrelate the LUs. AS with region-wide candidates also benefits from the enlarged aperture and its Eve-aware selection metric, but the proposed design outperforms it with half the number of antennas, since the MAs can be placed at arbitrary positions in $\mathcal C$ rather than at fixed candidate positions. Only for the smallest region, where the candidate array covers the entire region, does AS perform comparably to the proposed design.
 
-Fig.~\ref{fig:region}(b) shows the ESSR versus the angular separation $\Delta$ for $M=3$ and $M=1$. For $M=3$, all the schemes benefit from a larger $\Delta$, since Eve becomes more separable from LU~$1$. For $\Delta=0.02$~rad, Eve is almost aligned with LU~$1$, and the proposed design outperforms the rate-oriented MA only slightly, since their LoS components can hardly be decorrelated with an aperture of $4\lambda$. As $\Delta$ increases, the gain of the proposed design first increases and then decreases, since Eve eventually becomes separable even with Eve-unaware positions. For $M=1$, the rate-oriented MA coincides with the FPA, since the ergodic rate of the LU does not depend on the antenna positions (see Section~\ref{sec:discussion}). In contrast, the proposed design significantly improves the ergodic secrecy rate, e.g., by $77.1\%$ over the FPA for $\Delta=0.1$~rad, by reducing the LoS correlation $|\hb_1^H(\bt)\gb(\bt)|^2$ in~\eqref{eq:c1} and~\eqref{eq:d1}. This result confirms that, different from the rate-oriented design, the MAs enhance secrecy even for a single LU. Finally, when the AoDs of Eve are independent of those of the LUs, i.e., uniformly distributed within $[-\pi/3,\pi/3]$, the proposed design improves the ESSR by $10.3\%$ and $21.8\%$ over the rate-oriented MA and the FPA, respectively, for $M=3$, and the secrecy rate by $13.1\%$ and $2.1\%$ over the FPA and AS, respectively, for $M=1$. Hence, the secrecy gain of the MAs is most pronounced when Eve is close to an LU, but does not rely on this placement.
+Fig.~\ref{fig:region}(b) shows the ESSR versus the angular separation $\Delta$ for $M=3$ and $M=1$. For $M=3$, all the schemes benefit from a larger $\Delta$, since Eve becomes more separable from LU~$1$. When Eve is almost aligned with LU~$1$, the proposed design outperforms the rate-oriented MA only slightly, since even an aperture of $4\lambda$ can hardly decorrelate their LoS components. As $\Delta$ increases, the gain of the proposed design first increases and then decreases, since Eve eventually becomes separable even with Eve-unaware positions. For $M=1$, the rate-oriented MA coincides with the FPA, since the ergodic rate of the LU does not depend on the antenna positions (see Section~\ref{sec:discussion}). In contrast, the proposed design significantly improves the ergodic secrecy rate by reducing the LoS correlation $|\hb_1^H(\bt)\gb(\bt)|^2$ in~\eqref{eq:c1} and~\eqref{eq:d1}, which confirms that the MAs enhance secrecy even for a single LU. Finally, when the AoDs of Eve are independent of those of the LUs, the proposed design still outperforms all the benchmarks, e.g., by about $10\%$ and $22\%$ compared with the rate-oriented MA and the FPA for $M=3$, whereas AS performs close to the proposed design for $M=1$. In this case, Eve is mostly well separated from the LUs, so that the compact candidate array of AS can already decorrelate it from a single LU, whereas the large aperture of the MAs is essential when Eve is close to an LU.
 
 \subsection{Benefit of the Long-Term Power Allocation}\label{sec:sim_pa}
 
@@ -668,7 +704,7 @@ Fig.~\ref{fig:region}(b) shows the ESSR versus the angular separation $\Delta$ f
 
 Fig.~\ref{fig:pa} evaluates the benefit of the proposed long-term power allocation, i.e., the secrecy water-filling in Proposition~\ref{prop:wf} combined with the optimized AN power. It is compared with two EP benchmarks with $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha$ is either optimized by a one-dimensional search, similar to~\cite{Zhou2010}, or fixed to $0.5$, similar to~\cite{ChenArxiv2026}. For all the schemes, the antenna positions are optimized by Algorithm~\ref{alg:ao}, where the objective of the EP benchmarks retains $[\cdot]^+$, since the LUs cannot be switched off (see Section~\ref{sec:opt}-A). The large-scale fading of the LUs is $[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$~dB, where $\varsigma$ is referred to as the fading spread.
 
-Fig.~\ref{fig:pa}(a) shows that, for $\varsigma=20$~dB, the proposed power allocation outperforms both EP benchmarks. Its gain over EP with optimized $\alpha$ is significant at low-to-moderate SNR, e.g., $0.65$~bps/Hz at $10$~dB, but becomes marginal at $20$~dB. The reason is that the proposed power allocation switches off or reduces the power of the LUs whose effective channel gains are comparable to that of Eve (Proposition~\ref{prop:wf}), whereas at high SNR, all the LUs achieve positive secrecy rates and nearly equal powers become optimal, similar to conventional water-filling. Fig.~\ref{fig:pa}(b) shows that EP with optimized $\alpha$ performs comparably to the proposed power allocation for small fading spreads, e.g., $\varsigma\le5$~dB, since the LUs have similar effective channel gains, which are further balanced by the optimized positions, whereas the gain of the proposed power allocation increases with $\varsigma$ for larger fading spreads. Moreover, EP with $\alpha=0.5$ performs worst in all the cases, especially at low SNR, where little or no AN is needed. Hence, both components of the long-term power allocation are important: the information--AN power splitting improves the ESSR in all the cases, whereas the per-user power allocation provides additional gains for heterogeneous LUs at low-to-moderate SNR.
+Fig.~\ref{fig:pa}(a) shows that, for $\varsigma=20$~dB, the proposed power allocation outperforms both EP benchmarks, and its gain over EP with optimized $\alpha$ is significant at low-to-moderate SNR but marginal at high SNR. The reason is that the proposed power allocation switches off or reduces the power of the LUs whose effective channel gains are comparable to that of Eve (Proposition~\ref{prop:wf}), whereas at high SNR, all the LUs achieve positive secrecy rates and nearly equal powers become optimal, similar to conventional water-filling. Fig.~\ref{fig:pa}(b) further shows that EP with optimized $\alpha$ performs comparably to the proposed power allocation for small fading spreads, since the LUs then have similar effective channel gains, which are further balanced by the optimized positions, whereas the gain of the proposed power allocation increases with $\varsigma$. Moreover, EP with $\alpha=0.5$ performs worst in all the cases, especially at low SNR, where little or no AN is needed. Hence, both components of the long-term power allocation are important: the information--AN power splitting improves the ESSR in all the cases, whereas the per-user power allocation provides additional gains for heterogeneous LUs at low-to-moderate SNR.
 
 % =============================================================================
 \section{Conclusion}\label{sec:conclusion}
