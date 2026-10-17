@@ -46,7 +46,7 @@ for n = 1:N
         delta = max(prm.delta0, deltaLast(n)/2);
         accepted = false;
         for k = 1:60
-            tnew = proj_polygon(tn + g/delta, Acon, bcon);
+            tnew = proj_polygon(tn + g/delta, Acon, bcon, tn);
             Tn = T;  Tn(n,:) = tnew.';
             [Fnew, Rbn, Ren] = objective_F(sc, Tn, p, q, plus);
             sur = Fcur + g.'*(tnew - tn) - delta/2*sum((tnew - tn).^2);

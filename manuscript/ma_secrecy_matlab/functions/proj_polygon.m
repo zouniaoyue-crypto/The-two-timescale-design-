@@ -1,10 +1,13 @@
-function t = proj_polygon(z, Acon, bcon)
+function t = proj_polygon(z, Acon, bcon, t0)
 %PROJ_POLYGON  Exact solution of the two-dimensional convex QP
 %       min_t ||t - z||^2   s.t.  Acon * t >= bcon,
 %   i.e., the Euclidean projection of z onto a (nonempty) convex polygon.
 %   If z is infeasible, the minimizer lies on an edge (projection of z onto a
 %   constraint line) or at a vertex (intersection of two constraint lines); all
 %   such candidates are enumerated and the closest feasible one is returned.
+%   t0 is a feasible point (the current position) that is returned if rounding errors
+%   leave no candidate feasible, e.g., for a polygon that degenerates to a segment when
+%   several neighboring MAs are exactly at the minimum distance (dense arrays).
 
 tol = 1e-10;
 z = z(:);
@@ -26,6 +29,9 @@ C2 = [xi(ok).'; yi(ok).'];
 C = [C1, C2];
 feas = all(Acon*C >= repmat(bcon, 1, size(C,2)) - tol, 1);
 C = C(:, feas);
+if isempty(C)
+    t = t0(:);  return;
+end
 [~, k] = min(sum((C - repmat(z, 1, size(C,2))).^2, 1));
 t = C(:, k);
 end

@@ -1,10 +1,9 @@
-function plot_fig6(resA, resAS, resD3, resD1)
+function plot_fig6(resA, resAS, resN)
 %PLOT_FIG6  Fig. 6: (a) ESSR versus the side length A of the movable region, including the
 %   AS benchmark whose 2N candidate antennas span the region ('AS_region', resAS from
-%   extra_as_region.m); (b) ESSR versus the angular separation Delta between Eve and LU 1 for
-%   M = 3 (resD3, extra_angle_offset.m) and M = 1 (resD1, extra_single_user.m). For M = 1,
-%   the rate-oriented MA coincides with the FPA and is therefore not drawn. Both panels
-%   include the sparse FPA spanning the movable region (main_schemes.m).
+%   extra_as_region.m); (b) ESSR versus the number of MAs N (resN, extra_num_antennas.m),
+%   where AS is drawn only for N <= 10 (exhaustive search over nchoosek(2N, N) subsets).
+%   Both panels include the sparse FPA spanning the movable region (main_schemes.m).
 s = fig_style();
 % ---------------- (a) region size ----------------
 [Y, keys] = pick_schemes(resA, 'essr');
@@ -30,24 +29,17 @@ else
 end
 manual_legend(gcf, [m(1) + 0.06, m(2) + 1.97 - 0.50, 2.80, 0.46], lg, 1.38, 0.14);
 save_figure('fig6a_essr_region');
-if nargin < 4 || isempty(resD3) || isempty(resD1), return; end
-% ---------------- (b) angular separation, M = 3 and M = 1 ----------------
+if nargin < 3 || isempty(resN), return; end
+% ---------------- (b) number of MAs ----------------
 ax = new_figure();
 keys = main_schemes();
 items = cellfun(@scheme_style, keys, 'UniformOutput', false);
 for k = numel(keys):-1:1                       % reverse order: the proposed design on top
-    st = items{k};
-    j = find(strcmp(resD3.schemes, keys{k}), 1);
-    plot_curve(ax, resD3.values, resD3.essr(:, j), st);
-    if ~strcmp(keys{k}, 'MA_rate')                      % coincides with the FPA for M = 1
-        j = find(strcmp(resD1.schemes, keys{k}), 1);
-        plot_curve(ax, resD1.values, resD1.essr(:, j), st);
-    end
+    j = find(strcmp(resN.schemes, keys{k}), 1);
+    plot_curve(ax, resN.values, resN.essr(:, j), items{k});   % NaN (AS for N > 10): not drawn
 end
-label_axes(ax, 'Angular separation {\it\Delta} (rad)', 'ESSR (bps/Hz)');
-set(ax, 'XLim', [0 0.5], 'XTick', 0:0.1:0.5, 'YLim', [0 25], 'YTick', 0:5:25);
-axes_note(ax, 0.97, 0.97, '{\itM} = 3', 'right', 'top');
-axes_note(ax, 0.97, 0.13, '{\itM} = 1', 'right', 'top');
-manual_legend(gcf, [m(1) + 0.35, m(2) + 0.73, 2.30, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.15, 0.14);
-save_figure('fig6b_essr_offset');
+label_axes(ax, 'Number of MAs {\itN}', 'ESSR (bps/Hz)');
+set(ax, 'XLim', [resN.values(1) resN.values(end)], 'XTick', resN.values, 'YLim', [8 24], 'YTick', 8:2:24);
+manual_legend(gcf, [m(1) + 2.92 - 2.30, m(2) + 0.06, 2.24, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.12, 0.14);
+save_figure('fig6b_essr_antennas');
 end

@@ -21,13 +21,14 @@ fig5_snr(prm);                      % Fig. 5 and Table I: ESSR and AN power vs. 
 extra_eve_aod_error(prm);           % Table II: robustness to errors in the AoD of Eve
 fig6_region(prm);                   % Fig. 6(a): ESSR vs. region size
 extra_as_region(prm);               %   ... AS with candidates spanning the region
-extra_angle_offset(prm);            % Fig. 6(b): ESSR vs. angular separation, M = 3
+extra_num_antennas(prm);            % Fig. 6(b): ESSR vs. number of MAs
+extra_angle_offset(prm);            % Fig. 7(a): ESSR vs. angular separation, M = 3
 extra_single_user(prm);             %   ... M = 1
-extra_random_eve(prm, 3);           % Sec. V-F: AoDs of Eve independent of the LUs, M = 3
+extra_random_eve(prm, 3);           % Sec. V-G: AoDs of Eve independent of the LUs, M = 3
 extra_random_eve(prm, 1);           %   ... M = 1
-fig7_power_allocation(prm, 20);     % Fig. 7(a): power allocation vs. SNR (spread 20 dB)
 extra_pa_spread(prm, 0);            % Fig. 7(b): power allocation vs. fading spread, 0 dB
 extra_pa_spread(prm, 10);           %   ... 10 dB
+fig7_power_allocation(prm, 20);     % Sec. V-H: power allocation vs. SNR (spread 20 dB)
 close all;
 replot_all;                         % Figs. 6 and 7 combine several result files
 fprintf('All simulations finished in %.1f min.\n', toc(t0)/60);

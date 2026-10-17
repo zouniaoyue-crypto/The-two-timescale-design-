@@ -3,7 +3,7 @@ function res = extra_single_user(prm)
 %   and AN power fraction versus the angular separation Delta between Eve and the LU. The
 %   ergodic rate of the LU does not depend on the antenna positions for a given power, so
 %   that the rate-oriented MA design keeps its initial positions (compact UPA) and
-%   coincides with the FPA, whereas the proposed design reduces the leakage. Fig. 6(b) of
+%   coincides with the FPA, whereas the proposed design reduces the leakage. Fig. 7(a) of
 %   main.tex (M = 1).
 
 if nargin < 1, prm = default_params(); end
