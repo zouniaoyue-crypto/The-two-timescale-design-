@@ -36,8 +36,8 @@ for r = 1:2
 end
 label_axes(ax, 'Fading spread {\it\varsigma} (dB)', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [R{1}.values(1) R{1}.values(end)], 'XTick', R{1}.values, 'YLim', [0 14], 'YTick', 0:2:14);
-k10 = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 10 dB', 'color', [0 0 0], 'ls', '-',  'marker', 'none');
-k0  = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 0 dB',  'color', [0 0 0], 'ls', '--', 'marker', 'none');
+k10 = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 10 dB', 'color', [0.3 0.3 0.3], 'ls', '-',  'marker', 'none', 'lw', 1.0);
+k0  = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 0 dB',  'color', [0.3 0.3 0.3], 'ls', '--', 'marker', 'none', 'lw', 1.0);
 m = s.margins;
 manual_legend(gcf, [m(1) + 2.92 - 1.62, m(2) + 1.97 - 0.80, 1.58, 0.76], ...
               {{sty{1}}, {sty{2}}, {sty{3}}, {k10}, {k0}}, 1.5, 0.14);

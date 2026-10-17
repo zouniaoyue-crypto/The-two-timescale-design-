@@ -3,7 +3,8 @@ function plot_fig6(resA, resAS, resD3, resD1)
 %   AS benchmark whose 2N candidate antennas span the region ('AS_region', resAS from
 %   extra_as_region.m); (b) ESSR versus the angular separation Delta between Eve and LU 1 for
 %   M = 3 (resD3, extra_angle_offset.m) and M = 1 (resD1, extra_single_user.m). For M = 1,
-%   the rate-oriented MA coincides with the FPA and is therefore not drawn.
+%   the rate-oriented MA coincides with the FPA and is therefore not drawn. Both panels
+%   include the sparse FPA spanning the movable region (main_schemes.m).
 s = fig_style();
 % ---------------- (a) region size ----------------
 [Y, keys] = pick_schemes(resA, 'essr');
@@ -22,7 +23,12 @@ end
 label_axes(ax, 'Side length of the movable region {\itA}/{\it\lambda}', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [resA.values(1) resA.values(end)], 'XTick', resA.values, 'YLim', [15 25], 'YTick', 15:2:25);
 m = s.margins;
-manual_legend(gcf, [m(1) + 0.06, m(2) + 1.97 - 0.80, 1.42, 0.76], cellfun(@(c) {c}, items, 'UniformOutput', false), 1.4, 0.14);
+if numel(items) == 6                           % two columns above the curves
+    lg = {items([1 4]), items([2 5]), items([3 6])};
+else
+    lg = cellfun(@(c) {c}, items, 'UniformOutput', false);
+end
+manual_legend(gcf, [m(1) + 0.06, m(2) + 1.97 - 0.50, 2.80, 0.46], lg, 1.38, 0.14);
 save_figure('fig6a_essr_region');
 if nargin < 4 || isempty(resD3) || isempty(resD1), return; end
 % ---------------- (b) angular separation, M = 3 and M = 1 ----------------
@@ -42,6 +48,6 @@ label_axes(ax, 'Angular separation {\it\Delta} (rad)', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [0 0.5], 'XTick', 0:0.1:0.5, 'YLim', [0 25], 'YTick', 0:5:25);
 axes_note(ax, 0.97, 0.97, '{\itM} = 3', 'right', 'top');
 axes_note(ax, 0.97, 0.13, '{\itM} = 1', 'right', 'top');
-manual_legend(gcf, [m(1) + 0.35, m(2) + 0.78, 2.30, 0.34], {items(1:2), items(3:4)}, 1.12, 0.15);
+manual_legend(gcf, [m(1) + 0.35, m(2) + 0.73, 2.30, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.15, 0.14);
 save_figure('fig6b_essr_offset');
 end

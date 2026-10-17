@@ -9,7 +9,7 @@ function res = extra_single_user(prm)
 if nargin < 1, prm = default_params(); end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 prm.M = 1;
-res = sweep_schemes(prm, 'Delta', [0.02 0.05 0.1 0.2 0.3 0.5], [main_schemes(), {'SPA_full'}]);
+res = sweep_schemes(prm, 'Delta', [0.02 0.05 0.1 0.2 0.3 0.5], main_schemes());
 save(fullfile(results_dir(), 'extra_single_user.mat'), 'res', 'prm', '-v7');
 print_sweep(res, 'Delta (rad)');
 end

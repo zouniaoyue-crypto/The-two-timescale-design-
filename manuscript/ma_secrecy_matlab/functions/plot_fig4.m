@@ -7,11 +7,11 @@ function plot_fig4(res)
 s = fig_style();
 ax = new_figure();
 it = 0:res.nIt;
-c = fig_palette();  blue = c.blue;  red = c.verm;
-sty = {struct('color', blue, 'ls', '-',  'marker', 'none', 'lw', 1.3), ...    % N = 8,  10 dB
-       struct('color', blue, 'ls', '--', 'marker', 'none', 'lw', 1.3), ...    % N = 12, 10 dB
-       struct('color', red,  'ls', '-',  'marker', 'none', 'lw', 1.3), ...    % N = 8,  20 dB
-       struct('color', red,  'ls', '--', 'marker', 'none', 'lw', 1.3)};       % N = 12, 20 dB
+c = fig_palette();  blue = c.blue;  red = c.red;
+sty = {struct('color', blue, 'ls', '-',  'marker', 'none', 'lw', 1.1), ...    % N = 8,  10 dB
+       struct('color', blue, 'ls', '--', 'marker', 'none', 'lw', 1.1), ...    % N = 12, 10 dB
+       struct('color', red,  'ls', '-',  'marker', 'none', 'lw', 1.1), ...    % N = 8,  20 dB
+       struct('color', red,  'ls', '--', 'marker', 'none', 'lw', 1.1)};       % N = 12, 20 dB
 items = {};  k = 0;
 for iP = 1:numel(res.Plist)
     for iN = 1:numel(res.Nlist)
@@ -22,7 +22,7 @@ for iP = 1:numel(res.Plist)
         items{end+1} = st; %#ok<AGROW>
     end
 end
-st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.5);
+st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.3);
 draw(ax, it, mean(res.histMM, 1), st, s);
 st.name = '{\itN} = 8, 20 dB, MM only';
 xlim(ax, [0 res.nIt]);  set(ax, 'XTick', 0:10:res.nIt);
@@ -36,6 +36,6 @@ save_figure('fig4_convergence');
 end
 
 function draw(ax, x, y, st, s)
-lw = 1.3;  if isfield(st, 'lw'), lw = st.lw; end
+lw = 1.1;  if isfield(st, 'lw'), lw = st.lw; end
 plot(ax, x, y, 'LineStyle', st.ls, 'Color', st.color, 'LineWidth', lw);
 end
