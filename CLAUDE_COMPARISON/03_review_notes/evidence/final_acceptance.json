@@ -1,0 +1,39 @@
+{
+  "status": "COMPLETE_AUTHORIZED_REVISION_SCOPE",
+  "completed_utc": "2026-10-26T06:38:36.815890+00:00",
+  "specification_replacements": 82,
+  "phase_compile_gates": {
+    "1": "PASS",
+    "2": "PASS",
+    "3": "PASS",
+    "4": "PASS",
+    "5": "PASS"
+  },
+  "final_compile": "PASS; two passes; no gate warnings",
+  "full_queue_jobs": 21,
+  "full_result_files": 21,
+  "saved_design_records_checked": 28800,
+  "merged_records_already_counted_in_individual_N_files": 3200,
+  "accuracy_cached_designs_checked": 1200,
+  "convergence_cached_designs_checked": 700,
+  "supplementary_audit_designs_checked": 66,
+  "manuscript_numerical_literals_checked": 58,
+  "remaining_numeric_mismatches": 0,
+  "regenerated_figures_checked": 9,
+  "pdf_pages": 16,
+  "visual_gate": "PASS: changed pages12,13,15 inspected; other13 rendered pages pixel-identical to accepted baseline",
+  "source_sha256": "236f32d5a1bd312df4c5ef9bb2b8a8665989df75da7296caeaca2e146bcdaffa",
+  "pdf_sha256": "53ca4545a220fe10af4ae58f422f9949611db4dc5d93abccc1db2a05290510ff",
+  "historical_mat_files_preserved": 21,
+  "automation": "Deleted because task finished within current allowance; no24-hour successor needed",
+  "submission_ready": false,
+  "remaining_user_metadata": [
+    "Author One / Author Two and affiliation/email placeholders require genuine author information."
+  ],
+  "scope_limitations": [
+    "No global or stationarity guarantee is added.",
+    "The deterministic moment approximation is not certified as a true-ESSR lower bound.",
+    "The three-drop supplementary audit does not replace full-default experiments.",
+    "Completed cached calls and the explicitly revalidated adopted Eve-error result are retained; no claim of a wholly cold rerun."
+  ]
+}

@@ -1,0 +1,664 @@
+{
+  "checked_utc": "2026-10-26T06:27:37.246128+00:00",
+  "status": "COMPLETE_NUMERICAL_LITERAL_AUDIT",
+  "scope": "Numerical literals only. Each value is recomputed from a completed output; full scientific validation and plot/PDF acceptance are separate gates.",
+  "claims": [
+    {
+      "id": "accuracy_wiretap_SNR_max_error",
+      "value": 0.0524089404038528,
+      "rounded": "0.052",
+      "current": "0.052",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        769
+      ],
+      "anchor": "largest absolute differences"
+    },
+    {
+      "id": "accuracy_wiretap_Rician_max_error",
+      "value": 0.012824224953241758,
+      "rounded": "0.013",
+      "current": "0.013",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        769
+      ],
+      "anchor": "largest absolute differences"
+    },
+    {
+      "id": "iteration15_min_remaining_gain",
+      "value": 0.024460085756281558,
+      "rounded": "0.024",
+      "current": "0.024",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "remaining increases are between"
+    },
+    {
+      "id": "iteration15_max_remaining_gain",
+      "value": 0.033611136675745,
+      "rounded": "0.034",
+      "current": "0.034",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "remaining increases are between"
+    },
+    {
+      "id": "mean_stop_N8_P10",
+      "value": 16.31,
+      "rounded": "16.31",
+      "current": "16.31",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "average stopping indices"
+    },
+    {
+      "id": "mean_stop_N8_P20",
+      "value": 13.02,
+      "rounded": "13.02",
+      "current": "13.02",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "average stopping indices"
+    },
+    {
+      "id": "mean_stop_N12_P10",
+      "value": 15.87,
+      "rounded": "15.87",
+      "current": "15.87",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "average stopping indices"
+    },
+    {
+      "id": "mean_stop_N12_P20",
+      "value": 12.51,
+      "rounded": "12.51",
+      "current": "12.51",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        780
+      ],
+      "anchor": "average stopping indices"
+    },
+    {
+      "id": "SNR20_proposed",
+      "value": 20.74973926799935,
+      "rounded": "20.75",
+      "current": "20.75",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "SNR20_rate",
+      "value": 18.07564351357091,
+      "rounded": "18.08",
+      "current": "18.08",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "SNR20_compact",
+      "value": 15.817967764493755,
+      "rounded": "15.82",
+      "current": "15.82",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "SNR20_sparse",
+      "value": 17.745777999759223,
+      "rounded": "17.75",
+      "current": "17.75",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "gain_rate_abstract",
+      "value": 14.793917308784987,
+      "rounded": "14.8",
+      "current": "14.8",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        97
+      ],
+      "anchor": "Movable antenna (MA) arrays can separate"
+    },
+    {
+      "id": "gain_rate_introduction",
+      "value": 14.793917308784987,
+      "rounded": "14.8",
+      "current": "14.8",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        124
+      ],
+      "anchor": "Evaluation with the original channel model:"
+    },
+    {
+      "id": "SNR20_proposed_introduction",
+      "value": 20.74973926799935,
+      "rounded": "20.75",
+      "current": "20.75",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        124
+      ],
+      "anchor": "Evaluation with the original channel model:"
+    },
+    {
+      "id": "SNR20_rate_introduction",
+      "value": 18.07564351357091,
+      "rounded": "18.08",
+      "current": "18.08",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        124
+      ],
+      "anchor": "Evaluation with the original channel model:"
+    },
+    {
+      "id": "gain_rate_results",
+      "value": 14.793917308784987,
+      "rounded": "14.8",
+      "current": "14.8",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "gain_compact_results",
+      "value": 31.178287735393127,
+      "rounded": "31.2",
+      "current": "31.2",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        792
+      ],
+      "anchor": "compares the exact-SINR Monte Carlo ESSRs"
+    },
+    {
+      "id": "surrogate_SNR20",
+      "value": 18.984750548849362,
+      "rounded": "18.98",
+      "current": "18.98",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        769
+      ],
+      "anchor": "a surrogate value of"
+    },
+    {
+      "id": "ANfraction_MA_full",
+      "value": 0.2699375,
+      "rounded": "0.270",
+      "current": "0.270",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        794
+      ],
+      "anchor": "reports the AN power selected"
+    },
+    {
+      "id": "ANfraction_FPA_full",
+      "value": 0.47115000000000007,
+      "rounded": "0.471",
+      "current": "0.471",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        794
+      ],
+      "anchor": "reports the AN power selected"
+    },
+    {
+      "id": "ANfraction_MA_rate",
+      "value": 0.43074999999999986,
+      "rounded": "0.431",
+      "current": "0.431",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        794
+      ],
+      "anchor": "reports the AN power selected"
+    },
+    {
+      "id": "AN_power_reduction_percent",
+      "value": 42.7066751565319,
+      "rounded": "42.7",
+      "current": "42.7",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        794
+      ],
+      "anchor": "reports the AN power selected"
+    },
+    {
+      "id": "proposed_standard_error",
+      "value": 0.11309464808995136,
+      "rounded": "0.113",
+      "current": "0.113",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        755
+      ],
+      "anchor": "sample standard error of the proposed ESSR"
+    },
+    {
+      "id": "proposed_relative_standard_error",
+      "value": 0.5450412972868923,
+      "rounded": "0.55",
+      "current": "0.55",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        755
+      ],
+      "anchor": "sample standard error of the proposed ESSR"
+    },
+    {
+      "id": "TIN_increment_MA_full",
+      "value": 0.4942343817283472,
+      "rounded": "0.49",
+      "current": "0.49",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        830
+      ],
+      "anchor": "five AN-enabled designs"
+    },
+    {
+      "id": "TIN_increment_MA_rate",
+      "value": 1.4705187795162473,
+      "rounded": "1.47",
+      "current": "1.47",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        830
+      ],
+      "anchor": "five AN-enabled designs"
+    },
+    {
+      "id": "TIN_max_increment_upper_tenth",
+      "value": 1.6,
+      "rounded": "1.6",
+      "current": "1.6",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        830
+      ],
+      "anchor": "five AN-enabled designs"
+    },
+    {
+      "id": "noAN_TIN30",
+      "value": 27.13537233675628,
+      "rounded": "27.14",
+      "current": "27.14",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        830
+      ],
+      "anchor": "five AN-enabled designs"
+    },
+    {
+      "id": "noAN_worst30",
+      "value": 13.850845111209242,
+      "rounded": "13.85",
+      "current": "13.85",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        830
+      ],
+      "anchor": "five AN-enabled designs"
+    },
+    {
+      "id": "region_small",
+      "value": 17.268504803042642,
+      "rounded": "17.27",
+      "current": "17.27",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        806
+      ],
+      "anchor": "proposed ESSR increases from"
+    },
+    {
+      "id": "region_large",
+      "value": 21.978284559408277,
+      "rounded": "21.98",
+      "current": "21.98",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        806
+      ],
+      "anchor": "proposed ESSR increases from"
+    },
+    {
+      "id": "antennas4_MA_full",
+      "value": 18.442903283029256,
+      "rounded": "18.44",
+      "current": "18.44",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        808
+      ],
+      "anchor": "four optimized MAs achieve"
+    },
+    {
+      "id": "antennas12_FPA_full",
+      "value": 17.91955676517563,
+      "rounded": "17.92",
+      "current": "17.92",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        808
+      ],
+      "anchor": "four optimized MAs achieve"
+    },
+    {
+      "id": "antennas8_MA_full",
+      "value": 20.74973926799935,
+      "rounded": "20.75",
+      "current": "20.75",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        808
+      ],
+      "anchor": "four optimized MAs achieve"
+    },
+    {
+      "id": "antennas16_MA_rate",
+      "value": 20.522198460203352,
+      "rounded": "20.52",
+      "current": "20.52",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        808
+      ],
+      "anchor": "four optimized MAs achieve"
+    },
+    {
+      "id": "single_MA_full",
+      "value": 7.479552517367473,
+      "rounded": "7.48",
+      "current": "7.48",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        820
+      ],
+      "anchor": "proposed single-user ESSR"
+    },
+    {
+      "id": "single_FPA_full",
+      "value": 4.22351450182287,
+      "rounded": "4.22",
+      "current": "4.22",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        820
+      ],
+      "anchor": "proposed single-user ESSR"
+    },
+    {
+      "id": "single_SPA_full",
+      "value": 6.453916972597873,
+      "rounded": "6.45",
+      "current": "6.45",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        820
+      ],
+      "anchor": "proposed single-user ESSR"
+    },
+    {
+      "id": "lowSNR_MA_EPA_0",
+      "value": 4.424907808960897,
+      "rounded": "4.425",
+      "current": "4.425",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "lowSNR_MA_EPA_5",
+      "value": 2.944356689631261,
+      "rounded": "2.944",
+      "current": "2.944",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "lowSNR_MA_full_0",
+      "value": 4.379139778364989,
+      "rounded": "4.379",
+      "current": "4.379",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "lowSNR_MA_full_5",
+      "value": 2.883958613820134,
+      "rounded": "2.884",
+      "current": "2.884",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "PA_gain_0",
+      "value": 40.330901488330476,
+      "rounded": "40.3",
+      "current": "40.3",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "PA_gain_10",
+      "value": 13.868179976671492,
+      "rounded": "13.9",
+      "current": "13.9",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "PA_gain_20",
+      "value": 0.7771584078056781,
+      "rounded": "0.78",
+      "current": "0.78",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        826
+      ],
+      "anchor": "EP with optimized"
+    },
+    {
+      "id": "eve_error_0",
+      "value": 20.74973926799935,
+      "rounded": "20.75",
+      "current": "20.75",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        832
+      ],
+      "anchor": "We next perturb the Eve direction"
+    },
+    {
+      "id": "eve_error_0.05",
+      "value": 20.133462219690582,
+      "rounded": "20.13",
+      "current": "20.13",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        832
+      ],
+      "anchor": "We next perturb the Eve direction"
+    },
+    {
+      "id": "eve_error_0.1",
+      "value": 18.726226380188244,
+      "rounded": "18.73",
+      "current": "18.73",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        832
+      ],
+      "anchor": "We next perturb the Eve direction"
+    },
+    {
+      "id": "eve_error_loss",
+      "value": 2.9700471911914605,
+      "rounded": "3.0",
+      "current": "3.0",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        832
+      ],
+      "anchor": "We next perturb the Eve direction"
+    },
+    {
+      "id": "eve_error_best_benchmark",
+      "value": 17.931390172620414,
+      "rounded": "17.93",
+      "current": "17.93",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        832
+      ],
+      "anchor": "We next perturb the Eve direction"
+    },
+    {
+      "id": "random3_MA_full",
+      "value": 22.3017447411372,
+      "rounded": "22.30",
+      "current": "22.30",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random3_MA_rate",
+      "value": 20.226527170811373,
+      "rounded": "20.23",
+      "current": "20.23",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random3_SPA_full",
+      "value": 18.90858250439005,
+      "rounded": "18.91",
+      "current": "18.91",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random3_gain_MA_rate",
+      "value": 10.259880763518048,
+      "rounded": "10.3",
+      "current": "10.3",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random3_gain_SPA_full",
+      "value": 17.945090468623714,
+      "rounded": "17.9",
+      "current": "17.9",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random1_AS",
+      "value": 8.486100795059526,
+      "rounded": "8.49",
+      "current": "8.49",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    },
+    {
+      "id": "random1_MA_full",
+      "value": 8.666269948409617,
+      "rounded": "8.67",
+      "current": "8.67",
+      "matches_current_rounding": true,
+      "main_tex_lines": [
+        835
+      ],
+      "anchor": "Finally, Eve's elevation"
+    }
+  ],
+  "pending_groups": [],
+  "sources": {
+    "fig3_accuracy.mat": "7ab7d1bbc5be8036c252f4cf146709d9f60103df73fd2d5cf0ebfb453c3631a1",
+    "fig4_convergence.mat": "e60e6739d01ba213f432765310d20e3455d23ab52176ca7d074e7f780c9f2eb0",
+    "fig5_snr.mat": "ede176923a1765e82eb84e45db96e2f3b672ad8938d749b70b39f3481e6e915c",
+    "fig6_region.mat": "7ab1382c9909c89f074783d25199d8b7c4245e8e5ed1a1ddca80b29965eac341",
+    "extra_num_antennas_N4.mat": "5d594b63e2580aebf83cb9b73a33749cb9e5d896810bf4655022f05182396f48",
+    "extra_num_antennas_N12.mat": "31924e336f89815a2873687a40e87255cca5e353c5824ac24b1f7840805d33c5",
+    "extra_num_antennas_N8.mat": "93076bff8b5f2b4dda0c1cb6f6d0feff0d6bff31400c7878ff1247df1df713ba",
+    "extra_num_antennas_N16.mat": "bf242778ee18b8457286549fb1792b7008b35a99ea106904a013e9420d3aec24",
+    "extra_single_user.mat": "78ce8968d9d06d291f3f09a52b0df79f06e86a6c4a3d870b94716d4bf884094e",
+    "extra_pa_spread_0dB.mat": "4109c60c0ed558b000d706c9f7be035baeafc4ac15efe2cdfd01b03ed4786c07",
+    "extra_pa_spread_10dB.mat": "3c6a8a0a344759c6029eb44d0a2918c70267434a7efdd9fa2805332b942a6121",
+    "fig7_pa_hetero.mat": "63870fea48befbf95e5bfedca5540b89f93ebbd5ad7ff80261905923e93787f3",
+    "extra_eve_aod_error.mat": "e2f493f986ea4f5128798fb7d7807ee5ed518526722fb9fc9fb71bffb1ffa163",
+    "extra_random_eve_M3.mat": "fb5607cd370b4b7e7c37c7cfcc01afa781aaf2ab4638cfd645af58305defd5cd",
+    "extra_random_eve_M1.mat": "db8471cef9a164981385203dec4f8e91f62a7a76c81bb61a3f1f2ed2908dd904"
+  },
+  "changed_rounded_claims": []
+}

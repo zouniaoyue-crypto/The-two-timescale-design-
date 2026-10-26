@@ -1,0 +1,1305 @@
+{
+  "status": "VERIFIED",
+  "created_utc": "2026-10-26T06:49:33.968011+00:00",
+  "original_archive": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip",
+  "original_archive_sha256": "934dde752582b0d3cc57b7b2fa85d32e7fc7221823fdde9f9da7f6cb830dfb6d",
+  "current_source_matches_final_acceptance": true,
+  "omitted_original_duplicate_files": [
+    ".gitignore",
+    "CODEX_REVISION_SPEC.md",
+    "ma_secrecy_code.zip"
+  ],
+  "file_status_counts": {
+    "changed": 64,
+    "unchanged": 34,
+    "added": 1,
+    "original_only": 1
+  },
+  "changed_source_files": 33,
+  "copied_files": [
+    {
+      "file": "01_original/main.tex",
+      "bytes": 103444,
+      "sha256": "20705b223fd14ed53c88346283bd7e4c6ad4cfe502f1d1a97e4817275f701813",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::main.tex"
+    },
+    {
+      "file": "01_original/main_preview.pdf",
+      "bytes": 1875769,
+      "sha256": "a305966f4c5499272a3700fdf929df992a958b3469624215e3618bc94458f725",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::main_preview.pdf"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/check_implementation.m",
+      "bytes": 3731,
+      "sha256": "be035edaffdf6cc5635fd73213c9e132e42938af68390c9eee61c9e1668a584e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/check_implementation.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/default_params.m",
+      "bytes": 2864,
+      "sha256": "6042e0dd2b9f918e1259b57994fe9b9244338cb05027b0d267c4ccc7bb742f5d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/default_params.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_angle_offset.m",
+      "bytes": 585,
+      "sha256": "3a38da79a77fadb2e90a5b7f2721bfc44e495518be4a30bcf58232af17eb02e3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_angle_offset.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_as_region.m",
+      "bytes": 830,
+      "sha256": "c416a765a92dadefa0efc2f944b6f311bc07b1babb08def9ed89b292bb0feaf1",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_as_region.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_eve_aod_error.m",
+      "bytes": 1225,
+      "sha256": "b50b40327ade048a15d53e1e370f946ec2f52d93a92ccccda73d97be412e8000",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_eve_aod_error.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_num_antennas.m",
+      "bytes": 2245,
+      "sha256": "8ae4dcd74c05ad4ee7fdb1f45bc04ff8aed5c72dbec336df025d6e653e50e90c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_num_antennas.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_pa_spread.m",
+      "bytes": 768,
+      "sha256": "79d8fe8d2a8cd58e94ca93c3aede43c0aba992cf63e22720c6c0bfc766b47b03",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_pa_spread.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_random_eve.m",
+      "bytes": 716,
+      "sha256": "ead6add80e2fae635c92af5862c245d035868ecdd9a179ffe32269a7d6571e99",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_random_eve.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/extra_single_user.m",
+      "bytes": 822,
+      "sha256": "203990d5a2d8e7e5d37f6b0c6a692227078ceb76bf78f7343caeb80715604359",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/extra_single_user.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/fig3_accuracy.m",
+      "bytes": 1450,
+      "sha256": "3d10d39b11b29a122b839b42c1c503de056154c52be3950bb74c8a6e57e96737",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/fig3_accuracy.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/fig4_convergence.m",
+      "bytes": 2930,
+      "sha256": "96c598ed3ae290771b3a6e9c86b51022ada758bd1f6a08d740dd555358964f1f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/fig4_convergence.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/fig5_snr.m",
+      "bytes": 1018,
+      "sha256": "000202a02fa6fb74e65be1431053960e48afdd0e2525596574d2ac4be5b0b616",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/fig5_snr.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/fig6_region.m",
+      "bytes": 810,
+      "sha256": "23c85e4dcfc57f8accbbdc476b082b5edb83a60d56caa825736ae75b3ad7fe3d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/fig6_region.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/fig7_power_allocation.m",
+      "bytes": 1451,
+      "sha256": "d4bc45bef17e28980da0bbe54feba126265d568bc2644754990f49e6bb835959",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/fig7_power_allocation.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/readme.pdf",
+      "bytes": 437824,
+      "sha256": "eacf28e5decbaa4b164858a4124733abca1de2c0068f7a86a95019b1e75836f2",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/readme.pdf"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/readme.tex",
+      "bytes": 38675,
+      "sha256": "e769c8adbdc867ebe8c157b0b3123a409625d55b43eced2d5782d5685b481351",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/readme.tex"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/replot_all.m",
+      "bytes": 1573,
+      "sha256": "6810dd47bd3f3ef8ee477abbf2d4f84588af3807ddbef0ff2687929ef2c2d6ff",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/replot_all.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/run_all.m",
+      "bytes": 1955,
+      "sha256": "8658b75d71a751c4b80325d761e717ffecfa1105ded0261bb427188b19ff267c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/run_all.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/accuracy_point.m",
+      "bytes": 1277,
+      "sha256": "03e9e1796f3c8ab646261a31c24fa760670cace2d60e7c95a765051305adb719",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/accuracy_point.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/add_legend.m",
+      "bytes": 629,
+      "sha256": "07e09bdd9ae97dec8eb505283cb6eb89e3f8564ce9978414e2549591c44ddd84",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/add_legend.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/analytic_rates.m",
+      "bytes": 601,
+      "sha256": "7e132f028275122b4d8fb0aac058f25ffd3cf97c1463ae9057dcea6f6b3df592",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/analytic_rates.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/ao_optimize.m",
+      "bytes": 1216,
+      "sha256": "7b54bf9c751bd0874eb75d53dfd64220bdbe76b84516f655626091621197c7c3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/ao_optimize.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/as_select.m",
+      "bytes": 2644,
+      "sha256": "a97d802b639e55d4b64746e069db0a0f2dff5fb0746fb53e9fd9dea3c8636500",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/as_select.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/axes_note.m",
+      "bytes": 469,
+      "sha256": "aea1a4d88ebd1d24ed9b4418499fc73ceb7171a1036d81262271f30a8880742c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/axes_note.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/batch_inv_hpd.m",
+      "bytes": 652,
+      "sha256": "11f6c582eff135a6e8c2569cfc4c9a06236b6ae9e2c7ab6cfe00c7c55b42d653",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/batch_inv_hpd.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/build_scenario.m",
+      "bytes": 1140,
+      "sha256": "87aaf4887e745c09312b4ee15ebacccefb86043e3282e5106a88e915235fbd86",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/build_scenario.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/curve_style.m",
+      "bytes": 273,
+      "sha256": "e7f068e112f98cb11842e0467457c2c9768002cc02a8c00a59a0066db695dea3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/curve_style.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/design_scenario.m",
+      "bytes": 829,
+      "sha256": "51552a8871acc8bcebc4fe97532b63d053240abd22b937ad54cebbc1d335ef40",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/design_scenario.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/evaluate_schemes.m",
+      "bytes": 4029,
+      "sha256": "df923680b636a9dc2a29bede2d729436f7763fae478bb47c22e0cf562ed09797",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/evaluate_schemes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/fig_palette.m",
+      "bytes": 972,
+      "sha256": "d1445891268b6611223e581bd179c286e61576856cdf0fbc5f8c3d3432fe15f4",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/fig_palette.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/fig_style.m",
+      "bytes": 1561,
+      "sha256": "131172f745e7a53e277b54d3bab269049dd349caabcb85af6aa8d8c2ff8d8535",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/fig_style.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/gen_scenario.m",
+      "bytes": 912,
+      "sha256": "ad99f7172b34d3b942bc91d93bacd87da5de0c397bed647faa6c1887ded7791a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/gen_scenario.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/geo_quantities.m",
+      "bytes": 1523,
+      "sha256": "3fa8dde79ead7dd65aa25ecbb30d6d200e4a3b612d8fbed1fedc4c31a9dcd2e8",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/geo_quantities.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/grad_F_n.m",
+      "bytes": 2061,
+      "sha256": "4416cb9a5cf8a6b6c8d720d6ed085abe520c1ce3b36bda12ba6695e739050a83",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/grad_F_n.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/label_axes.m",
+      "bytes": 294,
+      "sha256": "2251e7b809835939ecc67246958c0179a5e1216f2b1fcf8973d176152c7e5cf7",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/label_axes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/lin_constraints.m",
+      "bytes": 652,
+      "sha256": "79afd2f0b5b2a47037a1282119c7993c80c725d599c0d8b4df79801219ddb242",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/lin_constraints.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/load_results.m",
+      "bytes": 329,
+      "sha256": "92ebf43d08deca92700e04d83effad5a915695a2fb916362e346dab679a731ed",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/load_results.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/main_schemes.m",
+      "bytes": 491,
+      "sha256": "a4a781db5e6675b6ef396cd9361bc3099104f06b7cf22204cfe5cb3c64f5bcad",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/main_schemes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/manual_legend.m",
+      "bytes": 2000,
+      "sha256": "8c0f73df6246cbff21c17abcb127ecbd29c3083048b52486b433ff962a377962",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/manual_legend.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/mc_rates.m",
+      "bytes": 2746,
+      "sha256": "6bde3fc4648d4aef0907a5b1314c5de804ad526c5f39bbeb35dd5b56455d00de",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/mc_rates.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/new_figure.m",
+      "bytes": 793,
+      "sha256": "a4f1213fca3c7c8e74e608405cf00c66e90d3bf3360d355a30b76b2c6badb72a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/new_figure.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/objective_F.m",
+      "bytes": 626,
+      "sha256": "15a6bbbd14274873448c696069a21eb706bcab3dcf6f1c234a2117c9b2b6ed40",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/objective_F.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/objective_F_n.m",
+      "bytes": 2447,
+      "sha256": "71fe9ff8b5c11eb730562c268d5167fc8ee98d30f7b0ef2e71585e3ef004a37d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/objective_F_n.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/pick_schemes.m",
+      "bytes": 511,
+      "sha256": "d61b85c70f1f0c6cf14f5a1c50e40640abfcc437ef7be42c0e2641a489b843bd",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/pick_schemes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_curve.m",
+      "bytes": 483,
+      "sha256": "f5312c9b67219ed742d81a2b73689434e221dbd8179ac5ea40d96f4232af32d0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_curve.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_fig3.m",
+      "bytes": 1967,
+      "sha256": "fcb99f144f3b7bbed6bf7646481aea5ed2fb3da17b9e7be46b1197a1ef92a7d1",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_fig3.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_fig4.m",
+      "bytes": 2007,
+      "sha256": "57c52cd7e775b06baeaacd9815330ae2d95a4b12665fe06e6d8dd30a840ef5f0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_fig4.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_fig5.m",
+      "bytes": 1512,
+      "sha256": "3376cd200aa5e29737326aba53c349cf4a0aa3c6c3e70bef52a6f99e3717cba0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_fig5.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_fig6.m",
+      "bytes": 2323,
+      "sha256": "7bc4c7e132cbb75b18d6b638735104f0b59c15cd8e4c48c5a0a1457540bd761e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_fig6.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_fig7.m",
+      "bytes": 3242,
+      "sha256": "9159d5b5e0152bab8590284a6418002490ca0a2bea012eb67fd9c6c79783a80b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_fig7.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/plot_schemes.m",
+      "bytes": 498,
+      "sha256": "4c8c2b0794b1a96f86e7f9b3cd2007ac6b29d976750c07d924c33c42c10bfe0a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/plot_schemes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/position_sweep.m",
+      "bytes": 3179,
+      "sha256": "e32e16a1ed8348cfc5caa4f471daea16d0e1572b66d6b157846efe932bf3013e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/position_sweep.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/power_opt.m",
+      "bytes": 2579,
+      "sha256": "3dccc7700efe58142431d297c161dce61b6380597abb5901c6a8fbcee17ea0d3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/power_opt.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/print_sweep.m",
+      "bytes": 680,
+      "sha256": "98fec3631dd437e4ed4e94dc20d812a2320d6f39c3220d5ac3c87f9cc2d02439",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/print_sweep.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/print_table_eve.m",
+      "bytes": 938,
+      "sha256": "b512c80e6383951d4c3b98681721e460e2b86041aaaa3c564942d9e8db74822a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/print_table_eve.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/proj_polygon.m",
+      "bytes": 1506,
+      "sha256": "7c2116c3ec0db2cacc3559dfbd03c6b5b642972846954bfa69370d8fe432314c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/proj_polygon.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/random_positions.m",
+      "bytes": 707,
+      "sha256": "bae8f2241d6a6dbf61a3035c324879ec6a67b6724e65fd7500d814a9198ee837",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/random_positions.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/rate_coeffs.m",
+      "bytes": 523,
+      "sha256": "1e85aa3ba5e35bde80c195d2424ae0e17b9238e50ad196caa0f4aeaf9f9ffecd",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/rate_coeffs.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/rate_oriented_positions.m",
+      "bytes": 1325,
+      "sha256": "073739ba83548ad8d4f8838423fc28853be8e6596c70737dd8124db7f9dea53e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/rate_oriented_positions.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/results_dir.m",
+      "bytes": 219,
+      "sha256": "3f97b3b01a64b6d556a46db8bace901637deb07104bf75d6e2b98fc2396f1f37",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/results_dir.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/save_figure.m",
+      "bytes": 1175,
+      "sha256": "4573af8b511958f63f543cfe25e577908b02000d6967c922840483734ffa9373",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/save_figure.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/scheme_name.m",
+      "bytes": 131,
+      "sha256": "b7210477006f06e29dbfcbc73928d5494ecad409d0b2ec33accd607818a612ea",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/scheme_name.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/scheme_style.m",
+      "bytes": 1503,
+      "sha256": "8ad378ab2a2ea14d52f8d2044ab612ad0c6b8edbd6acbc7006249f40e75bfe9b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/scheme_style.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/secrecy_wf.m",
+      "bytes": 1530,
+      "sha256": "ad25e55b3fef0c3ab8a647f22ad80ddd4a796aa9f03b8be4e2f485764d9923f5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/secrecy_wf.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/style_axes.m",
+      "bytes": 615,
+      "sha256": "bea7867b605f65fe8f87487a8c0c5d38953b838e4a84b4e5fc2c6e6c24a6ac3a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/style_axes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/sweep_schemes.m",
+      "bytes": 1995,
+      "sha256": "01b5a02f35ace743ae08979cd33fbb4d51b2fd434223c694fcfdf50e0a7d528e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/sweep_schemes.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/functions/upa_positions.m",
+      "bytes": 393,
+      "sha256": "ca4cab2b9729c16e4ccbd2bb0a478fc598b33575f5f271a2387b8457ac40755b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/functions/upa_positions.m"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_angle_offset.mat",
+      "bytes": 23987,
+      "sha256": "a8c42a1411706114f182d251d10d1ef2efaf8b6daa59dd9fa1a8038328e74aac",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_angle_offset.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_as_region.mat",
+      "bytes": 5437,
+      "sha256": "1be73dcffc5c9f9c162dadd32ec2309b4c9813a7a03ce77a5badaa188d0335b9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_as_region.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_eve_aod_error.mat",
+      "bytes": 19717,
+      "sha256": "469d2b8f155682449a5f9e39dbd5764fbd9a626ce15c7395d271ef54dccf3543",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_eve_aod_error.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas.mat",
+      "bytes": 25923,
+      "sha256": "6e4476b5426e45cb3aaea2f5a4b7db5e6083c990eedcf17084d4ff7071167aa9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N10.mat",
+      "bytes": 4715,
+      "sha256": "cf88b6ccbe7ca5e94afcd0582c2230756f66186f2e5e1a230c8920fdc0502c78",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N10.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N12.mat",
+      "bytes": 3921,
+      "sha256": "f9cf4859330701bd1643060a0c19716b9a54cf9d83bb3004b9e5a3eedc007aeb",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N12.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N14.mat",
+      "bytes": 3923,
+      "sha256": "01f77d7d8564d10513d8674745380852e66c55dfb285cf7b84a701c7a7c8b1e8",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N14.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N16.mat",
+      "bytes": 3914,
+      "sha256": "6227a30c12dbfa6d859117119cfb2a4d91c90ebedf801ab795659a17d3a03a5c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N16.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N4.mat",
+      "bytes": 4739,
+      "sha256": "625bbc7952b1d39de4c4a3a9431313419035dbe0bdc9e8b0d29e5cacb28a9a0e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N4.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N6.mat",
+      "bytes": 4724,
+      "sha256": "60cfbd1eeacf2e110b5da6ee7a604c455b9a72164922620d0c21ee65e3afdddf",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N6.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_num_antennas_N8.mat",
+      "bytes": 4713,
+      "sha256": "55d98a28c900b4f7135a07506a05192da32cf47310ad8d03a3edea06d57d839f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_num_antennas_N8.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_pa_spread_0dB.mat",
+      "bytes": 12576,
+      "sha256": "febba5ea01786327a98d0ec05595225cd6f1d6adf309c9a1ba9261b3cedf2bb5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_pa_spread_0dB.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_pa_spread_10dB.mat",
+      "bytes": 12565,
+      "sha256": "98a17bcc5fa4d095ac718e06268c3086ce4462cff1ab1e861383e9aea31208b9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_pa_spread_10dB.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_random_eve_M1.mat",
+      "bytes": 3932,
+      "sha256": "fd39c31bda52a8efad15c24ca035c113130e35a2abd442c28ed21eba981b093f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_random_eve_M1.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_random_eve_M3.mat",
+      "bytes": 4688,
+      "sha256": "9339d53001504bc5af74828ee0642d9205a1cdf8a393a46ed1b924cdbc431471",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_random_eve_M3.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/extra_single_user.mat",
+      "bytes": 20269,
+      "sha256": "37b412b056900e70a9d51ec7a3a37409046cc1cf7e336b27aca74567f4539755",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/extra_single_user.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig3a_accuracy_snr.png",
+      "bytes": 130597,
+      "sha256": "64344ed72e9bdae6ccb8521c2ed2cd7491ff41ae0c6c738b9a81604d5649cea5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig3a_accuracy_snr.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig3b_accuracy_kappa.png",
+      "bytes": 94087,
+      "sha256": "154261064dd08cbe54fb3a87653c9d7cb8e7cd648c95f85b3a8a612de579f183",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig3b_accuracy_kappa.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig3_accuracy.mat",
+      "bytes": 1291,
+      "sha256": "e442ba42a10e7f250bfda1fc2873fa855bef0e40adc43db837c3e51887b1b445",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig3_accuracy.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig4_convergence.mat",
+      "bytes": 246444,
+      "sha256": "059ca169429aa94b0e68f4e7bb750f1fb7cc799514577965120df1b716040fce",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig4_convergence.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig4_convergence.png",
+      "bytes": 124736,
+      "sha256": "638d8c9e172e760ba05fa2fd11526d702eb2bcffd85a17589b6e05625e26e9b4",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig4_convergence.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig5a_essr_snr.png",
+      "bytes": 206280,
+      "sha256": "132ac85dc85e26c91244d5b9aba21b8df6b004cfdec3aa6065e83ccb91ef9fb0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig5a_essr_snr.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig5b_an_fraction.png",
+      "bytes": 178563,
+      "sha256": "def9d6bb520c3f38ab452458bff868e5a65f534a06ce24ddb4f60f78515db627",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig5b_an_fraction.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig5_snr.mat",
+      "bytes": 33069,
+      "sha256": "d071cff8155179196160859b2156b1cbf7c62a587fe4ff36095e43c7a742f643",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig5_snr.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig6a_essr_region.png",
+      "bytes": 165508,
+      "sha256": "2004001c1c3996f0bd7074077b9baef9fd84bbfa4cd91ea7eec7a1a99894b76b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig6a_essr_region.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig6b_essr_antennas.png",
+      "bytes": 159774,
+      "sha256": "adec39f9c21013306133c58fedc577c922c61fb3575f64d6aa7119c81afedfc0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig6b_essr_antennas.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig6_region.mat",
+      "bytes": 16554,
+      "sha256": "79c2bcd4aaf8a9b05f8b69716764966b5413c07ee0d36e13e7c32f34cabce85f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig6_region.mat"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig7a_essr_offset.png",
+      "bytes": 180976,
+      "sha256": "b541c45a79e649fdb56f662ff71be7fdd5ae13cf61d4990b5c1302590c61d083",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig7a_essr_offset.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig7b_pa_spread.png",
+      "bytes": 188684,
+      "sha256": "84f1810a01481b437aafb9d7f463509901c4c2d2aeecac3bd6075e7a0605183b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig7b_pa_spread.png"
+    },
+    {
+      "file": "01_original/ma_secrecy_matlab/results/fig7_pa_hetero.mat",
+      "bytes": 17509,
+      "sha256": "afd20914a9fa6d8b5e9ec39426362f7c78e37839eb550bd193d5c2a9e8b86560",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\original_project.zip::ma_secrecy_matlab/results/fig7_pa_hetero.mat"
+    },
+    {
+      "file": "02_revised/main.tex",
+      "bytes": 116882,
+      "sha256": "236f32d5a1bd312df4c5ef9bb2b8a8665989df75da7296caeaca2e146bcdaffa",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\main.tex"
+    },
+    {
+      "file": "02_revised/main_revised.pdf",
+      "bytes": 1081680,
+      "sha256": "53ca4545a220fe10af4ae58f422f9949611db4dc5d93abccc1db2a05290510ff",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\main_revised.pdf"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/check_implementation.m",
+      "bytes": 5277,
+      "sha256": "6022a74bea4b56be9e7b43171287a15dca6ac02988830369105d63703feb57c8",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\check_implementation.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/default_params.m",
+      "bytes": 2879,
+      "sha256": "fc5f9a6a32d739d1288962d5c5021d63d3be23349a33eabb5997706bc69f343d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\default_params.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_angle_offset.m",
+      "bytes": 603,
+      "sha256": "8982415f6ca395e387036168aeb0bbc68153d8e9bf837bfde759067888a4bcb3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_angle_offset.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_as_region.m",
+      "bytes": 830,
+      "sha256": "c416a765a92dadefa0efc2f944b6f311bc07b1babb08def9ed89b292bb0feaf1",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_as_region.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_eve_aod_error.m",
+      "bytes": 1225,
+      "sha256": "b50b40327ade048a15d53e1e370f946ec2f52d93a92ccccda73d97be412e8000",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_eve_aod_error.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_num_antennas.m",
+      "bytes": 2780,
+      "sha256": "bb3ee01a4ee0678507b6ba570a0cf02db988057a3aa58b94e371db2797dc27f5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_num_antennas.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_pa_spread.m",
+      "bytes": 768,
+      "sha256": "79d8fe8d2a8cd58e94ca93c3aede43c0aba992cf63e22720c6c0bfc766b47b03",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_pa_spread.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_random_eve.m",
+      "bytes": 716,
+      "sha256": "ead6add80e2fae635c92af5862c245d035868ecdd9a179ffe32269a7d6571e99",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_random_eve.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/extra_single_user.m",
+      "bytes": 840,
+      "sha256": "2edaf942e6ff377e570080197964f2eebe3966dcbb3343347ced901ba5bfdf2d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\extra_single_user.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/fig3_accuracy.m",
+      "bytes": 1544,
+      "sha256": "081d3c3095dc30cbf3a0316a8de6f790433bed078fde51005a5d0a161d87cf8a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\fig3_accuracy.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/fig4_convergence.m",
+      "bytes": 2944,
+      "sha256": "c2513cd096f2a464eafa8c9a7c5e4b18b7bfe3af0a5d4bfbc3d18b2f658a55c5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\fig4_convergence.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/fig5_snr.m",
+      "bytes": 1018,
+      "sha256": "000202a02fa6fb74e65be1431053960e48afdd0e2525596574d2ac4be5b0b616",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\fig5_snr.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/fig6_region.m",
+      "bytes": 810,
+      "sha256": "23c85e4dcfc57f8accbbdc476b082b5edb83a60d56caa825736ae75b3ad7fe3d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\fig6_region.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/fig7_power_allocation.m",
+      "bytes": 1451,
+      "sha256": "d4bc45bef17e28980da0bbe54feba126265d568bc2644754990f49e6bb835959",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\fig7_power_allocation.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/accuracy_point.m",
+      "bytes": 1302,
+      "sha256": "3382b0bb72cc61824b55dba5fe84e1d2f01c0dafefbf627f7187790b8ecf6afe",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\accuracy_point.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/add_legend.m",
+      "bytes": 629,
+      "sha256": "07e09bdd9ae97dec8eb505283cb6eb89e3f8564ce9978414e2549591c44ddd84",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\add_legend.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/analytic_rates.m",
+      "bytes": 625,
+      "sha256": "44318346f39822ed14727476cc0c4dd207957fb0b433e1dfbceecf8075e81adf",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\analytic_rates.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/ao_optimize.m",
+      "bytes": 1216,
+      "sha256": "7b54bf9c751bd0874eb75d53dfd64220bdbe76b84516f655626091621197c7c3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\ao_optimize.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/as_select.m",
+      "bytes": 2768,
+      "sha256": "c03e1ff95ef9ca6bb2fe69661dd6f25034974087b3253e8005cab42445c1c50b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\as_select.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/axes_note.m",
+      "bytes": 469,
+      "sha256": "aea1a4d88ebd1d24ed9b4418499fc73ceb7171a1036d81262271f30a8880742c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\axes_note.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/batch_inv_hpd.m",
+      "bytes": 1701,
+      "sha256": "dab3f0dce71361332487fac21baf7987b264cac086c889770d0e00ce9a95b3b4",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\batch_inv_hpd.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/build_scenario.m",
+      "bytes": 1153,
+      "sha256": "d27747c0bd8ea4a2c5c1bcb06bb951e7c531d82d0349cc340190fc4b3bc2a717",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\build_scenario.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/curve_style.m",
+      "bytes": 273,
+      "sha256": "e7f068e112f98cb11842e0467457c2c9768002cc02a8c00a59a0066db695dea3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\curve_style.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/design_scenario.m",
+      "bytes": 829,
+      "sha256": "51552a8871acc8bcebc4fe97532b63d053240abd22b937ad54cebbc1d335ef40",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\design_scenario.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/evaluate_schemes.m",
+      "bytes": 4769,
+      "sha256": "c204693dc06d4481639420ca21ffd890a57174d39ca13ebe2e9be696f6444d2d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\evaluate_schemes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/fig_palette.m",
+      "bytes": 972,
+      "sha256": "d1445891268b6611223e581bd179c286e61576856cdf0fbc5f8c3d3432fe15f4",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\fig_palette.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/fig_style.m",
+      "bytes": 1723,
+      "sha256": "227d737a47b5588777bafe30026b66e92f6db121c92ab9eb50975a920860a1ac",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\fig_style.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/gen_scenario.m",
+      "bytes": 991,
+      "sha256": "5b70f3b933f99c5fc71a757ff859442f575dcaa969a9b184cefa5d321af0349f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\gen_scenario.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/geo_quantities.m",
+      "bytes": 1571,
+      "sha256": "842688e3d327c4b6ae0503b2c756defe7a3822dc659eefb1e6b074cce322ecbf",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\geo_quantities.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/grad_F_n.m",
+      "bytes": 2079,
+      "sha256": "54b625dc453cc6ec740eef6b5310820b7593744c0f04811d0a5892b72cde1c75",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\grad_F_n.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/label_axes.m",
+      "bytes": 294,
+      "sha256": "2251e7b809835939ecc67246958c0179a5e1216f2b1fcf8973d176152c7e5cf7",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\label_axes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/lin_constraints.m",
+      "bytes": 666,
+      "sha256": "e58396f6f2b98ffa0a8226b900ecb0eaa9a952612525d32e7f2555be7cbe686d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\lin_constraints.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/load_results.m",
+      "bytes": 329,
+      "sha256": "92ebf43d08deca92700e04d83effad5a915695a2fb916362e346dab679a731ed",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\load_results.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/main_schemes.m",
+      "bytes": 491,
+      "sha256": "a4a781db5e6675b6ef396cd9361bc3099104f06b7cf22204cfe5cb3c64f5bcad",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\main_schemes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/manual_legend.m",
+      "bytes": 2000,
+      "sha256": "8c0f73df6246cbff21c17abcb127ecbd29c3083048b52486b433ff962a377962",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\manual_legend.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/mc_rates.m",
+      "bytes": 2766,
+      "sha256": "f7a2c127356104b404d7e44d0f659fe1e5989cb3cdff63af8ae28108e5b1dfb0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\mc_rates.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/new_figure.m",
+      "bytes": 793,
+      "sha256": "a4f1213fca3c7c8e74e608405cf00c66e90d3bf3360d355a30b76b2c6badb72a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\new_figure.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/objective_F.m",
+      "bytes": 677,
+      "sha256": "f43450f61218e94cb7681136bbd37c186a8f6d1274a049580e5aa6edd808c8a0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\objective_F.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/objective_F_n.m",
+      "bytes": 2468,
+      "sha256": "0ea3c2d3a9397954035f41d650fa011960431b34ea48985634bea718b9eaa28d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\objective_F_n.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/pick_schemes.m",
+      "bytes": 511,
+      "sha256": "d61b85c70f1f0c6cf14f5a1c50e40640abfcc437ef7be42c0e2641a489b843bd",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\pick_schemes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_curve.m",
+      "bytes": 483,
+      "sha256": "f5312c9b67219ed742d81a2b73689434e221dbd8179ac5ea40d96f4232af32d0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_curve.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_fig3.m",
+      "bytes": 1967,
+      "sha256": "fcb99f144f3b7bbed6bf7646481aea5ed2fb3da17b9e7be46b1197a1ef92a7d1",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_fig3.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_fig4.m",
+      "bytes": 2021,
+      "sha256": "586c7c72fb0b2ee9d4fc25c41ba6d3da7e267cc6cb786d7d05e867703d3cb9c6",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_fig4.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_fig5.m",
+      "bytes": 1512,
+      "sha256": "3376cd200aa5e29737326aba53c349cf4a0aa3c6c3e70bef52a6f99e3717cba0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_fig5.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_fig6.m",
+      "bytes": 2323,
+      "sha256": "7bc4c7e132cbb75b18d6b638735104f0b59c15cd8e4c48c5a0a1457540bd761e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_fig6.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_fig7.m",
+      "bytes": 3373,
+      "sha256": "70fe1e056b795ed38324ab8798bb331b34d1cf5648a673e1c0958b328c430753",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_fig7.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/plot_schemes.m",
+      "bytes": 498,
+      "sha256": "4c8c2b0794b1a96f86e7f9b3cd2007ac6b29d976750c07d924c33c42c10bfe0a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\plot_schemes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/position_sweep.m",
+      "bytes": 3405,
+      "sha256": "881d9929bd55141b5e2055da0f0d276510cf1e98c521a55ae0fd62e71b038aff",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\position_sweep.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/power_opt.m",
+      "bytes": 2750,
+      "sha256": "916d5e6b799bf578a6f7d4b5bfc98566befc758ed1229561efd252434a5a43be",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\power_opt.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/print_sweep.m",
+      "bytes": 680,
+      "sha256": "98fec3631dd437e4ed4e94dc20d812a2320d6f39c3220d5ac3c87f9cc2d02439",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\print_sweep.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/print_table_eve.m",
+      "bytes": 938,
+      "sha256": "b512c80e6383951d4c3b98681721e460e2b86041aaaa3c564942d9e8db74822a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\print_table_eve.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/proj_polygon.m",
+      "bytes": 1506,
+      "sha256": "7c2116c3ec0db2cacc3559dfbd03c6b5b642972846954bfa69370d8fe432314c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\proj_polygon.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/random_positions.m",
+      "bytes": 707,
+      "sha256": "bae8f2241d6a6dbf61a3035c324879ec6a67b6724e65fd7500d814a9198ee837",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\random_positions.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/rate_coeffs.m",
+      "bytes": 527,
+      "sha256": "11b113f349d59b5e998f3216f7b87049becdfc78ef8b00f08ec20da183e6522f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\rate_coeffs.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/rate_oriented_positions.m",
+      "bytes": 1353,
+      "sha256": "a197d1fff198bb02cfd2882121c8991566e6b4697af7c0076b8901586071407f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\rate_oriented_positions.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/results_dir.m",
+      "bytes": 350,
+      "sha256": "b6748dea9b34c9f183f5da5eb67d6ca88ebae99182570d41dd3f683e96694ea7",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\results_dir.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/save_figure.m",
+      "bytes": 1175,
+      "sha256": "4573af8b511958f63f543cfe25e577908b02000d6967c922840483734ffa9373",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\save_figure.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/scheme_name.m",
+      "bytes": 131,
+      "sha256": "b7210477006f06e29dbfcbc73928d5494ecad409d0b2ec33accd607818a612ea",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\scheme_name.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/scheme_style.m",
+      "bytes": 1503,
+      "sha256": "8ad378ab2a2ea14d52f8d2044ab612ad0c6b8edbd6acbc7006249f40e75bfe9b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\scheme_style.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/secrecy_wf.m",
+      "bytes": 1529,
+      "sha256": "e0589498d5f48a81539a163acdb57f1551fa339597de60ee5b4eba48531c4e24",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\secrecy_wf.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/style_axes.m",
+      "bytes": 615,
+      "sha256": "bea7867b605f65fe8f87487a8c0c5d38953b838e4a84b4e5fc2c6e6c24a6ac3a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\style_axes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/sweep_schemes.m",
+      "bytes": 2617,
+      "sha256": "0e2f9a5fed1149179379ecc89b56159b4a7c61e422f8c4c49009f83ec6d4ee7a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\sweep_schemes.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/functions/upa_positions.m",
+      "bytes": 393,
+      "sha256": "ca4cab2b9729c16e4ccbd2bb0a478fc598b33575f5f271a2387b8457ac40755b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\functions\\upa_positions.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/replot_all.m",
+      "bytes": 1573,
+      "sha256": "6810dd47bd3f3ef8ee477abbf2d4f84588af3807ddbef0ff2687929ef2c2d6ff",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\replot_all.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/run_all.m",
+      "bytes": 1973,
+      "sha256": "eba04b85edf0753f3eee1be7480298a23bf2f1729ce9d6ef1fb97d756bf363ee",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\run_all.m"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/readme.tex",
+      "bytes": 39708,
+      "sha256": "e2a9e072190c1bf6fdc7f4c497e05818ed19153086b1290c62a63293d8bcb4c9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\readme.tex"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig3a_accuracy_snr.png",
+      "bytes": 84375,
+      "sha256": "3bf431aba0af06b016143e6a8394911e55a42052fad0c44d9345f8a23c86d4a5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig3a_accuracy_snr.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig3b_accuracy_kappa.png",
+      "bytes": 65979,
+      "sha256": "a1702accb06047a97acf329b54db1e8b2448252180eeaff4f5436a96c227b175",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig3b_accuracy_kappa.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig4_convergence.png",
+      "bytes": 75527,
+      "sha256": "f1d6a46424402b8a667284dbc675160cd5b9c66ddd2538c280a71984a41e537a",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig4_convergence.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig5a_essr_snr.png",
+      "bytes": 90841,
+      "sha256": "12e74cac6bd1eb87b1f8337b8320adf0687f83190787f230ad07cd1f4f004340",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig5a_essr_snr.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig5b_an_fraction.png",
+      "bytes": 90479,
+      "sha256": "6e130f2127ce317d2eaf464a30ce5d88521bb5e7ac4ed9667fff0171209882f9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig5b_an_fraction.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig6a_essr_region.png",
+      "bytes": 80156,
+      "sha256": "184abb0c9f2e1deadb003e6c8a55839d86f9c356bc2c748479ab408fc812bd9c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig6a_essr_region.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig6b_essr_antennas.png",
+      "bytes": 78844,
+      "sha256": "dbfc1f86ef6daa7a389ee4449bc75ebc99073d686e83f8c65c3e8333405f9635",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig6b_essr_antennas.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig7a_essr_offset.png",
+      "bytes": 85611,
+      "sha256": "8755e6a9f795011cde78442e6207b6933e7837d00cd5bb9fa58560302fd0ae88",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig7a_essr_offset.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/fig7b_pa_spread.png",
+      "bytes": 89143,
+      "sha256": "e209e84f26114572984c091f77049f98649e583c624e0883e4ccaa728748a9a9",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\fig7b_pa_spread.png"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/figures_revised_regenerated/provenance.json",
+      "bytes": 5163,
+      "sha256": "3db7477189ea6d885cee7a176e2624e6484871d40d8119390b0ff1ad99fd192b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\figures_revised_regenerated\\provenance.json"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_angle_offset.mat",
+      "bytes": 538194,
+      "sha256": "e8d93ecaf9ddceb697423f70bb7b8ca56ac6fec0e810790b633a1e15e5d85fa8",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_angle_offset.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_as_region.mat",
+      "bytes": 88761,
+      "sha256": "7a793beee10d5b4b889278c04d260fea09531db6ba59f505decea288985e593c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_as_region.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_eve_aod_error.mat",
+      "bytes": 403283,
+      "sha256": "e2f493f986ea4f5128798fb7d7807ee5ed518526722fb9fc9fb71bffb1ffa163",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_eve_aod_error.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas.mat",
+      "bytes": 743397,
+      "sha256": "a898d781715ab0fbbcecfbe79fe54601170821849538c3531afe2ffb63eeb36c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N10.mat",
+      "bytes": 109410,
+      "sha256": "ff0354c6d912e78fbe3b4a50ec8cfd22504d7614be99420c579027d6a272a2f0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N10.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N12.mat",
+      "bytes": 99254,
+      "sha256": "31924e336f89815a2873687a40e87255cca5e353c5824ac24b1f7840805d33c5",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N12.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N14.mat",
+      "bytes": 104839,
+      "sha256": "c0b8d9cb702eb05ae3812dd896cc1bc8a22fc2c6f0235b40325ea43ee05854cb",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N14.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N16.mat",
+      "bytes": 110209,
+      "sha256": "bf242778ee18b8457286549fb1792b7008b35a99ea106904a013e9420d3aec24",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N16.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N4.mat",
+      "bytes": 90161,
+      "sha256": "5d594b63e2580aebf83cb9b73a33749cb9e5d896810bf4655022f05182396f48",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N4.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N6.mat",
+      "bytes": 97905,
+      "sha256": "e00fa276203d3aa83d4d24de20a60df1ad7075484ec50f3487cdbdcc14ea9bb3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N6.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_num_antennas_N8.mat",
+      "bytes": 103279,
+      "sha256": "93076bff8b5f2b4dda0c1cb6f6d0feff0d6bff31400c7878ff1247df1df713ba",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_num_antennas_N8.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_pa_spread_0dB.mat",
+      "bytes": 470353,
+      "sha256": "4109c60c0ed558b000d706c9f7be035baeafc4ac15efe2cdfd01b03ed4786c07",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_pa_spread_0dB.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_pa_spread_10dB.mat",
+      "bytes": 516153,
+      "sha256": "3c6a8a0a344759c6029eb44d0a2918c70267434a7efdd9fa2805332b942a6121",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_pa_spread_10dB.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_random_eve_M1.mat",
+      "bytes": 46589,
+      "sha256": "db8471cef9a164981385203dec4f8e91f62a7a76c81bb61a3f1f2ed2908dd904",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_random_eve_M1.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_random_eve_M3.mat",
+      "bytes": 100042,
+      "sha256": "fb5607cd370b4b7e7c37c7cfcc01afa781aaf2ab4638cfd645af58305defd5cd",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_random_eve_M3.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/extra_single_user.mat",
+      "bytes": 231174,
+      "sha256": "78ce8968d9d06d291f3f09a52b0df79f06e86a6c4a3d870b94716d4bf884094e",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\extra_single_user.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/fig3_accuracy.mat",
+      "bytes": 1394,
+      "sha256": "7ab7d1bbc5be8036c252f4cf146709d9f60103df73fd2d5cf0ebfb453c3631a1",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\fig3_accuracy.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/fig4_convergence.mat",
+      "bytes": 246314,
+      "sha256": "e60e6739d01ba213f432765310d20e3455d23ab52176ca7d074e7f780c9f2eb0",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\fig4_convergence.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/fig5_snr.mat",
+      "bytes": 927025,
+      "sha256": "ede176923a1765e82eb84e45db96e2f3b672ad8938d749b70b39f3481e6e915c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\fig5_snr.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/fig6_region.mat",
+      "bytes": 482000,
+      "sha256": "7ab1382c9909c89f074783d25199d8b7c4245e8e5ed1a1ddca80b29965eac341",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\fig6_region.mat"
+    },
+    {
+      "file": "02_revised/ma_secrecy_matlab/results_revised_checkpointed/fig7_pa_hetero.mat",
+      "bytes": 689460,
+      "sha256": "63870fea48befbf95e5bfedca5540b89f93ebbd5ad7ff80261905923e93787f3",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\fig7_pa_hetero.mat"
+    },
+    {
+      "file": "03_review_notes/CODEX_REVISION_SPEC.md",
+      "bytes": 176998,
+      "sha256": "6476e548ad9957f12764be779804c1236f125524f46dd96639adeb4c56b68790",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\CODEX_REVISION_SPEC.md"
+    },
+    {
+      "file": "03_review_notes/CODEX_EXECUTION_REPORT.md",
+      "bytes": 7661,
+      "sha256": "d70ac1909d0df7262665bf981dedc45a7d37dce1b4943d595e70b021cffd4c9b",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\REVISION_EXECUTION_REPORT.md"
+    },
+    {
+      "file": "03_review_notes/evidence/final_acceptance.json",
+      "bytes": 1774,
+      "sha256": "c282e35d0514bb131d980c9a08cef184a48ac42de199d2244555c5839c2ca7d4",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\final_acceptance.json"
+    },
+    {
+      "file": "03_review_notes/evidence/pdf_visual_acceptance.json",
+      "bytes": 1107,
+      "sha256": "6bfb506570a4741c2bfe1d810f7ba45d22683fa34bd54d5d4e8bfb53f948cb65",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\visual_qa_final_20261026\\qa_report.json"
+    },
+    {
+      "file": "03_review_notes/evidence/full_data_validation.json",
+      "bytes": 10992,
+      "sha256": "5f96c0c7da0a976c2a86f1d4036501a19230fd023c4cd49e342494428822e78f",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\independent_validation.json"
+    },
+    {
+      "file": "03_review_notes/evidence/manuscript_claim_audit.json",
+      "bytes": 17898,
+      "sha256": "7c3aa14ae9b118e77268b9325eb80d6c6eaa97ad6de36e0a7aa3bb1d7606a94c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\manuscript_claim_audit.json"
+    },
+    {
+      "file": "03_review_notes/evidence/manuscript_claim_audit.md",
+      "bytes": 3349,
+      "sha256": "a1956ed2fd30d47e196ae6a59c70c37c46bfa8250ccccfbda10fe2d1b5c4adee",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\manuscript_claim_audit.md"
+    },
+    {
+      "file": "03_review_notes/evidence/cached_design_validation.json",
+      "bytes": 614697,
+      "sha256": "a6b12c4dc6a13dc9c324adc860f8f96fd79c4a06a2c3e4f9f483103cbae0a980",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\checkpoint_validation.json"
+    },
+    {
+      "file": "03_review_notes/evidence/supplementary_validation.json",
+      "bytes": 944,
+      "sha256": "36294d549547b114270a9674251c2c131aad47865cdef242e54647e922f4eb55",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\ma_secrecy_matlab\\results_revised_checkpointed\\supplementary\\supplementary_inspection.json"
+    },
+    {
+      "file": "03_review_notes/evidence/implementation_validation.md",
+      "bytes": 8126,
+      "sha256": "c3c2ce97007283f76d6d7695937488562b0f9f43b744363f55bf7e9a9323f6d2",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\numerical\\test-results\\VALIDATION_REPORT.md"
+    },
+    {
+      "file": "03_review_notes/evidence/phase_1_compile.json",
+      "bytes": 90,
+      "sha256": "f06f94e6057b50500da7b7f2a3d7bdea7b1e93d08e020bd00db576686cd27e4d",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-phase-1\\gate.json"
+    },
+    {
+      "file": "03_review_notes/evidence/phase_2_compile.json",
+      "bytes": 90,
+      "sha256": "eecbd1477adf2a8a2e6bc680aeec78c1751d342c1cec66ec734ca0c1354ccd90",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-phase-2\\gate.json"
+    },
+    {
+      "file": "03_review_notes/evidence/phase_3_compile.json",
+      "bytes": 90,
+      "sha256": "b1205732b5eda1d60a19487c68d0d791a8338d2321652ad6d5f433fe02a0d1bf",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-phase-3\\gate.json"
+    },
+    {
+      "file": "03_review_notes/evidence/phase_4_compile.json",
+      "bytes": 90,
+      "sha256": "8612d8470f1a08ad60f71768dc6e50f7b5a00d820bb191e175ef85a1e6385b3c",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-phase-4\\gate.json"
+    },
+    {
+      "file": "03_review_notes/evidence/phase_5_compile.json",
+      "bytes": 90,
+      "sha256": "62a1197495389d2a68a3737f5fbe0688cc9fd69e7d76ff41c36f853194bb8d31",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-phase-5\\gate.json"
+    },
+    {
+      "file": "03_review_notes/evidence/final_compile.json",
+      "bytes": 90,
+      "sha256": "62a1197495389d2a68a3737f5fbe0688cc9fd69e7d76ff41c36f853194bb8d31",
+      "origin": "C:\\Users\\lenovo\\Desktop\\GPT\\4\\manuscript\\.revision_audit\\run-20261019T123125Z\\build-final-regenerated-20261026\\gate.json"
+    }
+  ]
+}

@@ -1,0 +1,951 @@
+--- 01_original/main.tex
++++ 02_revised/main.tex
+@@ -13,7 +13,8 @@
+ \usepackage{cite}
+ \usepackage{graphicx}
+ \usepackage[caption=false,font=footnotesize]{subfig}
+-\graphicspath{{ma_secrecy_matlab/results/}}
++% Figures redrawn from the completed, independently checked simulation arrays.
++\graphicspath{{ma_secrecy_matlab/figures_revised_regenerated/}}
+ \usepackage{tikz}
+ \usetikzlibrary{arrows.meta,decorations.pathreplacing,calc,shapes.symbols}
+ \definecolor{fblue}{HTML}{2E6DB4}
+@@ -35,9 +36,9 @@
+ % ----------------------------- notation macros -------------------------------
+ \newcommand{\E}{\mathbb{E}}
+ \newcommand{\CN}{\mathcal{CN}}
+-\newcommand{\tr}{\mathrm{tr}}
+-\newcommand{\diag}{\mathrm{diag}}
+-\newcommand{\RE}{\mathrm{Re}}
++\newcommand{\tr}{\operatorname{Tr}}
++\newcommand{\diag}{\operatorname{diag}}
++\newcommand{\RE}{\operatorname{Re}}
+ \newcommand{\bt}{\mathbf{t}}
+ \newcommand{\bh}{\mathbf{h}}
+ \newcommand{\bg}{\mathbf{g}}
+@@ -72,11 +73,11 @@
+ \newcommand{\bPhi}{\boldsymbol{\Phi}}
+ \newcommand{\bGam}{\boldsymbol{\Gamma}}
+ \newcommand{\bSig}{\boldsymbol{\Sigma}}
+-\newcommand{\bDel}{\boldsymbol{\Delta}}
++\newcommand{\bDel}{\boldsymbol{\delta}}
+ \newcommand{\bPi}{\boldsymbol{\Pi}}
+ \newcommand{\Ptot}{P_{\mathrm{tot}}}
+-\newcommand{\Dmin}{D_{\min}}
+-\newcommand{\sbe}{\bar{\sigma}_e^2}
++\newcommand{\Dmin}{D_{\mathrm{min}}}
++\newcommand{\sbe}{\bar{\sigma}_{\mathrm{e}}^2}
+ \newcommand{\PHp}{\mathbf{P}^{\perp}(\bt)}
+ 
+ 
+@@ -93,7 +94,7 @@
+ \maketitle
+ 
+ \begin{abstract}
+-This paper investigates two-timescale secure transmission for a movable antenna (MA)-enabled multiuser downlink system with a passive eavesdropper (Eve), where the antenna positions are optimized based on statistical channel state information (CSI), and the precoding and artificial noise (AN) are designed based on the instantaneous CSI of the legitimate users (LUs). Specifically, under zero-forcing (ZF) precoding and null-space AN, the antenna positions and the power allocation among the confidential signals and the AN are jointly optimized to maximize the ergodic secrecy sum rate (ESSR) subject to the transmit power and antenna position constraints. Since the ergodic wiretap rate depends on the random ZF directions and AN subspace, we first prove that the information leakage and the AN received by Eve are conditionally independent given the channels of the LUs. Based on this property, a closed-form approximation of the ergodic wiretap rate is derived. This approximation reveals that the MAs can reduce the information leakage and increase the AN received by Eve. Then, an alternating optimization algorithm is developed for the resulting approximate ESSR maximization problem. For given antenna positions and AN power, the optimal power allocation among the LUs is derived in semi-closed form and follows a secrecy water-filling structure. For a given power allocation, each antenna position is updated by a global grid search followed by majorization--minimization refinement, and the resulting algorithm converges monotonically. Simulation results demonstrate that the proposed design outperforms the benchmark schemes, even for a single LU, while requiring less AN power and fewer antennas.
++Movable antenna (MA) arrays can separate nearly aligned legitimate and eavesdropping channels, but repositioning under fast fading incurs mechanical overhead. We formulate ergodic secrecy sum rate (ESSR) maximization by jointly optimizing antenna positions and long-term information and artificial noise (AN) powers under total-power, movement-region, and minimum-spacing constraints, using statistical channel state information (CSI). We restrict the instantaneous transmission policy to zero-forcing (ZF) precoding and null-space AN based on legitimate-channel CSI. The resulting problem couples random beamforming directions and AN subspaces with nonconcave position-dependent rates and nonconvex spacing constraints. To obtain a deterministic design objective, we derive conditional leakage and AN moments from their orthogonal Gaussian channel components and construct closed-form moment approximations; these approximations are not secrecy-rate bounds. For fixed positions and AN power, user screening yields a concave power-allocation problem with a secrecy water-filling solution, while a finite coarse-to-fine search selects the AN power. For fixed powers, a feasible grid search identifies position candidates, and quadratic minorization with linearized spacing constraints reduces local refinement to projection onto a convex polygon. Alternating these updates produces a nondecreasing, bounded surrogate-objective sequence without sampling channel realizations during optimization; Monte Carlo evaluation at a transmit signal-to-noise ratio of 20~dB gives a 14.8\% ESSR gain over the rate-oriented two-timescale MA benchmark in the default setting.
+ \end{abstract}
+ 
+ \begin{IEEEkeywords}
+@@ -105,13 +106,25 @@
+ % =============================================================================
+ \section{Introduction}\label{sec:intro}
+ % =============================================================================
+-\IEEEPARstart{P}{hysical} layer security (PLS) exploits the randomness and spatial characteristics of wireless channels to protect confidential messages against eavesdropping, thereby complementing upper-layer cryptography~\cite{Wyner1975,Mukherjee2014,WuJSAC2018}. In multi-antenna systems, PLS is typically achieved by secure precoding and artificial noise (AN)~\cite{Goel2008,Zhou2010}, which steer the confidential signals toward the legitimate users (LUs) and degrade the channel of the eavesdropper (Eve), respectively. However, the effectiveness of both techniques relies on the spatial separability between the LUs and Eve~\cite{Mukherjee2014}. When Eve is located in a direction close to that of an LU and the line-of-sight (LoS) propagation is dominant, their channels are highly correlated, and a conventional fixed-position antenna (FPA) array can hardly steer the information-bearing beams away from Eve without sacrificing the beamforming gain at the LU. Recently, movable antennas (MAs)~\cite{ZhuMag2024,ZhuTWC2024Model} and the closely related fluid antennas~\cite{WongTWC2021} have emerged as promising technologies to overcome this limitation, where adjusting the antenna positions within a given region reshapes the channel correlation among different receivers without additional radio-frequency (RF) chains~\cite{MaTWC2024,ZhuTWC2024MU,ZhuCL2023}. For PLS, the transmit beamforming and the antenna positions were jointly optimized in~\cite{HuSPL2024} to maximize the secrecy rate with perfect channel state information (CSI), and the case without the instantaneous CSI of the eavesdroppers was considered in~\cite{HuTMC2024}. More recently, a deterministic equivalent of the ergodic secrecy rate has been derived in~\cite{XieArxiv2026} for a multiple-input multiple-output MA system with a multi-antenna Eve and its statistical CSI, and a sensing-assisted secure design has been developed in~\cite{ChenArxiv2026}, where the antenna positions enhance both the estimation of the angles of departure (AoDs) of Eve and the secrecy rate. However, the designs in~\cite{HuSPL2024,HuTMC2024,XieArxiv2026} optimize the antenna positions based on the instantaneous CSI of the legitimate receivers. Under fast fading, such designs require the antennas to be repositioned in each channel coherence interval (CI), thereby incurring nonnegligible movement delay and energy consumption. Moreover, they require the CSI over the entire movable region, whose acquisition entails channel measurements at many antenna positions~\cite{ZhengTCOM2025,HuTVT2025}. On the other hand, the design in~\cite{ChenArxiv2026} assumes LoS channels and thus does not capture the small-scale fading.
+-
+-To reduce the movement and CSI acquisition overhead, the two-timescale design, which has been widely studied for intelligent reflecting surfaces~\cite{ZhaoTWC2021}, has been extended to MA systems~\cite{ZhengTCOM2025,HuTVT2025}, where the antenna positions are optimized based on the statistical CSI, and the beamforming is designed based on the instantaneous CSI of the resulting effective channels. Specifically, the antenna positions of a multiuser downlink were optimized in~\cite{ZhengTCOM2025} to maximize the ergodic sum rate under maximum-ratio transmission and zero-forcing (ZF) precoding, and the multiuser uplink with linear and successive interference cancellation receivers was considered in~\cite{HuTVT2025}. However, these works focus on maximizing the ergodic sum rate without considering eavesdropping. To the best of our knowledge, the two-timescale design of MA-enabled secure transmission remains unexplored. Extending the two-timescale MA design to secure transmission is nontrivial for three reasons. First, the ergodic wiretap rate of Eve depends on the random precoding directions and AN subspace induced by the instantaneous CSI of the LUs, whereas the existing ergodic-rate approximations for ZF precoding~\cite{ZhangJSTSP2014,ZhengTCOM2025,HuTVT2025} characterize only the signal power received by the intended users. Second, the antenna positions improve the ergodic rate only by decorrelating the users in the rate-oriented design, and thus bring no gain for a single user~\cite[Remark~2]{ZhengTCOM2025}, whereas their impact on the information leakage and the AN received by Eve has not been characterized. Third, the optimal power allocation between the confidential signals and the AN depends on the antenna positions, which determine the information leakage and the AN received by Eve.
+-
+-To bridge this gap, we jointly optimize the antenna positions and the long-term power allocation of an MA-enabled multiuser downlink with ZF precoding and null-space AN to maximize the ergodic secrecy sum rate (ESSR) based on the statistical CSI of the LUs and Eve. The resulting design requires neither the instantaneous CSI of Eve nor the antenna movement in each CI. First, we prove that, given the channels of the LUs, the information leakage and the AN received by Eve depend on orthogonal components of the wiretap channel and are thus conditionally independent. Based on this property, we derive a closed-form approximation of the ergodic wiretap rate. The approximation captures the LoS correlation between Eve and the LUs and is accurate over a wide range of Rician factors. Moreover, it reveals that, in contrast to the rate-oriented design, the MAs enhance secrecy by reducing the information leakage and increasing the AN received by Eve, even for a single LU. Then, we develop an alternating optimization (AO) algorithm for the resulting approximate ESSR maximization problem. For given antenna positions and AN power, the optimal power allocation among the LUs is derived in semi-closed form, and the AN power is then optimized by a one-dimensional search. The resulting allocation follows a secrecy water-filling structure and switches off the LUs whose effective channel gains do not exceed that of Eve. For a given power allocation, we update each antenna position by a global grid search followed by majorization--minimization (MM) refinement. The global search avoids the local maxima near the current position of each MA and is rendered affordable by a rank-one structure of the objective function. The resulting AO algorithm converges monotonically, and its complexity does not depend on the number of channel realizations due to the closed-form objective function. Finally, simulation results show that the proposed design outperforms the rate-oriented two-timescale MA design~\cite{ZhengTCOM2025}, antenna selection (AS) from twice as many antennas, and both compact and sparse FPA arrays, while requiring considerably less AN power. With only four MAs, it even outperforms a compact FPA array with $12$ antennas. The secrecy gain persists for a single LU, against an Eve that treats the inter-user interference as noise, under moderate errors in the AoDs of Eve, and when the AoDs of Eve are independent of those of the LUs.
+-
+-\textit{Notations:} Scalars, vectors, and matrices are denoted by italic, bold lower-case, and bold upper-case letters, respectively. $\mathbb C^{a\times b}$ and $\mathbb R^{a\times b}$ denote the sets of $a\times b$ complex and real matrices, respectively. $(\cdot)^T$, $(\cdot)^*$, and $(\cdot)^H$ denote the transpose, conjugate, and conjugate transpose, and $|\cdot|$, $\|\cdot\|$, and $\tr(\cdot)$ the modulus, Euclidean norm, and trace, respectively. $[\mathbf x]_i$ and $[\bX]_{i,j}$ denote the $i$-th entry of $\mathbf x$ and the $(i,j)$-th entry of $\bX$, $\diag(x_1,\ldots,x_M)$ the diagonal matrix with diagonal entries $x_1,\ldots,x_M$, and $\bX^{1/2}$ the entrywise square root of a nonnegative diagonal matrix $\bX$. $\bI_N$ denotes the $N\times N$ identity matrix, $\be_m$ the $m$-th column of an identity matrix, and $\CN(\boldsymbol\mu,\bSig)$ the circularly symmetric complex Gaussian distribution with mean $\boldsymbol\mu$ and covariance matrix $\bSig$. $\bX\succeq\mathbf 0$ ($\bX\succ\mathbf 0$) means that $\bX$ is positive semidefinite (definite). $j\triangleq\sqrt{-1}$, $\E\{\cdot\}$ and $\mathrm{Var}\{\cdot\}$ denote the expectation and variance, $\RE\{\cdot\}$ the real part, $\nabla_{\mathbf x}f$ the gradient of $f$ w.r.t.\ $\mathbf x$, $[x]^+\triangleq\max\{x,0\}$, $\lfloor x\rfloor$ the largest integer not exceeding $x$, $|\mathcal S|$ the cardinality of a set $\mathcal S$, and $\mathcal O(\cdot)$ and $o(\cdot)$ the big-O and little-o notations, respectively.
++\IEEEPARstart{P}{hysical} layer security exploits wireless channel randomness and spatial selectivity to protect confidential messages, complementing upper-layer cryptography~\cite{Wyner1975,Mukherjee2014,WuJSAC2018}. In multi-antenna systems, secure precoding directs confidential signals toward legitimate users (LUs), while artificial noise (AN) introduces interference at an eavesdropper (Eve)~\cite{Goel2008,Zhou2010}. Both techniques depend on spatial separation between the LUs and Eve~\cite{Mukherjee2014}. When Eve and an LU have similar departure angles and line-of-sight (LoS) propagation dominates, their channels are strongly correlated. A fixed-position antenna (FPA) array then has limited ability to suppress leakage without reducing the desired-signal gain.
++
++Movable antennas (MAs)~\cite{ZhuMag2024,ZhuTWC2024Model} and fluid antennas~\cite{WongTWC2021} adjust antenna positions within a prescribed region. This additional spatial freedom changes the channel correlations among receivers without increasing the number of radio-frequency (RF) chains~\cite{MaTWC2024,ZhuTWC2024MU,ZhuCL2023}. The secure design in~\cite{HuSPL2024} jointly optimizes transmit beamforming and antenna positions with perfect channel state information (CSI), while~\cite{HuTMC2024} considers unavailable instantaneous eavesdropper CSI. The analysis in~\cite{XieArxiv2026} derives a deterministic equivalent of the ergodic secrecy rate for a multiple-input multiple-output MA system with statistical CSI of a multi-antenna Eve. The sensing-assisted design in~\cite{ChenArxiv2026} optimizes positions to improve the estimation of Eve's angles of departure (AoDs) and the secrecy rate.
++
++The designs in~\cite{HuSPL2024,HuTMC2024,XieArxiv2026} use instantaneous legitimate-channel CSI for position optimization. Tracking these designs under fast fading requires position adaptation on the channel coherence interval (CI), with associated movement delay and energy consumption. Acquiring channel information over the movable region also requires measurements at multiple antenna positions~\cite{ZhengTCOM2025,HuTVT2025}. The LoS model in~\cite{ChenArxiv2026} does not characterize the effect of small-scale fading on long-term secrecy.
++
++Two-timescale designs reduce position-adaptation and CSI-acquisition overhead by separating slow statistical optimization from fast precoding. This approach is studied for intelligent reflecting surfaces in~\cite{ZhaoTWC2021} and for MA systems in~\cite{ZhengTCOM2025,HuTVT2025}. The antenna positions depend on statistical CSI, whereas the precoders depend on the instantaneous effective channels at those positions. The downlink design in~\cite{ZhengTCOM2025} maximizes the ergodic sum rate with maximum-ratio transmission or zero-forcing (ZF) precoding, and the uplink design in~\cite{HuTVT2025} considers linear and successive interference cancellation receivers. These rate objectives do not include information leakage to Eve.
++
++A secrecy objective introduces three coupled requirements. First, Eve's ergodic wiretap rate depends on the random ZF directions and AN subspace induced by the LU channels; intended-user rate approximations~\cite{ZhangJSTSP2014,ZhengTCOM2025,HuTVT2025} do not determine this leakage. Second, position optimization must characterize both the confidential signal and the AN received by Eve. These effects remain relevant with one LU, for which the rate-oriented position design provides no gain under the adopted channel model~\cite[Remark~2]{ZhengTCOM2025}. Third, changing the positions changes the effective LU gains, leakage gains, and AN gain at Eve, which in turn changes the allocation of power between confidential signals and AN.
++
++The remaining design task is to optimize long-term antenna positions and powers when the wiretap rate depends on the instantaneous ZF directions and AN subspace of the legitimate channels. A rate-oriented position design addresses interference among the LUs, but does not directly control leakage to Eve or its received AN power. We therefore formulate joint ergodic secrecy sum rate (ESSR) maximization with statistical CSI of the LUs and Eve, restrict the short-timescale policy to ZF precoding and isotropic null-space AN, and construct a deterministic approximate objective for the long-term variables. This restriction preserves per-realization power feasibility but does not solve the unrestricted precoding-policy problem. The principal contributions are as follows.
++\begin{enumerate}
++\item \textit{Wiretap-rate approximation and spatial mechanisms:} Under independent, spatially isotropic Gaussian non-line-of-sight (NLoS) components, we prove conditional independence between the information leakage and the AN-channel energy given the LU channels. We then approximate the random channel moments and the ergodic wiretap rate in closed form. The resulting coefficients characterize leakage along the ZF directions and AN coupling to Eve, in addition to the LU correlation that determines the ZF gain. These approximations are design surrogates rather than certified secrecy-rate bounds; their accuracy is evaluated by Monte Carlo simulation.
++\item \textit{Power-allocation decomposition:} For fixed positions and AN power, we identify the users whose legitimate effective gains exceed Eve's gains. The remaining power-allocation problem is strictly concave and admits a secrecy water-filling solution with one dual variable, obtained by bisection. We evaluate the resulting value function over finite coarse and refined AN-power grids because its unimodality is not established. This procedure provides a feasible candidate and does not certify a continuous global optimum.
++\item \textit{Feasible position updates and objective convergence:} We develop an alternating optimization (AO) algorithm. For fixed powers, a rank-one Gram-matrix representation permits efficient evaluation of each antenna's feasible grid candidates. Majorization--minimization (MM) refinement uses a quadratic lower model and an inner linear approximation of the spacing constraints, reducing the local update to projection onto a convex polygon. Retaining the current position and accepting only nondecreasing power updates yield a bounded, nondecreasing surrogate-objective sequence. The convergence statement concerns objective values; joint stationarity and global optimality are not established.
++\item \textit{Evaluation with the original channel model:} Designs computed from the approximations are evaluated using the instantaneous signal-to-interference-plus-noise ratios (SINRs) over independently generated small-scale fading realizations. In the default setting at a transmit signal-to-noise ratio (SNR) of $20$~dB, the proposed design achieves $20.75$~bps/Hz, compared with $18.08$~bps/Hz for the rate-oriented MA benchmark~\cite{ZhengTCOM2025}, a gain of $14.8\%$. Comparisons with antenna selection (AS) and fixed arrays also examine the AN fraction and antenna count, while additional tests consider single-user operation and errors in Eve's statistical CSI. All reported comparisons refer to the tested channel and resource settings.
++\end{enumerate}
++
++\textit{Notation:} Scalars, vectors, and matrices are denoted by italic, bold lowercase, and bold uppercase letters, respectively; sets are denoted by calligraphic letters. The spaces of $a\times b$ complex and real matrices are $\mathbb{C}^{a\times b}$ and $\mathbb{R}^{a\times b}$. The operators $(\cdot)^{\mathrm{T}}$, $(\cdot)^{\mathrm{*}}$, and $(\cdot)^{\mathrm{H}}$ denote transpose, conjugation, and conjugate transpose, respectively. The symbols $|\cdot|$, $\|\cdot\|$, and $\tr(\cdot)$ denote modulus, Euclidean norm, and trace. Vector and matrix entries are written as $[\mathbf{x}]_i$ and $[\bX]_{i,j}$. The diagonal entries of $\diag(x_1,\ldots,x_M)$ are $x_1,\ldots,x_M$. For a nonnegative diagonal matrix $\bX$, $\bX^{1/2}$ denotes its entrywise square root. The matrix $\bI_N$ is the $N\times N$ identity matrix, and $\be_m$ is the $m$th standard basis vector of the required dimension. The notation $\CN(\boldsymbol{\mu},\bSig)$ denotes a proper complex Gaussian distribution with mean $\boldsymbol{\mu}$, covariance $\bSig$, and zero pseudocovariance. Positive semidefiniteness and positive definiteness are written as $\bX\succeq\mathbf{0}$ and $\bX\succ\mathbf{0}$. We use $j\triangleq\sqrt{-1}$, $\E\{\cdot\}$ for expectation, $\mathrm{Var}\{\cdot\}$ for variance, $\RE\{\cdot\}$ for the real part, and $\nabla_{\mathbf{x}}f$ for the gradient with respect to $\mathbf{x}$. Finally, $[x]^+\triangleq\max\{x,0\}$, $\lfloor x\rfloor$ is the largest integer not exceeding $x$, $|\mathcal{S}|$ is the cardinality of $\mathcal{S}$, and $\mathcal{O}(\cdot)$ and $o(\cdot)$ denote big-O and little-o order, respectively.
+ 
+ % =============================================================================
+ \section{System Model and Problem Formulation}\label{sec:model}
+@@ -203,21 +216,21 @@
+ \label{fig:system}
+ \end{figure}
+ 
+-As illustrated in Fig.~\ref{fig:system}, we consider the downlink of a multiuser system, where a base station (BS) equipped with $N$ MAs serves $M$ single-antenna LUs in the presence of a single-antenna passive Eve. Let $\mathcal M\triangleq\{1,\ldots,M\}$ and $\mathcal N\triangleq\{1,\ldots,N\}$ denote the index sets of the LUs and the MAs, respectively, where $N\ge M+1$ is required to transmit AN in the null space of the channels of the LUs. The MAs are connected to the RF chains via flexible cables and can move within a two-dimensional square region $\mathcal C\triangleq[-A/2,A/2]\times[-A/2,A/2]$ of side length $A$~\cite{ZhuMag2024,ZhuTWC2024Model}. In the local Cartesian coordinate system of $\mathcal C$, the position of the $n$-th MA is denoted by $\bt_n\triangleq[x_n,y_n]^T\in\mathcal C$, and the positions of all the MAs are collected in $\bt\triangleq[\bt_1^T,\ldots,\bt_N^T]^T\in\mathbb R^{2N\times1}$. To avoid mutual coupling, the distance between any two MAs must be no smaller than a minimum distance $\Dmin$.
+-
+-Since the size of $\mathcal C$ is much smaller than the propagation distance, moving the MAs changes only the phases of the LoS paths, whereas their AoDs and amplitudes remain unchanged~\cite{ZhuTWC2024Model}. Let $\theta_m\in[-\pi/2,\pi/2]$ and $\phi_m\in[-\pi/2,\pi/2]$ denote the elevation and azimuth AoDs of the LoS path from the BS to the $m$-th LU, respectively, and define $\ba_m\triangleq[\cos\theta_m\sin\phi_m,\ \sin\theta_m]^T$. Then, the propagation distance of the LoS path from the $n$-th MA differs from that from the origin of $\mathcal C$ by $\bt_n^T\ba_m$, and the LoS component of the channel from the BS to the $m$-th LU is given by~\cite{ZhengTCOM2025}
++As illustrated in Fig.~\ref{fig:system}, we consider a multiuser downlink in which a base station (BS) with $N$ MAs serves $M$ single-antenna LUs in the presence of a passive single-antenna Eve. The LU and MA index sets are $\mathcal M\triangleq\{1,\ldots,M\}$ and $\mathcal N\triangleq\{1,\ldots,N\}$. We require $N\ge M+1$ so that the LU-channel null space contains at least one AN dimension. The MAs connect to RF chains through flexible cables and move in $\mathcal C\triangleq[-A/2,A/2]\times[-A/2,A/2]$ with side length $A$~\cite{ZhuMag2024,ZhuTWC2024Model}. MA $n$ has position $\bt_n\triangleq[x_n,y_n]^{\mathrm{T}}\in\mathcal C$, and the stacked position vector is $\bt\triangleq[\bt_1^{\mathrm{T}},\ldots,\bt_N^{\mathrm{T}}]^{\mathrm{T}}\in\mathbb R^{2N\times1}$. Pairwise spacing is constrained to be at least $\Dmin$ to mitigate mutual coupling; residual coupling is neglected in the adopted channel model.
++
++Since the size of $\mathcal C$ is much smaller than the propagation distance, moving the MAs changes only the phases of the LoS paths, whereas their AoDs and amplitudes remain unchanged~\cite{ZhuTWC2024Model}. Let $\theta_m\in[-\pi/2,\pi/2]$ and $\phi_m\in[-\pi/2,\pi/2]$ denote the elevation and azimuth AoDs of the LoS path from the BS to the $m$-th LU, respectively, and define $\ba_m\triangleq[\cos\theta_m\sin\phi_m,\ \sin\theta_m]^{\mathrm{T}}$. Then, the propagation distance of the LoS path from the $n$-th MA differs from that from the origin of $\mathcal C$ by $\bt_n^{\mathrm{T}}\ba_m$, and the LoS component of the channel from the BS to the $m$-th LU is given by~\cite{ZhengTCOM2025}
+ \begin{equation}\label{eq:hbar}
+-\hb_m(\bt)\triangleq\Big[e^{j\frac{2\pi}{\lambda}\bt_1^T\ba_m},\ldots,e^{j\frac{2\pi}{\lambda}\bt_N^T\ba_m}\Big]^T\in\mathbb C^{N\times1},
+-\end{equation}
+-where $\lambda$ is the carrier wavelength. As in~\cite{ZhengTCOM2025,HuTVT2025}, the channel from the BS to the $m$-th LU is modeled by Rician fading, i.e.,
++\hb_m(\bt)\triangleq\Big[e^{j\frac{2\pi}{\lambda}\bt_1^{\mathrm{T}}\ba_m},\ldots,e^{j\frac{2\pi}{\lambda}\bt_N^{\mathrm{T}}\ba_m}\Big]^{\mathrm{T}}\in\mathbb C^{N\times1},
++\end{equation}
++where $\lambda$ is the carrier wavelength. Following~\cite{ZhengTCOM2025,HuTVT2025}, we adopt the Rician channel model
+ \begin{equation}\label{eq:hm}
+ \bh_m(\bt)=\sqrt{\frac{\kappa_m\beta_m}{\kappa_m+1}}\,\hb_m(\bt)+\sqrt{\frac{\beta_m}{\kappa_m+1}}\,\htl_m,
+ \end{equation}
+-where $\beta_m$ is the large-scale fading coefficient, $\kappa_m\ge0$ is the Rician factor, and $\htl_m\sim\CN(\mathbf 0,\bI_N)$ is the non-LoS (NLoS) component.\footnote{The NLoS components at different antennas are assumed to be independent and identically distributed (i.i.d.)~\cite{ZhengTCOM2025,HuTVT2025}. This assumption is a reasonable approximation in rich-scattering environments with $\Dmin\ge\lambda/2$.} Similarly, the channel from the BS to Eve is given by
++where $\beta_m>0$ is the large-scale fading coefficient, $0\le\kappa_m<\infty$ is the Rician factor, and $\htl_m\sim\CN(\mathbf 0,\bI_N)$ is the NLoS component.\footnote{For each fixed feasible antenna configuration, the NLoS components at distinct antennas are assumed to be independent and identically distributed (i.i.d.)~\cite{ZhengTCOM2025,HuTVT2025}. This is an idealized rich-scattering model with $\Dmin\ge\lambda/2$; the spacing condition alone does not imply spatial independence. The model specifies the channel distribution at a fixed configuration and does not model the transient channel during antenna movement.} The NLoS components are redrawn independently across CIs. Similarly, the channel from the BS to Eve is given by
+ \begin{equation}\label{eq:g}
+-\bg(\bt)=\sqrt{\frac{\kappa_e\beta_e}{\kappa_e+1}}\,\gb(\bt)+\sqrt{\frac{\beta_e}{\kappa_e+1}}\,\gtl,
+-\end{equation}
+-where $\beta_e$, $\kappa_e$, and $\gtl\sim\CN(\mathbf 0,\bI_N)$ are defined similarly to those in~\eqref{eq:hm}, and $\gb(\bt)$ is given by~\eqref{eq:hbar} with $\ba_m$ replaced by $\ba_e\triangleq[\cos\theta_e\sin\phi_e,\ \sin\theta_e]^T$ for the elevation and azimuth AoDs $\theta_e$ and $\phi_e$ of Eve. The NLoS components $\htl_1,\ldots,\htl_M$ and $\gtl$ are mutually independent. Let $\bH(\bt)\triangleq[\bh_1(\bt),\ldots,\bh_M(\bt)]\in\mathbb C^{N\times M}$ denote the channel matrix from the BS to the LUs, and let $\Hb(\bt)\triangleq[\hb_1(\bt),\ldots,\hb_M(\bt)]$ and $\Htl\triangleq[\htl_1,\ldots,\htl_M]$ collect its LoS and NLoS components, respectively. Moreover, $\bK\triangleq\diag(\kappa_1,\ldots,\kappa_M)$ collects the Rician factors of the LUs.
++\bg(\bt)=\sqrt{\frac{\kappa_{\mathrm{e}}\beta_{\mathrm{e}}}{\kappa_{\mathrm{e}}+1}}\,\gb(\bt)+\sqrt{\frac{\beta_{\mathrm{e}}}{\kappa_{\mathrm{e}}+1}}\,\gtl,
++\end{equation}
++where $\beta_{\mathrm{e}}$, $\kappa_{\mathrm{e}}$, and $\gtl\sim\CN(\mathbf 0,\bI_N)$ are defined similarly to those in~\eqref{eq:hm}, and $\gb(\bt)$ is given by~\eqref{eq:hbar} with $\ba_m$ replaced by $\ba_{\mathrm{e}}\triangleq[\cos\theta_{\mathrm{e}}\sin\phi_{\mathrm{e}},\ \sin\theta_{\mathrm{e}}]^{\mathrm{T}}$ for the elevation and azimuth AoDs $\theta_{\mathrm{e}}$ and $\phi_{\mathrm{e}}$ of Eve. The NLoS components $\htl_1,\ldots,\htl_M$ and $\gtl$ are mutually independent. Let $\bH(\bt)\triangleq[\bh_1(\bt),\ldots,\bh_M(\bt)]\in\mathbb C^{N\times M}$ denote the channel matrix from the BS to the LUs, and let $\Hb(\bt)\triangleq[\hb_1(\bt),\ldots,\hb_M(\bt)]$ and $\Htl\triangleq[\htl_1,\ldots,\htl_M]$ collect its LoS and NLoS components, respectively. Moreover, $\bK\triangleq\diag(\kappa_1,\ldots,\kappa_M)$ collects the Rician factors of the LUs.
+ 
+ \subsection{Two-Timescale Transmission Protocol}
+ 
+@@ -244,13 +257,13 @@
+   \draw[decorate, decoration={brace, mirror, amplitude=4pt}, line width=0.5pt] (0.6,-0.1) -- (6.6,-0.1)
+      node[midway, below=4pt] {One CI (small timescale)};
+ \end{tikzpicture}
+-\caption{Two-timescale transmission protocol (CI: coherence interval).}
++\caption{Two-timescale transmission protocol.}
+ \label{fig:protocol}
+ \end{figure}
+ 
+-Unlike the instantaneous CSI over the entire region $\mathcal C$, the statistical CSI, i.e., $\{\beta_m,\kappa_m,\theta_m,\phi_m\}_{m\in\mathcal M}$ of the LUs and $\{\beta_e,\kappa_e,\theta_e,\phi_e\}$ of Eve, is determined by the large-scale fading and the LoS geometry, which vary much more slowly than the small-scale fading. Following~\cite{HuTMC2024,ChenArxiv2026}, we assume that the statistical CSI of Eve is known at the BS.\footnote{The statistical CSI of Eve can be obtained, e.g., from the prior knowledge of the location of Eve, by sensing its direction~\cite{ChenArxiv2026}, or from its historical signals if it is an untrusted node.}
+-
+-Accordingly, we adopt the two-timescale protocol in Fig.~\ref{fig:protocol}. The time is divided into frames, each of which consists of $N_{\mathrm{CI}}\gg1$ CIs over which the statistical CSI remains constant. At the beginning of each frame, the BS optimizes the antenna positions $\bt$ and the long-term power allocation $(\bp,q)$ (see Section~\ref{sec:zfan}) based on the statistical CSI and moves the MAs accordingly. Then, in each CI, the BS estimates $\bH(\bt)$ via uplink pilots by exploiting the channel reciprocity of time-division duplexing, and designs the precoding and AN. For ease of exposition, $\bH(\bt)$ is assumed to be perfectly estimated, whereas $\gtl$ is never available at the BS. Hence, the MAs are moved only once per frame, and the CSI of the LUs is required only at the current antenna positions.
++Unlike the instantaneous CSI over the entire region $\mathcal C$, the statistical CSI, i.e., $\{\beta_m,\kappa_m,\theta_m,\phi_m\}_{m\in\mathcal M}$ of the LUs and $\{\beta_{\mathrm{e}},\kappa_{\mathrm{e}},\theta_{\mathrm{e}},\phi_{\mathrm{e}}\}$ of Eve, is determined by the large-scale fading and the LoS geometry, which vary much more slowly than the small-scale fading. Following~\cite{HuTMC2024,ChenArxiv2026}, we assume that the statistical CSI of Eve is known at the BS.\footnote{The statistical CSI of Eve can be obtained, e.g., from the prior knowledge of the location of Eve, by sensing its direction~\cite{ChenArxiv2026}, or from its historical signals if it is an untrusted node.}
++
++Accordingly, we adopt the two-timescale protocol in Fig.~\ref{fig:protocol}. Each frame contains $N_{\mathrm{CI}}\gg1$ CIs with fixed statistical CSI. At the beginning of the frame, the BS optimizes the antenna positions $\bt$ and the long-term power allocation $(\bp,q)$ (see Section~\ref{sec:zfan}) and moves the MAs to the selected positions. In each CI, uplink pilots and time-division-duplex channel reciprocity provide $\bH(\bt)$ at the selected positions, from which the BS constructs the precoders and AN covariance. The LU CSI is assumed perfect, whereas $\gtl$ is unavailable at the BS. The rate objective measures spectral efficiency during data transmission and excludes the movement delay, movement energy, and pilot overhead. The position constraints describe feasible stationary configurations; antenna trajectories and collision avoidance during repositioning are outside the model. The MAs are repositioned once per frame, and instantaneous LU CSI is required only at the selected configuration.
+ 
+ \subsection{Signal Model and Ergodic Secrecy Rate}
+ 
+@@ -260,25 +273,32 @@
+ \end{equation}
+ where $\bw_m\in\mathbb C^{N\times1}$ is the precoding vector for the $m$-th LU, and $\bz\sim\CN(\mathbf 0,\bSig)$ is the AN with covariance matrix $\bSig\succeq\mathbf 0$. The symbols $s_1,\ldots,s_M$ and the AN $\bz$ are mutually independent. The transmit power satisfies $\sum_{m=1}^M\|\bw_m\|^2+\tr(\bSig)\le\Ptot$, where $\Ptot$ is the maximum transmit power of the BS. Under the two-timescale protocol, $\bw_m$ and $\bSig$ depend on the instantaneous CSI of the LUs and are thus denoted by $\bw_m(\bH(\bt))$ and $\bSig(\bH(\bt))$.
+ 
+-The signal received at the $m$-th LU is $y_m=\bh_m^H(\bt)\bx+n_m$, where $n_m\sim\CN(0,\sigma_m^2)$ is the additive white Gaussian noise. The resulting signal-to-interference-plus-noise ratio (SINR) of the $m$-th LU is
+-\begin{equation}\label{eq:sinr_gen}
+-\gamma_m=\frac{|\bh_m^H(\bt)\bw_m|^2}{\sum_{i=1,i\neq m}^{M}|\bh_m^H(\bt)\bw_i|^2+\bh_m^H(\bt)\bSig\bh_m(\bt)+\sigma_m^2}.
+-\end{equation}
+-The signal received at Eve is $y_e=\bg^H(\bt)\bx+n_e$ with $n_e\sim\CN(0,\sigma_e^2)$. Since the receiver of a passive Eve is unknown to the BS, we consider the worst case where Eve can cancel the signals of the other LUs when intercepting $s_m$, e.g., via multiuser detection~\cite{ZhuTWC2014}. This worst-case model yields a secrecy guarantee regardless of the decoding capability of Eve. The SINR of Eve for $s_m$ is then
++The signal received at the $m$-th LU is $y_m=\bh_m^{\mathrm{H}}(\bt)\bx+n_m$, where $n_m\sim\CN(0,\sigma_m^2)$ is the additive white Gaussian noise. The resulting SINR of the $m$-th LU is
++\begin{align}
++I_m&\triangleq\sum_{\substack{i=1\\ i\neq m}}^{M}
++ |\bh_m^{\mathrm{H}}(\bt)\bw_i|^2
++ +\bh_m^{\mathrm{H}}(\bt)\bSig\bh_m(\bt),\nonumber\\
++\gamma_m&=\frac{|\bh_m^{\mathrm{H}}(\bt)\bw_m|^2}{I_m+\sigma_m^2}.
++\label{eq:sinr_gen}
++\end{align}
++The signal received at Eve is $y_{\mathrm{e}}=\bg^{\mathrm{H}}(\bt)\bx+n_{\mathrm{e}}$ with $n_{\mathrm{e}}\sim\CN(0,\sigma_{\mathrm{e}}^2)$. Since the receiver of a passive Eve is unknown to the BS, we consider the worst case where Eve can cancel the signals of the other LUs when intercepting $s_m$, e.g., via multiuser detection~\cite{ZhuTWC2014}. This worst-case model yields a secrecy guarantee regardless of the decoding capability of Eve. The SINR of Eve for $s_m$ is then
+ \begin{equation}\label{eq:sinre_gen}
+-\gamma_{e,m}=\frac{|\bg^H(\bt)\bw_m|^2}{\bg^H(\bt)\bSig\bg(\bt)+\sigma_e^2},
++\gamma_{\mathrm{e},m}=\frac{|\bg^{\mathrm{H}}(\bt)\bw_m|^2}{\bg^{\mathrm{H}}(\bt)\bSig\bg(\bt)+\sigma_{\mathrm{e}}^2},
+ \end{equation}
+ which upper-bounds that of an Eve treating the signals of the other LUs as interference.
+ 
+-Since the instantaneous CSI of Eve is unknown, the confidential message of each LU is encoded over the CIs of a frame, which experience independent realizations of the NLoS components. With this coding, the following ergodic secrecy rate is achievable for the $m$-th LU~\cite{Gopala2008,ZhuTWC2014}:
++Since the instantaneous CSI of Eve is unknown, the confidential message of each LU is encoded across independently faded CIs with fixed statistical CSI and fixed long-term variables. We use the asymptotic stationary-ergodic coding model in~\cite{Gopala2008,ZhuTWC2014}, under which the following ergodic secrecy rate is achievable for the $m$-th LU:
+ \begin{equation}\label{eq:esr}
+-R_m^{\mathrm{sec}}\triangleq\big[\bar R_m-\bar R_{e,m}\big]^+,
+-\end{equation}
+-where
++R_m^{\mathrm{sec}}\triangleq\big[\bar R_m-\bar R_{\mathrm{e},m}\big]^+,
++\end{equation}
++where $\bar R_m$ is the ergodic rate of LU $m$ and $\bar R_{\mathrm{e},m}$ is the ergodic wiretap rate for $s_m$, defined as
+ \begin{equation}\label{eq:ergodic}
+-\bar R_m\triangleq\E\{\log_2(1+\gamma_m)\},\quad \bar R_{e,m}\triangleq\E\{\log_2(1+\gamma_{e,m})\}
+-\end{equation}
+-denote the ergodic rate of the $m$-th LU and the ergodic wiretap rate of Eve for $s_m$, respectively, with the expectations taken over $\Htl$ and $\gtl$ for a given $\bt$. The ESSR is then $\sum_{m=1}^MR_m^{\mathrm{sec}}$.
++\begin{aligned}
++\bar R_m&\triangleq\E\{\log_2(1+\gamma_m)\},\\
++\bar R_{\mathrm{e},m}&\triangleq\E\{\log_2(1+\gamma_{\mathrm{e},m})\}.
++\end{aligned}
++\end{equation}
++Both expectations are taken over $\Htl$ and $\gtl$ for fixed $\bt$. The ESSR is $\sum_{m=1}^{M}R_m^{\mathrm{sec}}$.
+ 
+ \subsection{Problem Formulation}
+ 
+@@ -302,22 +322,35 @@
+ 
+ \subsection{Short-Timescale ZF Precoding and Null-Space AN}\label{sec:zfan}
+ 
+-To avoid designing $\mathcal W$ for every realization of $\bH(\bt)$, we restrict the short-timescale policy to ZF precoding and null-space AN with a long-term power allocation. Specifically, in each CI, the precoder of the $m$-th LU is $\bw_m(\bH(\bt))=\sqrt{p_m}\,\wb_m$, where $p_m\ge0$ denotes the power allocated to the $m$-th LU, and
++We restrict the short-timescale policy to ZF precoding and null-space AN with a long-term power allocation. In each CI, the precoder for LU $m$ is $\bw_m(\bH(\bt))=\sqrt{p_m}\,\wb_m$, where $p_m\ge0$ is its allocated power. Define the unnormalized and unit-norm ZF directions as
+ \begin{equation}\label{eq:zf}
+-\wb_m\triangleq\frac{\bH(\bt)\big(\bH^H(\bt)\bH(\bt)\big)^{-1}\be_m}{\big\|\bH(\bt)\big(\bH^H(\bt)\bH(\bt)\big)^{-1}\be_m\big\|}
+-\end{equation}
+-is the normalized ZF precoding vector of the $m$-th LU, which satisfies $\bh_i^H(\bt)\wb_m=0$, $\forall i\neq m$. Meanwhile, the AN is isotropically distributed in the null space of $\bH^H(\bt)$~\cite{Zhou2010,ZhuTWC2014}, i.e., $\bSig(\bH(\bt))=q\,\PHp$, where $q\ge0$ denotes the AN power per dimension, and
++\begin{aligned}
++\bw_m^\circ&\triangleq\bH(\bt)
++ \big(\bH^{\mathrm{H}}(\bt)\bH(\bt)\big)^{-1}\be_m,\\
++\wb_m&\triangleq\frac{\bw_m^\circ}{\|\bw_m^\circ\|}.
++\end{aligned}
++\end{equation}
++The direction satisfies $\bh_i^{\mathrm{H}}(\bt)\wb_m=0$ for $i\neq m$. The AN covariance is $\bSig(\bH(\bt))=q\,\PHp$, with $q\ge0$ denoting the AN power per null-space dimension~\cite{Zhou2010,ZhuTWC2014}. The projector onto the null space of $\bH^{\mathrm{H}}(\bt)$ is
+ \begin{equation}\label{eq:an}
+-\PHp\triangleq\bI_N-\bH(\bt)\big(\bH^H(\bt)\bH(\bt)\big)^{-1}\bH^H(\bt)
+-\end{equation}
+-is the orthogonal projection onto the null space of $\bH^H(\bt)$. Since $\bH(\bt)$ has full column rank with probability one, we have $\bH^H(\bt)\PHp=\mathbf 0$ and $\tr(\PHp)=N-M$. Hence, the AN causes no interference to the LUs, and the transmit power in each CI is $\sum_{m=1}^M p_m+(N-M)q$.
+-
+-We refer to $\bp\triangleq[p_1,\ldots,p_M]^T$ and $q$ as the long-term power allocation, which is optimized based on the statistical CSI and remains fixed within a frame. In contrast, $\wb_m$ and $\PHp$ are updated in each CI according to $\bH(\bt)$. With this design, the SINRs in~\eqref{eq:sinr_gen} and~\eqref{eq:sinre_gen} reduce to
+-\begin{align}
+-\gamma_m&=\frac{p_m|\bh_m^H(\bt)\wb_m|^2}{\sigma_m^2}=\frac{p_m}{\sigma_m^2\big[(\bH^H(\bt)\bH(\bt))^{-1}\big]_{m,m}},\label{eq:snr}\\
+-\gamma_{e,m}&=\frac{p_m|\bg^H(\bt)\wb_m|^2}{q\,\bg^H(\bt)\PHp\bg(\bt)+\sigma_e^2},\label{eq:sinre}
+-\end{align}
+-where the second equality in~\eqref{eq:snr} follows from $|\bh_m^H(\bt)\wb_m|^2=1/[(\bH^H(\bt)\bH(\bt))^{-1}]_{m,m}$ by~\eqref{eq:zf}.
++\PHp=\bI_N-\bH(\bt)
++ \big(\bH^{\mathrm{H}}(\bt)\bH(\bt)\big)^{-1}\bH^{\mathrm{H}}(\bt).
++\end{equation}
++For finite Rician factors, positive large-scale gains, and $N>M$, the independent Gaussian NLoS components imply that $\bH(\bt)$ has full column rank almost surely. Therefore, $\bH^{\mathrm{H}}(\bt)\PHp=\mathbf 0$ and $\tr(\PHp)=N-M$ almost surely. The AN causes no interference to the LUs, and the transmit power in each CI is $\sum_{m=1}^M p_m+(N-M)q$. On a rank-deficient channel realization, which has probability zero under this model, define the policy by $\bw_m=\mathbf 0$ for all $m$ and $\bSig=\mathbf 0$. This extension satisfies the every-realization power constraint in (P1) and does not change any ergodic rate. We assume $\beta_{\mathrm{e}}>0$, $0\le\kappa_{\mathrm{e}}<\infty$, $\sigma_m^2>0$, and $\sigma_{\mathrm{e}}^2>0$ throughout the finite-parameter analysis; infinite Rician factors are considered only as limits.
++
++In numerical evaluation, a nonfinite or unsafe Gram-matrix pivot, or an estimated reciprocal infinity-norm condition number no larger than $10^{-12}$, triggers an explicit experiment failure. No channel realization is discarded or redrawn; this numerical threshold is distinct from the probability-zero rank-deficient set.
++
++We refer to $\bp\triangleq[p_1,\ldots,p_M]^{\mathrm{T}}$ and $q$ as the long-term power allocation, which is optimized based on the statistical CSI and remains fixed within a frame. In contrast, $\wb_m$ and $\PHp$ are updated in each CI according to $\bH(\bt)$. With this design, the SINRs in~\eqref{eq:sinr_gen} and~\eqref{eq:sinre_gen} reduce to
++\begin{align}
++\gamma_m&=\frac{p_m|\bh_m^{\mathrm{H}}(\bt)\wb_m|^2}{\sigma_m^2}
++\nonumber\\
++&=\frac{p_m}{\sigma_m^2
++ \big[(\bH^{\mathrm{H}}(\bt)\bH(\bt))^{-1}\big]_{m,m}},
++\label{eq:snr}\\
++\gamma_{\mathrm{e},m}&=\frac{p_m|\bg^{\mathrm{H}}(\bt)\wb_m|^2}
++ {q\,\bg^{\mathrm{H}}(\bt)\PHp\bg(\bt)+\sigma_{\mathrm{e}}^2},
++\label{eq:sinre}
++\end{align}
++where the second equality in~\eqref{eq:snr} follows from $|\bh_m^{\mathrm{H}}(\bt)\wb_m|^2=1/[(\bH^{\mathrm{H}}(\bt)\bH(\bt))^{-1}]_{m,m}$ by~\eqref{eq:zf}.
+ 
+ The adopted ZF-AN design requires only the instantaneous CSI of the LUs, and no optimization problem needs to be solved in each CI, since $\bp$ and $q$ depend only on the statistical CSI. Moreover, the equal power allocation in~\cite{ZhengTCOM2025} and the information--AN power splitting with equal power per LU are special cases of $(\bp,q)$. With the ZF-AN design, (P1) is restricted to
+ \begin{subequations}\label{eq:P2}
+@@ -339,9 +372,12 @@
+ \end{equation}
+ where $\bL(\bt)+\Htl$ is the normalized channel matrix, whose LoS component is weighted by the square roots of the Rician factors. Accordingly, we define
+ \begin{equation}\label{eq:Phi}
+-\bPhi(\bt)\triangleq\bL^H(\bt)\bL(\bt)+N\bI_M,\qquad \bOm(\bt)\triangleq\bPhi^{-1}(\bt),
+-\end{equation}
+-where $\bPhi(\bt)=\E\{(\bL(\bt)+\Htl)^H(\bL(\bt)+\Htl)\}$ is the correlation matrix of the normalized channels of the LUs. The ergodic rate of the LUs under ZF precoding has been characterized in~\cite{ZhangJSTSP2014,ZhengTCOM2025}, and the result is restated below for completeness.
++\begin{aligned}
++\bPhi(\bt)&\triangleq\bL^{\mathrm{H}}(\bt)\bL(\bt)+N\bI_M,\\
++\bOm(\bt)&\triangleq\bPhi^{-1}(\bt),
++\end{aligned}
++\end{equation}
++where $\bPhi(\bt)=\E\{(\bL(\bt)+\Htl)^{\mathrm{H}}(\bL(\bt)+\Htl)\}$ is the correlation matrix of the normalized channels of the LUs. The ergodic rate of the LUs under ZF precoding has been characterized in~\cite{ZhangJSTSP2014,ZhengTCOM2025}, and the result is restated below for completeness.
+ 
+ \begin{lemma}[{\cite{ZhangJSTSP2014,ZhengTCOM2025}}]\label{lem:lu}
+ For given $\bt$ and $p_m$, the ergodic rate of the $m$-th LU is approximated by
+@@ -351,81 +387,125 @@
+ where $\eta_m(\bt)\triangleq\zeta_m(N-M)/(N\omega_m(\bt))$ is the effective channel gain of the $m$-th LU, $\zeta_m\triangleq\beta_m/((\kappa_m+1)\sigma_m^2)$, and $\omega_m(\bt)\triangleq[\bOm(\bt)]_{m,m}$.
+ \end{lemma}
+ 
+-Lemma~\ref{lem:lu} follows from Jensen's inequality and a central Wishart approximation of $(\bL(\bt)+\Htl)^H(\bL(\bt)+\Htl)$ with the same mean $\bPhi(\bt)$~\cite{ZhangJSTSP2014}. This approximation is equivalent to that in~\cite[Sec.~IV-A]{ZhengTCOM2025}, reduces to the well-known lower bound $\log_2(1+\zeta_mp_m(N-M))$ for Rayleigh fading~\cite{Ngo2013}, and is conservative in the LoS-dominant regime (see Section~\ref{sec:sim_acc}). Moreover, the antenna positions affect $\tilde R_m(\bt,p_m)$ only through $\omega_m(\bt)$. Since $\bPhi(\bt)\succeq N\bI_M$ and $[\bOm(\bt)]_{m,m}\ge1/[\bPhi(\bt)]_{m,m}=1/(N(\kappa_m+1))$~\cite{Horn2013}, we have
++To distinguish the exact inequality from the subsequent moment approximation, let $Z_m\triangleq[(\bH^{\mathrm{H}}(\bt)\bH(\bt))^{-1}]_{m,m}$. Since $\log_2(1+p_m/(\sigma_m^2 z))$ is convex for $z>0$, Jensen's inequality gives
++\begin{equation}\label{eq:lu_jensen_exact}
++\bar R_m\ge
++\log_2\!\left(1+\frac{p_m}{\sigma_m^2\E\{Z_m\}}\right).
++\end{equation}
++The central Wishart approximation in~\cite{ZhangJSTSP2014} replaces the noncentral Gram matrix of $\bL(\bt)+\Htl$ by a central Wishart matrix with $N$ degrees of freedom and covariance $\bPhi(\bt)/N$. Its inverse moment gives $\E\{Z_m\}\approx N\omega_m(\bt)/((N-M)[\bB]_{m,m})$, which yields~\eqref{eq:Rm} and is equivalent to~\cite[Sec.~IV-A]{ZhengTCOM2025}. The inverse-moment substitution is an approximation, so~\eqref{eq:Rm} is not asserted to be a lower bound for an arbitrary noncentral channel. For Rayleigh fading, the inverse moment is exact and~\eqref{eq:Rm} reduces to the lower bound $\log_2(1+\zeta_mp_m(N-M))$~\cite{Ngo2013}. Its behavior in the LoS-dominant regime is evaluated in Section~\ref{sec:sim_acc}. The antenna positions affect $\tilde R_m(\bt,p_m)$ only through $\omega_m(\bt)$. Since $\bPhi(\bt)\succeq N\bI_M$ and $[\bOm(\bt)]_{m,m}\ge1/[\bPhi(\bt)]_{m,m}=1/(N(\kappa_m+1))$~\cite{Horn2013}, we have
+ \begin{equation}\label{eq:etabound}
+ \zeta_m(N-M)\le\eta_m(\bt)\le\zeta_m(N-M)(\kappa_m+1),
+ \end{equation}
+-where the upper bound is achieved if $\hb_m^H(\bt)\hb_i(\bt)=0$ for all $i\neq m$ with $\kappa_i>0$. Hence, $1/(N\omega_m(\bt))\in[1,\kappa_m+1]$ is the LoS gain of the $m$-th LU that survives the ZF precoding. The antenna positions can improve this gain by decorrelating the LoS components of the LUs.
++where the upper bound is achieved if $\hb_m^{\mathrm{H}}(\bt)\hb_i(\bt)=0$ for all $i\neq m$ with $\kappa_i>0$. Hence, $1/(N\omega_m(\bt))\in[1,\kappa_m+1]$ is the LoS gain of the $m$-th LU that survives the ZF precoding. The antenna positions can improve this gain by decorrelating the LoS components of the LUs.
+ 
+ \subsection{Ergodic Wiretap Rate of Eve}\label{sec:eve}
+ 
+-Unlike $\gamma_m$ in~\eqref{eq:snr}, which depends on $\bH(\bt)$ only through $[(\bH^H(\bt)\bH(\bt))^{-1}]_{m,m}$, the SINR of Eve in~\eqref{eq:sinre} depends on the random ZF direction $\wb_m$ and AN subspace, both determined by $\bH(\bt)$. This dependence is the main difficulty in deriving $\bar R_{e,m}$. To address this issue, we first characterize the information leakage and the AN received by Eve given $\bH(\bt)$.
++Unlike $\gamma_m$ in~\eqref{eq:snr}, which depends on $\bH(\bt)$ only through $[(\bH^{\mathrm{H}}(\bt)\bH(\bt))^{-1}]_{m,m}$, the SINR of Eve in~\eqref{eq:sinre} depends on the random ZF direction $\wb_m$ and AN subspace, both determined by $\bH(\bt)$. This dependence is the main difficulty in deriving $\bar R_{\mathrm{e},m}$. To address this issue, we first characterize the information leakage and the AN received by Eve given $\bH(\bt)$.
+ 
+ \begin{lemma}\label{lem:indep}
+-Conditioned on $\bH(\bt)$, the information leakage $X_m\triangleq|\bg^H(\bt)\wb_m|^2$ and the AN power $Y\triangleq\bg^H(\bt)\PHp\bg(\bt)$ received by Eve are independent, and their conditional means and variances are given by
+-\begin{align}
+-\E\{X_m|\bH(\bt)\}&=\tilde\beta_e\big(\kappa_e\bar X_m+1\big),\nonumber\\
+-\mathrm{Var}\{X_m|\bH(\bt)\}&=\tilde\beta_e^2\big(2\kappa_e\bar X_m+1\big),\label{eq:EX}\\
+-\E\{Y|\bH(\bt)\}&=\tilde\beta_e\big(\kappa_e\bar Y+N-M\big),\nonumber\\
+-\mathrm{Var}\{Y|\bH(\bt)\}&=\tilde\beta_e^2\big(2\kappa_e\bar Y+N-M\big),\label{eq:EY}
+-\end{align}
+-where $\tilde\beta_e\triangleq\beta_e/(\kappa_e+1)$, and $\bar X_m\triangleq|\gb^H(\bt)\wb_m|^2$ and $\bar Y\triangleq\gb^H(\bt)\PHp\gb(\bt)$ are the LoS counterparts of $X_m$ and $Y$.
++Conditioned on $\bH(\bt)$, the information leakage $X_m\triangleq|\bg^{\mathrm{H}}(\bt)\wb_m|^2$ and the AN power $Y\triangleq\bg^{\mathrm{H}}(\bt)\PHp\bg(\bt)$ received by Eve are independent, and their conditional means and variances are given by
++\begin{align}
++\E\{X_m|\bH(\bt)\}&=\tilde\beta_{\mathrm{e}}\big(\kappa_{\mathrm{e}}\bar X_m+1\big),\nonumber\\
++\mathrm{Var}\{X_m|\bH(\bt)\}&=\tilde\beta_{\mathrm{e}}^2\big(2\kappa_{\mathrm{e}}\bar X_m+1\big),\label{eq:EX}\\
++\E\{Y|\bH(\bt)\}&=\tilde\beta_{\mathrm{e}}\big(\kappa_{\mathrm{e}}\bar Y+N-M\big),\nonumber\\
++\mathrm{Var}\{Y|\bH(\bt)\}&=\tilde\beta_{\mathrm{e}}^2\big(2\kappa_{\mathrm{e}}\bar Y+N-M\big),\label{eq:EY}
++\end{align}
++where $\tilde\beta_{\mathrm{e}}\triangleq\beta_{\mathrm{e}}/(\kappa_{\mathrm{e}}+1)$, and $\bar X_m\triangleq|\gb^{\mathrm{H}}(\bt)\wb_m|^2$ and $\bar Y\triangleq\gb^{\mathrm{H}}(\bt)\PHp\gb(\bt)$ are the LoS counterparts of $X_m$ and $Y$.
+ \end{lemma}
+ \begin{IEEEproof}
+ See Appendix~\ref{app:indep}.
+ \end{IEEEproof}
+ 
+-Lemma~\ref{lem:indep} reveals that, given the channels of the LUs, the information leakage is determined only by the component of the wiretap channel along the ZF direction, whereas the AN received by Eve is determined only by its component in the null space of $\bH^H(\bt)$. Moreover, the conditional relative variances of $X_m$ and $Y$ are $(2\kappa_e\bar X_m+1)/(\kappa_e\bar X_m+1)^2$ and $(2\kappa_e\bar Y+N-M)/(\kappa_e\bar Y+N-M)^2$, respectively. Hence, $X_m$ concentrates when the LoS leakage $\kappa_e\bar X_m$ is strong, i.e., in the case that dominates the ergodic wiretap rate, and $Y$ concentrates when $N-M$ or $\kappa_e\bar Y$ is large. This concentration property motivates approximating $\bar R_{e,m}=\E\{\log_2(1+p_mX_m/(qY+\sigma_e^2))\}$ by $\log_2(1+p_m\E\{X_m\}/(q\E\{Y\}+\sigma_e^2))$ as in~\cite[Lemma~1]{ZhangJSTSP2014}, which is accurate when $X_m$ and $Y$ concentrate around their means and is asymptotically exact as $\kappa_e,\kappa_m\to\infty$, $\forall m\in\mathcal M$. Using Lemma~\ref{lem:indep} and taking the expectation over $\Htl$, we obtain
++Lemma~\ref{lem:indep} follows from the isotropic Gaussian covariance of Eve's NLoS component and the orthogonality between the ZF direction and the AN subspace. It does not imply unconditional independence after averaging over $\Htl$. Indeed, the laws of total variance and total covariance give
++\begin{align}
++\frac{\mathrm{Var}\{X_m\}}{\tilde\beta_{\mathrm{e}}^2}
++&=1+2\kappa_{\mathrm{e}}\E\{\bar X_m\}
++  +\kappa_{\mathrm{e}}^2\mathrm{Var}\{\bar X_m\},\nonumber\\
++\frac{\mathrm{Var}\{Y\}}{\tilde\beta_{\mathrm{e}}^2}
++&=N-M+2\kappa_{\mathrm{e}}\E\{\bar Y\}
++  +\kappa_{\mathrm{e}}^2\mathrm{Var}\{\bar Y\},\nonumber\\
++\frac{\mathrm{Cov}\{X_m,Y\}}{\tilde\beta_{\mathrm{e}}^2}
++&=\kappa_{\mathrm{e}}^2\mathrm{Cov}\{\bar X_m,\bar Y\}.
++\label{eq:unconditional_moments}
++\end{align}
++Thus, small conditional relative variances alone do not establish concentration of the unconditional received powers: their conditional means also vary with the LU channel. To obtain a deterministic design objective, we apply a first-order moment approximation to $\log_2(1+p_mX_m/(qY+\sigma_{\mathrm{e}}^2))$, replacing the received powers by their unconditional means, as motivated by~\cite[Lemma~1]{ZhangJSTSP2014}. This replacement is neither an equality nor a general upper or lower bound, because the logarithmic rate is concave in $X_m$ and convex in $Y$ for $p_m,q>0$. Its accuracy must therefore be checked against the exact SINR, including weak-LoS and small-null-space cases. Substitution of the exact conditional means in Lemma~\ref{lem:indep} yields
+ \begin{equation}\label{eq:Re0}
+-\bar R_{e,m}\approx\log_2\bigg(1+\frac{p_m\big(\kappa_e\E\{\bar X_m\}+1\big)}{q\big(\kappa_e\E\{\bar Y\}+N-M\big)+\sbe}\bigg),
+-\end{equation}
+-where $\sbe\triangleq\sigma_e^2/\tilde\beta_e$ is the normalized noise power of Eve.
++\bar R_{\mathrm{e},m}\approx\log_2\bigg(1+\frac{p_m\big(\kappa_{\mathrm{e}}\E\{\bar X_m\}+1\big)}{q\big(\kappa_{\mathrm{e}}\E\{\bar Y\}+N-M\big)+\sbe}\bigg),
++\end{equation}
++where $\sbe\triangleq\sigma_{\mathrm{e}}^2/\tilde\beta_{\mathrm{e}}$ is the normalized noise power of Eve.
+ 
+ However, $\E\{\bar X_m\}$ and $\E\{\bar Y\}$ in~\eqref{eq:Re0}, i.e., the average LoS energies of Eve along the ZF direction of the $m$-th LU and in the AN subspace, respectively, still have no closed-form expressions. Since $\wb_m$ and $\PHp$ are invariant to the scaling of the columns of $\bH(\bt)$, they depend on $\bH(\bt)$ only through the normalized channel matrix $\bL(\bt)+\Htl$ in~\eqref{eq:Hdecomp}. We approximate $\E\{\bar X_m\}$ and $\E\{\bar Y\}$ by replacing the inverse of the random Gram matrix of $\bL(\bt)+\Htl$ with the inverse of its mean $\bPhi(\bt)$, where the NLoS contribution to the AN subspace is calibrated by the identity $\tr(\PHp)=N-M$. These approximations lead to the following result.
+ 
+ \begin{proposition}\label{prop:eve}
+ The average LoS energies in~\eqref{eq:Re0} are approximated by $\E\{\bar X_m\}\approx c_m(\bt)$ and $\E\{\bar Y\}\approx d(\bt)$, where
+ \begin{align}
+-c_m(\bt)&\triangleq\frac{\big|[\bOm(\bt)\bv(\bt)]_m\big|^2+N[\bOm^2(\bt)]_{m,m}}{\omega_m(\bt)},\label{eq:cm}\\
+-d(\bt)&\triangleq\frac{(N-M)\big(N-\bv^H(\bt)\bOm(\bt)\bv(\bt)\big)}{N-M+N\tr(\bOm(\bt))}.\label{eq:d}
+-\end{align}
+-and $\bv(\bt)\triangleq\bL^H(\bt)\gb(\bt)=\bK^{1/2}\Hb^H(\bt)\gb(\bt)$. Accordingly, the ergodic wiretap rate of Eve for $s_m$ is approximated by
++c_m(\bt)&\triangleq
++ \frac{\big|[\bOm(\bt)\bv(\bt)]_m\big|^2}
++ {\omega_m(\bt)}\nonumber\\
++&\quad+\frac{N[\bOm^2(\bt)]_{m,m}}{\omega_m(\bt)},
++\label{eq:cm}\\
++d(\bt)&\triangleq\frac{N-M}
++ {N-M+N\tr(\bOm(\bt))}\nonumber\\
++&\quad\times\big(N-\bv^{\mathrm{H}}(\bt)\bOm(\bt)\bv(\bt)\big),
++\label{eq:d}
++\end{align}
++and $\bv(\bt)\triangleq\bL^{\mathrm{H}}(\bt)\gb(\bt)=\bK^{1/2}\Hb^{\mathrm{H}}(\bt)\gb(\bt)$. Accordingly, the ergodic wiretap rate of Eve for $s_m$ is approximated by
+ \begin{equation}\label{eq:Re}
+-\bar R_{e,m}\approx\tilde R_{e,m}(\bt,p_m,q)\triangleq\log_2\bigg(1+\frac{\xi_m(\bt)\,p_m}{q\,\psi(\bt)+\sbe}\bigg),
+-\end{equation}
+-where $\xi_m(\bt)\triangleq\kappa_ec_m(\bt)+1$ and $\psi(\bt)\triangleq\kappa_ed(\bt)+N-M$.
++\bar R_{\mathrm{e},m}\approx\tilde R_{\mathrm{e},m}(\bt,p_m,q)\triangleq\log_2\bigg(1+\frac{\xi_m(\bt)\,p_m}{q\,\psi(\bt)+\sbe}\bigg),
++\end{equation}
++where $\xi_m(\bt)\triangleq\kappa_{\mathrm{e}}c_m(\bt)+1$ and $\psi(\bt)\triangleq\kappa_{\mathrm{e}}d(\bt)+N-M$.
+ \end{proposition}
+ \begin{IEEEproof}
+ See Appendix~\ref{app:det}.
+ \end{IEEEproof}
+ 
+-The approximations $\E\{\bar X_m\}\approx c_m(\bt)$ and $\E\{\bar Y\}\approx d(\bt)$ in Proposition~\ref{prop:eve} are exact for Rayleigh fading and asymptotically exact as the LoS components dominate, and $c_m(\bt),d(\bt)\in[0,N]$ hold as for their exact counterparts (see Appendix~\ref{app:det}). Accordingly, $\xi_m(\bt)$ and $\psi(\bt)$ represent the normalized information leakage for the $m$-th LU and the normalized AN power received by Eve, respectively. Unlike the existing approximations for ZF precoding, which involve only the diagonal entries of $\bOm(\bt)$, Proposition~\ref{prop:eve} captures the correlation between the LoS components of Eve and the LUs via $\bv(\bt)$.
++The approximations of $\E\{\bar X_m\}$ and $\E\{\bar Y\}$ in Proposition~\ref{prop:eve} are exact when all LU LoS components vanish, and their values lie in $[0,N]$ (see Appendix~\ref{app:det}). Their large-LoS exactness requires a fixed, full-column-rank limiting LU LoS matrix, as specified in Lemma~\ref{lem:det}; it does not cover coincident or linearly dependent limiting LU steering vectors. The corresponding rate approximation in~\eqref{eq:Re} has an additional moment-replacement error and is not exact merely because the LU channels are Rayleigh. If all LU channels and Eve's channel approach deterministic LoS channels with a full-column-rank limiting LU matrix and positive noise powers, the random ZF directions and the AN subspace converge to their deterministic counterparts, and the wiretap-rate approximation also becomes exact. No uniform accuracy statement is made near a rank-deficient limiting LU geometry. The coefficients $\xi_m(\bt)$ and $\psi(\bt)$ describe normalized leakage and normalized AN reception in the adopted approximation. The vector $\bv(\bt)$ retains the LoS correlation between Eve and the LUs, which is absent from an approximation based only on the diagonal of $\bOm(\bt)$.
+ 
+ \subsection{Approximate ESSR Maximization Problem}\label{sec:discussion}
+ 
+ Based on Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve}, the ergodic secrecy rate of the $m$-th LU is approximated by
+ \begin{equation}\label{eq:esrapprox}
+-R_m^{\mathrm{sec}}\approx\tilde R_m^{\mathrm{sec}}(\bt,p_m,q)\triangleq\big[\tilde R_m(\bt,p_m)-\tilde R_{e,m}(\bt,p_m,q)\big]^+,
++\begin{aligned}
++R_m^{\mathrm{sec}}&\approx\tilde R_m^{\mathrm{sec}}(\bt,p_m,q)\\
++&\triangleq\big[\tilde R_m(\bt,p_m)
++ -\tilde R_{\mathrm{e},m}(\bt,p_m,q)\big]^+,
++\end{aligned}
+ \end{equation}
+ which depends only on the statistical CSI and is thus suitable for the large-timescale design. The following remarks reveal how the antenna positions affect the approximate ESSR.
+ 
+ \begin{remark}[Secrecy Mechanisms of the MAs]\label{rem:mech}
+-From~\eqref{eq:Rm}, \eqref{eq:cm}, and~\eqref{eq:d}, the antenna positions affect the approximate ESSR via $\omega_m(\bt)$, $c_m(\bt)$, and $d(\bt)$, i.e., via the LoS array correlations $[\Hb^H(\bt)\Hb(\bt)]_{i,j}=\sum_{n=1}^{N}e^{j\frac{2\pi}{\lambda}\bt_n^T(\ba_j-\ba_i)}$ among the LUs and $[\Hb^H(\bt)\gb(\bt)]_{i}=\sum_{n=1}^{N}e^{j\frac{2\pi}{\lambda}\bt_n^T(\ba_e-\ba_i)}$ between Eve and the LUs. A smaller $\omega_m(\bt)$, i.e., a weaker LoS correlation between the $m$-th LU and the other LUs, yields a larger ZF gain in~\eqref{eq:etabound}. This decorrelation among the LUs is the only mechanism exploited by the rate-oriented design~\cite{ZhengTCOM2025}. In secure transmission, a smaller $c_m(\bt)$ and a larger $d(\bt)$ provide two additional mechanisms, i.e., less information leakage and more AN received by Eve. In particular, if $\bv(\bt)=\mathbf 0$, i.e., the LoS component of Eve is orthogonal to those of all the LUs, then $c_m(\bt)$ reduces to its minimum $N[\bOm^2(\bt)]_{m,m}/\omega_m(\bt)$ caused by the NLoS components, and $d(\bt)$ achieves its maximum $N(N-M)/(N-M+N\tr(\bOm(\bt)))$ for a given $\bPhi(\bt)$. Hence, by decorrelating the LoS component of Eve from those of the LUs, the MAs simultaneously reduce the information leakage and increase the AN received by Eve, whereas an FPA array can hardly achieve this decorrelation when Eve is located in a direction close to that of an LU. Note that if $\kappa_e=0$, then $\tilde R_{e,m}=\log_2(1+p_m/(q(N-M)+\sbe))$ does not depend on $\bt$, i.e., the statistical CSI of Eve carries no spatial information, and only the first mechanism remains.
++From~\eqref{eq:Rm}, \eqref{eq:cm}, and~\eqref{eq:d}, the antenna positions affect the approximate ESSR via $\omega_m(\bt)$, $c_m(\bt)$, and $d(\bt)$, i.e., via the LoS array correlations $[\Hb^{\mathrm{H}}(\bt)\Hb(\bt)]_{i,j}=\sum_{n=1}^{N}e^{j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}(\ba_j-\ba_i)}$ among the LUs and $[\Hb^{\mathrm{H}}(\bt)\gb(\bt)]_{i}=\sum_{n=1}^{N}e^{j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}(\ba_{\mathrm{e}}-\ba_i)}$ between Eve and the LUs. A smaller $\omega_m(\bt)$, i.e., a weaker LoS correlation between the $m$-th LU and the other LUs, yields a larger ZF gain in~\eqref{eq:etabound}. This decorrelation among the LUs is the only mechanism exploited by the rate-oriented design~\cite{ZhengTCOM2025}. In secure transmission, a smaller $c_m(\bt)$ and a larger $d(\bt)$ provide two additional mechanisms, i.e., less information leakage and more AN received by Eve. In particular, if $\bv(\bt)=\mathbf 0$, i.e., the LoS component of Eve is orthogonal to those of all the LUs, then $c_m(\bt)$ reduces to its minimum $N[\bOm^2(\bt)]_{m,m}/\omega_m(\bt)$ caused by the NLoS components, and $d(\bt)$ achieves its maximum $N(N-M)/(N-M+N\tr(\bOm(\bt)))$ for a given $\bPhi(\bt)$. Hence, by decorrelating the LoS component of Eve from those of the LUs, the MAs simultaneously reduce the information leakage and increase the AN received by Eve, whereas an FPA array can hardly achieve this decorrelation when Eve is located in a direction close to that of an LU. Note that if $\kappa_{\mathrm{e}}=0$, then $\tilde R_{\mathrm{e},m}=\log_2(1+p_m/(q(N-M)+\sbe))$ does not depend on $\bt$, i.e., the statistical CSI of Eve carries no spatial information, and only the first mechanism remains.
+ \end{remark}
+ 
+ \begin{remark}[Single LU]\label{rem:single}
+-If $M=1$, then $\bPhi(\bt)=N(\kappa_1+1)$ is a scalar, and $\eta_1=\zeta_1(N-1)(\kappa_1+1)$ does not depend on $\bt$.\footnote{For $M=1$, even the exact ergodic rate $\E\{\log_2(1+p_1\|\bh_1(\bt)\|^2/\sigma_1^2)\}$ does not depend on $\bt$, because the distribution of $\|\bh_1(\bt)\|^2$ depends on $\hb_1(\bt)$ only through $\|\hb_1(\bt)\|^2=N$.} In contrast,
+-\begin{align}
+-c_1(\bt)&=\frac{\kappa_1|\hb_1^H(\bt)\gb(\bt)|^2/N+1}{\kappa_1+1},\label{eq:c1}\\
+-d(\bt)&=\frac{(N-1)(\kappa_1+1)}{(N-1)(\kappa_1+1)+1}\bigg(N-\frac{\kappa_1|\hb_1^H(\bt)\gb(\bt)|^2}{N(\kappa_1+1)}\bigg)\label{eq:d1}
+-\end{align}
+-depend on $\bt$ through the LoS correlation $|\hb_1^H(\bt)\gb(\bt)|^2$ between the LU and Eve. Hence, unlike the rate-oriented two-timescale design, where the MAs bring no gain for a single user~\cite[Remark~2]{ZhengTCOM2025}, the MAs enhance the secrecy of a single LU by reducing this correlation.
++For $M=1$, the sole entry of $\bPhi(\bt)$ is $[\bPhi(\bt)]_{1,1}=N(\kappa_1+1)$, so $\eta_1=\zeta_1(N-1)(\kappa_1+1)$ is independent of $\bt$.\footnote{For $M=1$, the exact ergodic rate $\E\{\log_2(1+p_1\|\bh_1(\bt)\|^2/\sigma_1^2)\}$ is also independent of $\bt$, because the distribution of $\|\bh_1(\bt)\|^2$ depends on $\hb_1(\bt)$ only through $\|\hb_1(\bt)\|^2=N$.} In contrast,
++\begin{align}
++c_1(\bt)&=\frac{\kappa_1|\hb_1^{\mathrm{H}}(\bt)\gb(\bt)|^2/N+1}
++ {\kappa_1+1},\label{eq:c1}\\
++d(\bt)&=\frac{(N-1)(\kappa_1+1)}
++ {(N-1)(\kappa_1+1)+1}\nonumber\\
++&\quad\times\bigg(N-
++ \frac{\kappa_1|\hb_1^{\mathrm{H}}(\bt)\gb(\bt)|^2}
++ {N(\kappa_1+1)}\bigg).\label{eq:d1}
++\end{align}
++Both quantities depend on $\bt$ through the LoS correlation $|\hb_1^{\mathrm{H}}(\bt)\gb(\bt)|^2$ between the LU and Eve. Reducing this correlation decreases $c_1(\bt)$ and increases $d(\bt)$ in the adopted approximation, whereas the LU rate is position-independent~\cite[Remark~2]{ZhengTCOM2025}. For a single LU, however, the exact projectors satisfy $\wb_1\wb_1^{\mathrm{H}}+\PHp=\bI_N$ and hence $\bar X_1+\bar Y=N$ for every channel realization. The separately constructed approximations do not enforce this identity at finite $\kappa_1$: writing $C_1\triangleq|\hb_1^{\mathrm{H}}(\bt)\gb(\bt)|^2$, their residual is
++\begin{equation}\label{eq:single_identity_residual}
++c_1+d-N=
++\frac{\kappa_1(C_1/N-1)}
++{(\kappa_1+1)((N-1)(\kappa_1+1)+1)}.
++\end{equation}
++Thus, the single-user secrecy trend is a prediction of the approximation that requires verification using the exact SINRs. The residual vanishes in the Rayleigh and deterministic-LoS limits but is generally nonzero between these limits.
+ \end{remark}
+ 
+ \begin{remark}[High-SNR Behavior and AN Saving]\label{rem:highsnr}
+-Consider the information--AN power splitting with equal power among the LUs, i.e., $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha\in(0,1)$ is the power-splitting factor. In the high signal-to-noise ratio (SNR) regime, i.e., as $\Ptot\to\infty$, we have
++Consider the information--AN power splitting with equal power among the LUs, i.e., $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha\in(0,1)$ is the power-splitting factor. In the high SNR regime, i.e., as $\Ptot\to\infty$, we have
+ \begin{equation}\label{eq:highsnr}
+-\tilde R_m-\tilde R_{e,m}=\log_2\frac{\alpha\Ptot\eta_m(\bt)}{M}-\log_2\Big(1+\frac{\alpha\Theta_m(\bt)}{1-\alpha}\Big)+o(1),
++\begin{aligned}
++\tilde R_m-\tilde R_{\mathrm{e},m}
++={}&\log_2\frac{\alpha\Ptot\eta_m(\bt)}{M}\\
++&-\log_2\Big(1+\frac{\alpha\Theta_m(\bt)}
++ {1-\alpha}\Big)+o(1),
++\end{aligned}
+ \end{equation}
+ where $o(1)$ vanishes as $\Ptot\to\infty$, and $\Theta_m(\bt)\triangleq\frac{(N-M)\xi_m(\bt)}{M\psi(\bt)}$ is the ratio of the normalized information leakage to the normalized AN power received by Eve. Hence, the high-SNR slope of the approximate ESSR equals $M$ regardless of $\bt$, and the antenna positions affect the approximate ESSR only through the constant term. Moreover, the value of $\alpha$ that maximizes the sum of the constant terms in~\eqref{eq:highsnr} satisfies $\sum_{m=1}^M\big[\frac1\alpha-\frac1{1-\alpha}-\frac{\Theta_m-1}{1+\alpha(\Theta_m-1)}\big]=0$, whose solution for $\Theta_m=\Theta$, $\forall m\in\mathcal M$, is given by
+ \begin{equation}\label{eq:alphastar}
+@@ -442,7 +522,7 @@
+ \mathrm{s.t.}\ \ & \eqref{eq:P2pow}\text{--}\eqref{eq:P2dist},\nonumber
+ \end{align}
+ \end{subequations}
+-where the operator $[\cdot]^+$ in~\eqref{eq:esrapprox} is dropped without loss of optimality. Specifically, for any feasible $(\bt,\bp,q)$, setting $p_m=0$ for every LU whose term in~\eqref{eq:P3obj} is negative yields another feasible solution, whose objective value equals the approximate ESSR $\sum_{m=1}^M\tilde R_m^{\mathrm{sec}}(\bt,p_m,q)$ of the original solution, since the $m$-th term depends only on $p_m$ and $q$ for a given $\bt$. Hence, (P3) has the same optimal value as its counterpart with $[\cdot]^+$, and every term in~\eqref{eq:P3obj} is nonnegative at any optimal solution of (P3). In contrast, under equal power allocation among the LUs, the operator $[\cdot]^+$ must be retained.
++where removing $[\cdot]^+$ preserves the global optimum under freely adjustable nonnegative user powers. For fixed $\bt$ and $q$, each summand depends only on its own $p_m$. Setting $p_m=0$ for every negative summand preserves feasibility, makes those summands zero, and leaves the other summands unchanged. Therefore, (P3) and its positive-part counterpart have the same global optimum. This argument does not identify $F$ with the approximate ESSR at an arbitrary intermediate position iterate: a position update with fixed powers can make an individual summand negative. Accordingly, Algorithm~\ref{alg:ao} monitors the smooth objective $F$; Monte Carlo evaluation retains $[\cdot]^+$ as in~\eqref{eq:esr}. For a final report of the approximate ESSR, evaluate~\eqref{eq:esrapprox} directly. Under equal user powers, turning off a single user is inadmissible, so the positive-part operator must also be retained during benchmark optimization.
+ 
+ % =============================================================================
+ \section{Proposed Two-Timescale Optimization Algorithm}\label{sec:opt}
+@@ -460,49 +540,63 @@
+ \end{subequations}
+ where
+ \begin{equation}\label{eq:fm}
+-f_m(p;q)\triangleq\log_2(1+\eta_mp)-\log_2\big(1+\eta_{e,m}(q)\,p\big),
+-\end{equation}
+-and $\eta_{e,m}(q)\triangleq\xi_m/(q\psi+\sbe)$, which decreases with $q$, is the effective channel gain of Eve for $s_m$. Problem (P3.1) is nonconvex in general, because $f_m$ is not jointly concave in $p_m$ and $q$. Nevertheless, for a given $q$, its optimal $\bp$ can be obtained in semi-closed form, as shown below. The first-order and second-order derivatives of $f_m$ w.r.t.\ $p$ are given by
+-\begin{align}
+-\frac{\partial f_m}{\partial p}&=\frac{\eta_m-\eta_{e,m}}{\ln2\,(1+\eta_mp)(1+\eta_{e,m}p)},\label{eq:fm1}\\
+-\frac{\partial^2 f_m}{\partial p^2}&=\frac{1}{\ln2}\bigg[\frac{\eta_{e,m}^2}{(1+\eta_{e,m}p)^2}-\frac{\eta_m^2}{(1+\eta_mp)^2}\bigg],\label{eq:fm2}
+-\end{align}
+-where the argument $q$ of $\eta_{e,m}$ is omitted. If $\eta_m\le\eta_{e,m}$, then $f_m(p;q)\le0$ for all $p\ge0$, and thus $p_m=0$ is optimal. If $\eta_m>\eta_{e,m}$, then $\eta_m(1+\eta_{e,m}p)-\eta_{e,m}(1+\eta_mp)=\eta_m-\eta_{e,m}>0$, i.e., $\frac{\eta_m}{1+\eta_mp}>\frac{\eta_{e,m}}{1+\eta_{e,m}p}$. Hence, by~\eqref{eq:fm1} and~\eqref{eq:fm2}, $f_m$ is strictly increasing and strictly concave in $p\ge0$. Let $\mathcal M_{\mathrm a}(q)\triangleq\{m\in\mathcal M\,|\,\eta_m>\eta_{e,m}(q)\}$ denote the set of LUs that can achieve positive secrecy rates, and $P_{\mathrm I}(q)\triangleq\Ptot-(N-M)q$ the power available for the confidential signals. Then, the optimal $\bp$ for a given $q$ is given as follows.
++f_m(p;q)\triangleq\log_2(1+\eta_mp)-\log_2\big(1+\eta_{\mathrm{e},m}(q)\,p\big),
++\end{equation}
++and $\eta_{\mathrm{e},m}(q)\triangleq\xi_m/(q\psi+\sbe)$, which decreases with $q$, is the effective channel gain of Eve for $s_m$. Problem (P3.1) is nonconvex in general, because $f_m$ is not jointly concave in $p_m$ and $q$. Nevertheless, for a given $q$, its optimal $\bp$ can be obtained in semi-closed form, as shown below. The first-order and second-order derivatives of $f_m$ w.r.t.\ $p$ are given by
++\begin{align}
++\frac{\partial f_m}{\partial p}&=\frac{\eta_m-\eta_{\mathrm{e},m}}{\ln2\,(1+\eta_mp)(1+\eta_{\mathrm{e},m}p)},\label{eq:fm1}\\
++\frac{\partial^2 f_m}{\partial p^2}&=\frac{1}{\ln2}\bigg[\frac{\eta_{\mathrm{e},m}^2}{(1+\eta_{\mathrm{e},m}p)^2}-\frac{\eta_m^2}{(1+\eta_mp)^2}\bigg],\label{eq:fm2}
++\end{align}
++where the argument $q$ of $\eta_{\mathrm{e},m}$ is omitted. If $\eta_m\le\eta_{\mathrm{e},m}$, then $f_m(p;q)\le0$ for all $p\ge0$, and thus $p_m=0$ is optimal. If $\eta_m>\eta_{\mathrm{e},m}$, then $\eta_m(1+\eta_{\mathrm{e},m}p)-\eta_{\mathrm{e},m}(1+\eta_mp)=\eta_m-\eta_{\mathrm{e},m}>0$, i.e., $\frac{\eta_m}{1+\eta_mp}>\frac{\eta_{\mathrm{e},m}}{1+\eta_{\mathrm{e},m}p}$. Hence, by~\eqref{eq:fm1} and~\eqref{eq:fm2}, $f_m$ is strictly increasing and strictly concave in $p\ge0$. Let $\mathcal M_{\mathrm a}(q)\triangleq\{m\in\mathcal M\,|\,\eta_m>\eta_{\mathrm{e},m}(q)\}$ denote the set of LUs that can achieve positive secrecy rates, and $P_{\mathrm I}(q)\triangleq\Ptot-(N-M)q$ the power available for the confidential signals. Then, the optimal $\bp$ for a given $q$ is given as follows.
+ 
+ \begin{proposition}[Secrecy Water-Filling]\label{prop:wf}
+ For a given $q$ with $P_{\mathrm I}(q)>0$ and $\mathcal M_{\mathrm a}(q)\neq\emptyset$, the optimal power allocation is $p_m^\star=0$ for $m\notin\mathcal M_{\mathrm a}(q)$ and
+ \begin{equation}\label{eq:wf}
+-p_m^\star(\nu)=\bigg[\frac{2(\rho_m-1)}{\sqrt{(\eta_m-\eta_{e,m})^2+4\eta_m\eta_{e,m}\rho_m}+\eta_m+\eta_{e,m}}\bigg]^+
+-\end{equation}
+-for $m\in\mathcal M_{\mathrm a}(q)$, where $\rho_m=\rho_m(\nu)\triangleq(\eta_m-\eta_{e,m})/(\nu\ln2)$, and the water level $\nu>0$ is the unique solution of $\sum_{m\in\mathcal M_{\mathrm a}(q)}p_m^\star(\nu)=P_{\mathrm I}(q)$.
++\begin{aligned}
++v_m^{\mathrm{wf}}(\nu)
++&\triangleq\sqrt{(\eta_m-\eta_{\mathrm{e},m})^2
++ +4\eta_m\eta_{\mathrm{e},m}\rho_m(\nu)},\\
++p_m^\star(\nu)
++&=\left[\frac{2(\rho_m(\nu)-1)}
++ {v_m^{\mathrm{wf}}(\nu)+\eta_m+\eta_{\mathrm{e},m}}\right]^+,
++\end{aligned}
++\end{equation}
++for $m\in\mathcal M_{\mathrm a}(q)$, where $\rho_m=\rho_m(\nu)\triangleq(\eta_m-\eta_{\mathrm{e},m})/(\nu\ln2)$, and the water level $\nu>0$ is the unique solution of $\sum_{m\in\mathcal M_{\mathrm a}(q)}p_m^\star(\nu)=P_{\mathrm I}(q)$.
+ \end{proposition}
+ \begin{IEEEproof}
+-Since the objective is strictly concave and increasing in $\{p_m\}_{m\in\mathcal M_{\mathrm a}(q)}$ and Slater's condition holds, the Karush--Kuhn--Tucker (KKT) conditions are necessary and sufficient for optimality, and the power constraint is active at the optimum~\cite{Boyd2004}. Let $\nu>0$ denote the dual variable associated with the power constraint. The KKT conditions yield $\partial f_m/\partial p=\nu$ if $p_m^\star>0$ and $\partial f_m/\partial p|_{p=0}\le\nu$ otherwise. From~\eqref{eq:fm1}, the former is equivalent to $(1+\eta_mp)(1+\eta_{e,m}p)=\rho_m(\nu)$, i.e., a quadratic equation in $p$, whose positive root, written in a numerically stable form, is given by~\eqref{eq:wf}. The latter is equivalent to $\rho_m(\nu)\le1$, in which case~\eqref{eq:wf} gives $p_m^\star=0$. Finally, since $\sum_{m\in\mathcal M_{\mathrm a}(q)}p_m^\star(\nu)$ is continuous and strictly decreasing in $\nu$ over $(0,\max_{m\in\mathcal M_{\mathrm a}(q)}(\eta_m-\eta_{e,m})/\ln2)$, ranging from $+\infty$ to $0$, the water level is unique.
++Since the objective is strictly concave and increasing in $\{p_m\}_{m\in\mathcal M_{\mathrm a}(q)}$ and Slater's condition holds, the Karush--Kuhn--Tucker (KKT) conditions are necessary and sufficient for optimality, and the power constraint is active at the optimum~\cite{Boyd2004}. Let $\nu>0$ denote the dual variable associated with the power constraint. The KKT conditions yield $\partial f_m/\partial p=\nu$ if $p_m^\star>0$ and $\partial f_m/\partial p|_{p=0}\le\nu$ otherwise. From~\eqref{eq:fm1}, the former is equivalent to $(1+\eta_mp)(1+\eta_{\mathrm{e},m}p)=\rho_m(\nu)$, i.e., a quadratic equation in $p$, whose positive root, written in a numerically stable form, is given by~\eqref{eq:wf}. The latter is equivalent to $\rho_m(\nu)\le1$, in which case~\eqref{eq:wf} gives $p_m^\star=0$. Finally, since $\sum_{m\in\mathcal M_{\mathrm a}(q)}p_m^\star(\nu)$ is continuous and strictly decreasing in $\nu$ over $(0,\max_{m\in\mathcal M_{\mathrm a}(q)}(\eta_m-\eta_{\mathrm{e},m})/\ln2)$, ranging from $+\infty$ to $0$, the water level is unique.
+ \end{IEEEproof}
+ 
+ Since $p_m^\star(\nu)$ is nonincreasing in $\nu$, the water level in Proposition~\ref{prop:wf} can be found by bisection.
+ 
+ \begin{remark}[Relation to Classic Water-Filling]\label{rem:wf}
+-As $\eta_{e,m}\to0$, \eqref{eq:wf} reduces to the classic water-filling solution $[1/(\nu\ln2)-1/\eta_m]^+$. Hence, \eqref{eq:wf} can be regarded as a secrecy water-filling solution, in which the LUs whose effective channel gains do not exceed that of Eve are switched off.
++As $\eta_{\mathrm{e},m}\to0$, \eqref{eq:wf} reduces to the classic water-filling solution $[1/(\nu\ln2)-1/\eta_m]^+$. Hence, \eqref{eq:wf} can be regarded as a secrecy water-filling solution, in which the LUs whose effective channel gains do not exceed that of Eve are switched off.
+ \end{remark}
+ 
+-Next, let $G(q)\triangleq\sum_{m\in\mathcal M}f_m(p_m^\star;q)$ denote the objective value achieved by the optimal $\bp$ for a given $q$, where $G(q)=0$ if $\mathcal M_{\mathrm a}(q)=\emptyset$ or $P_{\mathrm I}(q)=0$. The AN power per dimension is then optimized as
++Next, let $G(q)\triangleq\sum_{m\in\mathcal M}f_m(p_m^\star(q);q)$ denote the optimal fixed-$q$ value. Set $G(q)=0$ and $\bp=\mathbf 0$ when $\mathcal M_{\mathrm a}(q)=\emptyset$ or $P_{\mathrm I}(q)=0$. The continuous AN-power target is
+ \begin{equation}\label{eq:qsearch}
+-q^\star=\arg\max_{0\le q\le q_{\max}}\ G(q),
+-\end{equation}
+-where $q_{\max}\triangleq\Ptot/(N-M)$. Increasing $q$ reduces the effective channel gains of Eve at the cost of less power for the confidential signals. Since $G(q)$ is not necessarily unimodal, \eqref{eq:qsearch} is tackled by a coarse grid search followed by a finer one around the best grid point (Algorithm~\ref{alg:power}).
++q^\star\in\underset{0\le q\le q_{\mathrm{max}}}{\arg\max}\ G(q),
++\end{equation}
++where $q_{\mathrm{max}}\triangleq\Ptot/(N-M)$. Increasing $q$ suppresses Eve's effective gain while reducing the signal-power budget. No unimodality of $G$ is established, so a golden-section or ternary search is not justified as a global solver. Algorithm~\ref{alg:power} evaluates a coarse grid and a finer grid around its best point, retaining the union of both candidate sets. It returns the best evaluated pair $(\hat\bp,\hat q)$, rather than a certified global solution of~\eqref{eq:qsearch}. For a nonempty active set and positive signal budget, the bisection interval is initialized by $\nu_{\mathrm{lo}}=0$ and $\nu_{\mathrm{hi}}=\max_{m\in\mathcal M_{\mathrm a}(q)}(\eta_m-\eta_{\mathrm{e},m}(q))/\ln2$. After $I_{\mathrm b}$ bisection steps, use the upper endpoint in~\eqref{eq:wf}, which preserves the power inequality. The zero dual endpoint is never evaluated.
+ 
+ \begin{algorithm}[t]
+-\caption{Power Allocation for Given $\bt$}\label{alg:power}
++\caption{Finite-Grid Power Allocation for Given $\bt$}\label{alg:power}
+ \small\begin{algorithmic}[1]
+-\Require $\{\eta_m,\xi_m\}_{m\in\mathcal M}$, $\psi$, $\sbe$, $\Ptot$, and the grid size $Q$.
+-\Ensure $q^\star$ and $\bp^\star$.
+-\For{each $q$ in a uniform grid of $Q$ points over $[0,q_{\max}]$}
+-  \State Obtain $\bp^\star$ by Proposition~\ref{prop:wf}, where $\nu$ is found by bisection.
+-  \State Evaluate $G(q)$.
++\Require $\{\eta_m,\xi_m\}_{m\in\mathcal M}$, $\psi$, $\sbe$, $\Ptot$, integer $Q\ge2$, and $I_{\mathrm b}$.
++\Ensure Best evaluated powers $\hat\bp$ and $\hat q$.
++\State Set $q_{\mathrm{max}}=\Ptot/(N-M)$ and let $\mathcal Q_0$ contain $Q$ uniformly spaced points in $[0,q_{\mathrm{max}}]$.
++\For{each $q\in\mathcal Q_0$}
++  \State If $P_{\mathrm I}(q)=0$ or $\mathcal M_{\mathrm a}(q)=\emptyset$, set $\bp(q)=\mathbf 0$ and $G(q)=0$.
++  \State Otherwise, compute $\bp(q)$ by~\eqref{eq:wf} with $I_{\mathrm b}$ bisection steps and the feasible upper dual endpoint, and evaluate $G(q)$.
+ \EndFor
+-\State Repeat Steps 1--4 over a uniform grid of $Q$ points between the two neighbors of the best grid point.
+-\State \Return the best $q$ as $q^\star$ and its optimal power allocation as $\bp^\star$.
++\State Let $q_0$ be a maximizer over $\mathcal Q_0$; break ties by candidate order.
++\State Let $a$ and $b$ be its adjacent coarse points, clipped to $[0,q_{\mathrm{max}}]$ at the endpoints.
++\State Let $\mathcal Q_1$ contain $Q$ uniformly spaced points in $[a,b]$.
++\For{each previously unevaluated $q\in\mathcal Q_1$}
++  \State Compute $\bp(q)$ and $G(q)$ with the same zero-case and bisection rules.
++\EndFor
++\State Select a maximum over $\mathcal Q_1$; replace it by the coarse maximum only if the coarse value is strictly larger. Set the selected powers to $(\hat\bp,\hat q)$.
++\State \Return $(\hat\bp,\hat q)$.
+ \end{algorithmic}
+ \end{algorithm}
+ 
+@@ -516,7 +610,7 @@
+ & \|\bt_n-\bt_i\|\ge\Dmin,\ \forall n,i\in\mathcal N,\ n\neq i,
+ \end{align}
+ \end{subequations}
+-where $F(\bt)\triangleq F(\bt,\bp,q)$. Problem (P3.2) is challenging for two reasons. First, according to Remark~\ref{rem:mech}, $F(\bt)$ depends on $\bt_n$ through the phases $\frac{2\pi}{\lambda}\bt_n^T(\ba_j-\ba_i)$, $i,j\in\mathcal M\cup\{e\}$, which rotate by $2\pi$ when $\bt_n$ moves by $\lambda/\|\ba_j-\ba_i\|$ along $\ba_j-\ba_i$. Hence, $F(\bt)$ is highly oscillatory and has numerous local maxima within $\mathcal C$. Second, the minimum-distance constraints are nonconvex. To reduce the problem dimension, we optimize the antenna positions in an element-wise manner similar to~\cite{ZhengTCOM2025}, i.e., we update $\bt_n$ with the other positions fixed, for $n=1,\ldots,N$ in turn. Let $F(\bt_n)$ denote $F$ as a function of $\bt_n$, with the other positions fixed at their latest values. The subproblem for the $n$-th MA is given by
++where $F(\bt)\triangleq F(\bt,\bp,q)$. Problem (P3.2) is challenging for two reasons. First, according to Remark~\ref{rem:mech}, $F(\bt)$ depends on $\bt_n$ through the phases $\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}(\ba_j-\ba_i)$, $i,j\in\mathcal M\cup\{\mathrm{e}\}$, which rotate by $2\pi$ when $\bt_n$ moves by $\lambda/\|\ba_j-\ba_i\|$ along $\ba_j-\ba_i$. Hence, $F(\bt)$ is highly oscillatory and has numerous local maxima within $\mathcal C$. Second, the minimum-distance constraints are nonconvex. To reduce the problem dimension, we optimize the antenna positions in an element-wise manner similar to~\cite{ZhengTCOM2025}, i.e., we update $\bt_n$ with the other positions fixed, for $n=1,\ldots,N$ in turn. Let $F(\bt_n)$ denote $F$ as a function of $\bt_n$, with the other positions fixed at their latest values. The subproblem for the $n$-th MA is given by
+ \begin{subequations}\label{eq:P32n0}
+ \begin{align}
+ (\mathrm{P3.2}.n):\ \max_{\bt_n}\ \ & F(\bt_n)\\
+@@ -524,54 +618,75 @@
+ & \|\bt_n-\bt_i\|\ge\Dmin,\ \forall i\in\mathcal N\setminus\{n\}.
+ \end{align}
+ \end{subequations}
+-Although (P3.2.$n$) has only two real variables, $F(\bt_n)$ is multimodal. Therefore, a purely local method, e.g., the MM method adopted in~\cite{ZhengTCOM2025}, typically converges to a local maximum near the current position of the MA, so that the MAs move slowly across $\mathcal C$ and the AO iterations may stagnate at an inferior solution (see Section~\ref{sec:sim_conv}). To overcome this issue, we tackle (P3.2.$n$) by a coarse-to-fine approach: in Stage~1, a global search over a grid of candidate positions locates the best basin of $F(\bt_n)$; in Stage~2, the MM method refines the position within this basin. The global search is affordable, because the following rank-one structure allows $F(\bt_n)$ to be evaluated at any candidate position with only $\mathcal O(M^2)$ operations.
++Although (P3.2.$n$) contains only two real variables, its objective can have several local maxima because the spatial phases depend on the antenna position. A local MM step can therefore depend on its starting point~\cite{ZhengTCOM2025}. We combine a search over a finite grid with MM refinement: Stage~1 selects the best feasible evaluated point, including the current position, and Stage~2 improves that point within a convex inner approximation of the spacing constraints. Neither stage certifies a globally optimal position or identifies the basin of a continuous global maximizer. The rank-one structure below reduces the arithmetic cost per grid candidate after its position-independent quantities are formed.
+ 
+ \textit{1) Rank-one structure:} Let $\bl_n(\bt_n)\in\mathbb C^{M\times1}$ denote the conjugate transpose of the $n$-th row of $\bL(\bt)$, i.e.,
+ \begin{equation}\label{eq:ln}
+-\bl_n(\bt_n)=\bK^{1/2}\Big[e^{-j\frac{2\pi}{\lambda}\bt_n^T\ba_1},\ldots,e^{-j\frac{2\pi}{\lambda}\bt_n^T\ba_M}\Big]^T.
+-\end{equation}
+-Since $\bL^H\bL=\sum_{i=1}^N\bl_i\bl_i^H$ and $\bL^H\gb=\sum_{i=1}^N\bl_ie^{j\frac{2\pi}{\lambda}\bt_i^T\ba_e}$, we have
+-\begin{align}
+-\bPhi(\bt)&=\bGam_n+\bl_n(\bt_n)\bl_n^H(\bt_n),\label{eq:Phin}\\
+-\bv(\bt)&=\br_n+\bl_n(\bt_n)e^{j\frac{2\pi}{\lambda}\bt_n^T\ba_e},\label{eq:vn}
+-\end{align}
+-where $\bGam_n\triangleq\sum_{i\neq n}\bl_i(\bt_i)\bl_i^H(\bt_i)+N\bI_M$ and $\br_n\triangleq\sum_{i\neq n}\bl_i(\bt_i)e^{j\frac{2\pi}{\lambda}\bt_i^T\ba_e}$ do not depend on $\bt_n$. By the Sherman--Morrison formula~\cite{Horn2013},
++\bl_n(\bt_n)=\bK^{1/2}\Big[e^{-j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}\ba_1},\ldots,e^{-j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}\ba_M}\Big]^{\mathrm{T}}.
++\end{equation}
++Since $\bL^{\mathrm{H}}\bL=\sum_{i=1}^N\bl_i\bl_i^{\mathrm{H}}$ and $\bL^{\mathrm{H}}\gb=\sum_{i=1}^N\bl_ie^{j\frac{2\pi}{\lambda}\bt_i^{\mathrm{T}}\ba_{\mathrm{e}}}$, we have
++\begin{align}
++\bPhi(\bt)&=\bGam_n+\bl_n(\bt_n)\bl_n^{\mathrm{H}}(\bt_n),\label{eq:Phin}\\
++\bv(\bt)&=\br_n+\bl_n(\bt_n)e^{j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}\ba_{\mathrm{e}}},\label{eq:vn}
++\end{align}
++where $\bGam_n\triangleq\sum_{i\neq n}\bl_i(\bt_i)\bl_i^{\mathrm{H}}(\bt_i)+N\bI_M$ and $\br_n\triangleq\sum_{i\neq n}\bl_i(\bt_i)e^{j\frac{2\pi}{\lambda}\bt_i^{\mathrm{T}}\ba_{\mathrm{e}}}$ do not depend on $\bt_n$. By the Sherman--Morrison formula~\cite{Horn2013},
+ \begin{equation}\label{eq:sm}
+-\bOm(\bt)=\bGam_n^{-1}-\frac{\bGam_n^{-1}\bl_n(\bt_n)\bl_n^H(\bt_n)\bGam_n^{-1}}{1+\bl_n^H(\bt_n)\bGam_n^{-1}\bl_n(\bt_n)}.
+-\end{equation}
++\bOm(\bt)=\bGam_n^{-1}
++-\frac{\bGam_n^{-1}\bl_n\bl_n^{\mathrm{H}}\bGam_n^{-1}}
++ {1+\bl_n^{\mathrm{H}}\bGam_n^{-1}\bl_n}.
++\end{equation}
++Here, $\bl_n=\bl_n(\bt_n)$.
+ Hence, for given $\bGam_n^{-1}$ and $\br_n$, the quantities $\omega_m$, $c_m$, $d$, and thus $F(\bt_n)$ can be evaluated at any candidate position with only $\mathcal O(M^2)$ operations.
+ 
+ \textit{2) Stage 1 (global search):} Let $\mathcal G\subset\mathcal C$ denote a uniform grid over $\mathcal C$ with spacing $d_{\mathrm g}$, and $\mathcal G_n\triangleq\{\mathbf c\in\mathcal G\,|\,\|\mathbf c-\bt_i\|\ge\Dmin,\ \forall i\neq n\}$ the set of grid points that are feasible for (P3.2.$n$). Based on~\eqref{eq:sm}, we evaluate $F(\bt_n)$ at $\bt_n=\mathbf c$ for all the candidates $\mathbf c\in\mathcal G_n\cup\{\bt_n\}$, where $\bt_n$ is the current position of the $n$-th MA, and obtain
+ \begin{equation}\label{eq:gridsearch}
+ \hat\bt_n=\arg\max_{\mathbf c\in\mathcal G_n\cup\{\bt_n\}}F(\mathbf c),
+ \end{equation}
+-which requires $\mathcal O(|\mathcal G|M^2)$ operations, e.g., $|\mathcal G|=1681$ candidate positions for $A=4\lambda$ and $d_{\mathrm g}=\lambda/10$. Since the current position is included in the candidates, $F(\hat\bt_n)\ge F(\bt_n)$. The spacing $d_{\mathrm g}$ is chosen as a fraction of the shortest period $\lambda/\max_{i,j\in\mathcal M\cup\{e\}}\|\ba_j-\ba_i\|$ of the phases in $F(\bt_n)$, so that the basins of $F(\bt_n)$ are densely sampled, and $\hat\bt_n$ typically lies in the basin of a globally optimal solution of (P3.2.$n$).
+-
+-\textit{3) Stage 2 (MM refinement):} Starting from $\bt_n^{(0)}=\hat\bt_n$, we refine the position by the MM method~\cite{Sun2017}, where $\bt_n^{(k)}$ denotes the position of the $n$-th MA in the $k$-th MM iteration. To construct a surrogate function, we derive the gradient of $F(\bt_n)$. Let $u_n\in\{x_n,y_n\}$ denote the coordinate of $\bt_n$ along the axis $u\in\{x,y\}$, and define $\bD_u\triangleq\diag(a_{1,u},\ldots,a_{M,u})$, where $a_{m,x}\triangleq\cos\theta_m\sin\phi_m$ and $a_{m,y}\triangleq\sin\theta_m$ are the entries of $\ba_m$, and $a_{e,u}$ is the corresponding entry of $\ba_e$. From~\eqref{eq:ln}--\eqref{eq:vn}, the derivatives of $\bl_n$, $\bv$, and $\bOm$ w.r.t.\ $u_n$ are given by
++which requires $\mathcal O(|\mathcal G|M^2)$ arithmetic operations after the candidate-independent matrix quantities are available, plus the feasibility checks. For example, $A=4\lambda$ and $d_{\mathrm g}=\lambda/10$ give $|\mathcal G|=1681$. Including the current position guarantees $F(\hat\bt_n)\ge F(\bt_n)$ even when no grid point is feasible. The scale $\lambda/\max_{i,j\in\mathcal M\cup\{\mathrm{e}\}}\|\ba_j-\ba_i\|$ describes the shortest variation period of an individual nonconstant correlation phase along its own direction. The grid resolution required by the rational matrix objective also depends on the spacing-constrained domain. If all direction differences vanish, the phase-dependent objective is invariant to the position. A grid-refinement study, rather than the phase scale alone, assesses the selected resolution.
++
++\textit{3) Stage 2 (MM refinement):} Starting from $\bt_n^{(0)}=\hat\bt_n$, we refine the position by the MM method~\cite{Sun2017}, where $\bt_n^{(k)}$ denotes the position of the $n$-th MA in the $k$-th MM iteration. To construct a surrogate function, we derive the gradient of $F(\bt_n)$. Let $u_n\in\{x_n,y_n\}$ denote the coordinate of $\bt_n$ along the axis $u\in\{x,y\}$, and define $\bD_u\triangleq\diag(a_{1,u},\ldots,a_{M,u})$, where $a_{m,x}\triangleq\cos\theta_m\sin\phi_m$ and $a_{m,y}\triangleq\sin\theta_m$ are the entries of $\ba_m$, and $a_{\mathrm{e},u}$ is the corresponding entry of $\ba_{\mathrm{e}}$. From~\eqref{eq:ln}--\eqref{eq:vn}, the derivatives of $\bl_n$, $\bv$, and $\bOm$ w.r.t.\ $u_n$ are given by
+ \begin{align}
+ \dot{\bl}_n&\triangleq\frac{\partial\bl_n}{\partial u_n}=-j\frac{2\pi}{\lambda}\bD_u\bl_n,\label{eq:dl}\\
+-\dot{\bv}&\triangleq\frac{\partial\bv}{\partial u_n}=j\frac{2\pi}{\lambda}\big(a_{e,u}\bI_M-\bD_u\big)\bl_ne^{j\frac{2\pi}{\lambda}\bt_n^T\ba_e},\label{eq:dv}\\
+-\dot{\bOm}&\triangleq\frac{\partial\bOm}{\partial u_n}=-\bOm\big(\dot{\bl}_n\bl_n^H+\bl_n\dot{\bl}_n^H\big)\bOm,\label{eq:dOm}
+-\end{align}
+-where~\eqref{eq:dOm} follows from $\partial\bPhi^{-1}=-\bPhi^{-1}(\partial\bPhi)\bPhi^{-1}$. Based on~\eqref{eq:dl}--\eqref{eq:dOm}, the derivatives $\dot\omega_m\triangleq\partial\omega_m/\partial u_n$, $\dot c_m\triangleq\partial c_m/\partial u_n$, and $\dot d\triangleq\partial d/\partial u_n$ are derived in closed form in Appendix~\ref{app:grad}. Let $\chi_m\triangleq\xi_mp_m$ and $\Upsilon\triangleq q\psi+\sbe$, whose derivatives are $\dot\chi_m=\kappa_ep_m\dot c_m$ and $\dot\Upsilon=\kappa_eq\dot d$, respectively. Moreover, $\dot\eta_m\triangleq\partial\eta_m/\partial u_n=-\eta_m\dot\omega_m/\omega_m$. By the chain rule, the entries of the gradient $\nabla_{\bt_n}F=[\partial F/\partial x_n,\ \partial F/\partial y_n]^T$ are given by
++\dot{\bv}&\triangleq\frac{\partial\bv}{\partial u_n}\nonumber\\
++&=j\frac{2\pi}{\lambda}
++ \big(a_{\mathrm{e},u}\bI_M-\bD_u\big)\bl_n
++ e^{j\frac{2\pi}{\lambda}\bt_n^{\mathrm{T}}\ba_{\mathrm{e}}},\label{eq:dv}\\
++\dot{\bOm}&\triangleq\frac{\partial\bOm}{\partial u_n}=-\bOm\big(\dot{\bl}_n\bl_n^{\mathrm{H}}+\bl_n\dot{\bl}_n^{\mathrm{H}}\big)\bOm,\label{eq:dOm}
++\end{align}
++where~\eqref{eq:dOm} follows from $\partial\bPhi^{-1}=-\bPhi^{-1}(\partial\bPhi)\bPhi^{-1}$. Based on~\eqref{eq:dl}--\eqref{eq:dOm}, the derivatives $\dot\omega_m\triangleq\partial\omega_m/\partial u_n$, $\dot c_m\triangleq\partial c_m/\partial u_n$, and $\dot d\triangleq\partial d/\partial u_n$ are derived in closed form in Appendix~\ref{app:grad}. Let $\chi_m\triangleq\xi_mp_m$ and $\Upsilon\triangleq q\psi+\sbe$, whose derivatives are $\dot\chi_m=\kappa_{\mathrm{e}}p_m\dot c_m$ and $\dot\Upsilon=\kappa_{\mathrm{e}}q\dot d$, respectively. Moreover, $\dot\eta_m\triangleq\partial\eta_m/\partial u_n=-\eta_m\dot\omega_m/\omega_m$. By the chain rule, the entries of the gradient $\nabla_{\bt_n}F=[\partial F/\partial x_n,\ \partial F/\partial y_n]^{\mathrm{T}}$ are given by
+ \begin{equation}\label{eq:dF}
+-\frac{\partial F}{\partial u_n}=\frac{1}{\ln2}\sum_{m=1}^{M}\bigg[\frac{p_m\dot\eta_m}{1+\eta_mp_m}-\frac{\kappa_ep_m\dot c_m}{\chi_m+\Upsilon}+\frac{\kappa_eq\chi_m\dot d}{\Upsilon(\chi_m+\Upsilon)}\bigg],
+-\end{equation}
+-
+-Since $F(\bt_n)$ is twice continuously differentiable and $\mathcal C$ is compact, $\nabla_{\bt_n}F$ is Lipschitz continuous over $\mathcal C$ with some constant $\mathcal L_n$. According to the descent lemma~\cite[Lemma~5.7]{Beck2017}, for any $\delta_n\ge\mathcal L_n$, the following quadratic function, which is tight at $\bt_n^{(k)}$, is a lower bound of $F(\bt_n)$:
+-\begin{align}
+-F(\bt_n)\ge\hat F_n(\bt_n|\bt_n^{(k)})\triangleq\ &F(\bt_n^{(k)})+\nabla_{\bt_n}F(\bt_n^{(k)})^T\big(\bt_n-\bt_n^{(k)}\big)\nonumber\\
+-&-\frac{\delta_n}{2}\big\|\bt_n-\bt_n^{(k)}\big\|^2.\label{eq:surrogate}
+-\end{align}
+-Since $\mathcal L_n$ is difficult to obtain, $\delta_n$ is determined by backtracking~\cite{Beck2017}, i.e., starting from $\max\{\delta_0,\delta_n^{\mathrm{pre}}/2\}$, where $\delta_0>0$ is a constant and $\delta_n^{\mathrm{pre}}$ is the previously accepted value, $\delta_n$ is doubled until the update below satisfies $F(\bt_n^{(k+1)})\ge\hat F_n(\bt_n^{(k+1)}|\bt_n^{(k)})$, which holds once $\delta_n\ge\mathcal L_n$.
++\begin{aligned}
++\frac{\partial F}{\partial u_n}
++=\frac{1}{\ln2}\sum_{m=1}^{M}
++\bigg[&
++\frac{p_m\dot\eta_m}{1+\eta_mp_m}
++-\frac{\kappa_{\mathrm{e}}p_m\dot c_m}{\chi_m+\Upsilon}\\
++&+\frac{\kappa_{\mathrm{e}}q\chi_m\dot d}
++ {\Upsilon(\chi_m+\Upsilon)}\bigg].
++\end{aligned}
++\end{equation}
++
++For fixed $\bp$, $q$, and the other antenna positions, $F$ is smooth on a neighborhood of the compact square $\mathcal C$: $\bPhi\succeq N\bI_M$ and all noise powers are positive, so the inverse and logarithmic denominators remain well defined. Its coordinate gradient is therefore Lipschitz continuous on $\mathcal C$ with a finite constant $L_n$. The smoothness bound~\cite[Lemma~5.7]{Beck2017} gives, for $\delta_n\ge L_n$,
++\begin{align}
++F(\bt_n)&\ge\hat F_n(\bt_n|\bt_n^{(k)})\nonumber\\
++&\triangleq F(\bt_n^{(k)})
++ +\nabla_{\bt_n}F(\bt_n^{(k)})^{\mathrm{T}}
++ (\bt_n-\bt_n^{(k)})\nonumber\\
++&\qquad-\frac{\delta_n}{2}
++ \|\bt_n-\bt_n^{(k)}\|^2.
++\label{eq:surrogate}
++\end{align}
++The surrogate is value- and gradient-tight at the current point~\cite{Sun2017}. Since $L_n$ is unknown, the numerical method starts from $\max\{\delta_0,\delta_n^{\mathrm{pre}}/2\}$ and doubles $\delta_n$ until the trial solution of~\eqref{eq:P32n} satisfies $F(\bt_n^{\mathrm{trial}})\ge\hat F_n(\bt_n^{\mathrm{trial}}|\bt_n^{(k)})$. This pointwise acceptance test is sufficient for the monotonicity argument; passing it does not certify that the tested $\delta_n$ bounds the Hessian everywhere. The test succeeds for sufficiently large $\delta_n$ in exact arithmetic. In the implementation, at most $B_{\mathrm{max}}=60$ trials are made; a failed search retains the current feasible position. A trial is committed only if its computed objective also does not decrease, and $\delta_n^{\mathrm{pre}}$ stores the last accepted curvature value.
++
++For an EP benchmark with objective $F_{\mathrm{EP}}(\bt)=\sum_m[r_m(\bt)]^+$, where $r_m=\tilde R_m-\tilde R_{\mathrm{e},m}$ for its fixed powers, the objective need not be differentiable at $r_m=0$. At the current point define $\mathcal A^{(k)}=\{m:r_m(\bt_n^{(k)})>0\}$ and $h_k(\bt_n)=\sum_{m\in\mathcal A^{(k)}}r_m(\bt_n)$. Then $h_k(\bt_n)\le F_{\mathrm{EP}}(\bt_n)$ everywhere and equality holds at the current point. The implementation uses the gradient of this fixed active sum to construct the quadratic lower model and tests its trial against the full positive-part objective. Thus, the same acceptance argument preserves nondecrease without assuming smoothness of the clipped objective. If the active set is empty, the selected gradient is zero and the current point may be retained.
+ 
+ To handle the minimum-distance constraints, we note that $\|\bt_n-\bt_i\|^2$ is convex w.r.t.\ $\bt_n$ and is thus lower-bounded by its first-order Taylor expansion at $\bt_n^{(k)}$~\cite{ZhengTCOM2025}, i.e.,
+ \begin{equation}\label{eq:distlin}
+-\|\bt_n-\bt_i\|^2\ge\|\bDel_{n,i}^{(k)}\|^2+2\big(\bDel_{n,i}^{(k)}\big)^T\big(\bt_n-\bt_n^{(k)}\big),
++\|\bt_n-\bt_i\|^2\ge\|\bDel_{n,i}^{(k)}\|^2+2\big(\bDel_{n,i}^{(k)}\big)^{\mathrm{T}}\big(\bt_n-\bt_n^{(k)}\big),
+ \end{equation}
+ where $\bDel_{n,i}^{(k)}\triangleq\bt_n^{(k)}-\bt_i$. Replacing $\|\bt_n-\bt_i\|^2$ in the minimum-distance constraints with the right-hand side of~\eqref{eq:distlin} yields the linear constraints
+ \begin{equation}\label{eq:linc}
+-\big(\bDel_{n,i}^{(k)}\big)^T\bt_n\ge\big(\bDel_{n,i}^{(k)}\big)^T\bt_n^{(k)}+\frac{\Dmin^2-\|\bDel_{n,i}^{(k)}\|^2}{2},\quad\forall i\neq n,
++\big(\bDel_{n,i}^{(k)}\big)^{\mathrm{T}}\bt_n\ge\big(\bDel_{n,i}^{(k)}\big)^{\mathrm{T}}\bt_n^{(k)}+\frac{\Dmin^2-\|\bDel_{n,i}^{(k)}\|^2}{2},\quad\forall i\neq n,
+ \end{equation}
+ whose feasible set is a convex subset of that of the minimum-distance constraints w.r.t.\ $\bt_n$. Based on~\eqref{eq:surrogate} and~\eqref{eq:linc}, $\bt_n$ is updated by solving
+ \begin{equation}\label{eq:P32n}
+@@ -581,45 +696,65 @@
+ \begin{equation}\label{eq:mono}
+ F(\bt_n^{(k+1)})\ge\hat F_n(\bt_n^{(k+1)}|\bt_n^{(k)})\ge\hat F_n(\bt_n^{(k)}|\bt_n^{(k)})=F(\bt_n^{(k)}),
+ \end{equation}
+-and $\bt_n^{(k+1)}$ is feasible for (P3.2.$n$) due to~\eqref{eq:distlin}. The MM iterations are repeated until the fractional increase of $F$ is below $\epsilon_{\mathrm{in}}$ or $I_{\mathrm{in}}$ iterations are reached.
++and the new position satisfies the original spacing constraints because~\eqref{eq:distlin} is a global lower bound. The current position is feasible for the linearized constraints, so the inner polygon is nonempty even if it degenerates to a segment or point. The inner iterations stop when
++\begin{equation*}
++\frac{F(\bt_n^{(k+1)})-F(\bt_n^{(k)})}
++{\max\{1,|F(\bt_n^{(k+1)})|\}}
++<\epsilon_{\mathrm{in}},
++\end{equation*}
++or after $I_{\mathrm{in}}$ iterations. This scaled objective test remains defined when $F$ is zero or signed; it does not by itself certify a stationary point. A failed backtracking search leaves the position unchanged and consequently terminates the inner objective test.
+ 
+ \subsection{Overall Algorithm, Convergence, and Complexity}\label{sec:overall}
+ 
+ \begin{algorithm}[t]
+ \caption{Two-Timescale AO Algorithm for (P3)}\label{alg:ao}
+ \small\begin{algorithmic}[1]
+-\Require Statistical CSI, $\Ptot$, $\mathcal C$, $\Dmin$, $Q$, $d_{\mathrm g}$, $\delta_0$, $\epsilon_{\mathrm{in}}$, $I_{\mathrm{in}}$, $\epsilon$, $I_{\max}$.
+-\Ensure $\bt^\star$, $\bp^\star$, and $q^\star$.
+-\State Initialize feasible antenna positions $\bt$, obtain $(\bp,q)$ by Algorithm~\ref{alg:power}, and set $\ell=0$.
++\Require Statistical CSI and noise powers, $\Ptot$, $\mathcal C$, $\Dmin$, $Q$, $I_{\mathrm b}$, $d_{\mathrm g}$, $\delta_0$, $B_{\mathrm{max}}$, $\epsilon_{\mathrm{in}}$, $I_{\mathrm{in}}$, $\epsilon$, and $I_{\mathrm{max}}$.
++\Ensure Feasible outputs $\bt^{\mathrm{out}}$, $\bp^{\mathrm{out}}$, and $q^{\mathrm{out}}$.
++\State Verify that the selected initial configuration $\bt$ satisfies~\eqref{eq:P2region} and~\eqref{eq:P2dist}.
++\State Obtain $(\bp,q)$ by Algorithm~\ref{alg:power}; set $\ell=0$ and $\delta_n^{\mathrm{pre}}=\delta_0$ for every $n$.
+ \Repeat
++  \State Store $F_{\mathrm{old}}=F(\bt,\bp,q)$.
+   \For{$n=1$ to $N$}
+-    \State \textit{Stage 1:} Compute $\bGam_n^{-1}$ and $\br_n$, and obtain $\hat\bt_n$ by~\eqref{eq:gridsearch}.
+-    \State \textit{Stage 2:} Starting from $\bt_n^{(0)}=\hat\bt_n$, update $\bt_n$ by~\eqref{eq:P32n} with backtracking on $\delta_n$ until the fractional increase of $F$ is below $\epsilon_{\mathrm{in}}$ or $I_{\mathrm{in}}$ iterations are reached.
++    \State Form $\bGam_n^{-1}$ and $\br_n$ using the latest positions, and choose $\hat\bt_n$ by~\eqref{eq:gridsearch}.
++    \State Starting from $\hat\bt_n$, perform at most $I_{\mathrm{in}}$ updates of~\eqref{eq:P32n} with the pointwise surrogate test, the nondecrease guard, and at most $B_{\mathrm{max}}$ backtracking trials per update.
++    \State Stop the inner updates by the scaled objective test in Section~\ref{sec:position}; retain the previous position if no trial is accepted.
+   \EndFor
+-  \State Obtain $(\bp',q')$ by Algorithm~\ref{alg:power} for the updated $\bt$, and set $(\bp,q)\leftarrow(\bp',q')$ if $F(\bt,\bp',q')\ge F(\bt,\bp,q)$.
+-  \State $\ell\leftarrow\ell+1$.
+-\Until{the fractional increase of $F$ is below $\epsilon$ or $\ell=I_{\max}$}
++  \State Obtain $(\bp',q')$ by Algorithm~\ref{alg:power} at the updated $\bt$.
++  \State Commit $(\bp,q)\leftarrow(\bp',q')$ only if $F(\bt,\bp',q')\ge F(\bt,\bp,q)$.
++  \State Set $F_{\mathrm{new}}=F(\bt,\bp,q)$ and $\ell\leftarrow\ell+1$.
++\Until{$(F_{\mathrm{new}}-F_{\mathrm{old}})/\max\{1,|F_{\mathrm{new}}|\}<\epsilon$ or $\ell=I_{\mathrm{max}}$}
++\State \Return $(\bt^{\mathrm{out}},\bp^{\mathrm{out}},q^{\mathrm{out}})=(\bt,\bp,q)$.
+ \end{algorithmic}
+ \end{algorithm}
+ 
+ Based on Sections~\ref{sec:power} and~\ref{sec:position}, the overall AO algorithm for (P3) is summarized in Algorithm~\ref{alg:ao}, whose convergence, initialization, and complexity are discussed below.
+ 
+-\textit{Convergence:} In each iteration of Algorithm~\ref{alg:ao}, the global search in~\eqref{eq:gridsearch} does not decrease the objective value of (P3), since the current position is included in the candidates, and neither do the MM updates in~\eqref{eq:P32n} due to~\eqref{eq:mono}. Since the power allocation is also updated only if the objective value does not decrease, the objective value is nondecreasing over the iterations. Moreover, it is upper-bounded by $\sum_{m=1}^M\log_2(1+\zeta_m(N-M)(\kappa_m+1)\Ptot)$ according to~\eqref{eq:etabound} and $p_m\le\Ptot$. Therefore, the objective value achieved by Algorithm~\ref{alg:ao} is guaranteed to converge.
++\textit{Convergence:} The finite-grid position search includes the current point, the accepted MM step satisfies~\eqref{eq:mono}, and the power update is committed only when $F$ does not decrease. Therefore, the sequence of accepted values of the smooth objective $F$ is nondecreasing. It is bounded above by $\sum_{m=1}^M\log_2(1+\zeta_m(N-M)(\kappa_m+1)\Ptot)$ using~\eqref{eq:etabound} and $p_m\le\Ptot$. With the iteration caps removed, these objective values converge. The implemented finite algorithm terminates at its iteration limit or its specified objective-increase tolerance. This argument proves neither convergence of the variables nor stationarity or global optimality: the power search uses a finite grid, the position subproblems are inexact, and the spacing constraints couple the antenna blocks. It also does not establish monotonicity of the exact Monte Carlo ESSR, because $F$ uses approximated rates. The final design is evaluated using~\eqref{eq:esr} with the exact SINRs.
+ 
+ \textit{Initialization:} Since (P3) is nonconvex, the solution obtained by Algorithm~\ref{alg:ao} may depend on the initial positions. This dependence is weaker than for purely local updates, since the global search in Stage~1 allows each MA to move to any feasible grid point in $\mathcal C$ in every iteration. To further improve the solution, Algorithm~\ref{alg:ao} can be executed from several initializations, e.g., the positions of the FPA array and random feasible positions, and the best solution is selected.
+ 
+-\textit{Complexity:} In each iteration, forming $\bPhi$ and $\bOm$ requires $\mathcal O(NM^2+M^3)$ operations. For each MA, $\bGam_n^{-1}$ is obtained from $\bOm$ by a rank-one update. Stage 1 requires $\mathcal O(|\mathcal G|(M^2+N))$ operations, including the feasibility check of the grid points, where $|\mathcal G|=(\lfloor A/d_{\mathrm g}\rfloor+1)^2$. In Stage 2, the gradient in~\eqref{eq:dF} and each evaluation of $F$ require $\mathcal O(M^2)$ operations based on~\eqref{eq:sm}, and solving~\eqref{eq:P32n} by enumeration requires $\mathcal O(N^3)$ operations. Algorithm~\ref{alg:power} requires $\mathcal O(QI_{\mathrm b}M)$ operations, where $I_{\mathrm b}$ is the number of bisection iterations. Hence, the complexity of Algorithm~\ref{alg:ao} per initialization is $\mathcal O\big(I_{\mathrm o}\big(NM^2+M^3+N|\mathcal G|(M^2+N)+NI_{\mathrm{in}}J(M^2+N^3)+QI_{\mathrm b}M\big)\big)$, where $I_{\mathrm o}$ is the number of AO iterations and $J$ is the average number of backtracking trials. In contrast to stochastic optimization~\cite{ZhaoTWC2021}, this complexity does not depend on the number of channel realizations. Since Algorithm~\ref{alg:ao} depends only on the slowly varying statistical CSI, it is executed only once per frame, whereas the ZF precoding and AN generation in each CI require $\mathcal O(NM^2+M^3)$ operations.
++\textit{Complexity:} Let $C_{\mathrm{geo}}\triangleq NM^2+M^3$ denote the arithmetic cost of forming the Gram matrix and its inverse. Conditional on a precomputed $\bGam_n^{-1}$, a rank-one candidate evaluation costs $\mathcal O(M^2)$; in particular, $[\bOm^2]_{m,m}=\sum_i|[\bOm]_{m,i}|^2$ does not require forming a dense matrix square. The supplied implementation, however, reconstructs $\bGam_n^{-1}$ for each antenna and recomputes the geometry in the generic gradient and objective routines. Its Stage~1 cost per antenna is $\mathcal O(C_{\mathrm{geo}}+|\mathcal G|(M^2+N))$, including spacing checks, where $|\mathcal G|=(\lfloor A/d_{\mathrm g}\rfloor+1)^2$. Each inner MM iteration uses a gradient costing $\mathcal O(C_{\mathrm{geo}})$ and $J$ backtracking trials, each costing $\mathcal O(C_{\mathrm{geo}}+N^3)$. The $N^3$ term accounts for enumerating line intersections and checking their feasibility against all polygon constraints. The power routine uses $\mathcal O(QI_{\mathrm b}M)$ operations after the coefficients are formed. Thus, a conservative bound per initialization is
++\begin{align*}
++\mathcal O\!\Bigg(I_{\mathrm o}\Bigg\{
++&C_{\mathrm{geo}}+QI_{\mathrm b}M\\
++&+N\Big[C_{\mathrm{geo}}+|\mathcal G|(M^2+N)\\
++&\quad+I_{\mathrm{in}}\big(C_{\mathrm{geo}}
++  +J(C_{\mathrm{geo}}+N^3)\big)\Big]
++\Bigg\}\Bigg),
++\end{align*}
++where $I_{\mathrm o}\le I_{\mathrm{max}}$, $J\le B_{\mathrm{max}}$, and $I_{\mathrm{in}}$ bounds the number of inner updates. Executing $N_{\mathrm{init}}$ initializations multiplies the design cost by $N_{\mathrm{init}}$. A fully cached implementation could reduce the repeated geometry cost, but that reduction is not claimed for the supplied code. In contrast to the stochastic optimization in~\cite{ZhaoTWC2021}, the statistical design contains no Monte Carlo channel loop; it is executed once per frame. The separate short-timescale ZF construction requires $\mathcal O(C_{\mathrm{geo}})$ operations per CI. Constructing a dense AN covariance is unnecessary: one AN realization can be generated by projecting a standard complex Gaussian vector with the already available channel factorization.
+ 
+ % =============================================================================
+ \section{Simulation Results}\label{sec:sim}
+ % =============================================================================
+ \subsection{Simulation Setup and Benchmarks}\label{sec:sim_setup}
+ 
+-Unless otherwise specified, we set $N=8$, $M=3$, $A=4\lambda$, $\Dmin=\lambda/2$, $\kappa_m=\kappa_e=10$~dB, $\beta_m=\beta_e=1$, and $\sigma_m^2=\sigma_e^2=\sigma^2$, such that $\Ptot/\sigma^2$ is the transmit SNR, which is $20$~dB by default. The elevation and azimuth AoDs of the LUs are independently and uniformly distributed within $[-\pi/3,\pi/3]$. Similar to~\cite{ChenArxiv2026}, Eve is located in a direction close to that of LU~$1$ to model the challenging case in Section~\ref{sec:intro}. Specifically, its AoDs are $\theta_e=\theta_1+\Delta\cos\tilde\phi$ and $\phi_e=\phi_1+\Delta\sin\tilde\phi$, i.e., they deviate from those of LU~$1$ by the angular separation $\Delta$ in the direction specified by $\tilde\phi$, which is uniformly distributed over $[0,2\pi)$. By default, $\Delta=0.1$~rad, for which the normalized LoS correlation $|\hb_1^H(\bt)\gb(\bt)|/N$ between Eve and LU~$1$ exceeds $0.94$ for the FPA, i.e., Eve lies well within the main lobe of the beam steered toward LU~$1$. The case where the AoDs of Eve are independent of those of the LUs is considered in Section~\ref{sec:sim_rob}.
+-
+-For Algorithm~\ref{alg:ao}, the grid spacing in Stage~1 is $d_{\mathrm g}=\lambda/10$, i.e., less than one third of the shortest phase period in Section~\ref{sec:position}, and the remaining parameters are $\delta_0=1$, $\epsilon_{\mathrm{in}}=10^{-6}$, $I_{\mathrm{in}}=20$, $\epsilon=10^{-4}$, $I_{\max}=50$, and $Q=41$. Algorithm~\ref{alg:ao} is executed from a $2\times(N/2)$ uniform planar array (UPA) with $\lambda/2$ spacing and two sets of random feasible positions, and the best solution is selected. All the results are averaged over $100$ random realizations of the AoDs shared by all the schemes, i.e., the comparisons are paired, and the standard error of the average ESSR of the proposed design at $20$~dB is $0.5\%$ of its value. Since the closed-form approximations are used only for optimization, the ergodic rates of each design are evaluated with the exact SINRs in~\eqref{eq:snr} and~\eqref{eq:sinre} over $5\times10^3$ channel realizations.
+-
+-We compare the proposed design with four benchmarks: 1) \textbf{Rate-oriented MA}: The antenna positions maximize the approximate ergodic sum rate of the LUs with equal power, i.e., $\sum_{m=1}^M\log_2(1+\eta_m(\bt)\Ptot/M)$, which ignores Eve~\cite{ZhengTCOM2025}. For a fair comparison, this problem is tackled by the position update in Section~\ref{sec:position} with the same initializations. This benchmark reveals the gain of the secrecy-aware positioning enabled by Proposition~\ref{prop:eve}. 2) \textbf{AS}: Similar to~\cite{ChenArxiv2026}, the BS selects $N$ of $2N$ candidate antennas, which form a UPA with $4$ rows, $N/2$ columns, and $\lambda/2$ spacing, by an exhaustive search over all the $\binom{2N}{N}$ subsets, e.g., $12870$ for $N=8$, where the selection metric is the approximate ESSR in (P3). AS requires no antenna movement but twice as many antennas and an RF switching network. 3) \textbf{Sparse FPA}: A $2\times(N/2)$ UPA spans $\mathcal C$ with spacings $2A/(N-2)$ and $A$ along the $x$- and $y$-axes, respectively. This benchmark has the same aperture as the MAs and thus separates the gain of the optimized positions from that of the large aperture. 4) \textbf{FPA}: The BS adopts the $2\times(N/2)$ UPA with $\lambda/2$ spacing. All the schemes adopt the power allocation in Algorithm~\ref{alg:power}, so that their performance differences are caused only by the antenna positions.
++Unless otherwise specified, $N=8$, $M=3$, $A=4\lambda$, $\Dmin=\lambda/2$, $\kappa_m=\kappa_{\mathrm{e}}=10$~dB, $\beta_m=\beta_{\mathrm{e}}=1$, and $\sigma_m^2=\sigma_{\mathrm{e}}^2=\sigma^2$. The default transmit SNR $\Ptot/\sigma^2$ is $20$~dB. The implementation normalizes $\lambda=1$ and $\sigma^2=1$; the Rician factors are converted from dB to linear values before channel generation. The elevation and azimuth AoDs of the LUs are independently uniform on $[-\pi/3,\pi/3]$. To examine a near-aligned eavesdropper~\cite{ChenArxiv2026}, we set $\theta_{\mathrm{e}}=\theta_1+\Delta\cos\tilde\phi$ and $\phi_{\mathrm{e}}=\phi_1+\Delta\sin\tilde\phi$, where $\tilde\phi$ is uniform on $[0,2\pi)$. Here, $\Delta$ denotes an offset in the elevation--azimuth coordinates rather than the physical three-dimensional angle between propagation directions. Its default value is $0.1$~rad. For a compact FPA, this setting produces strongly correlated LoS responses from Eve and LU~$1$. Independent Eve and LU directions are considered in Section~\ref{sec:sim_rob}.
++
++For Algorithm~\ref{alg:ao}, Stage~1 uses a grid spacing of $d_{\mathrm g}=\lambda/10$. The remaining parameters are $\delta_0=1$, $\epsilon_{\mathrm{in}}=10^{-6}$, $I_{\mathrm{in}}=20$, $\epsilon=10^{-4}$, and $I_{\mathrm{max}}=50$. The AN-power search uses a coarse grid and a local refinement grid, each containing $Q=41$ points, and the water-level bisection uses $60$ iterations. For the rate comparisons, Algorithm~\ref{alg:ao} starts from a $2\times(N/2)$ uniform planar array (UPA) with $\lambda/2$ spacing and two random feasible configurations; the configuration with the largest surrogate objective is retained. Figure~\ref{fig:conv} instead uses a single UPA initialization, with $2\times4$ and $3\times4$ elements for $N=8$ and $N=12$, respectively. All schemes share $100$ AoD realizations. At $20$~dB, the sample standard error of the proposed ESSR is $0.113$~bit/s/Hz, or approximately $0.55\%$ of its mean. The statistical-CSI approximations determine the designs, whereas the reported ergodic rates use the exact SINRs in~\eqref{eq:snr} and~\eqref{eq:sinre}. Each rate evaluation uses $5000$ independent channel realizations, except in Fig.~\ref{fig:acc}, which uses $10000$. The objective values in Fig.~\ref{fig:conv} are evaluated analytically.
++
++We compare the proposed design with four benchmarks. 1) \textbf{Rate-oriented MA}: The antenna positions maximize $\sum_{m=1}^{M}\log_2(1+\eta_m(\bt)\Ptot/M)$, which excludes Eve from the position objective~\cite{ZhengTCOM2025}. The same position-update method and initial configurations are used, after which Algorithm~\ref{alg:power} allocates power. 2) \textbf{AS}: The BS enumerates all $\binom{2N}{N}$ subsets of $N$ antennas from a $4\times(N/2)$ candidate UPA with $\lambda/2$ spacing~\cite{ChenArxiv2026}. Each subset is scored by the approximate ESSR using secrecy water-filling at $21$ uniformly spaced AN-power values. Algorithm~\ref{alg:power} then refines the power allocation only for the selected subset using its two $41$-point grids. This procedure searches all subsets under the coarse metric; it does not certify the best subset under the refined metric or the optimum over continuous AN power. For $N=8$, there are $12870$ subsets. 3) \textbf{Sparse FPA}: A $2\times(N/2)$ UPA spans $\mathcal C$, with spacings $2A/(N-2)$ and $A$ along the $x$- and $y$-axes. 4) \textbf{FPA}: A $2\times(N/2)$ UPA has $\lambda/2$ spacing. All schemes use the same final power-allocation procedure after their positions or antenna subsets are selected. The numerical position and subset searches have the budgets stated above. The AS benchmark uses $2N$ physical candidate elements and $N$ selected transmission branches.
+ 
+ \subsection{Accuracy of the Closed-Form Approximations}\label{sec:sim_acc}
+ 
+@@ -627,11 +762,11 @@
+ \centering
+ \subfloat[]{\includegraphics[width=\columnwidth]{fig3a_accuracy_snr}\label{fig:acc_P}}\hfil
+ \subfloat[]{\includegraphics[width=\columnwidth]{fig3b_accuracy_kappa}\label{fig:acc_K}}
+-\caption{Ergodic sum rates of the LUs and Eve achieved by the proposed design, obtained by Monte Carlo simulations (markers) and by Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} (lines), versus (a) the transmit SNR $\Ptot/\sigma^2$ and (b) the Rician factor $\kappa=\kappa_m=\kappa_e$.}
++\caption{Ergodic sum rates of the LUs and Eve achieved by the proposed design, obtained by Monte Carlo simulations (markers) and by Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} (lines), versus (a) the transmit SNR $\Ptot/\sigma^2$ and (b) the Rician factor $\kappa=\kappa_m=\kappa_{\mathrm{e}}$.}
+ \label{fig:acc}
+ \end{figure*}
+ 
+-Fig.~\ref{fig:acc} evaluates the accuracy of Lemma~\ref{lem:lu} and Proposition~\ref{prop:eve} at the designs obtained by Algorithm~\ref{alg:ao}. Proposition~\ref{prop:eve} closely matches the Monte Carlo results over the entire ranges of the SNR and the Rician factor, indicating that it accurately captures the LoS correlation between Eve and the LUs. In contrast, Lemma~\ref{lem:lu} underestimates the ergodic sum rate of the LUs, and the gap grows with the Rician factor. The reason is that, besides Jensen's inequality, the central Wishart approximation in Lemma~\ref{lem:lu} is exact for Rayleigh fading but overestimates $\E\{[(\bH^H(\bt)\bH(\bt))^{-1}]_{m,m}\}$ by a factor approaching $N/(N-M)$ as the LoS components dominate. Hence, the approximate ESSR in~\eqref{eq:esrapprox} is a conservative estimate of the actual ESSR. Nevertheless, this gap is similar for all the schemes and smaller than the gains of the proposed design, so that the approximation remains a suitable design objective.
++Figure~\ref{fig:acc} compares the approximate and Monte Carlo rates at the configurations selected by Algorithm~\ref{alg:ao}. Over the tested SNRs and Rician factors, the largest absolute differences between the approximate and simulated wiretap sum rates are $0.052$ and $0.013$~bit/s/Hz, respectively. These comparisons support the approximation in the tested configurations; they do not establish a bound for arbitrary positions or channel statistics. Lemma~\ref{lem:lu} underestimates the simulated LU sum rate, with a larger discrepancy as the LoS component becomes stronger. Its derivation combines Jensen's inequality with a central-Wishart replacement, whose inverse-moment expression is exact for Rayleigh channels but is generally approximate for Rician channels. Consequently, the resulting ESSR is a surrogate objective rather than a certified lower bound on the true ESSR. At $20$~dB, the proposed configuration has a Monte Carlo ESSR of $20.75$~bit/s/Hz and a surrogate value of $18.98$~bit/s/Hz. Approximation errors can change the ranking of close designs; the reported comparisons therefore use the exact-SINR Monte Carlo rates.
+ 
+ \subsection{Convergence Behavior of Algorithm~\ref{alg:ao}}\label{sec:sim_conv}
+ 
+@@ -642,7 +777,7 @@
+ \label{fig:conv}
+ \end{figure}
+ 
+-Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of iterations of Algorithm~\ref{alg:ao}, which is run without the stopping criterion. For all the settings, the objective value increases monotonically and converges within about $15$ iterations. The fast convergence is due to the global search in Stage~1, which moves each MA directly to the best basin of $F(\bt_n)$ instead of letting it traverse the movable region through local updates. In contrast, with only the MM updates, the objective value increases much more slowly and remains lower, since the MAs are trapped in the local maxima near their initial positions.
++Figure~\ref{fig:conv} reports the objective of (P3), with the outer stopping test disabled to retain $50$ iterations. Every stored trajectory is nondecreasing, consistent with the acceptance tests for the position and power updates. The averaged curves are close to their final values after approximately $15$ iterations: their remaining increases are between $0.024$ and $0.034$~bit/s/Hz. This observation does not imply that every realization meets the default stopping test within $15$ iterations. The average stopping indices are $16.31$ and $13.02$ for $N=8$ at $10$ and $20$~dB, and $15.87$ and $12.51$ for $N=12$; some realizations reach the $50$-iteration limit. The feasible-grid stage examines positions beyond the neighborhood accessible to a local MM update. It therefore provides a higher initial improvement in these experiments, while the MM-only variant attains a lower objective. A finite spatial grid does not certify the best continuous attraction region, and monotonic objective convergence does not by itself establish stationarity.
+ 
+ \subsection{ESSR and AN Power Versus Transmit SNR}
+ 
+@@ -654,9 +789,9 @@
+ \label{fig:snr}
+ \end{figure*}
+ 
+-Fig.~\ref{fig:snr}(a) shows that the proposed design achieves the highest ESSR over the entire SNR range, e.g., about $31\%$ higher than that of the FPA at $20$~dB. Although the rate-oriented MA exploits the same movable region, its gain over the FPA is less than half of that of the proposed design. The reason is that the rate-oriented positions only decorrelate the LUs, whereas the proposed positions additionally reduce the information leakage and increase the AN received by Eve (see Remark~\ref{rem:mech}). AS achieves an even smaller gain, because its $2N$ candidates form a compact array, whose spatial resolution is insufficient to decorrelate the LoS components of Eve and LU~$1$. The sparse FPA has the same aperture as the MAs but also achieves less than half of the gain of the proposed design over the FPA, because its fixed positions cannot adapt the LoS correlations to the AoDs of the LUs and Eve. Hence, the secrecy gain of the MAs results mainly from the optimized positions rather than from the large aperture. Moreover, the absolute ESSR gains of the proposed design approach constants at high SNR, since the antenna positions improve the constant term rather than the slope of the ESSR (see Remark~\ref{rem:highsnr}). In contrast, without AN, i.e., with $q=0$ in Algorithm~\ref{alg:ao}, the ESSR of the proposed design saturates at high SNR, because the SINRs of the LUs and Eve then grow at the same rate with the transmit power~\cite{Goel2008}.
+-
+-Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates, as predicted by~\eqref{eq:alphastar}. The proposed design requires much less AN power than all the benchmarks, whose AN power fractions are comparable to that of the FPA. This result verifies the AN-saving effect in Remark~\ref{rem:highsnr}: since the proposed positions reduce the information leakage and increase the AN received by Eve, less AN suffices, leaving more power for the confidential signals.
++Figure~\ref{fig:snr}(a) compares the exact-SINR Monte Carlo ESSRs. At $20$~dB, the proposed, rate-oriented, and compact-FPA designs achieve $20.75$, $18.08$, and $15.82$~bit/s/Hz, respectively. The proposed gain is $14.8\%$ over the rate-oriented design and $31.2\%$ over the compact FPA. The rate-oriented objective improves the legitimate-channel geometry through $\eta_m(\bt)$, whereas the secrecy objective also accounts for the leakage coefficients $c_m(\bt)$ and the AN coefficient $d(\bt)$. Position changes can trade these quantities against one another; the formulation does not require every user's leakage to decrease at every iteration. The sparse FPA achieves $17.75$~bit/s/Hz at the same aperture, showing that aperture alone does not reproduce the gain of the adaptive positions in this setting. The compact AS candidates provide a different, discretely constrained set of spatial configurations. At high SNR, the simulated absolute gains change slowly, consistent with the constant-offset comparison in Remark~\ref{rem:highsnr} under its stated assumptions. With $q=0$, the worst-case Eve model yields a secrecy-rate ceiling because the desired and leakage signal powers both scale with the transmit power~\cite{Goel2008}.
++
++Figure~\ref{fig:snr}(b) reports the AN power selected by the surrogate optimization, with each resulting design evaluated as in Fig.~\ref{fig:snr}(a). At $20$~dB, the proposed AN fraction is $0.270$, compared with $0.471$ for the compact FPA and $0.431$ for the rate-oriented MA. Thus, the proposed design allocates approximately $42.7\%$ less power to AN than the compact FPA at this SNR. In Proposition~\ref{prop:eve}, the wiretap rate decreases when the leakage coefficient falls or the effective AN denominator increases. Spatial control therefore changes the tradeoff between confidential-signal power and AN power. The observed fractions level off at high SNR, consistent with~\eqref{eq:alphastar} within the assumptions of Remark~\ref{rem:highsnr}. These fractions are selected by the approximate objective and are not certified minimizers of AN power for a prescribed true ESSR.
+ 
+ \subsection{Impact of the Region Size and the Number of MAs}\label{sec:sim_reg}
+ 
+@@ -668,113 +803,157 @@
+ \label{fig:region}
+ \end{figure*}
+ 
+-Fig.~\ref{fig:region}(a) shows the ESSR versus the side length $A$ of the movable region, where we also consider AS with region-wide candidates, i.e., a $4\times4$ candidate UPA spanning $\mathcal C$, whereas the FPA and AS with the compact candidate array do not depend on $A$. The gain of the proposed design grows with $A$, because a larger region provides more spatial degrees of freedom for decorrelating the LoS components of Eve and the LUs. In contrast, the ESSRs of the rate-oriented MA and the sparse FPA increase much more slowly, since the former exploits the enlarged region only to decorrelate the LUs, and the latter cannot adapt its positions to the AoDs. AS with region-wide candidates also benefits from the enlarged aperture and its Eve-aware selection metric, but the proposed design outperforms it with half the number of antennas, because the MAs can be placed at arbitrary positions in $\mathcal C$ rather than at fixed candidate positions. Only for the smallest region, where the candidate array covers the entire region, does AS perform comparably to the proposed design.
+-
+-Fig.~\ref{fig:region}(b) shows the ESSR versus the number of MAs $N$, where AS is shown only for $N\le10$, because the number of subsets in its exhaustive search grows exponentially with $N$. All the schemes benefit from more antennas, which provide a larger array gain and more dimensions for the AN. The gain of the proposed design over the FPA decreases with $N$, because the aperture of the FPA grows with $N$, so that the FPA can better separate Eve from LU~$1$ even without position optimization. Nevertheless, the proposed design with $N=4$ MAs outperforms the FPA with $N=12$ antennas, and that with $N=8$ MAs outperforms the rate-oriented MA with $N=16$ MAs, i.e., the secrecy-aware positioning can substantially reduce the number of antennas and RF chains required for a target ESSR. Moreover, the sparse FPA, whose grating lobes are strong for small $N$, outperforms the rate-oriented MA for $N\ge12$, because more antennas in $\mathcal C$ suppress them.
+-
+-\subsection{Impact of the Angular Separation}\label{sec:sim_sep}
++Figure~\ref{fig:region}(a) varies $A$ while retaining $N=8$, $M=3$, and $\Dmin=\lambda/2$. It also includes AS with $16$ candidates on a $4\times4$ UPA spanning $\mathcal C$. A larger region expands the phase differences available for controlling the weighted LoS Gram matrix and its correlation with Eve. The secrecy-aware optimizer can therefore trade legitimate-channel conditioning against leakage suppression and AN reception. The rate-oriented design uses the expanded region only through its LU-rate objective, while the sparse FPA samples a fixed geometry for each $A$. The proposed ESSR increases from $17.27$ to $21.98$~bit/s/Hz over $A/\lambda=1.5$ to $6$ in this experiment. The feasible continuous-position set expands with $A$, but a finite-start algorithm need not produce a monotone curve for every realization. AS with region-wide candidates also benefits from its larger candidate aperture; its comparison with the proposed design concerns continuous versus discrete positioning and $N$ active elements versus $2N$ physical candidate elements. At $A=1.5\lambda$, the compact and region-wide candidate UPAs coincide.
++
++Figure~\ref{fig:region}(b) varies $N$ at $M=3$ and $A=4\lambda$. AS is evaluated only for $N\le10$ because the number of candidate subsets grows as $\binom{2N}{N}$. Increasing $N$ improves the legitimate-channel array gain and enlarges the null space available for AN. The compact FPA aperture also increases with $N$, so this comparison changes both the number of elements and its angular response. In this setting, four optimized MAs achieve $18.44$~bit/s/Hz, exceeding the $17.92$~bit/s/Hz of a compact FPA with $12$ antennas. Eight optimized MAs achieve $20.75$~bit/s/Hz, compared with $20.52$~bit/s/Hz for the rate-oriented design with $16$ MAs. These comparisons identify attainable average rates for the specified geometry rather than a universal antenna-count reduction. For the sparse FPA, increasing $N$ reduces the horizontal element spacing at fixed aperture, changing its sidelobe and grating-lobe structure. This effect can improve separation from Eve without establishing uniform sidelobe suppression for every AoD.
++
++\subsection{Impact of the Coordinate-Angle Offset}\label{sec:sim_sep}
+ 
+ \begin{figure*}[t]
+ \centering
+ \subfloat[]{\includegraphics[width=\columnwidth]{fig7a_essr_offset}\label{fig:offset}}\hfil
+ \subfloat[]{\includegraphics[width=\columnwidth]{fig7b_pa_spread}\label{fig:pa_spread}}
+-\caption{(a) ESSR versus the angular separation $\Delta$ between Eve and LU~$1$ for $M=3$ and $M=1$. (b) ESSR of the proposed power allocation (PA) and two equal-power (EP) benchmarks versus the fading spread $\varsigma$.}
++\caption{(a) ESSR versus the coordinate-angle offset $\Delta$ between Eve and LU~$1$ for $M=3$ and $M=1$. (b) ESSR of the proposed power allocation (PA) and two equal-power (EP) benchmarks versus the fading spread $\varsigma$.}
+ \label{fig:sep_pa}
+ \end{figure*}
+ 
+-Fig.~\ref{fig:sep_pa}(a) shows the ESSR versus the angular separation $\Delta$ for $M=3$ and $M=1$. For $M=3$, all the schemes benefit from a larger $\Delta$, because Eve becomes more separable from LU~$1$. When Eve is almost aligned with LU~$1$, the proposed design outperforms the rate-oriented MA only slightly, because even an aperture of $4\lambda$ can hardly decorrelate their LoS components. As $\Delta$ increases, the gain of the proposed design first increases and then decreases, because Eve eventually becomes separable even with Eve-unaware positions. For $M=1$, the rate-oriented MA coincides with the FPA, since the ergodic rate of the LU does not depend on the antenna positions (see Remark~\ref{rem:single}). In contrast, the proposed design significantly improves the ergodic secrecy rate by reducing the LoS correlation $|\hb_1^H(\bt)\gb(\bt)|^2$ in~\eqref{eq:c1} and~\eqref{eq:d1}. This result confirms that the MAs enhance secrecy even for a single LU. The sparse FPA also benefits from its large aperture for $M=1$, but the proposed design achieves a further gain by adapting the positions to the AoDs of the LU and Eve.
++Figure~\ref{fig:sep_pa}(a) varies the coordinate-angle offset $\Delta$ between Eve and LU~$1$. This parameter is the Euclidean offset in the elevation--azimuth coordinates used in Section~\ref{sec:sim_setup}; the corresponding physical separation also depends on the nominal direction. For $M=3$, the proposed and rate-oriented ESSRs are close at $\Delta=0.02$~rad, since the finite aperture limits the phase differences between nearly aligned LoS components. Their gap grows at intermediate offsets and narrows when the rate-oriented positions already provide sufficient separation. For $M=1$, the LU's marginal ergodic rate is independent of position, so the rate-oriented implementation retains the compact UPA. Secrecy-aware positioning still changes the LU--Eve LoS correlation and hence the approximate leakage and AN terms. At $\Delta=0.1$~rad, the proposed single-user ESSR is $7.48$~bit/s/Hz, compared with $4.22$~bit/s/Hz for the compact FPA and $6.45$~bit/s/Hz for the sparse FPA. These rates use exact-SINR evaluation and do not require the finite-Rician moment approximations to satisfy an exact complementary-projection identity.
+ 
+ \subsection{Benefit of the Long-Term Power Allocation}\label{sec:sim_pa}
+ 
+-Fig.~\ref{fig:sep_pa}(b) evaluates the benefit of the proposed long-term power allocation, i.e., the secrecy water-filling in Proposition~\ref{prop:wf} combined with the optimized AN power. It is compared with two equal-power (EP) benchmarks with $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha$ is either optimized by a one-dimensional search, similar to~\cite{Zhou2010}, or fixed to $0.5$, similar to~\cite{ChenArxiv2026}. For all the schemes, the antenna positions are optimized by Algorithm~\ref{alg:ao}, where the objective of the EP benchmarks retains $[\cdot]^+$ (see Section~\ref{sec:discussion}). The large-scale fading of the LUs is $[\beta_1,\beta_2,\beta_3]=[0,-\varsigma/2,-\varsigma]$~dB, where $\varsigma$ is the fading spread.
+-
+-EP with optimized $\alpha$ performs comparably to the proposed power allocation for small fading spreads, because the LUs then have similar effective channel gains, which are further balanced by the optimized positions. In contrast, the gain of the proposed power allocation increases with $\varsigma$, since it switches off or reduces the power of the LUs whose effective channel gains are comparable to that of Eve (Proposition~\ref{prop:wf}). This gain decreases with the SNR, e.g., from $40\%$ at $0$~dB to $14\%$ at $10$~dB and to below $1\%$ at $20$~dB for $\varsigma=20$~dB. The reason is that, at high SNR, all the LUs achieve positive secrecy rates and nearly equal powers become optimal, similar to classic water-filling. EP with $\alpha=0.5$ performs worst in all the cases, especially at $0$~dB, where little or no AN is needed. Hence, both components of the long-term power allocation are important: the information--AN power splitting improves the ESSR in all cases, and the per-user power allocation further benefits heterogeneous LUs at low-to-moderate SNR.
++Figure~\ref{fig:sep_pa}(b) compares the proposed long-term power allocation with two EP benchmarks. The proposed design combines the fixed-AN-power secrecy water-filling solution in Proposition~\ref{prop:wf} with the finite AN-power search. The EP benchmarks use $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha$ is selected by a finite one-dimensional search, as in the power-splitting approach of~\cite{Zhou2010}, or fixed to $0.5$, as in~\cite{ChenArxiv2026}. Each scheme uses its own power-allocation rule during the position updates, and the EP objective retains $[\cdot]^+$ as discussed in Section~\ref{sec:discussion}. The linear large-scale fading coefficients are $\beta_1=1$, $\beta_2=10^{-\varsigma/20}$, and $\beta_3=10^{-\varsigma/10}$, corresponding to gains of $0$, $-\varsigma/2$, and $-\varsigma$~dB. The fading spread $\varsigma$ is specified in decibels.
++
++At $0$~dB and fading spreads of $0$ and $5$~dB, EP with optimized $\alpha$ attains Monte Carlo ESSRs of $4.425$ and $2.944$~bit/s/Hz, slightly above the proposed PA values of $4.379$ and $2.884$~bit/s/Hz. Its surrogate objectives are lower in both cases. The power-allocation optimum for fixed positions therefore does not imply dominance in the true ESSR after finite-start position optimization. At a $20$-dB fading spread, the proposed PA exceeds optimized EP by $40.3\%$, $13.9\%$, and $0.78\%$ at SNRs of $0$, $10$, and $20$~dB, respectively. The secrecy water-filling rule assigns no power when a user's surrogate legitimate gain does not exceed its effective leakage gain, and reallocates power among the remaining users. This adaptation is useful when the effective gains differ substantially. The smaller measured gains at higher SNRs depend on the tested effective gains and optimized power splits. The equal-user-power expansion in Remark~\ref{rem:highsnr} does not establish that equal user powers are generally asymptotically optimal. EP with $\alpha=0.5$ also expends power on AN at low SNR when the optimized split can select little or no AN. The experiment thus distinguishes the benefit of AN-power selection from that of per-user power adaptation without asserting universal true-ESSR superiority.
+ 
+ \subsection{Robustness of the Secrecy Gain}\label{sec:sim_rob}
+ 
+-Finally, we examine whether the gain of the proposed design relies on the worst-case eavesdropper model, the accurate statistical CSI of Eve, and the location of Eve close to an LU. First, we evaluate the designs against an Eve that treats the signals of the other LUs as interference (TIN), i.e., whose SINR has the additional term $\sum_{i\neq m}p_i|\bg^H(\bt)\wb_i|^2$ in the denominator of~\eqref{eq:sinre}. For $\Ptot/\sigma^2\in\{10,20,30\}$~dB, the ESSRs of all the schemes increase by at most $1.6$~bps/Hz, and the proposed design still achieves the highest ESSR, i.e., its gain is not an artifact of the worst-case model. Moreover, the proposed design benefits the least from the TIN Eve, e.g., by $0.5$ versus $1.5$~bps/Hz for the rate-oriented MA at $20$~dB, because its positions reduce the leakage of all the LUs and thus also the inter-user interference received by Eve. Without AN, however, its ESSR against the TIN Eve keeps increasing with the SNR, e.g., to $27.1$~bps/Hz at $30$~dB, because the inter-user interference then acts as AN, whereas it saturates at about $14$~bps/Hz under the worst-case model (see Fig.~\ref{fig:snr}(a)). Hence, the AN is indispensable for a secrecy guarantee that does not rely on the decoding capability of Eve.
+-
+-Second, all the schemes are designed with AoDs of Eve that deviate from the true ones by $\varepsilon_{\mathrm e}$ in a random direction, as modeled for $\Delta$ in Section~\ref{sec:sim_setup}, and are evaluated with the true AoDs. The ESSRs of the benchmarks hardly change, because only their power allocation and the antenna subset of AS depend on the AoDs of Eve. In contrast, the ESSR of the proposed design decreases with $\varepsilon_{\mathrm e}$, because its positions are tailored to the AoDs of Eve. Nevertheless, at $20$~dB, it decreases by only $3\%$ for $\varepsilon_{\mathrm e}=0.05$~rad and still exceeds those of all benchmarks for $\varepsilon_{\mathrm e}=\Delta=0.1$~rad ($18.73$ versus at most $17.93$~bps/Hz). This robustness is due to the smooth variation of the LoS correlations with the AoDs of Eve.
+-
+-Third, when the AoDs of Eve are independent of those of the LUs and follow the same distribution, the proposed design still outperforms all the benchmarks, e.g., by $10\%$ and $18\%$ compared with the rate-oriented MA and the sparse FPA for $M=3$, whereas AS performs close to the proposed design for $M=1$. In this case, Eve is mostly well separated from the LUs, so that the compact candidates of AS can already decorrelate it from a single LU, whereas the large aperture of the MAs is essential when Eve is close to an LU.
++We first evaluate the same designs against an Eve that decodes each stream by treating interference as noise (TIN), adding $\sum_{i\ne m}p_i|\bg^{\mathrm{H}}(\bt)\wb_i|^2$ to the denominator of~\eqref{eq:sinre}. For the five AN-enabled designs at SNRs of $10$, $20$, and $30$~dB, the ESSR increases by at most $1.6$~bit/s/Hz. At $20$~dB, the increases are $0.49$ and $1.47$~bit/s/Hz for the proposed and rate-oriented designs. The smaller increase for the proposed design is consistent with lower received inter-user leakage, which also reduces the interference protecting a stream against a TIN receiver. For the no-AN design at $30$~dB, the TIN and worst-case ESSRs are $27.14$ and $13.85$~bit/s/Hz, respectively. Inter-user interference can therefore protect the evaluated TIN receiver, whereas the worst-case model excludes that protection. The need for AN at high SNR follows from the specified eavesdropper model and does not establish that every secrecy target requires AN.
++
++We next perturb the Eve direction available to the BS by a coordinate-angle offset $\varepsilon_{\mathrm e}$ in a uniformly random direction, using the construction in Section~\ref{sec:sim_setup}. The designs use the perturbed statistical CSI and the rate evaluations use the true CSI. At $20$~dB, the proposed ESSR decreases from $20.75$ to $20.13$~bit/s/Hz at $\varepsilon_{\mathrm e}=0.05$~rad, a $3.0\%$ reduction, and to $18.73$~bit/s/Hz at $0.1$~rad. It remains above the largest benchmark value, $17.93$~bit/s/Hz, in this experiment. Errors affect the proposed positions as well as the power allocation; the rate-oriented and fixed-position schemes depend on the perturbed Eve CSI only through power allocation, and AS also depends on it through subset selection. Smooth LoS phases explain continuity of the rate evaluation at fixed designs, but do not alone guarantee a small optimization loss or robustness to arbitrary errors. These experiments establish tolerance for the tested offsets rather than a worst-case robust-design guarantee.
++
++{\widowpenalty=10000
++Finally, Eve's elevation and azimuth are drawn independently of the LUs from $[-\pi/3,\pi/3]$. For $M=3$, the proposed, rate-oriented, and sparse-FPA ESSRs are $22.30$, $20.23$, and $18.91$~bit/s/Hz, giving proposed gains of $10.3\%$ and $17.9\%$. For $M=1$, AS achieves $8.49$~bit/s/Hz, close to the proposed value of $8.67$~bit/s/Hz. Independent directions reduce the frequency of near alignment, allowing the compact AS candidates to separate Eve from a single LU in more realizations. These averages complement the near-alignment experiment; they do not imply that a large movable aperture is necessary in every individual geometry.\par}
++
+ 
+ % =============================================================================
+ \section{Conclusion}\label{sec:conclusion}
+ % =============================================================================
+-This paper investigated two-timescale secure transmission for an MA-enabled multiuser downlink system with a passive Eve. The derived closed-form approximation of the ergodic wiretap rate revealed that, beyond decorrelating the LUs, the MAs enhance secrecy by reducing the information leakage and increasing the AN received by Eve. Based on this result, we developed an AO algorithm, which combines secrecy water-filling with a two-stage position update and exhibits fast and monotonic convergence. Simulation results demonstrated that the proposed secrecy-aware positioning significantly outperforms the rate-oriented two-timescale MA design, AS, and FPA arrays, enhances the secrecy even for a single LU, and reduces the AN power and the number of antennas required for secure transmission. Since this paper assumes a single-antenna Eve and perfect CSI of the LUs, extending the design to multiple multi-antenna eavesdroppers and imperfect CSI is an important direction for future work.
++This paper investigates two-timescale secure transmission for an MA-enabled multiuser downlink with statistical CSI of a passive Eve. A closed-form wiretap-rate approximation characterizes how antenna positions affect information leakage and the AN received by Eve, in addition to the LU ZF gains. The resulting deterministic objective supports an AO method that combines optimal per-user power allocation for fixed AN power, sampled AN-power search, and grid-assisted MM position updates. Feasibility-preserving updates and an acceptance test produce nondecreasing, bounded objective values. The reported simulations show secrecy gains over the rate-oriented MA design, AS, and FPA arrays, including gains with one LU and lower AN-power fractions in the evaluated settings. Extending the model to multiple multi-antenna eavesdroppers and imperfect LU CSI requires new leakage analysis and uncertainty-aware optimization.
+ 
+ % =============================================================================
+ \appendices
+ \section{Proof of Lemma~\ref{lem:indep}}\label{app:indep}
+ % =============================================================================
+-Let $\mathbf U\triangleq[\mathbf u_1,\ldots,\mathbf u_{N-M}]$ be an orthonormal basis of the null space of $\bH^H(\bt)$. Then, $\PHp=\mathbf U\mathbf U^H$ and $Y=\sum_{i=1}^{N-M}|\mathbf u_i^H\bg(\bt)|^2$. Moreover, $\wb_m$ is a unit-norm vector in the column space of $\bH(\bt)$, so that $\mathbf Q\triangleq[\wb_m,\mathbf U]$ has orthonormal columns. On the other hand, since $\gtl$ is independent of $\bH(\bt)$, \eqref{eq:g} yields $\bg(\bt)|\bH(\bt)\sim\CN(\sqrt{\kappa_e\tilde\beta_e}\,\gb(\bt),\tilde\beta_e\bI_N)$. Consequently, $\mathbf Q^H\bg(\bt)$ is conditionally Gaussian with covariance matrix $\tilde\beta_e\mathbf Q^H\mathbf Q=\tilde\beta_e\bI_{N-M+1}$, i.e., its entries $\wb_m^H\bg(\bt),\mathbf u_1^H\bg(\bt),\ldots,\mathbf u_{N-M}^H\bg(\bt)$ are conditionally independent. Hence, $X_m=|\wb_m^H\bg(\bt)|^2$ and $Y$ are conditionally independent. Finally, \eqref{eq:EX} and~\eqref{eq:EY} follow from $\E\{|z|^2\}=|\mu|^2+\tilde\beta_e$ and $\mathrm{Var}\{|z|^2\}=\tilde\beta_e^2+2|\mu|^2\tilde\beta_e$ for $z\sim\CN(\mu,\tilde\beta_e)$, together with $\sum_{i=1}^{N-M}|\mathbf u_i^H\gb(\bt)|^2=\bar Y$.
++Let $\mathbf U=[\mathbf u_1,\ldots,\mathbf u_{N-M}]\in\mathbb C^{N\times(N-M)}$ have orthonormal columns spanning the null space of $\bH^{\mathrm{H}}(\bt)$. Then $\PHp=\mathbf U\mathbf U^{\mathrm{H}}$ and $Y=\sum_{i=1}^{N-M}|\mathbf u_i^{\mathrm{H}}\bg(\bt)|^2$. The unit-norm ZF direction $\wb_m$ lies in the column space of $\bH(\bt)$. Thus, $\mathbf Q\triangleq[\wb_m,\mathbf U]\in\mathbb C^{N\times(N-M+1)}$ satisfies $\mathbf Q^{\mathrm{H}}\mathbf Q=\bI_{N-M+1}$.
++
++Since $\gtl$ is independent of $\bH(\bt)$, the conditional distribution induced by~\eqref{eq:g} is proper complex Gaussian with mean $\sqrt{\kappa_{\mathrm{e}}\tilde\beta_{\mathrm{e}}}\,\gb(\bt)$ and covariance $\tilde\beta_{\mathrm{e}}\bI_N$. Conditioned on $\bH(\bt)$, $\mathbf Q^{\mathrm{H}}\bg(\bt)$ is therefore proper complex Gaussian with covariance $\tilde\beta_{\mathrm{e}}\bI_{N-M+1}$. Its entries are conditionally independent, so $X_m=|\wb_m^{\mathrm{H}}\bg(\bt)|^2$ is conditionally independent of $Y$. For a proper scalar $z\sim\CN(\mu,\tilde\beta_{\mathrm{e}})$, the identities $\E\{|z|^2\}=|\mu|^2+\tilde\beta_{\mathrm{e}}$ and $\mathrm{Var}\{|z|^2\}=\tilde\beta_{\mathrm{e}}^2+2|\mu|^2\tilde\beta_{\mathrm{e}}$ yield~\eqref{eq:EX} and~\eqref{eq:EY}, using $\sum_{i=1}^{N-M}|\mathbf u_i^{\mathrm{H}}\gb(\bt)|^2=\bar Y$.
+ 
+ % =============================================================================
+ \section{Proof of Proposition~\ref{prop:eve}}\label{app:det}
+ % =============================================================================
+-We first establish the following lemma for a generic noncentral Gaussian matrix, and then apply it to~\eqref{eq:Re0}.
++We construct approximations for two moments of a noncentral Gaussian matrix and then apply them to~\eqref{eq:Re0}. The following lemma establishes their ranges and their exact limiting cases; it does not provide a finite-parameter error bound.
+ 
+ \begin{lemma}\label{lem:det}
+-Let $\bF=\Fb+\bW\in\mathbb C^{N\times M}$ with $M<N$, where $\Fb$ is deterministic and the entries of $\bW$ are i.i.d.\ $\CN(0,1)$ random variables. Let $\bb\in\mathbb C^{N\times1}$ be a deterministic vector, and define $\bPhi_{\bF}\triangleq\E\{\bF^H\bF\}=\Fb^H\Fb+N\bI_M$, $\wb_m(\bF)\triangleq\bF(\bF^H\bF)^{-1}\be_m/\|\bF(\bF^H\bF)^{-1}\be_m\|$, and $\mathbf P_{\bF}^\perp\triangleq\bI_N-\bF(\bF^H\bF)^{-1}\bF^H$. Then, we have
+-\begin{align}
+-\E\{|\bb^H\wb_m(\bF)|^2\}&\approx\frac{\big|[\bPhi_{\bF}^{-1}\Fb^H\bb]_m\big|^2+\|\bb\|^2[\bPhi_{\bF}^{-2}]_{m,m}}{[\bPhi_{\bF}^{-1}]_{m,m}},\label{eq:lem_c}\\
+-\E\{\bb^H\mathbf P_{\bF}^\perp\bb\}&\approx\frac{(N-M)\big(\|\bb\|^2-\bb^H\Fb\bPhi_{\bF}^{-1}\Fb^H\bb\big)}{N-M+N\tr(\bPhi_{\bF}^{-1})}.\label{eq:lem_d}
++Let $\bF=\Fb+\bW\in\mathbb C^{N\times M}$ with $M<N$, where $\Fb$ is deterministic and the entries of $\bW$ are i.i.d.\ $\CN(0,1)$ random variables. Let $\bb\in\mathbb C^{N\times1}$ be a deterministic vector, and define $\bPhi_{\bF}\triangleq\E\{\bF^{\mathrm{H}}\bF\}=\Fb^{\mathrm{H}}\Fb+N\bI_M$, $\wb_m(\bF)\triangleq\bF(\bF^{\mathrm{H}}\bF)^{-1}\be_m/\|\bF(\bF^{\mathrm{H}}\bF)^{-1}\be_m\|$, and $\mathbf P_{\bF}^\perp\triangleq\bI_N-\bF(\bF^{\mathrm{H}}\bF)^{-1}\bF^{\mathrm{H}}$. Then, we have
++\begin{align}
++\E\{|\bb^{\mathrm{H}}\wb_m(\bF)|^2\}
++&\approx\frac{1}{[\bPhi_{\bF}^{-1}]_{m,m}}
++\nonumber\\
++&\quad\times\Big(
++ \big|[\bPhi_{\bF}^{-1}\Fb^{\mathrm{H}}\bb]_m\big|^2
++ +\|\bb\|^2[\bPhi_{\bF}^{-2}]_{m,m}\Big),
++\label{eq:lem_c}\\
++\E\{\bb^{\mathrm{H}}\mathbf P_{\bF}^{\perp}\bb\}
++&\approx\frac{N-M}
++ {N-M+N\tr(\bPhi_{\bF}^{-1})}
++\nonumber\\
++&\quad\times\big(
++ \|\bb\|^2-\bb^{\mathrm{H}}\Fb\bPhi_{\bF}^{-1}\Fb^{\mathrm{H}}\bb\big).
++\label{eq:lem_d}
+ \end{align}
+ Moreover, \eqref{eq:lem_c} and~\eqref{eq:lem_d} are exact for $\Fb=\mathbf 0$, and are asymptotically exact for $\Fb=\varrho\Fb_0$ as $\varrho\to\infty$, where $\Fb_0$ has full column rank. The right-hand sides of~\eqref{eq:lem_c} and~\eqref{eq:lem_d} lie in $[0,\|\bb\|^2]$, as do their left-hand sides.
+ \end{lemma}
+ 
+ \begin{IEEEproof}
+-For brevity, let $\bPhi\triangleq\bPhi_{\bF}$. We first prove~\eqref{eq:lem_c}. Replacing $(\bF^H\bF)^{-1}$ in the unnormalized ZF direction by $\bPhi^{-1}=(\E\{\bF^H\bF\})^{-1}$ yields $\wb_m(\bF)\approx\bF\bPhi^{-1}\be_m/\|\bF\bPhi^{-1}\be_m\|$. Then, we approximate the mean of $|\bb^H\bF\bPhi^{-1}\be_m|^2/\|\bF\bPhi^{-1}\be_m\|^2$ by the ratio of the means of its numerator and denominator, in the same spirit as~\cite[Lemma~1]{ZhangJSTSP2014}. Since $\E\{\bW\}=\mathbf 0$ and $\E\{\bW\mathbf x\mathbf x^H\bW^H\}=\|\mathbf x\|^2\bI_N$ for any deterministic $\mathbf x$, we have
+-\begin{align}
+-\E\{|\bb^H\bF\bPhi^{-1}\be_m|^2\}&=|\bb^H\Fb\bPhi^{-1}\be_m|^2+\|\bb\|^2\|\bPhi^{-1}\be_m\|^2\nonumber\\
+-&=\big|[\bPhi^{-1}\Fb^H\bb]_m\big|^2+\|\bb\|^2[\bPhi^{-2}]_{m,m},\label{eq:app1}\\
+-\E\{\|\bF\bPhi^{-1}\be_m\|^2\}&=\be_m^T\bPhi^{-1}\bPhi\bPhi^{-1}\be_m=[\bPhi^{-1}]_{m,m},\label{eq:app2}
+-\end{align}
+-which lead to~\eqref{eq:lem_c}. Next, we prove~\eqref{eq:lem_d}. Replacing $(\bF^H\bF)^{-1}$ in $\mathbf P_{\bF}\triangleq\bI_N-\mathbf P_{\bF}^\perp=\bF(\bF^H\bF)^{-1}\bF^H$ by $\bPhi^{-1}$ and using $\E\{\bW\bPhi^{-1}\bW^H\}=\tr(\bPhi^{-1})\bI_N$ yield
++For brevity, let $\bPhi\triangleq\bPhi_{\bF}$. To construct~\eqref{eq:lem_c}, first replace the random inverse $(\bF^{\mathrm{H}}\bF)^{-1}$ in the unnormalized ZF direction by $\bPhi^{-1}$. Then approximate the expectation of the normalized quadratic ratio by the ratio of its numerator and denominator expectations, in the same spirit as~\cite[Lemma~1]{ZhangJSTSP2014}. These are two distinct approximations; neither follows from $\E\{(\bF^{\mathrm{H}}\bF)^{-1}\}=(\E\{\bF^{\mathrm{H}}\bF\})^{-1}$, which does not hold in general. For the deterministic vector $\bPhi^{-1}\be_m$, the required moments are exact because $\E\{\bW\}=\mathbf 0$ and $\E\{\bW\mathbf x\mathbf x^{\mathrm{H}}\bW^{\mathrm{H}}\}=\|\mathbf x\|^2\bI_N$ for any deterministic $\mathbf x$. Hence,
++\begin{align}
++\E\{|\bb^{\mathrm{H}}\bF\bPhi^{-1}\be_m|^2\}
++&=|\bb^{\mathrm{H}}\Fb\bPhi^{-1}\be_m|^2
++\nonumber\\
++&\quad+\|\bb\|^2\|\bPhi^{-1}\be_m\|^2
++\nonumber\\
++&=\big|[\bPhi^{-1}\Fb^{\mathrm{H}}\bb]_m\big|^2
++\nonumber\\
++&\quad+\|\bb\|^2[\bPhi^{-2}]_{m,m},
++\label{eq:app1}\\
++\E\{\|\bF\bPhi^{-1}\be_m\|^2\}
++&=\be_m^{\mathrm{T}}\bPhi^{-1}\bPhi\bPhi^{-1}\be_m
++\nonumber\\
++&=[\bPhi^{-1}]_{m,m},
++\label{eq:app2}
++\end{align}
++which define the approximation in~\eqref{eq:lem_c}. To construct~\eqref{eq:lem_d}, replacing the random inverse in $\mathbf P_{\bF}\triangleq\bI_N-\mathbf P_{\bF}^{\perp}=\bF(\bF^{\mathrm{H}}\bF)^{-1}\bF^{\mathrm{H}}$ by $\bPhi^{-1}$ first gives
+ \begin{equation}\label{eq:app3}
+-\E\{\mathbf P_{\bF}\}\approx\bPi+\tr(\bPhi^{-1})\bI_N,\qquad\bPi\triangleq\Fb\bPhi^{-1}\Fb^H,
+-\end{equation}
+-where $\bPi$ and $\tr(\bPhi^{-1})\bI_N$ represent the parts of the signal subspace induced by the LoS and NLoS components, respectively. However, \eqref{eq:app3} lets the NLoS component capture the fraction $\tr(\bPhi^{-1})$ of every direction, including those already captured by the LoS component, so that $\bb^H(\bI_N-\bPi-\tr(\bPhi^{-1})\bI_N)\bb$ may even become negative when $\bb$ is closely aligned with the column space of $\Fb$. To avoid this double counting, we let the NLoS component capture a fraction $\vartheta\in[0,1]$ of the complement of $\bPi$ only, i.e.,
++\E\{\mathbf P_{\bF}\}\approx\bPi+\tr(\bPhi^{-1})\bI_N,\qquad\bPi\triangleq\Fb\bPhi^{-1}\Fb^{\mathrm{H}}.
++\end{equation}
++The direct inverse substitution in~\eqref{eq:app3} need not be a contraction: subtracting it from $\bI_N$ can yield a negative quadratic form. We therefore adopt a positive-semidefinite, trace-calibrated ansatz for the expected signal-space projector,
+ \begin{equation}\label{eq:app4}
+-\E\{\mathbf P_{\bF}\}\approx\bPi+\vartheta(\bI_N-\bPi),
+-\end{equation}
+-which satisfies $\mathbf 0\preceq\bPi+\vartheta(\bI_N-\bPi)\preceq\bI_N$ since $\mathbf 0\preceq\bPi\prec\bI_N$, as shown below. The fraction $\vartheta$ is determined by the identity $\tr(\mathbf P_{\bF})=M$, which holds for every realization of $\bF$. Since $\tr(\bPi)=\tr\big(\bPhi^{-1}(\bPhi-N\bI_M)\big)=M-N\tr(\bPhi^{-1})$, taking the trace of both sides of~\eqref{eq:app4} yields $M-N\tr(\bPhi^{-1})+\vartheta\big(N-M+N\tr(\bPhi^{-1})\big)=M$, i.e., $\vartheta=N\tr(\bPhi^{-1})/(N-M+N\tr(\bPhi^{-1}))$. Therefore, $\E\{\mathbf P_{\bF}^\perp\}\approx(1-\vartheta)(\bI_N-\bPi)$ with $1-\vartheta=(N-M)/(N-M+N\tr(\bPhi^{-1}))$, and~\eqref{eq:lem_d} follows.
+-
+-\textit{Range:} The nonzero eigenvalues of $\bPi$ are $\mu_i^2/(\mu_i^2+N)<1$, where $\mu_1,\ldots,\mu_M$ are the singular values of $\Fb$, so that $\mathbf 0\preceq\bPi\prec\bI_N$. Moreover, $\bPhi\succeq N\bI_M$ implies $0<\tr(\bPhi^{-1})\le M/N$, i.e., $1-\vartheta\in[1-M/N,1)$. Hence, the right-hand side of~\eqref{eq:lem_d} lies in $[0,\|\bb\|^2]$. For~\eqref{eq:lem_c}, the Cauchy--Schwarz inequality and $N\ge1$ imply that the numerator is at most $\|\bb\|^2\be_m^T\bPhi^{-1}(\Fb^H\Fb+N\bI_M)\bPhi^{-1}\be_m=\|\bb\|^2[\bPhi^{-1}]_{m,m}$, so that the right-hand side of~\eqref{eq:lem_c} lies in $[0,\|\bb\|^2]$.
++\E\{\mathbf P_{\bF}\}
++\approx\bPi+\vartheta(\bI_N-\bPi).
++\end{equation}
++Since $\mathbf 0\preceq\bPi\prec\bI_N$, the right-hand side is a contraction for $\vartheta\in[0,1]$. Matching the exact trace $\tr(\mathbf P_{\bF})=M$ and using $\tr(\bPi)=M-N\tr(\bPhi^{-1})$ fixes
++\begin{equation*}
++\vartheta=\frac{N\tr(\bPhi^{-1})}
++{N-M+N\tr(\bPhi^{-1})}.
++\end{equation*}
++Consequently, $\E\{\mathbf P_{\bF}^{\perp}\}\approx(1-\vartheta)(\bI_N-\bPi)$, which yields~\eqref{eq:lem_d}. Trace matching does not uniquely determine an expected projector and does not establish an error bound; it fixes the scalar parameter within this ansatz. The range and limiting-case arguments below establish the stated properties of the construction.
++
++\textit{Range:} The nonzero eigenvalues of $\bPi$ are $\mu_i^2/(\mu_i^2+N)<1$, where $\mu_1,\ldots,\mu_M$ are the singular values of $\Fb$, so that $\mathbf 0\preceq\bPi\prec\bI_N$. Moreover, $\bPhi\succeq N\bI_M$ implies $0<\tr(\bPhi^{-1})\le M/N$, i.e., $1-\vartheta\in[1-M/N,1)$. Hence, the right-hand side of~\eqref{eq:lem_d} lies in $[0,\|\bb\|^2]$. For~\eqref{eq:lem_c}, the Cauchy--Schwarz inequality and $N\ge1$ imply that the numerator is at most $\|\bb\|^2\be_m^{\mathrm{T}}\bPhi^{-1}(\Fb^{\mathrm{H}}\Fb+N\bI_M)\bPhi^{-1}\be_m=\|\bb\|^2[\bPhi^{-1}]_{m,m}$, so that the right-hand side of~\eqref{eq:lem_c} lies in $[0,\|\bb\|^2]$.
+ 
+ \textit{Exactness for $\Fb=\mathbf 0$:} In this case, $\bPhi=N\bI_M$ and $\bPi=\mathbf 0$, and the right-hand sides of~\eqref{eq:lem_c} and~\eqref{eq:lem_d} reduce to $\|\bb\|^2/N$ and $\|\bb\|^2(1-M/N)$, respectively. Since $\mathbf Q\bW$ has the same distribution as $\bW$ for any unitary $\mathbf Q$, and $\wb_m(\mathbf Q\bW)=\mathbf Q\wb_m(\bW)$, $\wb_m(\bW)$ is uniformly distributed on the unit sphere, and $\E\{\mathbf P_{\bW}^\perp\}$ commutes with every unitary matrix and thus equals $(1-M/N)\bI_N$ due to $\tr(\mathbf P_{\bW}^\perp)=N-M$. Hence, the left-hand sides coincide with the right-hand sides.
+ 
+-\textit{Asymptotic exactness for $\Fb=\varrho\Fb_0$:} As $\varrho\to\infty$, $\bF/\varrho\to\Fb_0$ almost surely. Since $\wb_m(\cdot)$ and $\mathbf P_{(\cdot)}^\perp$ are invariant to the scaling of their arguments and continuous at full-column-rank matrices, and $|\bb^H\wb_m(\bF)|^2$ and $\bb^H\mathbf P_{\bF}^\perp\bb$ are bounded by $\|\bb\|^2$, the dominated convergence theorem yields $\E\{|\bb^H\wb_m(\bF)|^2\}\to|\bb^H\wb_m(\Fb_0)|^2$ and $\E\{\bb^H\mathbf P_{\bF}^\perp\bb\}\to\bb^H\mathbf P_{\Fb_0}^\perp\bb$. On the other hand, $\varrho^2\bPhi^{-1}\to(\Fb_0^H\Fb_0)^{-1}$, $\bPi\to\Fb_0(\Fb_0^H\Fb_0)^{-1}\Fb_0^H$, and $\tr(\bPhi^{-1})\to0$. Hence, the right-hand side of~\eqref{eq:lem_d} converges to $\bb^H\mathbf P_{\Fb_0}^\perp\bb$, and that of~\eqref{eq:lem_c} converges to $|[(\Fb_0^H\Fb_0)^{-1}\Fb_0^H\bb]_m|^2/[(\Fb_0^H\Fb_0)^{-1}]_{m,m}=|\bb^H\wb_m(\Fb_0)|^2$, since the second term in the numerator of~\eqref{eq:lem_c} decays as $\mathcal O(\varrho^{-4})$ whereas the denominator decays as $\mathcal O(\varrho^{-2})$. This completes the proof of Lemma~\ref{lem:det}.
++\textit{Asymptotic exactness for $\Fb=\varrho\Fb_0$:} As $\varrho\to\infty$, $\bF/\varrho\to\Fb_0$ almost surely. Since $\wb_m(\cdot)$ and $\mathbf P_{(\cdot)}^\perp$ are invariant to the scaling of their arguments and continuous at full-column-rank matrices, and $|\bb^{\mathrm{H}}\wb_m(\bF)|^2$ and $\bb^{\mathrm{H}}\mathbf P_{\bF}^\perp\bb$ are bounded by $\|\bb\|^2$, the dominated convergence theorem yields $\E\{|\bb^{\mathrm{H}}\wb_m(\bF)|^2\}\to|\bb^{\mathrm{H}}\wb_m(\Fb_0)|^2$ and $\E\{\bb^{\mathrm{H}}\mathbf P_{\bF}^\perp\bb\}\to\bb^{\mathrm{H}}\mathbf P_{\Fb_0}^\perp\bb$. On the other hand, $\varrho^2\bPhi^{-1}\to(\Fb_0^{\mathrm{H}}\Fb_0)^{-1}$, $\bPi\to\Fb_0(\Fb_0^{\mathrm{H}}\Fb_0)^{-1}\Fb_0^{\mathrm{H}}$, and $\tr(\bPhi^{-1})\to0$. Hence, the right-hand side of~\eqref{eq:lem_d} converges to $\bb^{\mathrm{H}}\mathbf P_{\Fb_0}^\perp\bb$, and that of~\eqref{eq:lem_c} converges to $|[(\Fb_0^{\mathrm{H}}\Fb_0)^{-1}\Fb_0^{\mathrm{H}}\bb]_m|^2/[(\Fb_0^{\mathrm{H}}\Fb_0)^{-1}]_{m,m}=|\bb^{\mathrm{H}}\wb_m(\Fb_0)|^2$, since the second term in the numerator of~\eqref{eq:lem_c} decays as $\mathcal O(\varrho^{-4})$ whereas the denominator decays as $\mathcal O(\varrho^{-2})$. This completes the proof of Lemma~\ref{lem:det}.
+ \end{IEEEproof}
+ 
+ \begin{IEEEproof}[Proof of Proposition~\ref{prop:eve}]
+-From~\eqref{eq:Hdecomp}, $\wb_m=\wb_m(\bL(\bt)+\Htl)$ and $\PHp=\mathbf P_{\bL(\bt)+\Htl}^\perp$. Applying Lemma~\ref{lem:det} with $\Fb=\bL(\bt)$, $\bW=\Htl$, and $\bb=\gb(\bt)$, for which $\bPhi_{\bF}=\bPhi(\bt)$, $\Fb^H\bb=\bv(\bt)$, and $\|\bb\|^2=N$, yields $\E\{\bar X_m\}\approx c_m(\bt)$ and $\E\{\bar Y\}\approx d(\bt)$. Substituting them into~\eqref{eq:Re0} yields~\eqref{eq:Re}.
++From~\eqref{eq:Hdecomp}, $\wb_m=\wb_m(\bL(\bt)+\Htl)$ and $\PHp=\mathbf P_{\bL(\bt)+\Htl}^\perp$. Applying Lemma~\ref{lem:det} with $\Fb=\bL(\bt)$, $\bW=\Htl$, and $\bb=\gb(\bt)$, for which $\bPhi_{\bF}=\bPhi(\bt)$, $\Fb^{\mathrm{H}}\bb=\bv(\bt)$, and $\|\bb\|^2=N$, yields $\E\{\bar X_m\}\approx c_m(\bt)$ and $\E\{\bar Y\}\approx d(\bt)$. Substituting them into~\eqref{eq:Re0} yields~\eqref{eq:Re}.
+ \end{IEEEproof}
+ 
+ % =============================================================================
+ \section{Derivatives of $\omega_m$, $c_m$, and $d$}\label{app:grad}
+ % =============================================================================
+-Let $o_m\triangleq[\bOm^2]_{m,m}$, $\tau\triangleq\tr(\bOm)$, $\tilde{\bv}\triangleq\bOm\bv$, and $\varpi\triangleq\bv^H\bOm\bv$. Since $\bOm$ is Hermitian, \eqref{eq:dOm} can be rewritten as $\dot{\bOm}=-(\bOm\dot{\bl}_n)(\bOm\bl_n)^H-(\bOm\bl_n)(\bOm\dot{\bl}_n)^H$. Hence, the derivatives of $\omega_m$, $o_m$, and $\tau$ w.r.t.\ $u_n$ are given by
+-\begin{align}
+-\dot\omega_m&=[\dot{\bOm}]_{m,m}=-2\RE\big\{[\bOm\dot{\bl}_n]_m[\bOm\bl_n]_m^*\big\},\label{eq:a1}\\
+-\dot o_m&=2\RE\big\{[\bOm\dot{\bOm}]_{m,m}\big\}=-2\RE\big\{[\bOm^2\dot{\bl}_n]_m[\bOm\bl_n]_m^*\nonumber\\
+-&\qquad\qquad+[\bOm^2\bl_n]_m[\bOm\dot{\bl}_n]_m^*\big\},\label{eq:a2}\\
+-\dot\tau&=\tr(\dot{\bOm})=-2\RE\big\{\bl_n^H\bOm^2\dot{\bl}_n\big\},\label{eq:a3}
+-\end{align}
+-where~\eqref{eq:a2} follows from $[\dot{\bOm}\bOm]_{m,m}=[\bOm\dot{\bOm}]_{m,m}^*$. For $c_m$ in~\eqref{eq:cm}, the derivative of $\tilde{\bv}=\bOm\bv$ is
++Let $o_m\triangleq[\bOm^2]_{m,m}$, $\tau\triangleq\tr(\bOm)$, $\tilde{\bv}\triangleq\bOm\bv$, and $\varpi\triangleq\bv^{\mathrm{H}}\bOm\bv$. Since $\bOm$ is Hermitian, \eqref{eq:dOm} can be rewritten as $\dot{\bOm}=-(\bOm\dot{\bl}_n)(\bOm\bl_n)^{\mathrm{H}}-(\bOm\bl_n)(\bOm\dot{\bl}_n)^{\mathrm{H}}$. Hence, the derivatives of $\omega_m$, $o_m$, and $\tau$ w.r.t.\ $u_n$ are given by
++\begin{align}
++\dot\omega_m&=[\dot{\bOm}]_{m,m}=-2\RE\big\{[\bOm\dot{\bl}_n]_m[\bOm\bl_n]_m^{\mathrm{*}}\big\},\label{eq:a1}\\
++\dot o_m&=2\RE\big\{[\bOm\dot{\bOm}]_{m,m}\big\}=-2\RE\big\{[\bOm^2\dot{\bl}_n]_m[\bOm\bl_n]_m^{\mathrm{*}}\nonumber\\
++&\qquad\qquad+[\bOm^2\bl_n]_m[\bOm\dot{\bl}_n]_m^{\mathrm{*}}\big\},\label{eq:a2}\\
++\dot\tau&=\tr(\dot{\bOm})=-2\RE\big\{\bl_n^{\mathrm{H}}\bOm^2\dot{\bl}_n\big\},\label{eq:a3}
++\end{align}
++where~\eqref{eq:a2} follows from $[\dot{\bOm}\bOm]_{m,m}=[\bOm\dot{\bOm}]_{m,m}^{\mathrm{*}}$. For $c_m$ in~\eqref{eq:cm}, the derivative of $\tilde{\bv}=\bOm\bv$ is
+ \begin{equation}\label{eq:a4}
+-\dot{\tilde{\bv}}=\dot{\bOm}\bv+\bOm\dot{\bv}=-\bOm\dot{\bl}_n\big(\bl_n^H\tilde{\bv}\big)-\bOm\bl_n\big(\dot{\bl}_n^H\tilde{\bv}\big)+\bOm\dot{\bv},
++\begin{aligned}
++\dot{\tilde{\bv}}
++&=\dot{\bOm}\bv+\bOm\dot{\bv}\\
++&=-\bOm\dot{\bl}_n
++ \big(\bl_n^{\mathrm{H}}\tilde{\bv}\big)\\
++&\quad-\bOm\bl_n
++ \big(\dot{\bl}_n^{\mathrm{H}}\tilde{\bv}\big)
++ +\bOm\dot{\bv},
++\end{aligned}
+ \end{equation}
+ and thus
+ \begin{equation}\label{eq:a5}
+-\dot c_m=\frac{2\RE\big\{[\tilde{\bv}]_m^*[\dot{\tilde{\bv}}]_m\big\}+N\dot o_m-c_m\dot\omega_m}{\omega_m}.
++\dot c_m=\frac{2\RE\big\{[\tilde{\bv}]_m^{\mathrm{*}}[\dot{\tilde{\bv}}]_m\big\}+N\dot o_m-c_m\dot\omega_m}{\omega_m}.
+ \end{equation}
+ For $d=(1-\vartheta)(N-\varpi)$ in~\eqref{eq:d} with $1-\vartheta=(N-M)/(N-M+N\tau)$ as in Appendix~\ref{app:det}, we have
+ \begin{align}
+-\dot\varpi&=2\RE\{\tilde{\bv}^H\dot{\bv}\}-2\RE\big\{(\tilde{\bv}^H\dot{\bl}_n)(\bl_n^H\tilde{\bv})\big\},\label{eq:a6}\\
++\dot\varpi&=2\RE\{\tilde{\bv}^{\mathrm{H}}\dot{\bv}\}\nonumber\\
++&\quad-2\RE\big\{
++ (\tilde{\bv}^{\mathrm{H}}\dot{\bl}_n)
++ (\bl_n^{\mathrm{H}}\tilde{\bv})\big\},\label{eq:a6}\\
+ \dot d&=-(1-\vartheta)\bigg(\dot\varpi+\frac{N(N-\varpi)\,\dot\tau}{N-M+N\tau}\bigg),\label{eq:a7}
+ \end{align}
+-where~\eqref{eq:a6} follows from $\bv^H\dot{\bOm}\bv=-2\RE\{(\tilde{\bv}^H\dot{\bl}_n)(\bl_n^H\tilde{\bv})\}$. Substituting $\dot\eta_m=-\eta_m\dot\omega_m/\omega_m$, \eqref{eq:a5}, and~\eqref{eq:a7} into~\eqref{eq:dF} yields $\nabla_{\bt_n}F$. All the quantities in~\eqref{eq:a1}--\eqref{eq:a7} follow from matrix-vector products with $\bOm$, requiring $\mathcal O(M^2)$ operations.
++where~\eqref{eq:a6} follows from $\bv^{\mathrm{H}}\dot{\bOm}\bv=-2\RE\{(\tilde{\bv}^{\mathrm{H}}\dot{\bl}_n)(\bl_n^{\mathrm{H}}\tilde{\bv})\}$. Substituting $\dot\eta_m=-\eta_m\dot\omega_m/\omega_m$, \eqref{eq:a5}, and~\eqref{eq:a7} into~\eqref{eq:dF} yields $\nabla_{\bt_n}F$. All the quantities in~\eqref{eq:a1}--\eqref{eq:a7} follow from matrix-vector products with $\bOm$, requiring $\mathcal O(M^2)$ operations.
+ 
+ % =============================================================================
+ \begin{thebibliography}{99}
+@@ -822,7 +1001,7 @@
+ L. Xie, P. Wang, G. Shen, G. Li, W. Mei, and L. Chen, ``Secure communication in MIMOME movable-antenna systems with statistical eavesdropper CSI,'' 2026, \emph{arXiv:2601.14755}.
+ 
+ \bibitem{ChenArxiv2026}
+-Y. Chen, G. Zhang, M. Cui, H. Fu, Q. Wu, and R. Zhang, ``Sensing-assisted secure communication in MA-aided ISAC: CRB analysis and robust design,'' Apr. 2026, \emph{arXiv:2604.23663}.
++Y. Chen, G. Zhang, M. Cui, H. Fu, Q. Wu, and R. Zhang, ``Sensing-assisted secure communication in MA-aided ISAC: CRB analysis and robust design,'' \emph{IEEE Trans. Wireless Commun.}, vol.~25, pp.~16400--16416, 2026, doi: 10.1109/TWC.2026.3688454.
+ 
+ \bibitem{ZhengTCOM2025}
+ Z. Zheng, Q. Wu, W. Chen, and G. Hu, ``Two-timescale design for movable antenna-enabled multiuser MIMO systems,'' \emph{IEEE Trans. Commun.}, vol.~73, no.~11, pp.~10554--10571, Nov. 2025.

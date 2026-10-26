@@ -1,0 +1,309 @@
+{
+  "status": "PASS",
+  "checked_utc": "2026-10-26T06:27:22.353367+00:00",
+  "designs_checked": 28800,
+  "files": {
+    "extra_angle_offset.mat": {
+      "sha256": "e8d93ecaf9ddceb697423f70bb7b8ca56ac6fec0e810790b633a1e15e5d85fa8",
+      "designs": 3000,
+      "differences": {
+        "essr": 0.0005468024679267103,
+        "essr_tin": 0.00023917560677233496,
+        "anfrac": 0.0,
+        "F": 5.690203863650822e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_as_region.mat": {
+      "sha256": "7a793beee10d5b4b889278c04d260fea09531db6ba59f505decea288985e593c",
+      "designs": 600,
+      "differences": {
+        "essr": 0.0008676789730763801,
+        "essr_tin": 0.0002536089356190985,
+        "anfrac": 0.0,
+        "F": 0.0
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {
+        "aoMaxIter": {
+          "old": "[[60.]]",
+          "new": "[[50.]]"
+        },
+        "fig8SNR": {
+          "old": "[[ 0. 10.]]",
+          "new": "ABSENT"
+        },
+        "gridStep": {
+          "old": "ABSENT",
+          "new": "[[0.1]]"
+        },
+        "mmMaxIter": {
+          "old": "ABSENT",
+          "new": "[[20.]]"
+        },
+        "mmTol": {
+          "old": "ABSENT",
+          "new": "[[1.e-06]]"
+        }
+      },
+      "historical_parameters_match": false
+    },
+    "extra_eve_aod_error.mat": {
+      "sha256": "e2f493f986ea4f5128798fb7d7807ee5ed518526722fb9fc9fb71bffb1ffa163",
+      "designs": 2500,
+      "differences": {
+        "essr": 0.0008248101601999736,
+        "essr_tin": 0.00028373838401307694,
+        "anfrac": 0.0,
+        "F": 5.6701310313655995e-12
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas.mat": {
+      "sha256": "a898d781715ab0fbbcecfbe79fe54601170821849538c3531afe2ffb63eeb36c",
+      "designs": 3200,
+      "differences": {
+        "essr": 0.00065862286312246,
+        "essr_tin": 0.0004127479443685189,
+        "anfrac": 0.0,
+        "F": 2.1136602867954934e-07
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N10.mat": {
+      "sha256": "ff0354c6d912e78fbe3b4a50ec8cfd22504d7614be99420c579027d6a272a2f0",
+      "designs": 500,
+      "differences": {
+        "essr": 0.00014449726841903043,
+        "essr_tin": 5.948605762995385e-05,
+        "anfrac": 0.0,
+        "F": 2.1136602867954934e-07
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N12.mat": {
+      "sha256": "31924e336f89815a2873687a40e87255cca5e353c5824ac24b1f7840805d33c5",
+      "designs": 400,
+      "differences": {
+        "essr": 8.360713721344837e-08,
+        "essr_tin": 5.304553596374717e-08,
+        "anfrac": 0.0,
+        "F": 5.852297135788831e-08
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N14.mat": {
+      "sha256": "c0b8d9cb702eb05ae3812dd896cc1bc8a22fc2c6f0235b40325ea43ee05854cb",
+      "designs": 400,
+      "differences": {
+        "essr": 6.357936399581376e-11,
+        "essr_tin": 4.886047122454329e-11,
+        "anfrac": 0.0,
+        "F": 4.771294470629073e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N16.mat": {
+      "sha256": "bf242778ee18b8457286549fb1792b7008b35a99ea106904a013e9420d3aec24",
+      "designs": 400,
+      "differences": {
+        "essr": 7.397460421998403e-11,
+        "essr_tin": 3.998934516857844e-11,
+        "anfrac": 0.0,
+        "F": 4.246913931638119e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N4.mat": {
+      "sha256": "5d594b63e2580aebf83cb9b73a33749cb9e5d896810bf4655022f05182396f48",
+      "designs": 500,
+      "differences": {
+        "essr": 0.00065862286312246,
+        "essr_tin": 0.0004127479443685189,
+        "anfrac": 0.0,
+        "F": 8.881784197001252e-15
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N6.mat": {
+      "sha256": "e00fa276203d3aa83d4d24de20a60df1ad7075484ec50f3487cdbdcc14ea9bb3",
+      "designs": 500,
+      "differences": {
+        "essr": 7.057367260898673e-05,
+        "essr_tin": 0.0003788440777618973,
+        "anfrac": 0.0,
+        "F": 8.881784197001252e-15
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_num_antennas_N8.mat": {
+      "sha256": "93076bff8b5f2b4dda0c1cb6f6d0feff0d6bff31400c7878ff1247df1df713ba",
+      "designs": 500,
+      "differences": {
+        "essr": 0.00014276771559451618,
+        "essr_tin": 0.0001174025324495176,
+        "anfrac": 0.0,
+        "F": 0.0
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_pa_spread_0dB.mat": {
+      "sha256": "4109c60c0ed558b000d706c9f7be035baeafc4ac15efe2cdfd01b03ed4786c07",
+      "designs": 1500,
+      "differences": {
+        "essr": 1.3730350190144236e-11,
+        "essr_tin": 1.570366059411299e-11,
+        "anfrac": 0.0,
+        "F": 3.9528380568754073e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_pa_spread_10dB.mat": {
+      "sha256": "3c6a8a0a344759c6029eb44d0a2918c70267434a7efdd9fa2805332b942a6121",
+      "designs": 1500,
+      "differences": {
+        "essr": 1.2941914206976435e-10,
+        "essr_tin": 2.1731416666170844e-10,
+        "anfrac": 0.0,
+        "F": 5.278710801803754e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_random_eve_M1.mat": {
+      "sha256": "db8471cef9a164981385203dec4f8e91f62a7a76c81bb61a3f1f2ed2908dd904",
+      "designs": 500,
+      "differences": {
+        "essr": 1.7763568394002505e-15,
+        "essr_tin": 1.7763568394002505e-15,
+        "anfrac": 0.0,
+        "F": 0.0
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_random_eve_M3.mat": {
+      "sha256": "fb5607cd370b4b7e7c37c7cfcc01afa781aaf2ab4638cfd645af58305defd5cd",
+      "designs": 500,
+      "differences": {
+        "essr": 0.0004908691572254043,
+        "essr_tin": 0.0002583892537444399,
+        "anfrac": 0.0,
+        "F": 3.552713678800501e-15
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "extra_single_user.mat": {
+      "sha256": "78ce8968d9d06d291f3f09a52b0df79f06e86a6c4a3d870b94716d4bf884094e",
+      "designs": 3000,
+      "differences": {
+        "essr": 0.0002341964781624739,
+        "essr_tin": 0.0002341964781624739,
+        "anfrac": 0.0,
+        "F": 8.881784197001252e-16
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "fig3_accuracy.mat": {
+      "sha256": "7ab7d1bbc5be8036c252f4cf146709d9f60103df73fd2d5cf0ebfb453c3631a1",
+      "designs": 0,
+      "differences": {
+        "vsP": 1.4210854715202004e-14,
+        "vsK": 1.0658141036401503e-14
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true,
+      "design_provenance": "This accuracy/convergence artifact stores aggregates or histories, not complete per-drop designs."
+    },
+    "fig4_convergence.mat": {
+      "sha256": "e60e6739d01ba213f432765310d20e3455d23ab52176ca7d074e7f780c9f2eb0",
+      "designs": 0,
+      "differences": {
+        "hist": 2.353998596049678e-08,
+        "histRnd": 3.7469135349965654e-08,
+        "histMM": 5.122728907736018e-10
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true,
+      "design_provenance": "This accuracy/convergence artifact stores aggregates or histories, not complete per-drop designs."
+    },
+    "fig5_snr.mat": {
+      "sha256": "ede176923a1765e82eb84e45db96e2f3b672ad8938d749b70b39f3481e6e915c",
+      "designs": 4200,
+      "differences": {
+        "essr": 0.0005828701594232655,
+        "essr_tin": 0.00025397656539283275,
+        "anfrac": 0.0,
+        "F": 4.618527782440651e-14
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "fig6_region.mat": {
+      "sha256": "7ab1382c9909c89f074783d25199d8b7c4245e8e5ed1a1ddca80b29965eac341",
+      "designs": 3000,
+      "differences": {
+        "essr": 0.00014276771559451618,
+        "essr_tin": 0.0001174025324495176,
+        "anfrac": 0.0,
+        "F": 1.3145040611561853e-13
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    },
+    "fig7_pa_hetero.mat": {
+      "sha256": "63870fea48befbf95e5bfedca5540b89f93ebbd5ad7ff80261905923e93787f3",
+      "designs": 2100,
+      "differences": {
+        "essr": 9.321610150436754e-11,
+        "essr_tin": 8.349392288664603e-10,
+        "anfrac": 0.0,
+        "F": 8.952838470577262e-11
+      },
+      "current_parameters_match_source": true,
+      "historical_parameter_differences": {},
+      "historical_parameters_match": true
+    }
+  },
+  "pending_files": [],
+  "scope": "Completed saved designs, histories, rates, aggregates and name-aligned historical differences; no claim of approximation exactness or independent replay of channel draws.",
+  "cached_design_checks": {
+    "accuracy": 1200,
+    "convergence": 700
+  },
+  "manuscript_claims_checked": 58,
+  "changed_rounded_claims": [],
+  "manuscript_figure_pdf_acceptance": "PENDING: numerical validation does not certify final manuscript figures or rendered pages."
+}
