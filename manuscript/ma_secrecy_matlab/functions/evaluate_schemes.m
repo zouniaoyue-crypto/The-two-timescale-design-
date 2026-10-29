@@ -69,8 +69,23 @@ for k = 1:numel(schemes)
         otherwise
             error('unknown scheme %s', name);
     end
+    % Reject invalid designs before exact-SINR evaluation.
+    assert(isequal(size(T), [sc.N, 2]) && all(isfinite(T(:))) && isreal(T));
+    assert(all(abs(T(:)) <= sc.A/2 + 1e-8));
+    D2 = (T(:,1) - T(:,1).').^2 + (T(:,2) - T(:,2).').^2;
+    D2(1:sc.N+1:end) = inf;
+    assert(all(D2(:) >= sc.Dmin^2 - 1e-8));
+    assert(numel(p) == sc.M && all(isfinite(p(:))) && all(p(:) >= -1e-10));
+    assert(isscalar(q) && isfinite(q) && q >= -1e-10);
+    assert(sum(p) + (sc.N - sc.M)*q <= sc.P + 1e-8*max(1, sc.P));
     [Rb, Re, essr, st] = mc_rates(scTrue, T, p, q, prm.S, seed);
+    assert(all(isfinite([Rb(:); Re(:); essr; st.an])));
+    assert(all(Rb >= -1e-10) && all(Re >= -1e-10) && st.an >= -1e-8);
+    r = struct();
     r.essr = essr;  r.Rb = Rb;  r.Re = Re;
+    r.leak = st.leak; r.an = st.an;
+    r.evaluationSamples = prm.S;
+    r.seed = seed;
     r.essr_tin = st.essr_tin;                  % eavesdropper treating interference as noise
     r.F = objective_F(sc, T, p, q, true);      % approximate ESSR as predicted at the BS
     r.anfrac = (sc.N - sc.M)*q/sc.P;

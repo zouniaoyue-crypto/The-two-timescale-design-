@@ -52,11 +52,19 @@ end
 end
 
 function [xbest, fbest] = search1d(f, a, b, n)
-% coarse grid on [a, b] followed by a fine grid around the best coarse point
+% Retain both grids; prefer the original fine-grid result on a tie.
+validateattributes(n, {'numeric'}, {'scalar','integer','>=',2});
 x = linspace(a, b, n);
-[~, i] = max(f(x));
-lo = x(max(i-1, 1));  hi = x(min(i+1, n));
+y = reshape(f(x), 1, []);
+[fcoarse, i] = max(y);
+lo = x(max(i-1, 1));
+hi = x(min(i+1, n));
 x2 = linspace(lo, hi, n);
-[fbest, j] = max(f(x2));
+y2 = reshape(f(x2), 1, []);
+[fbest, j] = max(y2);
 xbest = x2(j);
+if fcoarse > fbest
+    fbest = fcoarse;
+    xbest = x(i);
+end
 end

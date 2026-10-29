@@ -1,8 +1,8 @@
 function plot_fig3(res)
 %PLOT_FIG3  Fig. 3: accuracy of the closed-form ergodic rates at the designs of the proposed
 %   scheme, (a) versus the transmit SNR and (b) versus the Rician factor. Each panel shows
-%   the ergodic sum rate of the LUs (blue, Lemma 1) and the ergodic wiretap sum rate of Eve
-%   (red, Proposition 1); hollow markers without lines: Monte Carlo; lines: closed forms.
+%   the ergodic sum rate of the LUs (blue, main.tex eq:Rm) and the ergodic wiretap sum rate of Eve
+%   (red, eq:Re); hollow markers without lines: Monte Carlo; lines: closed forms.
 %   res.vsP / res.vsK columns: [LU MC, LU closed form, Eve MC, Eve closed form, ...].
 s = fig_style();  c = fig_palette();
 xl = {'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)', 'Rician factor {\it\kappa} (dB)'};
@@ -10,9 +10,9 @@ data = {res.vsP, res.vsK};  xv = {res.Pvec, res.Kvec};
 files = {'fig3a_accuracy_snr', 'fig3b_accuracy_kappa'};
 ylims = {[0 40], [0 25]};  yt = {0:5:40, 0:5:25};
 lu  = struct('name', 'LUs, simulation',    'color', c.blue, 'ls', 'none', 'marker', 's',    'lw', 1.0, 'mfc', 'w');
-luA = struct('name', 'LUs, Lemma 1',        'color', c.blue, 'ls', '-',    'marker', 'none', 'lw', 1.1, 'mfc', 'w');
+luA = struct('name', 'LUs, closed form',        'color', c.blue, 'ls', '-',    'marker', 'none', 'lw', 1.1, 'mfc', 'w');
 ev  = struct('name', 'Eve, simulation',    'color', c.red,  'ls', 'none', 'marker', '^',    'lw', 1.0, 'mfc', 'w');
-evA = struct('name', 'Eve, Proposition 1', 'color', c.red,  'ls', '--',   'marker', 'none', 'lw', 1.1, 'mfc', 'w');
+evA = struct('name', 'Eve, closed form', 'color', c.red,  'ls', '--',   'marker', 'none', 'lw', 1.1, 'mfc', 'w');
 for sweep = 1:2
     X = xv{sweep};  Y = data{sweep};
     ax = new_figure();

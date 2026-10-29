@@ -1,15 +1,15 @@
 function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus)
 %POSITION_SWEEP  One round of element-wise updates of the antenna positions
 %   (Section IV-B and Algorithm 2 of main.tex). For each MA n, with the other positions fixed:
-%   Stage 1 (global search): F is evaluated by objective_F_n at all points of a uniform
+%   Stage 1 (finite feasible-grid search): F is evaluated by objective_F_n at all points of a uniform
 %     grid over C with spacing prm.gridStep (in lambda) that satisfy the minimum-distance
-%     constraints exactly; MA n moves to the best point if it improves F (eq. (43)). This
-%     locates the best basin of the multimodal function F(t_n).
+%     constraints exactly; MA n moves to the best point if it improves F (main.tex label eq:gridsearch). This
+%     selects the best sampled candidate, without certifying the best continuous basin.
 %   Stage 2 (MM refinement), repeated at most prm.mmMaxIter times or until the relative
 %     increase of F is below prm.mmTol:
 %     1) gradient g = grad_{t_n} F at the current point (Appendix C);
-%     2) surrogate  F(t^(k)) + g^T (t_n - t_n^(k)) - delta_n/2 ||t_n - t_n^(k)||^2 (eq. (48));
-%     3) maximizer = projection of t_n^(k) + g/delta_n onto the polygon (eqs. (50), (51));
+%     2) surrogate  F(t^(k)) + g^T (t_n - t_n^(k)) - delta_n/2 ||t_n - t_n^(k)||^2 (main.tex label eq:surrogate);
+%     3) maximizer = projection of t_n^(k) + g/delta_n onto the polygon (main.tex labels eq:linc, eq:P32n);
 %     4) backtracking: delta_n <- 2 delta_n until F(new) >= surrogate(new).
 %   deltaLast (N x 1) stores the last accepted delta_n; the next search starts
 %   from max(delta0, deltaLast/2). Both stages never decrease F.
@@ -20,11 +20,15 @@ function [T, deltaLast] = position_sweep(sc, T, p, q, prm, deltaLast, plus)
 N = sc.N;
 if nargin < 6 || isempty(deltaLast), deltaLast = prm.delta0*ones(N,1); end
 if nargin < 7, plus = false; end
-xs = -sc.A/2 : prm.gridStep : sc.A/2;
-[X, Y] = meshgrid(xs, xs);
-G = [X(:).'; Y(:).'];                                  % grid over C, 2 x K
+assert(isscalar(prm.gridStep) && isfinite(prm.gridStep) && prm.gridStep >= 0);
+G = zeros(2, 0);
+if prm.gridStep > 0
+    xs = -sc.A/2 : prm.gridStep : sc.A/2;
+    [X, Y] = meshgrid(xs, xs);
+    G = [X(:).'; Y(:).'];                              % grid over C, 2 x K
+end
 for n = 1:N
-    % ---- stage 1: global search over the feasible grid points ----
+    % ---- stage 1: search over the finite feasible-grid candidates ----
     if prm.gridStep > 0
         idx = [1:n-1, n+1:N];
         D2 = (repmat(G(1,:), N-1, 1) - repmat(T(idx,1), 1, size(G,2))).^2 + ...

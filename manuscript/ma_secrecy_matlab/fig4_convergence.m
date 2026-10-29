@@ -8,7 +8,7 @@ function res = fig4_convergence(prm)
 %     res.itStop  : iteration at which Algorithm 2 with the default tolerance prm.aoTol
 %                   terminates (per setting and drop);
 %     res.histRnd : trajectories from two random initializations (N = 8, 20 dB);
-%     res.histMM  : trajectories without the global search of Stage 1, i.e., pure
+%     res.histMM  : trajectories without the grid search of Stage 1, i.e., pure
 %                   element-wise MM updates (prm.gridStep = 0; N = 8, 20 dB).
 %   For N = 12, the UPA initialization is a 3 x 4 UPA with lambda/2 spacing.
 

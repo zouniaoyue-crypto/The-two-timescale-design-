@@ -2,8 +2,8 @@ function sc = build_scenario(prm, th, ph, th_e, ph_e)
 %BUILD_SCENARIO  Scenario struct for given AoDs (all other quantities from prm).
 %
 %   Wave vectors (Sec. II-A):  a_m = [cos(theta_m) sin(phi_m); sin(theta_m)],  a_e likewise.
-%   zeta_m    = beta_m / ((kappa_m + 1) sigma_m^2)               (Lemma 1)
-%   sbar_e^2  = sigma_e^2 (kappa_e + 1) / beta_e                  (below eq. (21))
+%   zeta_m    = beta_m / ((kappa_m + 1) sigma_m^2)               (main.tex eq:Rm)
+%   sbar_e^2  = sigma_e^2 (kappa_e + 1) / beta_e                  (below main.tex eq:Re0)
 
 M = prm.M;
 sc.N = prm.N;  sc.M = M;

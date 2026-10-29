@@ -4,7 +4,8 @@ function sc = gen_scenario(prm, seed)
 %
 %   LU m:  theta_m, phi_m ~ U[-angMax, angMax]
 %   Eve :  theta_e = theta_1 + Delta*cos(phit), phi_e = phi_1 + Delta*sin(phit),
-%          phit ~ U[0, 2*pi), i.e., Eve is at the angular separation Delta from LU 1;
+%          phit ~ U[0, 2*pi), i.e., Delta is the AoD offset of Eve from LU 1 in the (theta, phi)
+%          coordinates (not the physical angle between the two directions);
 %          for Delta = Inf, theta_e, phi_e ~ U[-angMax, angMax] independently of the LUs.
 
 rng(seed);

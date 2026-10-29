@@ -10,6 +10,9 @@ s.width     = 3.5;                 % inches
 s.height    = 2.45;                % inches (single panel; Octave's qt toolkit does not
                                    % render figures lower than about 2.4 in correctly)
 s.font      = 'Times New Roman';
+% Optional family override for headless renderers; numerical data are unchanged.
+plotFont = getenv('MA_PLOT_FONT');
+if ~isempty(plotFont), s.font = plotFont; end
 s.fsTick    = 8;                   % tick labels
 s.fsLabel   = 9;                   % axis labels
 s.fsLegend  = 7;                   % legends and in-axes annotations

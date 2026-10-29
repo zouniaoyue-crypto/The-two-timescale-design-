@@ -3,7 +3,7 @@ function plot_fig4(res)
 %   of AO iterations, averaged over the drops, for (N, P_tot/sigma^2) in {8, 12} x {10, 20} dB
 %   (UPA initialization), drawn as continuous lines through all iterations without markers
 %   (colors: SNR; line styles: N). The dotted gray curve shows Algorithm 2 without the
-%   global search of Stage 1 (pure MM updates) for N = 8, 20 dB.
+%   grid search of Stage 1 (pure MM updates) for N = 8, 20 dB.
 s = fig_style();
 ax = new_figure();
 it = 0:res.nIt;

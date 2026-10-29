@@ -2,10 +2,9 @@ function [T, best, idx] = as_select(sc, prm, Tc)
 %AS_SELECT  Benchmark "antenna selection (AS)" with statistical CSI: N of the 2N
 %   antennas of a lambda/2-spaced UPA (prm.asRows x prm.asCols, e.g., 4 x 4 for N = 8)
 %   are selected by exhaustive search over all nchoosek(2N, N) subsets. The selection
-%   metric is the same as for the proposed design, i.e., the approximate ESSR (P3) with
-%   the long-term power allocation of Algorithm 1 (secrecy water-filling for each q on
-%   a coarse grid of prm.asGrid points, evaluated for all subsets in a vectorized way).
-%   The power allocation of the selected subset is then refined by power_opt.m.
+%   metric is the approximate ESSR (P3), where every subset is ranked using secrecy
+%   water-filling at prm.asGrid uniformly spaced q values (21 by default, vectorized over
+%   the subsets). Only the selected subset is refined by power_opt.m (Algorithm 1).
 %   The optional Tc (K x 2) overrides the candidate positions (e.g., a UPA spanning C).
 
 N = sc.N;  M = sc.M;  k0 = 2*pi/sc.lambda;
@@ -39,8 +38,8 @@ for m = 1:M
 end
 tr  = sum(om, 1);
 vOv = real(sum(conj(v) .* w, 1));
-c   = (abs(w).^2 + N*o2) ./ om;                 % c_m, eq. (22)
-d   = (N - vOv) .* (N - M) ./ (N - M + N*tr);   % d, eq. (23)
+c   = (abs(w).^2 + N*o2) ./ om;                 % c_m, main.tex eq:cm
+d   = (N - vOv) .* (N - M) ./ (N - M + N*tr);   % d, main.tex eq:d
 eta = repmat(sc.zeta, 1, S) * (N - M) ./ (N*om);
 xi  = sc.kappa_e*c + 1;
 psi = sc.kappa_e*d + N - M;

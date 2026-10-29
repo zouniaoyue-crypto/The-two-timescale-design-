@@ -4,7 +4,7 @@ function res = fig3_accuracy(prm)
 %     Fig. 3(a): versus P_tot/sigma^2 (kappa_m = kappa_e = 10 dB)
 %     Fig. 3(b): versus kappa = kappa_m = kappa_e (P_tot/sigma^2 = 20 dB)
 %   Markers: Monte Carlo (max(prm.S, 1e4) channel realizations); lines: closed forms
-%   (LUs: Lemma 1; Eve: Proposition 1). See accuracy_point.m.
+%   (LUs: main.tex eq:Rm; Eve: eq:Re). See accuracy_point.m.
 %   res.vsP(i, :) and res.vsK(i, :) = [LU MC, LU closed form, Eve MC, Eve closed form,
 %   ESSR MC, approximate ESSR] for the i-th SNR and Rician factor, respectively.
 

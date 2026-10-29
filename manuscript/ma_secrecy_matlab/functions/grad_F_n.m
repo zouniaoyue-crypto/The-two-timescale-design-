@@ -1,6 +1,6 @@
 function grad = grad_F_n(sc, T, p, q, n, act)
 %GRAD_F_N  Analytical gradient of F(t,p,q) w.r.t. t_n = [x_n; y_n]
-%   (eqs. (44)-(47) and Appendix C, eqs. (59)-(65), of main.tex).
+%   (main.tex eq:dl-eq:dF and Appendix C, eq:a1-eq:a7).
 %
 %   l_n     = K^{1/2} [exp(-j 2pi/lambda t_n^T a_1); ...; exp(-j 2pi/lambda t_n^T a_M)]
 %   dl_n/du = -j 2pi/lambda D_u l_n,                 u in {x_n, y_n}

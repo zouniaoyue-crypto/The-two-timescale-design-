@@ -5,7 +5,7 @@ function check_implementation()
 %      evaluation of F over candidate positions (objective_F_n) versus objective_F;
 %   2) secrecy water-filling (Proposition 2): KKT conditions and power budget;
 %   3) monotonic convergence of Algorithm 2;
-%   4) closed-form rates (Lemma 1, Proposition 1) versus Monte Carlo.
+%   4) closed-form rates (main.tex eq:Rm, eq:Re) versus Monte Carlo.
 
 here = fileparts(mfilename('fullpath'));
 addpath(here);  addpath(fullfile(here, 'functions'));

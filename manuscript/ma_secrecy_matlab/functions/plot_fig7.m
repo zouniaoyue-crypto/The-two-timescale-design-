@@ -1,17 +1,17 @@
 function plot_fig7(resD3, resD1, resS0, resS10)
-%PLOT_FIG7  Fig. 7: (a) ESSR versus the angular separation Delta between Eve and LU 1 for
+%PLOT_FIG7  Fig. 7: (a) ESSR versus the AoD offset Delta between Eve and LU 1 for
 %   M = 3 (resD3, extra_angle_offset.m) and M = 1 (resD1, extra_single_user.m); for M = 1,
 %   the rate-oriented MA coincides with the FPA and is therefore not drawn.
 %   (b) Benefit of the long-term power allocation (PA): ESSR of the proposed PA
 %   ('MA_full'), equal power (EP) with optimized alpha ('MA_EPA'), and EP with alpha = 0.5
 %   ('MA_fix'), where the positions are optimized by Algorithm 2 for each PA, versus the
-%   fading spread varsigma, [beta_1, beta_2, beta_3] = [0, -varsigma/2, -varsigma] dB, at
+%   fading spread S, [beta_1, beta_2, beta_3] = [0, -S/2, -S] dB, at
 %   P_tot/sigma^2 = 10 dB (solid, resS10) and 0 dB (dashed, resS0) (extra_pa_spread.m);
-%   varsigma = 0 corresponds to identical LUs. The PA versus the SNR
+%   S = 0 corresponds to identical LUs. The PA versus the SNR
 %   (fig7_power_allocation.m) is quoted in Section V-G without a figure.
 s = fig_style();
 m = s.margins;
-% ---------------- (a) angular separation, M = 3 and M = 1 ----------------
+% ---------------- (a) AoD offset, M = 3 and M = 1 ----------------
 if ~isempty(resD3) && ~isempty(resD1)
     ax = new_figure();
     keys = main_schemes();
@@ -25,7 +25,7 @@ if ~isempty(resD3) && ~isempty(resD1)
             plot_curve(ax, resD1.values, resD1.essr(:, j), st);
         end
     end
-    label_axes(ax, 'Angular separation {\it\Delta} (rad)', 'ESSR (bps/Hz)');
+    label_axes(ax, 'AoD offset {\it\Delta} (rad)', 'ESSR (bps/Hz)');
     set(ax, 'XLim', [0 0.5], 'XTick', 0:0.1:0.5, 'YLim', [0 25], 'YTick', 0:5:25);
     axes_note(ax, 0.97, 0.97, '{\itM} = 3', 'right', 'top');
     axes_note(ax, 0.97, 0.13, '{\itM} = 1', 'right', 'top');
@@ -45,10 +45,12 @@ R = {resS10, resS0};  lsp = {'-', '--'};
 for r = 1:2
     for k = 3:-1:1
         st = sty{k};  st.ls = lsp{r};
-        plot_curve(ax, R{r}.values, R{r}.essr(:, k), st);
+        j = find(strcmp(R{r}.schemes, keys{k}), 1);
+        assert(~isempty(j), 'Missing power-allocation scheme');
+        plot_curve(ax, R{r}.values, R{r}.essr(:, j), st);
     end
 end
-label_axes(ax, 'Fading spread {\it\varsigma} (dB)', 'ESSR (bps/Hz)');
+label_axes(ax, 'Fading spread {\itS} (dB)', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [R{1}.values(1) R{1}.values(end)], 'XTick', R{1}.values, 'YLim', [0 14], 'YTick', 0:2:14);
 k10 = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 10 dB', 'color', [0.3 0.3 0.3], 'ls', '-',  'marker', 'none', 'lw', 1.0);
 k0  = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 0 dB',  'color', [0.3 0.3 0.3], 'ls', '--', 'marker', 'none', 'lw', 1.0);

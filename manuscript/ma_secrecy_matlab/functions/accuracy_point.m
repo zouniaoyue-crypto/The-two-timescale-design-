@@ -4,7 +4,7 @@ function r = accuracy_point(pr, D, S, seed0)
 %   (the same drops as in Figs. 5-7). For each drop, the proposed design (t, p, q) is
 %   obtained by Algorithm 2 ('MA_full' in evaluate_schemes.m), and its rates are computed
 %   (i) by Monte Carlo simulation of the exact ZF precoding and null-space AN with S channel
-%   realizations and (ii) by the closed forms of Lemma 1 and Proposition 1.
+%   realizations and (ii) by the closed forms in main.tex eq:Rm and eq:Re.
 %   r.lu  = [Monte Carlo, closed form] of the ergodic sum rate of the LUs, sum_m Rbar_m
 %   r.eve = [Monte Carlo, closed form] of the ergodic wiretap sum rate of Eve, sum_m Rbar_{e,m}
 %   r.essr = [Monte Carlo ESSR, approximate ESSR (27)]

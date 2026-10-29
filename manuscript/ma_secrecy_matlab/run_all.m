@@ -17,12 +17,13 @@ end
 t0 = tic;
 fig3_accuracy(prm);                 % Fig. 3: accuracy of the closed-form rates
 fig4_convergence(prm);              % Fig. 4: convergence of Algorithm 2
+extra_grid_check(prm);              % Sec. V-A: Stage-1 grid spacing halved (20 drops)
 fig5_snr(prm);                      % Fig. 5 (and TIN Eve, Sec. V-H): ESSR and AN power vs. SNR
 extra_eve_aod_error(prm);           % Sec. V-H: robustness to errors in the AoD of Eve
 fig6_region(prm);                   % Fig. 6(a): ESSR vs. region size
 extra_as_region(prm);               %   ... AS with candidates spanning the region
 extra_num_antennas(prm);            % Fig. 6(b): ESSR vs. number of MAs
-extra_angle_offset(prm);            % Fig. 7(a): ESSR vs. angular separation, M = 3
+extra_angle_offset(prm);            % Fig. 7(a): ESSR vs. AoD offset, M = 3
 extra_single_user(prm);             %   ... M = 1
 extra_random_eve(prm, 3);           % Sec. V-H: AoDs of Eve independent of the LUs, M = 3
 extra_random_eve(prm, 1);           %   ... M = 1
