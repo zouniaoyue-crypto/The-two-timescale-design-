@@ -39,3 +39,26 @@ Code paths are relative to `manuscript/ma_secrecy_matlab/`.
 | I41, I42, I43 | readme.tex/readme.pdf | Equation numbers remapped from main.aux; symbols/terms updated; overclaim removed; extra_grid_check and verify_numbers documented | consistency with the final manuscript |
 | I43 | verify_numbers.m | New script printing every Section V number next to its recomputed value | CLAUDE.md rule 3 |
 | I24 | — | Rejected from v2: numerical-failure thresholds, rank-deficient policy, implementation-complexity caveats, repeated "does not establish" hedges, verbose Algorithms 1–2 | not paper content / over-hedging |
+
+## Round rev-4 — logical flow and writing quality (line numbers refer to `manuscript/main.tex` after this round)
+
+| ID | file:line | What | Why |
+|---|---|---|---|
+| I45 | main.tex:51 | Abstract rewritten (260 → 190 words) | TCOM limit 75–200 words; supervisor template |
+| I46 | main.tex:55 | Index Terms reduced to five | TCOM: up to five keywords |
+| I47, I48 | main.tex:64–72 | Introduction reorganized into five paragraphs (144/170/139/159/167 words; before 315/147/346); insight sentence now contrasts with [16]; tense/parallelism fixed | readability; no duplication of the abstract |
+| I49 | main.tex:213 | Protocol paragraph: explicit forward reference to (p, q); g̃ named | clarity |
+| I50 | main.tex:256 | Redundant sentence after (P1) removed | (9b) already contains ∀H(t) |
+| I51 | main.tex:245, 262–264 | "short-timescale" → "small-timescale" | consistent with Fig. 2 |
+| I53 | main.tex:168, 339, 455, 528 | "Since" → "Because" for new reasons | supervisor connector rule |
+| I54 | main.tex:180, 227, 374 | Voice alternation for K; explicit antecedent in II-C; Remark 1 split | one idea per sentence |
+| I52 | main.tex:337–363 | Lemma 1 discussion split into interpretation and approximation; "we approximate" (no dangling participle); \kappa_{\mathrm e} in ξ_m, ψ; [16], [19] cited for the ZF approximations | logic, typography, accuracy |
+| I55 | main.tex:510 | Grid-spacing sentence states why a numerical check is needed | logical link |
+| — | main.tex:176 | Footnote 1 rephrased (semicolon splice removed) | style |
+| — | main.tex:281, 291, 568 | "In addition"; restriction sentence reordered; "this guarantee concerns the objective value only" | flow, precision |
+| I56 | main.tex:583, 632, 650–652 | AS sentence split; "AS with the compact candidate array"; S defined first; "(see Proposition 2)"; parenthetical 20-dB note | clarity, consistent references |
+| I57 | main.tex:614 | Fig. 5 caption harmonized | caption consistency |
+| I58 | main.tex:665 | Conclusion: guarantee stated precisely; no "and" chain | accuracy |
+| — | main.tex:676–696 | Appendix B: five wording trims (scaling invariance referenced to Sec. III-C, "as in [19]", "including those captured", "trace of (57)", compact bound) | concision; keeps 14 pages |
+| I59 | main.tex:791–797 | Ngo2013 and Horn2013 bibitems swapped | numbering in order of first citation |
+| I60 | main.tex (prose) | Benchmark naming unified | terminology consistency |

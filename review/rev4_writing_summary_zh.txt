@@ -1,0 +1,147 @@
+第 14 轮（rev-4）修改说明：全文逻辑结构与写作质量
+====================================================
+
+本轮只处理逻辑结构与语言表达。所有公式、数值、假设、引用含义均未改变，未新增参考文献，
+仿真与结果未改动。修改后的完整稿件为 manuscript/main.tex（预览 PDF：manuscript/main_preview.pdf）。
+逐条记录见 review/ISSUES.md（I45–I61）与 review/CHANGELOG.md（"Round rev-4" 一节）。
+
+
+一、目标期刊（IEEE Transactions on Communications）要求核对
+----------------------------------------------------
+依据 TCOM 官方 "Policies and Guidelines" 页面：
+  - 摘要 75–200 词，需清楚概括研究范围与贡献；
+  - 关键词最多 5 个；
+  - 常规论文不超过 13 页（双栏、单倍行距、10 pt、四边 1 英寸页边距，含标题、作者信息、摘要、
+    正文、公式、图表、附录和参考文献）；修改稿不超过 16 页；明显超限的投稿会在送审前退回。
+对照结果：
+  - 原摘要实为 260 词（上一轮我报告的"约 205 词"统计有误），超过上限 → 已改为 190 词；
+  - 原关键词 6 个 → 已改为 5 个；
+  - 全文仍为 14 页（IEEEtran 期刊模板，末页约 1.9 栏），超过 13 页上限，见第五部分（需作者决定）。
+
+
+二、全文逻辑审查结论
+--------------------
+1. 研究动机：论证链完整（PLS 依赖空间可分性 → FPA 在 Eve 靠近 LU 且 LoS 主导时受限 → MA 可重塑
+   信道相关性 → 现有 MA-PLS 工作依赖瞬时 CSI、需每个 CI 移动天线 → 两时间尺度 MA 工作未考虑窃听，
+   且其 ZF 速率近似只刻画期望用户信号功率 → 研究空白）。问题在于引言第一段 315 词，混合了背景、
+   使能技术和相关工作三层内容，读者难以抓住主线。
+2. 问题建模：(P1) → (P2)（ZF-AN 限制）→ (P3)（确定性近似）的逐步收缩清晰，难点陈述与章节路线图对应。
+   小问题：II-B 协议段对 (p,q) 的前向引用不明确；(P1) 后一句与约束中的 "∀H(t)" 重复。
+3. 方法推进：III-C 一段同时完成"解释引理 1"和"提出近似"两步，且有悬垂分词
+   （"Substituting them ..., the rate is approximated"）；IV-B 中"为何需要数值验证网格间距"的逻辑
+   未说明；其余推导与算法描述衔接自然。
+4. 贡献表述：引言贡献段 346 词，与摘要几乎逐句重复（尤其是"MA 可降低泄露并增加 Eve 处 AN"一句）；
+   摘要把"条件独立性的证明"这一论证细节放在摘要中，不符合导师"摘要不写论证理由"的要求。
+5. 衔接与交叉引用：参考文献 [22] Horn 与 [23] Ngo 未按首次引用顺序编号（IEEE 要求按首次引用顺序）；
+   术语不统一（正文 "short-timescale" 与图 2 "small timescale"；"rate-oriented design / rate-oriented
+   two-timescale MA design / rate-oriented MA design" 混用）；图 5 图注体例与图 6、图 7 不一致。
+
+
+三、主要修改（按章节）
+----------------------
+【摘要】（260 → 190 词）
+  - 删去开头的动机句，改为导师模板：范围（where 从句说明两个时间尺度）→ 问题（目标与全部约束类别）
+    → 求解主线（"To solve this nonconvex stochastic problem, we first ..., where ..."）→ 算法（含收敛保证
+    与用途）→ 结果。
+  - 条件独立性的证明移到引言（属于论证细节）；保留"即使单个 LU，MA 也能降低泄露并增加 AN"的洞见。
+  - 删除未在摘要中复用的缩写（ZF、ESSR）；算法句去掉 "and ... such that ..." 链式结构。
+  修改前（节选）："Movable antennas (MAs) can reshape the spatial correlation ..., but repositioning them
+    in every channel coherence interval incurs substantial movement and channel acquisition overhead. ..."
+  修改后（全文）："This paper investigates two-timescale secure transmission for a movable antenna
+    (MA)-enabled multiuser downlink with a passive eavesdropper (Eve), where the antenna positions are
+    optimized based on statistical channel state information (CSI), and the zero-forcing precoding with
+    null-space artificial noise (AN) is adapted to the instantaneous CSI of the legitimate users (LUs).
+    Specifically, the antenna positions and the long-term power allocation of the confidential signals
+    and AN are jointly optimized to maximize the ergodic secrecy sum rate subject to the transmit power,
+    movable-region, and minimum-distance constraints. To solve this nonconvex stochastic problem, we first
+    transform it into a deterministic problem by approximating the ergodic wiretap rate in closed form,
+    where the resulting expression reveals that the MAs can reduce the information leakage and increase
+    the AN received by Eve, even for a single LU. Then, an alternating optimization algorithm with
+    guaranteed convergence is developed for the deterministic problem, where the power allocation among
+    the LUs follows a secrecy water-filling structure, and each antenna position is updated by a grid
+    search followed by majorization–minimization. Simulation results demonstrate that the proposed design
+    outperforms the benchmark schemes with less AN power and fewer antennas."
+
+【关键词】删去 "secrecy rate"（已被 physical layer security 覆盖），保留 5 个并按字母序排列。
+
+【引言】（3 段 → 5 段：144/170/139/159/167 词）
+  - 第 1 段：PLS 背景 → FPA 局限 → MA 一句话引出（"have emerged as a promising means to enhance the
+    spatial separability, where ..."）。
+  - 第 2 段：MA-PLS 相关工作及其共同局限（依赖瞬时 CSI、每个 CI 移动、整区域 CSI 获取；[15] 仅 LoS）。
+    统一时态（Recently → 现在完成时），长句拆分。
+  - 第 3 段：两时间尺度工作 → "focus on maximizing the ergodic sum rate without considering
+    eavesdropping" → ZF 近似只刻画期望用户信号功率、单用户无增益 → "remains unexplored"。
+    消除前后两句重复的 "maximize the ergodic sum rate"。
+  - 第 4 段（分析贡献）：问题 → 条件独立性（含"为什么需要"）→ 闭式近似 → 洞见。洞见句不再复述摘要，
+    改为与 [16] 对比："Unlike in the rate-oriented MA design [16], where the MAs only decorrelate the LUs,
+    this approximation shows that the MAs also reduce the information leakage and increase the AN
+    received by Eve, even for a single LU."
+  - 第 5 段（算法与结果）：AO 算法（收敛性、复杂度与信道样本数无关）→ 保密注水 → 网格搜索 + MM →
+    仿真结论与鲁棒性。
+
+【第 II 节 系统模型】
+  - 脚注 1：去掉分号连接的拼接句，先给出假设来源再说明其理想化性质。
+  - "Since the size of C ..." → "Because ..."（新原因用 Because，已知原因用 Since）。
+  - K 的定义改为被动句，避免连续以 "Moreover" 开头。
+  - II-B：明确 (p,q) "specified in Section III-A"；"g̃" 改为 "the NLoS component g̃ of Eve"；
+    合并"每帧……"两句。
+  - II-C：最坏情况 Eve 的两句理由合并后，恢复明确主语 "This worst-case model yields ..."，避免 which 指代不清。
+  - II-D：删除与约束 "∀H(t)" 重复的一句；"short-timescale" 统一为 "small-timescale"。
+
+【第 III 节 分析】
+  - III-A 标题与正文统一为 "Small-Timescale"；"(P2) is a restriction of (P1), i.e., ..." 调整语序；
+    "Moreover" 改为 "In addition"。
+  - III-C：将"引理 1 的含义"与"近似步骤"分为两段，并以 "However, since ..." 衔接条件方差与无条件方差的
+    区别；"Substituting them into (22), the ... is approximated by" 改为
+    "Substituting (23) and (24) into (22), we approximate ... by"（消除悬垂分词）；
+    ξ_m、ψ 定义中的 κ_e 改为罗马体下标 κ_{\mathrm e}（与全文一致）；"the existing approximations"
+    明确为 [16]、[19]；"Since the rate is concave ..." → "Because ..."。
+  - Remark 1：长句拆为两句（"In contrast, an FPA array can hardly ..."）；Remark 1、2 中统一称
+    "rate-oriented MA design"。
+
+【第 IV 节 算法】
+  - "Since F*(q) is not necessarily unimodal" / "Since the Lipschitz constant ..." → "Because ..."。
+  - IV-B：补全逻辑："Because F(t_n) is a rational function of these phase terms, the sufficiency of this
+    spacing is not guaranteed analytically and is verified numerically in Section V-A."
+  - IV-C："Note that this guarantee concerns the objective value only, rather than ..."。
+
+【第 V 节 仿真】（保持"现象 → 原因"结构）
+  - V-A：AS 基准的长句拆为两句（"All the C(2N,N) subsets ... are exhaustively ranked by ..."）。
+  - V-E：两种 AS 易混淆 → "AS with the compact candidate array performs comparably ... only for the
+    smallest region, which this array covers entirely."
+  - V-G：衰落差异 S 的定义移到首句（先定义后使用）；"(Proposition 2)" 统一为 "(see Proposition 2)"；
+    20 dB 未作图的说明改为括号注释。
+  - 图 5 图注改为与图 6、图 7 一致的体例："(a) ESSR and (b) optimized AN power fraction ... versus the
+    transmit SNR ..."。
+
+【第 VI 节 结论】
+  - 收敛表述改为准确的保证（"its objective value is guaranteed to converge"），不再用仿真观察
+    "converges monotonically and quickly"；消除三个并列动词的 "and" 链；统一 "rate-oriented MA design"。
+
+【附录 B】五处措辞精简（引用 III-C 中已说明的尺度不变性、"as in [19]"、"including those captured"、
+  "taking the trace of (57)"、"X̄_m, Ȳ ≤ ||ḡ||²"），含义不变，用于保持 14 页。
+
+【参考文献】Ngo2013 与 Horn2013 两条互换，使编号符合首次引用顺序（[22] Ngo，[23] Horn）。
+
+
+四、编译与检查
+--------------
+  - 新容器中 TeX Live 已重新安装；pdflatex 多次编译：14 页，0 个 overfull box，0 个未定义引用/文献。
+  - 句长与连接词检查：拆分了 3 处过长句（引言第 2 段、Remark 1、AS 基准），并将 2 个过长段落拆开（原引言第 1 段与贡献段、III-C 引理讨论段）；无连续堆叠的 Moreover/Furthermore；无 leverage、utilize、
+    novel 等禁用词；新原因统一用 Because。
+  - 本轮未做技术验证（按要求）；数值与上一轮 verify_numbers.m 的结果一致（本轮未改任何数值）。
+
+
+五、需要作者决定的事项
+----------------------
+1. 页数（I61）：TCOM 常规论文上限 13 页（1 英寸页边距格式），当前 IEEEtran 期刊模板为 14 页，
+   末页约 1.9 栏。由于图 3–图 7 固定在第 10–12 页，前文精简只能节省少量行，仅靠文字压缩无法降到
+   13 页。可选方案（可组合）：
+   (a) 将所有仿真子图高度由 2.45 in 降到约 2.1 in（约省 0.3 栏）；
+   (b) 将附录 C（梯度推导）移到补充材料（约省 0.6 栏）；
+   (c) 精简 Remark 4 与 V-G、V-H 的部分讨论（约省 0.4 栏）；
+   (d) 缩小图 1（约省 0.3 栏）。
+   请告诉我采用哪些方案；涉及删减内容的方案需要你确认。
+2. 作者姓名、单位、邮箱仍为占位符（main.tex 第 43–45 行）。
+3. 上一轮遗留事项：I33（V-H 小表格）、I34（新增仿真 E1–E6）、I35（2025–2026 新颖性检索与参考文献
+   全面核验）、I36（矢量 PDF 图）。

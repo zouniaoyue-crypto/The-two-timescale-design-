@@ -50,3 +50,29 @@ Evidence key: D = derivation, C = code, R = results file, P = reference PDF, X =
 | I42 | L | readme | "approximate ESSR is a conservative estimate" overclaims | own | D (I2) | "lower in all tested cases; not a bound in general" | fixed |
 | I43 | L | code | no script maps Section V numbers to results files | CLAUDE.md rule 3 | X | verify_numbers.m (prints recomputed value next to each number in the text) | fixed |
 | I44 | L | layout p. 11 | Underfull \vbox (badness 10000): about 5 pt extra paragraph gap below Figs. 5–6 | own | main.log | cosmetic, accepted | open |
+
+## Round rev-4 (logical flow and writing quality; no change to equations, numbers, assumptions or citation meaning)
+
+Target journal limits (official TCOM "Policies and Guidelines" page, read 2026-11-05): abstract 75–200 words,
+up to five keywords, regular papers at most 13 double-column pages (10 pt, 1-inch margins, everything included),
+revised papers at most 16 pages; manuscripts significantly exceeding the limits are returned before review.
+
+| ID | Sev | Location | Finding | From | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|---|
+| I45 | H | Abstract | 260 words (limit 200); opens with a motivation sentence; ZF and ESSR acronyms defined but not reused; algorithm sentence is an "and"/"such that" chain; proof detail (conditional independence) is a justification | TCOM, supervisor template | word count | rewritten to 190 words: scope (where-clause) → problem → solution step + insight → algorithm with guarantee → results; independence moved to the introduction | fixed |
+| I46 | M | Index Terms | six keywords (limit five) | TCOM | — | "secrecy rate" dropped (covered by physical layer security) | fixed |
+| I47 | M | Intro | P1 (315 words) mixed PLS background, MA technology and MA-PLS works; P3 (346 words) packed analysis, algorithm and results; insight sentence repeated the abstract | supervisor flow | word count | five paragraphs: background → MA-PLS works and their limitation → two-timescale works and gap → analytical contributions → algorithm and results; insight now contrasts with the rate-oriented design | fixed |
+| I48 | L | Intro | tense and parallelism ("were optimized" vs "has been derived"); redundant "maximize the ergodic sum rate" twice | own | text | present perfect for recent works; parallel "for a downlink ... and for an uplink ..." | fixed |
+| I49 | L | II-B | protocol forward-references (p, q) with "(see Section III-A)"; "g̃ is never available" without saying what g̃ is | own | text | "(p, q) specified in Section III-A"; "the NLoS component g̃ of Eve" | fixed |
+| I50 | L | II-D | sentence "Here, (9b) must hold for every realization of H(t)" repeats the "∀H(t)" in (9b) | own | text | removed | fixed |
+| I51 | L | II–III | "short-timescale" (text) vs "small timescale" (Fig. 2) | own | grep | "small-timescale" everywhere | fixed |
+| I52 | M | III-C | one paragraph mixed the interpretation of Lemma 1 and the approximation step; dangling participle "Substituting them..., the rate is approximated"; italic Eve subscript in ξ_m, ψ definitions; "existing approximations" uncited | own | text | two paragraphs; "we approximate"; \kappa_{\mathrm e}; cite [16], [19] | fixed |
+| I53 | L | II-A, III-C, IV | "Since" used for new reasons | supervisor rule | text | "Because" for new reasons (4 places) | fixed |
+| I54 | L | Remark 1, II-C | long sentences; an ambiguous "which" introduced in II-C | own | text | split; explicit "This worst-case model" | fixed |
+| I55 | L | IV-B | "Since F is a rational function ..., the grid spacing is verified numerically" leaves the logical link implicit | own | text | "is not guaranteed analytically and is verified numerically" | fixed |
+| I56 | L | V-A, V-E, V-G | long AS sentence; "AS" ambiguous in V-E (two AS variants); fading spread S defined after its use | own | text | split; "AS with the compact candidate array"; S defined in the first sentence of V-G | fixed |
+| I57 | L | Fig. 5 caption | caption style differs from Figs. 6–7 | own | text | "(a) ESSR and (b) ... versus ..." | fixed |
+| I58 | L | Conclusion | "and" chain of three verbs; "converges monotonically and quickly" is a simulation observation, not the guarantee | own | text | two clauses; "its objective value is guaranteed to converge" | fixed |
+| I59 | L | References | [22] Horn and [23] Ngo numbered out of order of first citation (IEEE requires order of first citation) | own | script | bibitems swapped | fixed |
+| I60 | L | naming | "rate-oriented design / rate-oriented two-timescale MA design / rate-oriented MA design" | own | grep | "rate-oriented MA design" in prose, "rate-oriented MA" as benchmark name | fixed |
+| I61 | H | whole paper | 14 IEEEtran pages (last page about 1.9 columns) vs TCOM limit of 13 pages; tightening alone saves only lines because Figs. 3–7 are anchored to pp. 10–12 | TCOM | build | options: smaller figure panels, Appendix C to supplementary material, shorter Remarks/Sec. V-G–V-H, smaller Fig. 1 | needs-decision |
