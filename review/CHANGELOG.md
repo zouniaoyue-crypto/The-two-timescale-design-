@@ -62,3 +62,21 @@ Code paths are relative to `manuscript/ma_secrecy_matlab/`.
 | — | main.tex:676–696 | Appendix B: five wording trims (scaling invariance referenced to Sec. III-C, "as in [19]", "including those captured", "trace of (57)", compact bound) | concision; keeps 14 pages |
 | I59 | main.tex:791–797 | Ngo2013 and Horn2013 bibitems swapped | numbering in order of first citation |
 | I60 | main.tex (prose) | Benchmark naming unified | terminology consistency |
+
+## Round rev-4b — sentence-level IEEE language pass (de-templating)
+
+Scope: every prose paragraph from the Introduction to Appendix B (the abstract, which follows the supervisor template, is unchanged).
+Invariants checked: all 52 displayed equations, all 55 citations, all inline mathematics and all numbers are unchanged
+(script comparison plus the academic-humanizer `check_invariants.py`, which also confirmed 18 protected technical terms);
+the only reference changes are "Remarks 1–3" added in Sec. III-D and two redundant references to Secs. IV-A/IV-B and
+Algorithm 2 removed. Label numbering unchanged; 14 pages; no overfull boxes or undefined references.
+
+| ID | file:line | What | Why |
+|---|---|---|---|
+| I62, I65 | main.tex:64–72 | Introduction: "thus complements", "Both techniques, however, ...", "promising" removed, connector-free sentence for [16]/[17], "reduces the cost of evaluating each grid point", "less AN power" | template cues, vague intensity |
+| I62 | main.tex:166–260 | Section II: "must be separated by at least D_min", causal "so that" for the LoS phase, "follows Rician fading and is given by", protocol sentence merged, worst-case model split into guarantee + SINR sentences, "which maps the instantaneous CSI ...", "which yields a deterministic problem" | clarity, fewer "i.e." and participial tails |
+| I62, I63 | main.tex:264–410 | Section III: "The AN therefore causes ...", "whereas w̄_m and P⊥ are updated ...", restriction stated with a colon, LoS-gain sentence merged, Lemma 1 discussion rewritten with one condition per variance, "Remarks 1–3 show ...", Remark 1 mechanisms as cause → effect, "so that reducing the leakage is equivalent to ...", (P3) justification with a colon | logic, readability |
+| I62, I64 | main.tex:412–572 | Section IV: "two structures that simplify its optimization", derivative lead-in, "the quadratic equation ... in p", "Equation (36) can therefore be regarded ...", "oscillates on the scale of a wavelength", two-stage sentence, "Consequently, once Γ_n⁻¹ and r_n are available ...", convergence paragraph without "Note that" | precision, connectors |
+| I62, I64 | main.tex:579–660 | Section V: "so that ... is the transmit SNR", "Eve thus lies well within ...", paired-comparison sentence, "isolates the gain", "agrees ... within maximum absolute errors", explicit cause of the underestimation, "This fast convergence results from ...", "is consistent with the AN-saving effect", "substantially improves", "optimized for the assumed AoDs" | observation → reason without stock openers; claim strength |
+| I66 | main.tex:665 | Conclusion: "Building on this approximation ...", "is left for future work" | stock phrasing |
+| I66 | main.tex:671–678 | Appendices A–B: connectors ("Since", "Because", "As a result"), "We also use ...", "These are two separate approximations" | stock phrasing |

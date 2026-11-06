@@ -1,0 +1,113 @@
+第 15 轮（rev-4b）修改说明：逐句语言修订与去模板化
+================================================
+
+本轮对引言至附录 B 的每一段正文逐句修订（摘要已按导师模板定稿，本轮未改）。目标是让逻辑关系
+由句子本身承担，而不是依赖套话连接词；用词与证据强度一致；句法准确、简洁，符合 IEEE 写作习惯。
+修改后的完整稿件：manuscript/main.tex（预览：manuscript/main_preview.pdf）。
+逐条记录：review/ISSUES.md（I62–I66）与 review/CHANGELOG.md（"Round rev-4b" 一节）。
+
+
+一、诊断结果（依据学术写作模板化模式清单，只看成簇出现的问题）
+------------------------------------------------------------
+1. 连接词与插入语过密，形成机械节奏：
+     "i.e.," 39 处、"Hence," 22 处、"Moreover," 13 处、"In contrast," 11 处、"Based on" 8 处、
+     "The reason is that" 3 处、"This result verifies/confirms" 2 处、"affordable" 3 处。
+   修改后分别为 13、4（均在证明中）、2、1、0、0、0、0。
+2. 用词强于或虚于证据：
+     "closely matches ... accurately captures"、"verifies the AN-saving effect"、
+     "significantly improves"（易被理解为统计显著）、"tailored to the AoDs"、
+     "highly oscillatory and has numerous local maxima"、"promising means"、"considerably less"。
+3. 复杂并列与指代：III-C 中两个条件方差用 "respectively" 与两个条件对应，读者需来回对照；
+   Remark 1 用 "i.e." 把量与其物理含义直接等同；若干句末分词短语（"thereby ..."）只是复述前文。
+4. 套话式句子："Note that this guarantee concerns ..."、"is an important direction for future work"、
+   "Note that these are two separate approximations"。
+
+
+二、修改原则
+------------
+  - 逻辑关系写进从句（because / since / so that / therefore / whereas），减少句首连接词；
+  - "i.e." 只保留在真正的定义或数学等价处，其余改为直接陈述、冒号或定语从句；
+  - 动词强度不高于证据（如 "verifies" → "is consistent with"，"significantly" → "substantially"）；
+  - 能用文中已有的具体事实替代抽象形容词时就替代（如 "affordable" → "reduces the cost of
+    evaluating each grid point"；"highly oscillatory" → "oscillates on the scale of a wavelength"）；
+  - 不新增、不删除任何结论、数值、公式、引用和局限说明。
+
+
+三、代表性修改（修改前 → 修改后）
+--------------------------------
+【引言】
+  "have emerged as a promising means to enhance the spatial separability"
+  → "have emerged as a means to enhance this separability"
+  "where a rank-one structure of the objective function renders the grid search affordable"
+  → "where a rank-one structure of the objective function reduces the cost of evaluating each grid point"
+  "while requiring considerably less AN power" → "while requiring less AN power"
+
+【第 II 节】
+  "To mitigate the mutual coupling, the distance between any two MAs is required to be no smaller than
+   a minimum distance D_min" → "To mitigate mutual coupling, any two MAs must be separated by at least
+   a minimum distance D_min"
+  "This worst-case model yields a secrecy guarantee regardless of ..., and the corresponding SINR ..."
+  → "This worst-case model provides a secrecy guarantee that does not depend on the decoding capability
+     of Eve. Under this model, the SINR of Eve for s_m is given by"
+
+【第 III 节】
+  "Lemma 1 reveals that ... Moreover, the conditional relative variances of X_m and Y, i.e., ... and ...,
+   are small when ... and when ..., respectively."
+  → "By Lemma 1, ... The conditional relative variance of X_m, (...), is small when the LoS leakage is
+     strong, and that of Y, (...), is small when N − M or κ_e Ȳ is large."
+  "A smaller ω_m(t), i.e., a weaker LoS correlation ..., yields a larger ZF gain"
+  → "A weaker LoS correlation between the m-th LU and the other LUs reduces ω_m(t) and thus increases
+     the ZF gain"
+  "a smaller c_m(t) and a larger d(t) provide two additional mechanisms, i.e., less information leakage
+   and more AN received by Eve" → "Secure transmission offers two additional mechanisms: a smaller c_m(t)
+   reduces the information leakage, and a larger d(t) increases the AN received by Eve."
+
+【第 IV 节】
+  "Nevertheless, (P3) has two useful structures." → "Nevertheless, (P3) has two structures that simplify
+   its optimization."
+  "Hence, F(t) is highly oscillatory and has numerous local maxima within C."
+  → "..., so that F(t) oscillates on the scale of a wavelength and has many local maxima within C."
+  "Note that this guarantee concerns the objective value only, rather than ..."
+  → "This guarantee concerns the objective value only; it does not imply that the iterates converge to
+     a stationary point or a globally optimal solution of (P3)."
+
+【第 V 节】
+  "closely matches the Monte Carlo results, ..., indicating that it accurately captures ..."
+  → "agrees with the Monte Carlo results within maximum absolute errors of 0.052 and 0.013 bps/Hz ...,
+     which indicates that it captures ..."
+  "The reason is that, besides Jensen's inequality, the central Wishart approximation ... is exact for
+   Rayleigh fading but overestimates ..." → "This underestimation stems from Jensen's inequality and from
+   the central Wishart approximation in Section III-B, which is exact for Rayleigh fading but overestimates ..."
+  "This result verifies the AN-saving effect in Remark 3" → "This difference is consistent with the
+   AN-saving effect in Remark 3"
+  "the proposed design significantly improves the ergodic secrecy rate" → "substantially improves"
+  "because its positions are tailored to the AoDs of Eve" → "since its positions are optimized for the
+   assumed AoDs of Eve"
+
+【结论与附录】
+  "is an important direction for future work" → "is left for future work"
+  "On the other hand, since g̃ is independent of H(t), ..." → "Because g̃ is independent of H(t), ..."
+
+
+四、忠实性核对
+--------------
+  - 数值与统计量：全部保留（humanizer 的 check_invariants.py 通过）；
+  - 引用与图、式、节编号：全部保留（52 个显示公式、55 处引用逐一比对一致；仅新增 "Remarks 1–3"
+    的交叉引用，删除 2 处重复的节/算法引用）；
+  - 技术术语：18 个受保护术语（如 ergodic secrecy sum rate、secrecy water-filling、AoD offset、
+    asymptotically exact、neither an upper nor a lower bound 等）全部保留；
+  - 结论强度：未加强任何结论；4 处主动减弱（closely matches/accurately、verifies、considerably、
+    promising），并将 significantly 改为 substantially，以免被理解为统计显著；
+  - 局限与不确定性：全部保留（近似不是上下界、收敛只针对目标值、单天线 Eve 与完美 LU CSI 的假设等）；
+  - 编译：14 页，0 overfull box，0 未定义引用；公式、图、表编号不变。
+  - 作者语气校准：未提供作者本人的写作样本，因此未做个人语气匹配；以 CLAUDE.md 中导师的写作规范为准。
+
+
+五、需要作者确认的事项
+----------------------
+1. "AN-saving effect" 是文中自定义的名称（Remark 3 定义，V-D 使用），本轮保留；如导师不希望出现
+   自造术语，可改为 "this effect"。
+2. "Similar to [15]"（Eve 位置设置）与 "similar to [16]"（逐天线优化）两处保留了 "similar to"，
+   因为未逐一核对 [15]、[16] 的具体设置；若与原文完全一致，可改为 "As in"。
+3. IEEE 要求在投稿时按其政策披露生成式 AI 的使用情况（通常写在致谢中）；请按投稿时的最新政策处理。
+4. 上一轮遗留：13 页上限（I61）、作者信息占位符、I33–I36。

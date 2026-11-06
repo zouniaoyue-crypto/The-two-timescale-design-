@@ -76,3 +76,13 @@ revised papers at most 16 pages; manuscripts significantly exceeding the limits 
 | I59 | L | References | [22] Horn and [23] Ngo numbered out of order of first citation (IEEE requires order of first citation) | own | script | bibitems swapped | fixed |
 | I60 | L | naming | "rate-oriented design / rate-oriented two-timescale MA design / rate-oriented MA design" | own | grep | "rate-oriented MA design" in prose, "rate-oriented MA" as benchmark name | fixed |
 | I61 | H | whole paper | 14 IEEEtran pages (last page about 1.9 columns) vs TCOM limit of 13 pages; tightening alone saves only lines because Figs. 3–7 are anchored to pp. 10–12 | TCOM | build | options: smaller figure panels, Appendix C to supplementary material, shorter Remarks/Sec. V-G–V-H, smaller Fig. 1 | needs-decision |
+
+## Round rev-4b (sentence-level language pass; equations, numbers, citations and labels unchanged)
+
+| ID | Sev | Location | Finding | From | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|---|
+| I62 | M | whole text | clustered template cues: "i.e.," ×39, "Hence," ×22, "Moreover," ×13, "In contrast," ×11, "Based on" ×8, "The reason is that" ×3, "This result verifies/confirms" ×2, "affordable" ×3 | humanizer pattern catalog | counts | transitions carried by the logical relation (because/since/so that/therefore inside the clause); counts now 13/4/2/1/0/0/0/0 | fixed |
+| I63 | L | III-C, Remark 1, Remark 2 | "respectively" pairing of two variance conditions hard to parse; "i.e." used to equate a quantity with its interpretation | own | text | each variance stated with its own condition; mechanisms written as cause → effect ("a smaller c_m reduces the leakage ...") | fixed |
+| I64 | L | IV-B, V-B–V-H | verbs stronger or vaguer than the evidence: "closely matches ... accurately captures", "verifies the AN-saving effect", "significantly improves" (statistical connotation), "tailored to the AoDs", "highly oscillatory ... numerous local maxima" | humanizer claim-strength rule | text | "agrees ... within maximum absolute errors of", "is consistent with", "substantially improves", "optimized for the assumed AoDs", "oscillates on the scale of a wavelength and has many local maxima" | fixed |
+| I65 | L | Introduction | "promising means", "considerably less AN power" | pattern catalog | text | intensifiers removed | fixed |
+| I66 | L | IV-C, Conclusion, App. B | stock phrasing ("Note that this guarantee ...", "is an important direction for future work", "Note that these are ...") | pattern catalog | text | direct statements | fixed |
