@@ -1,14 +1,15 @@
-function plot_fig7(resD3, resD1, resS0, resS10)
+function plot_fig7(resD3, resD1, resS)
 %PLOT_FIG7  Fig. 7: (a) ESSR versus the AoD offset Delta between Eve and LU 1 for
 %   M = 3 (resD3, extra_angle_offset.m) and M = 1 (resD1, extra_single_user.m); for M = 1,
-%   the rate-oriented MA coincides with the FPA and is therefore not drawn.
+%   the rate-oriented MA keeps its UPA initialization and thus coincides with the FPA, so
+%   the FPA curve is redrawn on top of it to keep both visible.
 %   (b) Benefit of the long-term power allocation (PA): ESSR of the proposed PA
 %   ('MA_full'), equal power (EP) with optimized alpha ('MA_EPA'), and EP with alpha = 0.5
 %   ('MA_fix'), where the positions are optimized by Algorithm 2 for each PA, versus the
-%   fading spread S, [beta_1, beta_2, beta_3] = [0, -S/2, -S] dB, at
-%   P_tot/sigma^2 = 10 dB (solid, resS10) and 0 dB (dashed, resS0) (extra_pa_spread.m);
-%   S = 0 corresponds to identical LUs. The PA versus the SNR
-%   (fig7_power_allocation.m) is quoted in Section V-G without a figure.
+%   large-scale fading spread S of the LUs, [beta_1, beta_2, beta_3] = [0, -S/2, -S] dB,
+%   at P_tot/sigma^2 = 10 dB (resS, extra_pa_spread_10dB.mat from extra_pa_spread.m);
+%   S = 0 corresponds to identical LUs. The gains at 0 dB (extra_pa_spread_0dB.mat) and
+%   20 dB (fig7_power_allocation.m) are quoted in Section V-G without a figure.
 s = fig_style();
 m = s.margins;
 % ---------------- (a) AoD offset, M = 3 and M = 1 ----------------
@@ -20,11 +21,12 @@ if ~isempty(resD3) && ~isempty(resD1)
         st = items{k};
         j = find(strcmp(resD3.schemes, keys{k}), 1);
         plot_curve(ax, resD3.values, resD3.essr(:, j), st);
-        if ~strcmp(keys{k}, 'MA_rate')                      % coincides with the FPA for M = 1
-            j = find(strcmp(resD1.schemes, keys{k}), 1);
-            plot_curve(ax, resD1.values, resD1.essr(:, j), st);
-        end
+        j = find(strcmp(resD1.schemes, keys{k}), 1);
+        plot_curve(ax, resD1.values, resD1.essr(:, j), st);
     end
+    k = find(strcmp(keys, 'FPA_full'), 1);         % M = 1: FPA on top of the identical
+    j = find(strcmp(resD1.schemes, 'FPA_full'), 1);    % rate-oriented MA curve
+    plot_curve(ax, resD1.values, resD1.essr(:, j), items{k});
     label_axes(ax, 'AoD offset {\it\Delta} (rad)', 'ESSR (bps/Hz)');
     set(ax, 'XLim', [0 0.5], 'XTick', 0:0.1:0.5, 'YLim', [0 25], 'YTick', 0:5:25);
     axes_note(ax, 0.97, 0.97, '{\itM} = 3', 'right', 'top');
@@ -32,8 +34,8 @@ if ~isempty(resD3) && ~isempty(resD1)
     manual_legend(gcf, [m(1) + 0.35, m(2) + 0.73, 2.30, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.15, 0.14);
     save_figure('fig7a_essr_offset');
 end
-if nargin < 4 || isempty(resS0) || isempty(resS10), return; end
-% ---------------- (b) power allocation versus the fading spread ----------------
+if nargin < 3 || isempty(resS), return; end
+% ---------------- (b) power allocation versus the large-scale fading spread ----------------
 keys = {'MA_full', 'MA_EPA', 'MA_fix'};
 names = {'Proposed PA', 'EP, optimized {\it\alpha}', 'EP, {\it\alpha} = 0.5'};
 sty = cell(1, 3);
@@ -41,20 +43,13 @@ for k = 1:3
     sty{k} = scheme_style(keys{k});  sty{k}.ls = '-';  sty{k}.name = names{k};
 end
 ax = new_figure();
-R = {resS10, resS0};  lsp = {'-', '--'};
-for r = 1:2
-    for k = 3:-1:1
-        st = sty{k};  st.ls = lsp{r};
-        j = find(strcmp(R{r}.schemes, keys{k}), 1);
-        assert(~isempty(j), 'Missing power-allocation scheme');
-        plot_curve(ax, R{r}.values, R{r}.essr(:, j), st);
-    end
+for k = 3:-1:1
+    j = find(strcmp(resS.schemes, keys{k}), 1);
+    assert(~isempty(j), 'Missing power-allocation scheme');
+    plot_curve(ax, resS.values, resS.essr(:, j), sty{k});
 end
-label_axes(ax, 'Fading spread {\itS} (dB)', 'ESSR (bps/Hz)');
-set(ax, 'XLim', [R{1}.values(1) R{1}.values(end)], 'XTick', R{1}.values, 'YLim', [0 14], 'YTick', 0:2:14);
-k10 = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 10 dB', 'color', [0.3 0.3 0.3], 'ls', '-',  'marker', 'none', 'lw', 1.0);
-k0  = struct('name', '{\itP}_{tot}/{\it\sigma}^2 = 0 dB',  'color', [0.3 0.3 0.3], 'ls', '--', 'marker', 'none', 'lw', 1.0);
-manual_legend(gcf, [m(1) + 2.92 - 1.62, m(2) + 1.97 - 0.80, 1.58, 0.76], ...
-              {{sty{1}}, {sty{2}}, {sty{3}}, {k10}, {k0}}, 1.5, 0.14);
+label_axes(ax, 'Large-scale fading spread {\itS} (dB)', 'ESSR (bps/Hz)');
+set(ax, 'XLim', [resS.values(1) resS.values(end)], 'XTick', resS.values, 'YLim', [4 12], 'YTick', 4:2:12);
+manual_legend(gcf, [m(1) + 2.92 - 1.62, m(2) + 1.97 - 0.50, 1.58, 0.46], {{sty{1}}, {sty{2}}, {sty{3}}}, 1.5, 0.14);
 save_figure('fig7b_pa_spread');
 end

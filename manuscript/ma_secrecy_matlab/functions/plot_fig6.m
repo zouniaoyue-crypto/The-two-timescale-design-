@@ -2,7 +2,8 @@ function plot_fig6(resA, resAS, resN)
 %PLOT_FIG6  Fig. 6: (a) ESSR versus the side length A of the movable region, including the
 %   AS benchmark whose 2N candidate antennas span the region ('AS_region', resAS from
 %   extra_as_region.m); (b) ESSR versus the number of MAs N (resN, extra_num_antennas.m),
-%   where AS is drawn only for N <= 10 (exhaustive search over nchoosek(2N, N) subsets).
+%   where AS uses the exhaustive search for N <= 10 and the swap search (as_swap.m) for
+%   N >= 12.
 %   Both panels include the sparse FPA spanning the movable region (main_schemes.m).
 s = fig_style();
 % ---------------- (a) region size ----------------
@@ -36,7 +37,7 @@ keys = main_schemes();
 items = cellfun(@scheme_style, keys, 'UniformOutput', false);
 for k = numel(keys):-1:1                       % reverse order: the proposed design on top
     j = find(strcmp(resN.schemes, keys{k}), 1);
-    plot_curve(ax, resN.values, resN.essr(:, j), items{k});   % NaN (AS for N > 10): not drawn
+    plot_curve(ax, resN.values, resN.essr(:, j), items{k});
 end
 label_axes(ax, 'Number of MAs {\itN}', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [resN.values(1) resN.values(end)], 'XTick', resN.values, 'YLim', [8 24], 'YTick', 8:2:24);

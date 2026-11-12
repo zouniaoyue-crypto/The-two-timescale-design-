@@ -38,5 +38,5 @@ In MATLAB or Octave, from `manuscript/ma_secrecy_matlab/`:
 
 - Author names, IEEE membership grades, affiliations and e-mail addresses (`main.tex`, lines 43–45).
 - A funding acknowledgment, if any.
-- Decisions on the open items in `../review/ISSUES.md` (I33 robustness table, I34 extra
-  simulations, I36 vector figures, I35 novelty search and full reference verification).
+- Decisions on the open items in `../review/ISSUES.md` (I73 optional reference on antenna movement
+  time, I34 extra simulations, I36 vector figures, I35 novelty search and full reference verification).

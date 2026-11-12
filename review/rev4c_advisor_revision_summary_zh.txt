@@ -1,0 +1,253 @@
+第 16 轮（rev-4c）修改说明：导师批注 PDF（67 条）与仿真部分四个问题
+======================================================================
+
+修改后的稿件：manuscript/main.tex（预览：manuscript/main_preview.pdf，14 页，0 个 overfull box，
+0 个未定义引用）。逐条记录：review/ISSUES.md（I67–I85）与 review/CHANGELOG.md（"Round rev-4c" 一节）。
+第 V 节的每个数值都由 ma_secrecy_matlab/verify_numbers.m 从 results/*.mat 重新计算核对。
+
+
+一、第一部分：仿真部分的四个问题（已先完成）
+------------------------------------------
+
+1. Fig. 6(b) 中 AS 曲线为什么不完整
+   原因：AS 基准从 2N 个候选天线中穷举选 N 个，子集数为 C(2N,N)：N=10 时 1.8×10^5，
+   N=12、14、16 时分别为 2.7×10^6、4.0×10^7、6.0×10^8。原代码在 N>10 时不计算（记为 NaN），
+   所以曲线止于 N=10。IEEE 论文中确实很少这样处理。
+   处理：
+   - N≤10 仍用穷举（与 Fig. 5、6(a)、7(a) 中的 AS 完全一致）；N≥12 改用"交换搜索"：选择指标
+     与穷举相同（(P3) 的近似 ESSR，AN 功率取 21 个网格点）；以"贪婪删除"得到的子集和 4 个随机
+     子集为初值，每一步在所有"一个选中天线换一个未选中天线"的交换中取指标最大者，直到指标不再
+     增加，最后取 5 个初值中最好的结果。
+   - 用同样的 100 个场景验证（新脚本 extra_as_swap_check.m）：N=4、6、8、10 时，交换搜索分别在 99、98、92、93 个场景
+     （共 100 个）中达到穷举搜索的最大指标值（选中的子集不同时多为对称的等价子集）；平均 ESSR 与
+     穷举结果的差别分别为 0.023%、0.005%、0.014%、0.006%（N=10：18.297 对 18.298 bps/Hz）。
+     因此 N≥12 时用交换搜索得到的 AS 曲线与 N≤10 的穷举结果可以直接衔接。
+   - 新结果：AS 在 N=12、14、16 时的 ESSR 为 19.22、20.00、20.68 bps/Hz；所提方案相对 AS 的增益
+     从 N=4 的 42.1% 降到 N=16 的 10.5%（AS 的 4×(N/2) 候选阵列随 N 增大、孔径变大）。
+   - 正文：V-A 说明 N≤10 穷举、N≥12 交换搜索；V-E 给出交换搜索的做法和验证结果；Fig. 6(b) 重画。
+
+2. Fig. 7(a)：是否需要 AoD 偏移；M=1 时是否补画速率导向 MA
+   (1) 建议保留这组仿真。Δ 不是"漂移"，而是 Eve 相对 LU 1 的到达角偏移，表示 Eve 与 LU 在方向上
+       有多接近。它的作用有三点：
+       - 刻画引言提出的挑战场景（Eve 方向靠近某个 LU 且 LoS 主导时，FPA 难以区分两者）；
+       - 图中 M=1 的一组曲线是"即使只有一个 LU，MA 也能提高保密性"这一核心结论的唯一仿真证据，
+         而摘要、引言、III-D 和结论都用到这一结论；
+       - 增益随 Δ 先增后减（Δ=0.1–0.2 rad 时最大），说明 MA 在"方向接近但仍可分"的区间最有价值。
+       因此它是本文仿真的重要组成部分，不宜删除。
+   (2) M=1 的速率导向 MA 已补画。M=1 时它的目标函数与天线位置无关（III-D 第 2) 段），算法保留
+       UPA 初始位置，所以与 FPA 逐场景完全重合（数值相同）。图中两条曲线都画出，FPA 画在上层，
+       两种标记都能看到；图注与正文写明"M=1 时速率导向 MA 与 FPA 重合"，与 M=3 一致。
+
+3. Fig. 7(b)：是否只显示 10 dB；横轴 S 的含义；图的目的
+   (1) S 的含义：S 是 LU 之间的大尺度衰落差异（large-scale fading spread），
+       [β1, β2, β3] = [0, −S/2, −S] dB，即最强 LU 与最弱 LU 的大尺度衰落之比（单位 dB）；
+       S=0 表示三个 LU 完全相同。Eve 的 β_e = 0 dB，与方向上靠近 Eve 的 LU 1 相同，因此 S 增大时，
+       LU 2、LU 3 逐渐比 Eve 弱。原横轴名 "Fading spread" 容易被理解为时延/多普勒扩展或小尺度衰落，
+       已改为 "Large-scale fading spread S (dB)"，并在正文中先定义后使用。
+   (2) 图的目的：评估长时功率分配（命题 2 的保密注水 + AN 功率优化）相对两种等功率基准
+       （α 优化、α=0.5）的收益，并区分它的两个组成部分：
+       - 信息–AN 功率分割：α=0.5 在所有 S 下都最差，说明 α 必须优化；
+       - 每用户功率分配：默认设置中 LU 同质（β_m 相同），看不出它的作用；只有 LU 异质（S 较大）时，
+         保密注水把功率从"有效增益接近或低于 Eve 的 LU"上撤下，才带来明显增益。
+       这就是需要这组仿真、并以 S 为横轴的原因。
+   (3) 只显示 10 dB：同意，已修改。原图把 0 dB 与 10 dB 的六条曲线放在一起，0 dB 时 ESSR 只有
+       1–4.4 bps/Hz，而且 S≤5 dB 时等功率方案略优（差值约一个标准误），需要额外解释，读者负担大。
+       10 dB 一组已能展示全部结论：S≤10 dB 时 EP（α 优化）与所提方案接近（差值 ≤1.3%），
+       S=20 dB 时所提方案高 14%，α=0.5 始终最差。0 dB（S=20 dB 时增益 40%）与 20 dB（<1%）的结果
+       改为正文中的数值（来自 extra_pa_spread_0dB.mat 与 fig7_pa_hetero.mat），用于说明增益随
+       SNR 增大而减小。纵轴改为 4–12，曲线差别更清楚。
+   (4) 参数是否合理：S 取 0–20 dB（例如路径损耗指数为 3 时，对应 LU 距离比约 1–4.6 倍），
+       10 dB 为中等 SNR；β_e 与最强 LU 相同属于对系统较不利的设置。这些设置合理，已在 V-G 中说明。
+   (5) V-G 按"目的 → 设置 → 现象 → 原因 → 结论"重写；原来"EP 基准保留 [·]+"一句从 III-D 移到这里，
+       并说明原因（等功率时不能单独把某个 LU 的功率置零）。
+
+4. V-H（鲁棒性）是否保留
+   同意删除。该节只有文字，三项检查（Eve 把其他 LU 信号当干扰、Eve 的 AoD 误差、Eve 的 AoD 与 LU
+   无关）都没有图支撑，约占半栏，且与主线（Eve 靠近 LU 的挑战场景）关系较弱。已删除该节，同时删除
+   引言末句和 V-A 中对它的引用。对应脚本和结果保留（run_all.m 中设 SUPPLEMENTARY = true 即可运行），
+   若审稿人问到最坏情况 Eve 模型或 Eve 统计 CSI 误差，可直接在回复信中使用。
+
+
+二、第二部分：批注逐条处理（编号为 PDF 中批注的顺序）
+--------------------------------------------------
+
+【摘要】
+ [1] "subject to" 前加逗号：已加（句子较长，逗号把目标和约束分开，更易读）。
+ [2] "stochastic"：保留。问题含期望（遍历速率），"nonconvex stochastic problem → deterministic
+     problem" 正好对应转化的含义。
+ [3] "where the resulting expression reveals ..."：用 where 从句表达"洞见"不合适（where 从句应给出
+     这一步的技术细节，而洞见是结论）。改为两句：先写转化这一步，再把洞见单独成句："The resulting
+     approximation reveals that the MAs can reduce the information leakage and increase the AN
+     received by Eve, even for a single LU."（曾考虑在 where 从句中写条件独立性，但会使摘要超过
+     TCOM 的 200 词上限，且上一轮已决定把这一论证细节放在引言，因此未加入。摘要现为 196 词。）
+ [4] 删除 "with guaranteed convergence"。
+ [5] "outperforms the benchmark schemes with less AN power and fewer antennas" 有歧义（可理解为
+     "AN 功率更少、天线更少的基准方案"），且"更少天线"缺少比较对象。改为："the proposed design
+     outperforms the benchmark schemes while allocating less power to the AN, and requires fewer
+     antennas to achieve a given ESSR"（对应 Fig. 5(b) 的 AN 功率占比与 Fig. 6(b) 的天线数比较）。
+
+【引言】
+ [6] ", and thus"：该句已改写，不再需要。
+ [7] [1]–[3] 是 PLS 文献，放在 "complements upper-layer cryptography" 之后会被误认为是密码学文献。
+     删去与密码学的对比（对本文论证没有作用），文献紧跟 PLS 的定义句。
+ [8] "and" 还是 "or"：应为 "and"。只有两个条件同时成立时可分性才差：若 NLoS 丰富，即使方向接近，
+     信道也近似独立；若 LoS 主导但方向相差大，FPA 也能区分。已改为
+     "if Eve is located in a direction close to that of an LU and the line-of-sight (LoS) path is
+     dominant"，并把长句拆成两句。
+ [9] 删除 fluid antennas 及其文献（该文献不再被引用，已从参考文献表删除，编号已重新核对）。
+ [10] "Under fast fading" 改为 "Since this CSI varies from one channel coherence interval (CI) to
+     another, the antennas have to be repositioned in each CI"。
+ [11] "movement delay and energy consumption" 需要文献支撑：我核对了现有文献 [16]、[17]、[6] 的
+     摘要，均没有直接这样表述；[16] 的原文是 "frequent MA position adjustments based on
+     instantaneous CSI incur high operational complexity"。按"不擅自增加/编造文献"的规则，正文改为
+     有文献支撑的说法 "which incurs a high operational complexity [16]"。若希望保留"移动时延"，可
+     考虑新增文献 arXiv:2503.18547（MA-enabled ISAC: tackling slow antenna movement ... via
+     two-timescale optimization，摘要中明确写到 slow antenna movement speed 与 MA 调整时间），
+     需要你确认后我再加入（见第五部分）。
+ [12] 两时间尺度长句（which 从句套 where 从句）拆为两句："To reduce ..., two-timescale designs have
+     been developed for MA systems [16], [17], following those for intelligent reflecting surfaces
+     [18]. In these designs, ..."
+ [13] 这句话的逻辑（你问到的地方）：现有两时间尺度 MA 工作采用的 ZF 遍历速率近似，只刻画"期望用户
+     收到的信号功率"，它只取决于 LU 信道之间的相关性；因此 (i) 单用户时没有用户间相关性，MA 位置
+     不影响速率（[16, Remark 2] 的结论）；(ii) 这类近似无法刻画信号泄露给"非期望接收者"Eve 的功率，
+     而后者取决于 Eve 与 LU 信道之间的相关性。这正是本文需要新近似的原因，也说明保密场景下 MA 对
+     单个 LU 也有用，与 [16] 形成对比。本文同样用 ZF，但新推导的 Eve 速率近似 (27) 包含了 Eve 与 LU
+     的 LoS 相关（v(t)），这是与现有近似的本质区别。原文把这几步压在一句里，已拆成三句，因果关系
+     逐步写出。
+ [14][15] "we first prove that ... depend on orthogonal components ... and are thus conditionally
+     independent" 改为："Since the ZF directions and the AN subspace vary with the random channels of
+     the LUs, we first prove that the information leakage and the AN power received by Eve are
+     conditionally independent given these channels. Based on this property, ..."
+ [16][17][18] 按批注删除。
+ [19] "whose effective channel gains do not exceed that of Eve" 不严谨：Eve 对每个 LU 的信号有不同
+     的有效增益 η_e,m。改为 "an LU is allocated nonzero power only if its effective channel gain
+     exceeds that of Eve for its signal"（这里的 "only if" 严格成立）。
+ [20] "switches off" 偏口语，全文改为 "allocates zero power to"。
+ [21][22] 两个 "by" 连用：改为 "each antenna position is first selected by a grid search and then
+     refined by majorization–minimization (MM)"（摘要同样修改）。
+ [23] 仿真结论缩为一句，不再列举细节。
+ 另：贡献段以 "In this paper" 开头，系统模型与问题分两句写，不再塞进一个长句。
+
+【第 II 节】
+ [24] "where N ≥ M+1 is required ..." 改为独立句："To transmit AN in the null space of the channels
+     of the LUs, we assume N ≥ M+1."
+ [25] LoS 相位一句：先说明参考点与传播距离差，再给出相位差，再引出式 (1)；式 (1) 末尾标点改为句号。
+ [26]–[30] 两时间尺度协议一节重写：先说明统计 CSI 由大尺度衰落与 LoS 几何决定、变化慢（解决 [27]
+     "which" 指代不清）；再写帧结构 "each frame consists of N_CI ≫ 1 CIs with constant statistical
+     CSI"（解决 [28] "over which"）；正文与 Fig. 2 中不再出现尚未定义的 p、q（[29]），改为
+     "the long-term power allocation"，图中改为 "t and powers"；删除 [30] 关于开销的一句，
+     其要点（MA 每帧只移动一次、只需当前位置的 CSI）并入最后一句。
+ [31] 发射信号：先给式 (4)，再在式下说明 s_m、w_m、z 等符号。
+ [32][37][38][41]–[44][46] 关于 W 与函数记号：见第四部分。
+ [33][35] y_m 与 y_e 改为独立显示公式 (5)、(7)。
+ [34] 删除脚注 1。
+ [36] 编码与遍历保密速率的逻辑：BS 不知道 Eve 的瞬时 CSI，无法按每次实现调整速率；因此把每个 LU
+     的消息在一帧内的多个 CI 上编码（这些 CI 的 NLoS 分量独立），此时式 (9) 的遍历保密速率可达。
+ [39][40] 问题难点一段改为 IEEE 常见写法："Problem (P1) is a nonconvex stochastic optimization
+     problem, which is challenging to solve. Specifically, ... Moreover, ... To tackle these
+     challenges, we first ... in Section III, ... Then, an AO algorithm is developed ... in Section IV."
+
+【第 III 节】
+ [41]–[46] III-A 重写：先说明为什么采用 ZF-AN（BS 没有 Eve 的瞬时 CSI，无法在每个 CI 直接压低泄露；
+     ZF-AN 只需要 LU 的瞬时 CSI），再给出 w_m = √p_m w̄_m 与 Σ = qP⊥，再说明长时功率分配与 (P2)；
+     "(P2) is a restriction of (P1)" 后补充"其最优值是 (P1) 的下界"。
+ [47][49] III-B、III-C 的符号、版式与逻辑：III-B 按"信道分解 (17) → Jensen 下界 (18) → 中心 Wishart
+     近似（均值由 (19) 给出）→ 近似速率 (20) → 有效增益的范围 (21)"顺序展开；III-C 中引理 1 后的讨论
+     缩短，只保留"正交分量"的物理含义、集中性条件与近似的性质。
+ [48] Ȟ（breve）：见第四部分。
+ [50] 三个连续 Remark：改为新的 III-D 小节 "Secrecy Mechanisms of the MAs"，用 1) 2) 3) 三个带标题
+     的段落（LoS decorrelation / Single LU / High-SNR behavior and AN power），这是 IEEE 期刊中讨论
+     性内容的常见写法；LoS 相关改为显示公式 (28)–(29)。原 Remark 4（与经典注水的关系）也改为命题 2
+     之后的正文。全文不再有 Remark 环境。
+ [51] 逻辑问题：原来 Remark 3 用的是"等功率 + α 分割"的特例，紧接着是一般形式的 (P3)，读者会误以为
+     后面的推导依赖这个特例。现在：(1) 先在 III-D 讨论机理（等功率特例明确说明 "serves only to
+     provide insight, whereas the long-term power allocation is optimized without this restriction
+     in Section IV-A"）；(2) (P3) 放在随后的 III-E，紧接第 IV 节，逻辑连续；(3) 原 III-D 末尾关于
+     等功率要保留 [·]+ 的一句与 (P3) 无关，已移到 V-G。
+
+【第 IV 节】
+ [52] 改为 "To tackle (P3), we exploit two properties of its objective function. First, ... Second,
+     ... Based on these properties, we alternately optimize ..."
+ [53] 原句 "η_e,m(q) ≜ ..., which decreases with q, is the effective channel gain ..." 结构混乱，
+     改为 "η_e,m(q) ≜ ξ_m/(qψ+σ̄_e²) denotes the effective channel gain of Eve for s_m, which
+     decreases with q"。
+ [54][55][56] 命题 2 的证明重写：KKT 条件改为显示公式 (41)；分别说明两种情况；最后一句改为
+     "as ν increases from 0 to ..., Σp_m*(ν) decreases continuously and strictly from +∞ to 0.
+     Hence, the water level ... is unique."
+ [57] 改为 ", as summarized in Algorithm 1"。
+ [58] (P3.2) 难点：先由 (28)–(29) 指出 F 通过相位依赖 t_n，再说明相位的周期，从而 F 在波长尺度上
+     振荡、局部极大值多。
+ [59] 长句拆为三句：局部方法（如 [16] 的 MM）易收敛到当前位置附近的局部极大 → 可能使 AO 停在较差解
+     → 因此采用"网格搜索 + MM 精修"两阶段。
+ [60] 改为 "Hence, given Γ_n^{-1} and r_n, evaluating ... at a candidate position requires only
+     O(M²) operations, compared with O(NM²+M³) operations for computing them from scratch."
+ [61] 原句给人"方法不可靠"的印象。原意是：网格间距取相位最短周期的一部分，因为 F 是相位项的有理
+     函数，无法从理论上证明该间距一定足够，所以用仿真检验。现改为正面表述："Since the selected grid
+     point is further refined in Stage 2, a moderate spacing suffices, as confirmed numerically in
+     Section V-A"（V-A 中：间距减半，平均 ESSR 只变化 0.01%）。
+ [62] Lipschitz 常数用回溯还是 Hessian 上界：这里回溯更合适，理由如下：
+     - Hessian 上界法在目标函数结构简单时（例如 [16] 等文献中的余弦相位和）可以得到闭式、较紧的
+       常数；本文的 F(t_n) 是 log、矩阵逆（Ω）、c_m、d 等的复合函数，全局 Hessian 上界很难推导，
+       而且会非常松，导致 MM 步长很小、收敛慢；
+     - 回溯法只要求在每一步检验 F(t^{k+1}) ≥ 二次下界，保证单调性（式 (58)）与 Hessian 法相同，
+       同时 δ_n 能适应局部曲率，步长更大；
+     - Stage 1 的网格搜索已负责"全局"部分，Stage 2 只需要局部精修，回溯的自适应步长正好合适。
+     正文已加一句说明为什么不用 Hessian 上界。
+
+【第 V、VI 节】
+ [63] 删除 "99%"，改为 "converges within about 15 iterations"（99% 的判据仍在 verify_numbers.m 中
+     核对）。
+ [64] 见第一部分 2。
+ [65][66] 见第一部分 3。
+ [67] 见第一部分 4。
+ 结论：改为现在完成时，补充"即使单个 LU"，删去重复内容，未来工作一句简化。
+
+
+三、全文性修改（对应第二部分的 7 条总体意见）
+------------------------------------------
+ 1. 篇幅：不再为 14 页压缩内容；当前 14 页（≤15 页）。删除 V-H 后腾出的篇幅用于必要的解释
+    （III-D 的显示公式、KKT 条件、V-E 中 AS 交换搜索的说明、V-G 的目的与设置）。
+ 2. 长句：逐段检查超过约 40 词的句子并拆分（摘要首句、引言第 1–3 段、III-E、V-D、V-G 等）。
+ 3. IEEE 规范：公式全部作为句子成分并带标点；显示公式先给出、符号在式下说明；"subject to" 前加逗号；
+    "switches off"、"Under fast fading"、"Note that" 等口语或模板说法替换；避免 "only/always" 等
+    绝对化用语，保留的 "only" 均严格成立。
+ 4. 逻辑：每段按"目的/前提 → 做法 → 结果 → 原因"组织；问题难点、方法动机与小节之间的过渡句都重写。
+ 5. 符号：见第四部分。
+ 6. 摘要与引言：见第二部分。
+ 7. 术语统一："large-scale fading spread"、"long-term power allocation"、"rate-oriented MA design"、
+    "ZF precoding and null-space AN" 全文一致；不再使用自造词 "small-timescale policy" 和
+    "AN-saving effect"。
+
+
+四、符号与记号的修改
+--------------------
+ 1. 删除 W ≜ {w_m(H(t)), Σ(H(t))} 与 "small-timescale policy"（[37][38]）：这不是 IEEE 无线通信
+    论文的常用写法，且后文没有使用函数记号（[32][43]）。现在 (P1) 直接写成对 t、{w_m}、Σ 的优化，
+    约束中的 "∀H(t)" 表示预编码与 AN 协方差对每个信道实现分别设计；正文用一句话说明这一点。
+ 2. 删除 Ȟ（breve，[48]）：信道直接写成 H(t) = (L(t) + H̃)B^{1/2}（式 (17)）；Jensen 与 Wishart
+    近似直接对 H(t) 写出；附录 B 中由于 w̄_m 与 P⊥ 对列缩放不变，"without loss of generality"
+    令 B = I，从而直接使用 H。
+ 3. β̃_m ≜ β_m/(κ_m+1) 与 β̃_e 统一定义为 NLoS 分量的功率，B = diag(β̃_1, ..., β̃_M)，ζ_m = β̃_m/σ_m²。
+ 4. LoS 相关中下标 j 与虚数单位 j 冲突，改为 (i, k)。
+ 5. 不再使用 Remark 环境；引理与命题只保留 Lemma 1、Proposition 1、Proposition 2（均为新的、精确的
+    结论）。
+
+
+五、需要你确认的事项
+--------------------
+ 1. [11] 是否新增文献 arXiv:2503.18547 来支撑"天线移动耗时"的说法（目前正文用 [16] 原话
+    "high operational complexity"，不需要新增文献）。
+ 2. AS 交换搜索的描述目前放在 V-E 正文中（3 句）。如希望更简短，可只保留"N≥12 时采用交换搜索，
+    并在 N≤10 时验证其与穷举一致"一句，细节放到回复信中。
+ 3. 删除 V-H 后，最坏情况 Eve 模型和 Eve 统计 CSI 误差的鲁棒性只在 II-C 中用一句话说明；若审稿人
+    问到，可用保留的补充脚本结果回复。
+ 4. 遗留事项：作者信息占位符；I33–I36（矢量 PDF 图等）。
+
+
+六、编译与核对
+--------------
+ - pdflatex 两遍：14 页，0 个 overfull box，0 个未定义引用；参考文献按首次引用顺序编号（已脚本核对）。
+ - 第 V 节数值：verify_numbers.m 全部重新计算（新增 AS 交换搜索验证、Fig. 7(b) 10 dB 的数值；
+   删除 V-H 的数值）。
+ - 代码说明 readme.tex/readme.pdf：公式编号按新稿件重新对应；增加 as_metric.m、as_swap.m、
+   extra_as_swap_check.m 的说明；Fig. 7(b) 与补充脚本的说明已更新。

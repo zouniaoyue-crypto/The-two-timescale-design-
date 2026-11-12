@@ -53,7 +53,7 @@ for i = 1:numel(c.Nlist)
     end
 end
 show('V-C', 'all trajectories monotone (1 = yes)', mono, 'increases monotonically');
-show('V-C', 'iterations for the average curves to reach 99% of their increase', itMax, 'within 15');
+show('V-C', 'iterations for the average curves to reach 99% of their increase', itMax, 'converges within about 15');
 
 % ---------------- Section V-D ----------------
 pr = val(f5, i20, 'MA_full');
@@ -70,45 +70,28 @@ for v = n.values
     show('V-E', sprintf('ESSR: sparse FPA minus rate-oriented MA, N = %d', v), ...
          val(n, iN(v), 'SPA_full') - val(n, iN(v), 'MA_rate'), '> 0 iff N >= 14');
 end
+for v = n.values
+    show('V-E', sprintf('ESSR: AS, N = %d (exhaustive N <= 10, swap search N >= 12)', v), val(n, iN(v), 'AS'), 'Fig. 6(b)');
+end
+show('V-E', 'number of AS subsets for N = 16 (1e8)', nchoosek(32, 16)/1e8, '6.0');
+w = load(fullfile(R, 'extra_as_swap_check.mat'));  w = w.res;
+opt = (1 - w.fSwap./w.fExh) <= 1e-9;          % swap search attains the exhaustive optimum of the metric
+show('V-E', 'swap search attains the maximum metric, worst N <= 10 (% of drops)', 100*min(mean(opt, 2)), 'at least 92%');
+show('V-E', 'swap search: largest |difference| of the average ESSR, N <= 10 (%)', ...
+     100*max(abs(1 - mean(w.essrSwap, 2)./mean(w.essrExh, 2))), 'less than 0.03%');
 
-% ---------------- Section V-G (spread S = 20 dB, no figure) ----------------
+% ---------------- Section V-G (Fig. 7(b) at 10 dB; 0 and 20 dB in the text) ----------------
+s10 = ld('extra_pa_spread_10dB');
+g10 = 100*(s10.essr(:, col(s10, 'MA_full'))./s10.essr(:, col(s10, 'MA_EPA')) - 1);
+show('V-G', 'gain of the proposed PA over EP, optimized alpha, 10 dB, largest for S <= 10 dB (%)', max(g10(s10.values <= 10)), 'close');
+show('V-G', 'gain of the proposed PA over EP, optimized alpha, 10 dB, S = 20 dB (%)', g10(s10.values == 20), '14%');
+show('V-G', 'EP with alpha = 0.5 worst for all S at 10 dB (1 = yes)', ...
+     all(s10.essr(:, col(s10, 'MA_fix')) < min(s10.essr(:, col(s10, 'MA_full')), s10.essr(:, col(s10, 'MA_EPA')))), 'performs worst');
+show('V-G', 'ESSR decreasing in S for all PA schemes at 10 dB (1 = yes)', all(all(diff(s10.essr(:, [col(s10, 'MA_full') col(s10, 'MA_EPA') col(s10, 'MA_fix')]), 1, 1) < 0)), 'decrease with S');
 p = ld('fig7_pa_hetero');
 for v = [0 10 20]
     ii = find(p.values == v);
-    show('V-G', sprintf('gain of the proposed PA over EP, optimized alpha, %d dB (%%)', v), ...
+    show('V-G', sprintf('gain of the proposed PA over EP, optimized alpha, %d dB, S = 20 dB (%%)', v), ...
          100*(val(p, ii, 'MA_full')/val(p, ii, 'MA_EPA') - 1), '40% / 14% / below 1%');
 end
-
-% ---------------- Section V-H ----------------
-mx = 0;
-for v = [10 20 30]
-    ii = find(f5.values == v);
-    for k = 1:numel(withAN)
-        jj = col(f5, withAN{k});
-        mx = max(mx, f5.essr_tin(ii, jj) - f5.essr(ii, jj));
-    end
-end
-show('V-H', 'TIN Eve: largest ESSR increase of the schemes with AN', mx, 'at most 1.53');
-show('V-H', 'TIN Eve: ESSR increase of the proposed design at 20 dB', ...
-     f5.essr_tin(i20, col(f5, 'MA_full')) - pr, '0.5');
-show('V-H', 'TIN Eve: ESSR increase of the rate-oriented MA at 20 dB', ...
-     f5.essr_tin(i20, col(f5, 'MA_rate')) - val(f5, i20, 'MA_rate'), '1.5');
-i30 = find(f5.values == 30);
-show('V-H', 'proposed w/o AN at 30 dB, TIN Eve', f5.essr_tin(i30, col(f5, 'MA_noAN')), '27.1');
-show('V-H', 'proposed w/o AN at 30 dB, worst-case Eve', val(f5, i30, 'MA_noAN'), 'about 14');
-e = ld('extra_eve_aod_error');  bench = {'MA_rate', 'AS', 'FPA_full', 'SPA_full'};  dec = 0;
-for k = 1:numel(bench)
-    y = e.essr(:, col(e, bench{k}));
-    dec = max(dec, max(1 - y/y(1)));
-end
-show('V-H', 'AoD error: largest relative ESSR decrease of the benchmarks (%)', 100*dec, 'less than 2%');
-y = e.essr(:, col(e, 'MA_full'));
-show('V-H', 'AoD error: decrease of the proposed design at 0.05 rad (%)', 100*(1 - y(e.values == 0.05)/y(1)), '3%');
-show('V-H', 'AoD error 0.1 rad: proposed design', y(e.values == 0.1), '18.73');
-show('V-H', 'AoD error 0.1 rad: best benchmark', ...
-     max(cellfun(@(k) val(e, find(e.values == 0.1), k), bench)), 'at most 17.93');
-q3 = ld('extra_random_eve_M3');  q1 = ld('extra_random_eve_M1');
-show('V-H', 'random Eve, M = 3: gain over the rate-oriented MA (%)', 100*(val(q3, 1, 'MA_full')/val(q3, 1, 'MA_rate') - 1), '10%');
-show('V-H', 'random Eve, M = 3: gain over the sparse FPA (%)', 100*(val(q3, 1, 'MA_full')/val(q3, 1, 'SPA_full') - 1), '18%');
-show('V-H', 'random Eve, M = 1: AS relative to the proposed design (%)', 100*(val(q1, 1, 'AS')/val(q1, 1, 'MA_full') - 1), 'close');
 end

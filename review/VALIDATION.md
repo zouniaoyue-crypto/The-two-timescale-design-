@@ -95,3 +95,35 @@ Other executed checks: Fig. 4 data (`fig4_convergence.mat`, N = 8, 20 dB): grid 
 - I36: vector (PDF) figures; PNG figures are used. MATLAB export: `exportgraphics(gcf, 'file.pdf', 'ContentType', 'vector')`.
 - I35: novelty search and full reference verification.
 - Author names, affiliations, e-mail addresses (placeholders in `main.tex`, lines 43–45) and a funding acknowledgment, if any.
+
+## Round rev-4c — advisor's annotated PDF (executed in Octave 8.4; TeX Live pdflatex/xelatex)
+
+| Check | Command / data | Result |
+|---|---|---|
+| Manuscript build | `pdflatex main.tex` (3 runs) | 14 pages; 0 overfull boxes; 0 undefined references/citations; Figs. 3–7 on pp. 10–12, before the Conclusion |
+| Code readme | `xelatex readme.tex` (2 runs) | 15 pages; 0 overfull boxes; equation numbers remapped from `main.aux` |
+| Abstract length | word count | 196 words (TCOM limit 200) |
+| References | first-citation order vs `\bibitem` order (script) | identical after removing the uncited WongTWC2021 |
+| Displays | `check.py` (before/after) | changed only as intended: (1) period, (5) and (7) new, (11) without 𝒲, (17)–(19) without Ȟ, (28)–(29) new, (41) new, App. B with H |
+| Octave reproduces the stored drops | `evaluate_schemes` for FPA and AS, N = 8, drops 1–2, vs `extra_num_antennas_N8.mat` | identical ESSR (16.678053/17.281360 and 17.270363/18.049499) |
+| AS for N = 12, 14, 16 | `extra_num_antennas([], N, {'AS'})`, same 100 drops and channel samples as the other schemes | ESSR 19.215 / 19.997 / 20.682 bps/Hz; paired difference to the rate-oriented MA −0.34 (SE 0.12) / −0.13 (SE 0.11) / +0.16 (SE 0.12) |
+| AS swap search vs exhaustive | `extra_as_swap_check` (N = 4, 6, 8, 10; 100 drops) | maximum metric attained in 99 / 98 / 92 / 93 drops (identical subset in 83 / 78 / 81 / 70); average ESSR 12.9805/12.9775, 15.7606/15.7597, 17.2378/17.2355, 18.2979/18.2969 (largest difference 0.023%) |
+| Fig. 7(a), M = 1 | `extra_single_user.mat` | rate-oriented MA identical to the FPA at every Δ (UPA initialization kept; position-independent objective) |
+| Figures | `plot_fig6`, `plot_fig7` (xvfb, Liberation Serif) | Fig. 6(b) with the complete AS curve; Fig. 7(a) with the rate-oriented MA for M = 1; Fig. 7(b) at 10 dB only |
+
+`verify_numbers` (Section V after this round; V-H removed):
+
+| Sec. | Quantity | Recomputed | Text |
+|---|---|---|---|
+| V-A | FPA LoS correlation at Δ = 0.1 (min over drops); grid halving; SE at 20 dB | 0.9439; +0.0107%; 0.545% | exceeds 0.94; 0.01%; 0.55% |
+| V-B | Eve-rate errors; ESSR approx./actual at 20 dB; gap range | 0.0524 / 0.0128; 18.985 / 20.749; 1.5245–1.7650 | 0.052 / 0.013; 18.98 / 20.75; 1.52–1.76 |
+| V-C | monotone; iterations to 99% of the average increase | yes; 15 | converges within about 15 iterations |
+| V-D | gains over rate-oriented MA / FPA; AN fractions | 14.79% / 31.18%; 0.270 / 0.471 | 14.8% / 31.2%; 0.27 / 0.47 |
+| V-E | proposed N = 4 − FPA N = 12; proposed N = 8 − rate-oriented N = 16 | +0.52; +0.23 | outperforms |
+| V-E | sparse FPA − rate-oriented MA, N = 10/12/14/16 | −0.06 / +0.11 / +0.32 / +0.44 | for N ≥ 14 |
+| V-E | C(32,16); swap search: maximum metric (worst N); largest average-ESSR difference | 6.01×10⁸; 92%; 0.023% | 6.0×10⁸; at least 92%; less than 0.03% |
+| V-G | 10 dB: largest gain for S ≤ 10 dB; gain at S = 20 dB; EP α = 0.5 worst; ESSR decreasing in S | 1.34%; 13.87%; yes; yes | close; 14%; worst; decrease |
+| V-G | S = 20 dB: gain at 0 / 10 / 20 dB | 40.33% / 13.87% / 0.78% | 40% / 14% / below 1% |
+
+Open items after this round: I73 (optional new reference on antenna movement time, needs the author's approval);
+I34–I36 unchanged; author information placeholders.

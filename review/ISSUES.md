@@ -38,7 +38,7 @@ Evidence key: D = derivation, C = code, R = results file, P = reference PDF, X =
 | I30 | L | (23),(47) | punctuation of displays | S-D6 | text | scan of all displays: each ends with , or . unless the sentence continues | fixed |
 | I31 | L | IV-C | "less than one third of the shortest phase period" → ‖a_j−a_i‖ ≤ 2 gives at most one fifth | S-B6 | D (‖a‖ ≤ 1) | adopt | fixed |
 | I32 | L | format | Index Terms alphabetical; "w.r.t." → "with respect to"; "widely studied … [18]" | S-F1/F4/F5 | text | adopt | fixed |
-| I33 | — | V-H | small table for robustness numbers | S-D4 | conflicts with Round-12 decision to remove tables | keep text | needs-decision |
+| I33 | — | V-H | small table for robustness numbers | S-D4 | conflicts with Round-12 decision to remove tables | keep text; obsolete: Sec. V-H removed in rev-4c (I70) | closed |
 | I34 | — | V | new simulations E1–E6 | S-E/G2 | — | not added | needs-decision |
 | I35 | — | Intro | novelty search 2025–2026 | S-A2 | OpenAlex rate-limited (HTTP 429) | not completed | unverified |
 | I36 | — | figures | vector PDF figures | S-D7 | — | PNG kept unless export verified | needs-decision |
@@ -75,7 +75,7 @@ revised papers at most 16 pages; manuscripts significantly exceeding the limits 
 | I58 | L | Conclusion | "and" chain of three verbs; "converges monotonically and quickly" is a simulation observation, not the guarantee | own | text | two clauses; "its objective value is guaranteed to converge" | fixed |
 | I59 | L | References | [22] Horn and [23] Ngo numbered out of order of first citation (IEEE requires order of first citation) | own | script | bibitems swapped | fixed |
 | I60 | L | naming | "rate-oriented design / rate-oriented two-timescale MA design / rate-oriented MA design" | own | grep | "rate-oriented MA design" in prose, "rate-oriented MA" as benchmark name | fixed |
-| I61 | H | whole paper | 14 IEEEtran pages (last page about 1.9 columns) vs TCOM limit of 13 pages; tightening alone saves only lines because Figs. 3–7 are anchored to pp. 10–12 | TCOM | build | options: smaller figure panels, Appendix C to supplementary material, shorter Remarks/Sec. V-G–V-H, smaller Fig. 1 | needs-decision |
+| I61 | H | whole paper | 14 IEEEtran pages (last page about 1.9 columns) vs TCOM limit of 13 pages; tightening alone saves only lines because Figs. 3–7 are anchored to pp. 10–12 | TCOM | build | options: smaller figure panels, Appendix C to supplementary material, shorter Remarks/Sec. V-G–V-H, smaller Fig. 1; advisor (rev-4c): up to 15 pages are acceptable, content is not compressed to meet 14 | fixed |
 
 ## Round rev-4b (sentence-level language pass; equations, numbers, citations and labels unchanged)
 
@@ -86,3 +86,27 @@ revised papers at most 16 pages; manuscripts significantly exceeding the limits 
 | I64 | L | IV-B, V-B–V-H | verbs stronger or vaguer than the evidence: "closely matches ... accurately captures", "verifies the AN-saving effect", "significantly improves" (statistical connotation), "tailored to the AoDs", "highly oscillatory ... numerous local maxima" | humanizer claim-strength rule | text | "agrees ... within maximum absolute errors of", "is consistent with", "substantially improves", "optimized for the assumed AoDs", "oscillates on the scale of a wavelength and has many local maxima" | fixed |
 | I65 | L | Introduction | "promising means", "considerably less AN power" | pattern catalog | text | intensifiers removed | fixed |
 | I66 | L | IV-C, Conclusion, App. B | stock phrasing ("Note that this guarantee ...", "is an important direction for future work", "Note that these are ...") | pattern catalog | text | direct statements | fixed |
+
+## Round rev-4c — advisor's annotated PDF (67 comments) and Part I simulation questions
+
+| ID | Sev | Location | Finding | From | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|---|
+| I67 | H | V-E, Fig. 6(b) | AS curve stopped at N = 10 (exhaustive search infeasible for N ≥ 12) | advisor (Part I-1) | C as_select.m; nchoosek(32,16) = 6.0e8 | swap search (greedy-removal + 4 random starts, pairwise exchanges) for N ≥ 12, same metric; validated against the exhaustive search for N ≤ 10 on the 100 drops (extra_as_swap_check.m); complete curve | fixed |
+| I68 | M | V-F, Fig. 7(a) | rate-oriented MA not drawn for M = 1; is the AoD-offset study needed? | advisor (Part I-2) | R extra_single_user.mat (rate-oriented = FPA exactly) | study kept (it defines the challenging case and is the only evidence for the single-LU gain); rate-oriented MA drawn for M = 1, coincidence stated in caption and text | fixed |
+| I69 | M | V-G, Fig. 7(b) | two SNR families (0/10 dB) cluttered; meaning of "fading spread" unclear; purpose of the study not stated | advisor (Part I-3, comment 65) | R extra_pa_spread_10dB.mat, fig7_pa_hetero.mat | 10 dB only; S defined as the large-scale fading spread of the LUs (β_e = 0 dB); purpose and setting stated; 0/20 dB gains quoted in the text | fixed |
+| I70 | M | V-H | text-only robustness subsection without figures | advisor (Part I-4, comment 67) | — | removed; scripts and results kept as supplementary (run_all.m, SUPPLEMENTARY flag) | fixed |
+| I71 | M | Abstract | insight packed into a where-clause; "with guaranteed convergence"; ambiguous "with less AN power and fewer antennas"; comma before "subject to" | advisor (comments 1–5) | text | rewritten | fixed |
+| I72 | M | Introduction | citations [1]–[3] read as support for cryptography; fluid antennas; "Under fast fading"; long two-timescale sentence; logic of the ZF-approximation/single-user sentence; long contribution and simulation summaries | advisor (comments 6–23) | text | rewritten | fixed |
+| I73 | M | Introduction | "movement delay and energy consumption" not supported by the cited abstracts ([16] states "high operational complexity") | advisor (comment 11) | arXiv abstracts of [16], [17], [6] | reworded to the supported claim; optional new reference on antenna movement time (arXiv:2503.18547) proposed, not added | needs-decision |
+| I74 | H | II-D, III-A | coined "small-timescale policy" 𝒲 ≜ {w_m(H(t)), Σ(H(t))}; functional notation not used later | advisor (comments 32, 37, 38, 41–44, 46) | text | removed; (P1) optimizes {w_m}, Σ with ∀H(t); ZF-AN introduced as a design choice | fixed |
+| I75 | M | III-B, III-C, App. B | breve matrix Ȟ (uncommon) | advisor (comment 48) | D | removed: H(t) = (L(t) + H̃)B^{1/2}; Wishart step written with H(t); App. B sets B = I without loss of generality (w̄_m, P⊥ invariant to column scaling); β̃_m defined like β̃_e | fixed |
+| I76 | M | II-B, Fig. 2 | protocol logic; "which"/"over which"; (p, q) used before definition (text and Fig. 2); overhead sentence | advisor (comments 26–30) | text | rewritten; Fig. 2 labels without p, q | fixed |
+| I77 | M | II-A, II-C | N ≥ M + 1 clause; LoS phase sentence; signal model sentence; y_m and y_e inline; footnote 1; coding over CIs | advisor (comments 24, 25, 31, 33–36) | text | displayed (5) and (7); footnote removed; rewritten | fixed |
+| I78 | M | II-D | difficulty paragraph style | advisor (comments 39, 40) | text | rewritten | fixed |
+| I79 | M | III-A | logic and readability of the ZF-AN restriction | advisor (comments 41–46) | text | motivated by the missing CSI of Eve; restriction and lower bound stated | fixed |
+| I80 | M | III-B, III-C | symbols, layout and logic of the rate derivations | advisor (comments 47, 49) | text | Jensen → Wishart → (20) in sequence; Lemma 1 discussion shortened | fixed |
+| I81 | M | III-D/E, IV-A | three consecutive remarks; Remark 3 (equal power) read as an exception before (P3); [·]⁺ sentence about EP; Remark 4 | advisor (comments 50, 51) | text | new Sec. III-D "Secrecy Mechanisms of the MAs" (1)–3) run-in paragraphs) before (P3) in III-E; equal-power case declared as insight only; EP [·]⁺ moved to V-G; Remark 4 as text | fixed |
+| I82 | L | IV | structures paragraph; η_e,m sentence; KKT proof; "(Algorithm 1)"; (P3.2) difficulty; long MM sentence; O(M²) sentence; grid-spacing sentence read as failure; Hessian bound vs backtracking | advisor (comments 52–62) | text, Beck2017 | rewritten; backtracking kept and justified (a global Hessian bound is loose for the composite F) | fixed |
+| I83 | L | V-C | "99% of their total increase" | advisor (comment 63) | R fig4_convergence.mat | "converges within about 15 iterations" | fixed |
+| I84 | L | III-D, IV-B | index j coincides with the imaginary unit in the LoS correlations | own | text | indices (i, k) | fixed |
+| I85 | L | References | WongTWC2021 uncited after the fluid-antenna clause was deleted | advisor (comment 9) | text | bibitem removed; numbering re-checked | fixed |

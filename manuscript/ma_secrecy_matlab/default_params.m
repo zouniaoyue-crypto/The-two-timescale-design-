@@ -38,6 +38,10 @@ prm.nGrid      = 41;     % grid size of the one-dimensional search (coarse and f
 prm.nBisect    = 60;     % bisection iterations for the water level nu
 prm.numInit    = 3;      % initializations of Algorithm 2: UPA + (numInit-1) random
 prm.asGrid     = 21;     % coarse grid of q used to rank the antenna subsets of the AS benchmark
+prm.asMaxSubsets = 2e5; % AS: exhaustive search if nchoosek(2N, N) <= asMaxSubsets (N <= 10),
+                         %   otherwise swap search (as_swap.m)
+prm.asSwapStarts = 5;    % AS swap search: greedy-removal start + 4 random starts
+prm.asSwapMaxIter = 100; % AS swap search: maximum number of exchanges per start
 prm.alphaFix   = 0.5;    % fixed power-splitting factor of the equal-power benchmark (Fig. 7)
 
 % ---------------- evaluation ----------------

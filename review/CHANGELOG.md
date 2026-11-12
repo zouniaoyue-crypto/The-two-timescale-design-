@@ -80,3 +80,31 @@ Algorithm 2 removed. Label numbering unchanged; 14 pages; no overfull boxes or u
 | I62, I64 | main.tex:579–660 | Section V: "so that ... is the transmit SNR", "Eve thus lies well within ...", paired-comparison sentence, "isolates the gain", "agrees ... within maximum absolute errors", explicit cause of the underestimation, "This fast convergence results from ...", "is consistent with the AN-saving effect", "substantially improves", "optimized for the assumed AoDs" | observation → reason without stock openers; claim strength |
 | I66 | main.tex:665 | Conclusion: "Building on this approximation ...", "is left for future work" | stock phrasing |
 | I66 | main.tex:671–678 | Appendices A–B: connectors ("Since", "Because", "As a result"), "We also use ...", "These are two separate approximations" | stock phrasing |
+
+## Round rev-4c — advisor's annotated PDF (Part I: simulations; Part II: 67 comments, whole-text rewrite)
+
+Line numbers refer to `manuscript/main.tex` after this round. Equation numbers changed: (5) and (7) are new
+displays of y_m and y_e, (28)–(29) display the LoS correlations, (41) displays the KKT conditions, and the
+normalized matrix Ȟ was removed. All numbers in Section V are recomputed by `verify_numbers.m`.
+
+| ID | file:line | What | Why |
+|---|---|---|---|
+| I67 | main.tex:590, 641; functions/as_metric.m, as_swap.m, as_select.m; extra_num_antennas.m; extra_as_swap_check.m; default_params.m; plot_fig6.m; results/extra_num_antennas*.mat, extra_as_swap_check.mat, fig6b_essr_antennas.png | AS for N ≥ 12 by a swap search with the exhaustive-search metric; validated for N ≤ 10; complete AS curve in Fig. 6(b); V-A/V-E text | advisor Part I-1 |
+| I68 | main.tex:645, 653; plot_fig7.m; results/fig7a_essr_offset.png | rate-oriented MA drawn for M = 1 (coincides with the FPA); caption and text explain why; purpose of the Δ study stated | advisor Part I-2 |
+| I69 | main.tex:645, 657–659; plot_fig7.m; replot_all.m; run_all.m; results/fig7b_pa_spread.png | Fig. 7(b) at 10 dB only, axis "Large-scale fading spread S"; V-G rewritten (purpose, setting, β_e, observations, 0/20-dB gains in text) | advisor Part I-3, comment 65 |
+| I70 | main.tex (former V-H), 586, 70; run_all.m; verify_numbers.m; replot_all.m | Sec. V-H and its cross-references removed; robustness scripts kept behind `SUPPLEMENTARY` | advisor Part I-4, comment 67 |
+| I71 | main.tex:51 | Abstract: insight as its own sentence; technical detail of the first step in the where-clause; "with guaranteed convergence" removed; comma before "subject to"; unambiguous result sentence | comments 1–5 |
+| I72, I73 | main.tex:64–72 | Introduction rewritten: citations placed on PLS; fluid antennas removed; "Under fast fading" → CI-based statement; supported claim "high operational complexity" [16]; two-timescale sentence split; ZF-approximation logic stated step by step; contributions and simulation summary shortened | comments 6–23 |
+| I85 | main.tex (bibliography) | WongTWC2021 removed (no longer cited); first-citation order verified | comment 9 |
+| I77 | main.tex:166, 168 | N ≥ M + 1 as its own sentence; LoS phase sentence with the reference point stated; eq. (1) ends with a period; footnote on i.i.d. NLoS removed | comments 24, 25, 34 |
+| I76 | main.tex:186–205, 211–213 | Protocol: statistical CSI sentence, frame/CI structure, no undefined (p, q) in text or Fig. 2, overhead sentence removed | comments 26–30 |
+| I77 | main.tex:217–241 | Signal model: x displayed first with symbols defined after it; y_m (5) and y_e (7) displayed; coding over the CIs explained | comments 31, 33, 35, 36 |
+| I74 | main.tex:253–262, 270–300 | 𝒲, "small-timescale policy" and w_m(H(t)), Σ(H(t)) removed; (P1) optimizes {w_m}, Σ with ∀H(t); III-A motivates ZF-AN by the missing CSI of Eve; restriction and lower bound stated | comments 32, 37, 38, 41–46 |
+| I78 | main.tex:264 | Problem-difficulty paragraph rewritten | comments 39, 40 |
+| I75, I80 | main.tex:303–325, 341–369, 675 | Ȟ removed: H(t) = (L(t) + H̃)B^{1/2} (17); Jensen bound (18) and Wishart step written with H(t); β̃_m defined like β̃_e; Lemma 1 discussion shortened; App. B sets B = I without loss of generality | comments 47–49 |
+| I81, I84 | main.tex:371–418, 456 | Remarks 1–3 → Sec. III-D "Secrecy Mechanisms of the MAs" with run-in paragraphs 1)–3) before (P3) (now Sec. III-E); LoS correlations displayed as (28)–(29) with indices (i, k); equal-power case declared as insight only; EP [·]⁺ sentence moved to V-G; Remark 4 → text after Proposition 2 | comments 50, 51 |
+| I82 | main.tex:419, 425–460, 488–535 | Sec. IV: properties paragraph; η_e,m definition; KKT conditions displayed (41); "as summarized in Algorithm 1"; (P3.2) difficulty via (28)–(29); local-trap sentence split; O(M²) vs O(NM² + M³); grid-spacing sentence stated positively; backtracking justified against a Hessian-based Lipschitz bound | comments 52–62 |
+| I83 | main.tex:613; verify_numbers.m | "converges within about 15 iterations" | comment 63 |
+| I61 | review/ISSUES.md | page limit closed: advisor allows up to 15 pages (now 14) | advisor Part II-1 |
+| — | main.tex (whole text) | long sentences split (abstract scope sentence trimmed; intro, V-D, V-G, III-E); "Note that" in III-D removed; "switches off" → "allocates zero power to" | advisor Part II-2–4, 7 |
+| — | ma_secrecy_matlab/readme.tex, readme.pdf | equation numbers remapped; AS swap search, Fig. 7(b), supplementary scripts, run times | consistency with main.tex |
