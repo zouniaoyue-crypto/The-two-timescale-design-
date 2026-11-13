@@ -1,0 +1,333 @@
+\documentclass[10.5pt,a4paper]{article}
+\usepackage[margin=2.1cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,array}
+\usepackage[shortlabels]{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,linkcolor=MidnightBlue,urlcolor=MidnightBlue]{hyperref}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+\setlist{itemsep=1pt,topsep=2pt}
+
+\newcommand{\Major}{\textcolor{BrickRed}{\textbf{Major}}}
+\newcommand{\Moderate}{\textcolor{BurntOrange}{\textbf{Moderate}}}
+\newcommand{\Minor}{\textcolor{OliveGreen}{\textbf{Minor}}}
+\newcommand{\bt}{\mathbf t}
+\newcommand{\hb}{\bar{\mathbf h}}
+\newcommand{\gb}{\bar{\mathbf g}}
+\newcommand{\Pp}{\mathbf P^{\perp}}
+
+% one comment block
+\newcommand{\comment}[3]{\subsection*{#1}\vspace{-4pt}{\small Severity: #2\qquad Category: #3}\par}
+\newenvironment{field}[1]{\par\smallskip\textbf{#1}\ }{\par}
+\newenvironment{example}{\begin{quote}\small}{\end{quote}}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Referee Report on the Revised Manuscript}\\[4pt]
+{\large ``Two-Timescale Secure Transmission for Movable Antenna-Enabled Multiuser Systems\\ With Statistical Eavesdropper CSI''}\\[6pt]
+\small Version reviewed: \texttt{manuscript/main.tex} and \texttt{main\_preview.pdf} (14 pages), commit \texttt{1720361}\\
+Independent IEEE Transactions referee report (manuscript unchanged)\quad\textbullet\quad 13 November 2026
+\end{center}
+
+\section*{1. Summary of the Manuscript}
+The paper studies a movable antenna (MA)-enabled multiuser downlink with zero-forcing (ZF) precoding and null-space artificial noise (AN), in which the antenna positions and a long-term power allocation are designed from statistical CSI to maximize the ergodic secrecy sum rate (ESSR) against a single-antenna passive eavesdropper (Eve) located in a direction close to that of one legitimate user (LU). The authors prove that, conditioned on the channels of the LUs, the information leakage and the AN power received by Eve are independent (Lemma~1), derive a closed-form approximation of the ergodic wiretap rate that depends on the line-of-sight (LoS) correlation between Eve and the LUs, and use it to obtain a deterministic problem. An alternating optimization (AO) algorithm combines secrecy water-filling (Proposition~2) with a grid-search-plus-majorization--minimization (MM) update of each antenna position. Simulations report ESSR gains of $14.8\%$ over a rate-oriented MA design and $31.2\%$ over a compact fixed-position array (FPA) at $20$~dB, a lower AN power fraction, and gains for a single LU.
+
+\section*{2. Overall Assessment}
+\textbf{Strengths.}
+\begin{itemize}
+\item The problem is relevant and well motivated: Eve close to an LU under LoS-dominant propagation is exactly the case where FPA arrays fail and MAs can help.
+\item Lemma~1 is a clean, exact result, and the resulting approximation exposes an interpretable mechanism (LoS decorrelation between Eve and the LUs), including the single-LU insight that contrasts with rate-oriented MA designs.
+\item The algorithm is carefully engineered: the rank-one evaluation makes a region-wide grid search affordable, the MM step is monotone and feasible by construction, and the convergence statement is precise (objective value only).
+\item The simulation methodology is sound in several respects: paired drops, exact-SINR Monte Carlo evaluation, a sparse-FPA control for the aperture effect, reported approximation accuracy, and numbers that are traceable to result files.
+\item The derivations I checked are correct (Section~5), and the writing is much improved over the previous version.
+\end{itemize}
+\textbf{Main concerns.} (i) Evidence for robustness to the key assumption, i.e., the statistical CSI of Eve, disappeared together with Section~V-H; (ii) the strongest benchmark is not used in the headline comparisons; (iii) the design quality of the surrogate objective is shown only indirectly; (iv) the positioning against AN-aided MA secrecy works and a few modeling choices (isotropic AN, parameter coverage) invite predictable reviewer questions; (v) Section~V can be made easier to read, and some connector overuse and repetition reappeared after the last rewrite.
+
+\textbf{Recommendation (as a referee).} Major revision. The concerns concern evidence and positioning rather than errors; most can be addressed with existing data, text changes, or moderate additional simulations.
+
+\section*{3. Overview of the Comments (Descending Importance)}
+Effort: T = text only; P = replot from stored results; S = new simulations; D = new derivation or design.
+\begin{center}\small
+\begin{longtable}{>{\raggedright}p{0.5cm}>{\raggedright}p{7.2cm}>{\raggedright}p{1.55cm}>{\raggedright}p{0.9cm}>{\raggedright\arraybackslash}p{3.9cm}}
+\toprule
+No. & Comment & Severity & Effort & Suggested action \\ \midrule
+\endhead
+1 & Robustness to errors in the statistical CSI of Eve is no longer evidenced & \Major & T/P & Reinstate compactly (data exist); author decision \\
+2 & Strongest benchmark (AS with region-wide candidates) missing from Figs.~5, 6(b), 7(a) and from the headline gains & \Major & S & Implement \\
+3 & Design quality of the surrogate objective (35) is shown only indirectly & \Major & S (D) & Rank-consistency check; stochastic baseline optional \\
+4 & Novelty positioning: AN-aided MA secrecy works, comparison with [13], [15], novelty check & \Major & T & Implement (new references need your approval) \\
+5 & Status and accuracy of the Eve-rate approximation (asymptotic claim, heuristic calibration, relative error) & \Major & T (S) & Implement text; extra check optional \\
+6 & Isotropic null-space AN although the LoS direction of Eve is known & \Major & T (D/S) & Justify in text; benchmark optional \\
+7 & Parameter coverage: ESSR versus the Rician factor and the number of LUs & \Major & S & ESSR vs.\ $\kappa$: implement; vs.\ $M$: optional \\
+8 & Section~V-A is hard to scan (parameters and benchmarks in run-on paragraphs) & \Moderate & T & Implement (parameter table) \\
+9 & Figure readability and self-contained captions & \Moderate & P & Implement selectively \\
+10 & Connector overuse and repetition reintroduced (``Hence'' $18\times$) & \Moderate & T & Implement \\
+11 & Paragraph after Lemma~1 alternates claims and caveats & \Moderate & T & Implement \\
+12 & Sections~V-E and V-G mix results with implementation details & \Moderate & T & Implement \\
+13 & Movement time and pilot overhead no longer mentioned & \Moderate & T & One sentence \\
+14 & AoD offset $\Delta$ defined in coordinate space & \Moderate & T & Optional \\
+15 & Contribution paragraphs: novelty relative to [13], [15] implicit & \Moderate & T & Optional (author decision) \\
+16 & Terminology and notation consistency & \Minor & T & Implement \\
+17 & Introduction: uncited claim; double ``however'' & \Minor & T & Implement \\
+18 & Lemma~1 contains variances used only qualitatively & \Minor & T & Optional \\
+19 & Algorithm~2, line~7: reason for the acceptance test & \Minor & T & Implement \\
+20 & Complexity: dominant term and run time & \Minor & T/S & Optional \\
+21 & ``As predicted by (33)'' for a non-equal-power design & \Minor & T & Implement \\
+22 & Conclusion is generic & \Minor & T & Implement \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section*{4. Detailed Comments}
+
+% ---------------------------------------------------------------------------
+\comment{1. Robustness to imperfect statistical CSI of Eve is no longer evidenced}{\Major}{Simulation, assumptions}
+\begin{field}{Issue.}
+The design relies on knowing the AoDs of Eve accurately. With $\Delta=0.1$~rad, Eve lies inside the main lobe of the FPA beam toward LU~1, and the MA positions are tuned to separate two directions that differ by $0.1$~rad. The only support in the current draft is Footnote~1 (Section~II-B: the statistical CSI of Eve ``can be obtained, e.g., from prior knowledge of its location, by sensing its direction [14], or from its historical signals''). After Section~V-H was removed, the paper contains no evidence of how the gain degrades with AoD errors. This is the first question a physical-layer-security referee is likely to ask.
+\end{field}
+\begin{field}{Available evidence.}
+The stored results (\texttt{extra\_eve\_aod\_error.mat}) show that the ESSR of the proposed design decreases from $20.75$ to $20.13$~bps/Hz ($-3.0\%$) for an AoD error of $0.05$~rad and to $18.73$~bps/Hz ($-9.8\%$) for $0.1$~rad, i.e., an error as large as $\Delta$, where it still exceeds the best benchmark ($17.93$~bps/Hz). The gain over the rate-oriented MA thus shrinks from $14.8\%$ to about $4\%$ in the latter case. This is useful, honest information for the reader.
+\end{field}
+\begin{field}{Suggestion.}
+Reinstate the evidence compactly rather than as a subsection: either one single-column figure (ESSR versus the AoD error of Eve, all schemes) or two to three sentences at the end of Section~V-F, plus one clause in the conclusion acknowledging the dependence on the accuracy of Eve's AoDs. A robust design (averaging the objective over an AoD uncertainty set) can be mentioned as future work.
+\end{field}
+\begin{example}
+\textit{Suggested text (end of Section~V-F):} ``We also examine the sensitivity to errors in the AoDs of Eve. When the AoDs used for the design deviate from the true ones by $0.05$~rad in a random direction, the ESSR of the proposed design decreases by only $3.0\%$. Even for an error of $0.1$~rad, which equals the AoD offset $\Delta$, it still exceeds those of all the benchmarks ($18.73$ versus at most $17.93$~bps/Hz).''
+\end{example}
+\textbf{Effort:} low (data exist). \textbf{Note:} Section~V-H was removed on the advisor's decision; this comment asks to reconsider only this part.
+
+% ---------------------------------------------------------------------------
+\comment{2. The strongest benchmark is missing from the headline comparisons}{\Major}{Benchmarks}
+\begin{field}{Issue.}
+Two AS variants exist: compact candidates (a $4\times(N/2)$ UPA with $\lambda/2$ spacing, i.e., a $1.5\lambda\times1.5\lambda$ aperture for $N=8$) and region-wide candidates (a $4\times4$ UPA spanning $\mathcal C$). Only Fig.~6(a) shows the region-wide variant, although it is the strongest benchmark at the default setting ($A=4\lambda$, $20$~dB):
+\end{field}
+\begin{center}\footnotesize
+\begin{tabular}{lcccccc}
+\toprule
+Scheme & Proposed & AS (region) & Rate-or.\ MA & Sparse FPA & AS (compact) & FPA \\ \midrule
+ESSR (bps/Hz) & 20.75 & 19.34 & 18.08 & 17.75 & 17.24 & 15.82 \\
+Gain of the proposed & -- & $7.3\%$ & $14.8\%$ & $16.9\%$ & $20.4\%$ & $31.2\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Figs.~5, 6(b), and 7(a), as well as the headline numbers in Section~V-D, use only the weaker AS variant. The text itself states that its candidates form ``a compact array whose spatial resolution is insufficient'', which a referee may read as a straw-man benchmark with a smaller aperture than the MAs.
+\begin{field}{Suggestion.}
+Use the region-wide AS as the AS benchmark in all figures (or show both variants with clearly different styles), and quote the gain over the strongest benchmark in Section~V-D. State the trade-off explicitly: region-wide AS needs $2N$ antennas and an RF switching network but no mechanical movement.
+\end{field}
+\begin{example}
+\textit{Suggested text (Section~V-D):} ``\ldots e.g., $14.8\%$, $7.3\%$, and $31.2\%$ higher than those of the rate-oriented MA, AS with region-wide candidates, and the FPA at $20$~dB, respectively.''
+\end{example}
+\textbf{Effort:} new runs of the region-wide AS for Figs.~5, 6(b), and 7(a) (selection is cheap for $N\le10$; the swap search covers $N\ge12$).
+
+% ---------------------------------------------------------------------------
+\comment{3. The design quality of the surrogate objective is shown only indirectly}{\Major}{Methodology}
+\begin{field}{Issue.}
+Algorithm~2 maximizes $F$ in (35), which underestimates the true ESSR by $1.52$--$1.76$~bps/Hz (about $8\%$) at $20$~dB and is neither an upper nor a lower bound. Section~V-B argues that the gap is ``similar for all the schemes'', but this is measured only at the five final designs. For the design, what matters is whether maximizing $F$ also (nearly) maximizes the true ESSR, i.e., whether $F$ ranks candidate positions correctly. In addition, Section~IV-C states that, unlike stochastic optimization [17], the complexity does not depend on the number of channel realizations, but no performance comparison with such a method is given.
+\end{field}
+\begin{field}{Suggestion (in increasing cost).}
+(a) \emph{Rank consistency}: for each drop, evaluate $F$ and the Monte Carlo ESSR for a set of candidate designs (e.g., the AO iterates, perturbed positions, random feasible positions) and report a rank correlation (Kendall's $\tau$) or the loss incurred by selecting the best candidate by $F$ instead of the true ESSR. (b) \emph{Stochastic benchmark}: a sample-average or stochastic-SCA design that maximizes the Monte Carlo ESSR directly for a small setting, with ESSR and run time. (c) \emph{Upper bound}: MA positions optimized with instantaneous CSI, which quantifies the price of the two-timescale operation.
+\end{field}
+\begin{example}
+\textit{Possible sentence (Section~V-B):} ``Moreover, over $X$ candidate designs per realization, the ranking by (35) agrees with that by the Monte Carlo ESSR (Kendall's $\tau=\ldots$), and selecting the best candidate by (35) loses on average only $\ldots\%$ of the ESSR.''
+\end{example}
+\textbf{Effort:} (a) low to moderate; (b) and (c) high. \textbf{Recommendation:} implement (a); (b) and (c) optional.
+
+% ---------------------------------------------------------------------------
+\comment{4. Novelty positioning and literature coverage}{\Major}{Introduction}
+\begin{field}{Issue.}
+The introduction distinguishes the work from [11]--[14] by the CSI assumption and the fading model, but the distinction is spread over two long paragraphs, and the contribution relative to [13] (statistical CSI of Eve, ergodic secrecy rate, MAs) and [15] (two-timescale MA design with ZF) is left implicit. AN-aided MA secrecy designs are not discussed. A quick search returned, e.g., arXiv:2403.04269 (joint precoding, AN covariance, and MA positions for secure MIMO) and arXiv:2412.19656 (MA-aided physical layer security without CSI of Eve, using AN); both need to be verified against the full texts before citing. The novelty search for 2025--2026 two-timescale secure MA designs (issue I35) is still open, so the statement ``remains unexplored'' has not been checked systematically.
+\end{field}
+\begin{field}{Suggestion.}
+Add a compact comparison table (Table~I) and complete the novelty check; cite the closest AN-aided MA works if you approve them.
+\end{field}
+\begin{example}
+\textit{Possible Table~I columns:} Ref.\ $\mid$ antenna positions based on (instantaneous/statistical CSI) $\mid$ CSI of Eve $\mid$ users $\mid$ AN $\mid$ channel model $\mid$ gain for a single user.
+\end{example}
+\textbf{Effort:} text and table; references require your approval (project rule).
+
+% ---------------------------------------------------------------------------
+\comment{5. Status and accuracy of the Eve-rate approximation}{\Major}{Mathematical rigor}
+\begin{field}{Issue.}
+(i) Section~III-C states that ``the approximation is asymptotically exact as $\kappa_{\mathrm e}\to\infty$ and $\kappa_m\to\infty$ \ldots{} provided that the LoS components of the LUs are linearly independent'' without proof. Proposition~1 covers only $c_m$ and $d$ versus $\mathbb E\{\bar X_m\}$ and $\mathbb E\{\bar Y\}$, not the replacement of $X_m$ and $Y$ by their means, and the joint limit (two parameters, order of limits) is not specified. (ii) The construction of $d(\bt)$ in Appendix~B (the NLoS component captures a fraction $\chi$ of the complement of $\boldsymbol\Pi$, chosen to match $\mathrm{tr}(\Pp)=N-M$) is a heuristic, while the main text calls it ``calibrated'', which may read as derived. (iii) Accuracy is reported only for the wiretap sum rate and only in absolute terms. In Fig.~3(a), the rate of Eve ($0.29$--$1.60$~bps/Hz) is drawn on a $0$--$40$~bps/Hz axis; its maximum relative error is $6.0\%$ (at $5$~dB), which is not reported, and errors of $c_m$ and $d$ may cancel in the sum.
+\end{field}
+\begin{field}{Suggestion.}
+(i) Add a short proof sketch, or state the claim as an observation with a precise limit (e.g., $\mathbf K=\kappa\mathbf K_0$, $\kappa_{\mathrm e}=\kappa$, $\kappa\to\infty$). (ii) Call the step a ``trace-matching correction'' and state that it is heuristic, with Proposition~1 giving its exactness cases. (iii) Report relative errors and, ideally, the accuracy of $c_m$ and $d$ separately (one sentence or a small table).
+\end{field}
+\begin{example}
+\textit{Current:} ``Nevertheless, the approximation is asymptotically exact as $\kappa_{\mathrm e}\to\infty$ and $\kappa_m\to\infty$, $\forall m$, provided that \ldots''\\
+\textit{Suggested:} ``Nevertheless, the approximation becomes accurate when both $\kappa_{\mathrm e}$ and $\kappa_m$ are large, since $\bar X_m$ and $\bar Y$ then converge to deterministic values (see the proof of Proposition~1).''
+\end{example}
+\textbf{Effort:} text; the $c_m$/$d$ check is a short script.
+
+% ---------------------------------------------------------------------------
+\comment{6. Isotropic null-space AN although the LoS direction of Eve is known}{\Major}{Modeling, design}
+\begin{field}{Issue.}
+The BS knows $\gb(\bt)$, yet the AN is isotropic within the null space, $\boldsymbol\Sigma=q\Pp(\bt)$. A natural alternative concentrates AN in the null-space component aligned with the LoS direction of Eve, e.g., $\boldsymbol\Sigma=q_1\Pp+q_2\,\Pp\gb\gb^{\mathrm H}\Pp/\|\Pp\gb\|^2$, which increases the AN received by Eve without affecting the LUs. Since one of the two MA mechanisms emphasized by the paper is ``increasing the AN received by Eve'', a referee may ask whether a statistical-CSI-aware AN design with an FPA could recover part of the MA gain.
+\end{field}
+\begin{field}{Suggestion.}
+At minimum, justify the isotropic choice in Section~III-A (it requires no knowledge of Eve in each CI, keeps Lemma~1 and the closed form tractable, and is standard in [5], [19]) and mention AN shaping as an extension. Better, add a benchmark ``FPA with directional AN'' at the default setting.
+\end{field}
+\begin{example}
+\textit{Suggested sentence (Section~III-A):} ``Although the statistical CSI of Eve could be used to shape the AN within the null space, isotropic AN is adopted because it requires no knowledge of Eve in each CI and keeps the analysis in Section~III-C tractable [5], [19].''
+\end{example}
+\textbf{Effort:} text (low); benchmark (high, new design and simulations).
+
+% ---------------------------------------------------------------------------
+\comment{7. Parameter coverage favors the proposed design and omits key dependencies}{\Major}{Simulation coverage}
+\begin{field}{Issue.}
+The defaults $\kappa_m=\kappa_{\mathrm e}=10$~dB (LoS dominant) and $\Delta=0.1$~rad (Eve inside the main lobe) are exactly the regime where the proposed mechanisms matter. Fig.~7(a) covers $\Delta$, but (i) ESSR versus the Rician factor is not shown (Fig.~3(b) shows only the approximation accuracy); by Section~III-D, the Eve-related gain vanishes as $\kappa_{\mathrm e}\to0$, so readers will want to see where the gain disappears; (ii) the number of LUs is limited to $M\in\{1,3\}$, so scalability with $M$ and the trade-off between $N-M$ AN dimensions and multiplexing are not shown.
+\end{field}
+\begin{field}{Suggestion.}
+Add ESSR versus $\kappa$ (with $\kappa_m=\kappa_{\mathrm e}$, or $\kappa_{\mathrm e}$ alone) for all the schemes, and optionally ESSR versus $M$ (e.g., $M=1,\ldots,6$ with $N=8$). With the $15$-page allowance, one additional figure (or a panel replacing a less informative one) is affordable.
+\end{field}
+\textbf{Effort:} new simulations (moderate). \textbf{Recommendation:} ESSR versus $\kappa$: implement; versus $M$: optional.
+
+% ---------------------------------------------------------------------------
+\comment{8. Section V-A is hard to scan}{\Moderate}{Organization}
+\begin{field}{Issue.}
+Section~V-A has three dense paragraphs (about 450 words) that mix system parameters, algorithm parameters, evaluation methodology, and four benchmark definitions written as an inline enumeration in a single paragraph (about 250 words). The search rule of AS is split between Sections~V-A and V-E.
+\end{field}
+\begin{field}{Suggestion.}
+Collect all the parameters in a table (system / algorithm / evaluation), list the benchmarks as an itemized list with one or two sentences each, including their purpose (``isolates the secrecy-aware positioning'', ``controls for the aperture''), and move the AS swap-search description from Section~V-E to the AS item or a footnote.
+\end{field}
+\begin{example}
+\textit{Possible Table~II rows:} $N=8$, $M=3$, $A=4\lambda$, $D_{\min}=\lambda/2$, $\kappa_m=\kappa_{\mathrm e}=10$~dB, $\beta_m=\beta_{\mathrm e}=0$~dB, $P_{\mathrm{tot}}/\sigma^2=20$~dB, $\Delta=0.1$~rad, AoDs $\sim\mathcal U[-\pi/3,\pi/3]$; grid spacing $\lambda/10$ ($|\mathcal G|=1681$), $\delta_0=1$, $\epsilon_{\mathrm{in}}=10^{-6}$, $N_{\mathrm{MM}}=20$, $\epsilon=10^{-4}$, $N_{\mathrm{AO}}=50$, $Q=41$, $N_{\mathrm b}=60$, initializations UPA $+$ 2 random; $100$ AoD realizations, $5\times10^3$ channel samples ($10^4$ in Fig.~3).
+\end{example}
+
+% ---------------------------------------------------------------------------
+\comment{9. Figure readability and self-contained captions}{\Moderate}{Figures}
+\begin{itemize}
+\item \textbf{Fig.~3(a):} the rate of Eve ($0.3$--$1.6$~bps/Hz) is drawn on a $0$--$40$~bps/Hz axis, so the claimed accuracy is invisible. Use a second $y$-axis or a separate panel for Eve, or plot the relative error.
+\item \textbf{Fig.~4:} the curves flatten within about $15$ iterations, but the $x$-axis runs to $50$. Limit it to $0$--$30$ (or use a logarithmic axis); a measured run time per AO iteration would add value.
+\item \textbf{Fig.~5(a):} five ESSR curves nearly overlap on a $0$--$35$~bps/Hz scale. Consider a zoomed inset ($15$--$25$~dB) or plotting the ESSR gain over the FPA.
+\item \textbf{Fig.~6(a):} the two AS variants share the same color (teal) with dash-dotted and dotted lines; use distinct colors.
+\item \textbf{Fig.~6(b):} the AS curve mixes exhaustive search ($N\le10$) and swap search ($N\ge12$) without any mark. Add a caption note or change the marker fill at $N\ge12$.
+\item \textbf{Fig.~7:} two unrelated studies (AoD offset; power allocation versus $S$) share one figure, and panel~(a) overlays $M=3$ and $M=1$ with coinciding curves for $M=1$. Consider separate figures, and an in-plot label ``Rate-oriented MA $=$ FPA''.
+\item \textbf{Captions:} state the key parameters ($N$, $M$, $A$, $P_{\mathrm{tot}}/\sigma^2$, $\Delta$) in each caption; most TCOM referees expect self-contained captions.
+\item \textbf{Statistical confidence:} only one standard error ($0.55\%$) is reported. Show $95\%$ confidence bands, or state that differences below about $0.2$~bps/Hz (two paired standard errors) are not significant, e.g., sparse FPA versus rate-oriented MA at $N=12$.
+\end{itemize}
+\textbf{Effort:} replots from stored results (low). \textbf{Recommendation:} implement Fig.~3(a), Fig.~6(a)/(b), and the captions; the rest optional.
+
+% ---------------------------------------------------------------------------
+\comment{10. Connector overuse and repetition reappeared}{\Moderate}{Writing}
+\begin{field}{Issue.}
+After the last rewrite, ``Hence,'' appears $18$ times (Sections~II-A and II-B once each, III-A three times, III-B once, III-D twice, IV five times, V-G once, and Appendix~B four times), ``Since'' $37$ times, ``i.e.,'' $21$ times, and ``respectively'' $22$ times. The mechanism sentence ``reduce(s) the information leakage and increase(s) the AN received by Eve'' appears verbatim six times (abstract, introduction, Section~III-D, Section~V-D twice, and conclusion), plus variants in Sections~III-D and V-F.
+\end{field}
+\begin{field}{Suggestion.}
+Keep ``Hence'' for genuine deductions (about five occurrences) and restructure the rest with subordinate clauses or ``thus''; in Section~V, refer to Section~III-D instead of restating the mechanism.
+\end{field}
+\begin{example}
+\textit{Current (III-B):} ``Hence, by decorrelating the LoS component of the $m$-th LU from those of the other LUs, the antenna positions can increase $\eta_m(\bt)$ by up to a factor of $\kappa_m+1$.''\\
+\textit{Suggested:} ``By decorrelating the LoS component of the $m$-th LU from those of the other LUs, the antenna positions can thus increase $\eta_m(\bt)$ by up to a factor of $\kappa_m+1$.''\\[2pt]
+\textit{Current (V-D):} ``This difference is consistent with the analysis in Section~III-D: because the proposed positions reduce the information leakage and increase the AN received by Eve, less AN suffices, and more power remains for the confidential signals.''\\
+\textit{Suggested:} ``This difference is consistent with Section~III-D: the optimized positions decrease $\Theta$ and thus the AN power required for secrecy.''
+\end{example}
+
+% ---------------------------------------------------------------------------
+\comment{11. The paragraph after Lemma 1 alternates claims and caveats}{\Moderate}{Writing, Section III-C}
+\begin{field}{Issue.}
+Five of the eight sentences alternate between justification and caveats (``This approximation is accurate when \ldots'', ``By Lemma~1, \ldots'', ``Since \ldots{} these conditions alone do not guarantee \ldots'', ``Nevertheless, \ldots'', ``Moreover, since \ldots''), and the main step, i.e., replacing $X_m$ and $Y$ by their means, gets lost.
+\end{field}
+\begin{example}
+\textit{Suggested (three sentences):} ``Based on Lemma~1, we approximate $\bar R_{\mathrm e,m}$ by replacing $X_m$ and $Y$ with their means, as in [18, Lemma~1]. This approximation is accurate when $X_m$ and $Y$ concentrate around their means, e.g., when $\kappa_{\mathrm e}\bar X_m$ and $\kappa_{\mathrm e}\bar Y+N-M$ are large, and it becomes exact as the Rician factors grow. Since the rate is concave in $X_m$ and convex in $Y$, the approximation is neither an upper nor a lower bound, and its accuracy is evaluated in Section~V-B.''
+\end{example}
+
+% ---------------------------------------------------------------------------
+\comment{12. Sections V-E and V-G mix results with implementation details}{\Moderate}{Organization}
+\begin{field}{Issue.}
+The second paragraph of Section~V-E (about 230 words) begins with the AS search procedure and its validation before discussing Fig.~6(b). The first paragraph of Section~V-G combines the definition of $S$, the EP benchmarks, and an implementation detail of the EP benchmarks (retaining $[\cdot]^+$ and computing the gradient over the LUs with positive terms).
+\end{field}
+\begin{field}{Suggestion.}
+Move implementation details to Section~V-A (benchmarks) or to footnotes, and start each results paragraph with what the figure shows. Split the $43$-word sentence on the swap search into two sentences if it stays in the text.
+\end{field}
+
+% ---------------------------------------------------------------------------
+\comment{13. Movement time and pilot overhead are no longer mentioned}{\Moderate}{Practicality}
+\begin{field}{Issue.}
+The previous statement that the movement delay and the pilot overhead are not included in the ergodic rates was deleted. Referees frequently ask how long the antenna movement takes compared with a frame.
+\end{field}
+\begin{example}
+\textit{Suggested sentence (Section~II-B):} ``The time for moving the MAs at the beginning of each frame is assumed to be negligible compared with the frame duration and is not included in the ergodic rates.''
+\end{example}
+
+% ---------------------------------------------------------------------------
+\comment{14. AoD offset defined in coordinate space}{\Moderate}{Modeling}
+\begin{field}{Issue.}
+$\Delta$ perturbs $(\theta,\phi)$ in coordinate space, so the physical angular separation between Eve and LU~1 depends on $\theta_1$ (as noted in Section~V-A). Results versus $\Delta$ are therefore hard to interpret physically.
+\end{field}
+\begin{field}{Suggestion.}
+Report the corresponding physical separation (e.g., its mean over the drops for $\Delta=0.1$~rad), or use the normalized LoS correlation of the FPA, $|\hb_1^{\mathrm H}\gb|/N$, as an interpretable companion quantity (already quoted as $>0.94$ for $\Delta=0.1$~rad).
+\end{field}
+
+% ---------------------------------------------------------------------------
+\comment{15. Contribution paragraphs}{\Moderate}{Introduction}
+\begin{field}{Issue.}
+The two contribution paragraphs mix the problem, the contributions, and the simulation results, and the novelty relative to [13] and [15] is implicit.
+\end{field}
+\begin{field}{Suggestion.}
+Keep the supervisor's paragraph style but make each contribution explicit (``First, \ldots{} Second, \ldots{} Third, \ldots''), or use a three-item list if acceptable, and close with a one-sentence outline of the paper. This is an author decision.
+\end{field}
+
+% ---------------------------------------------------------------------------
+\comment{16. Terminology and notation consistency}{\Minor}{Notation}
+\begin{itemize}
+\item One quantity, four names: ``LoS correlation'' ($7\times$), ``LoS array correlation'', ``weighted LoS correlations'', and ``normalized LoS correlation''. Define, e.g., $\rho_m(\bt)\triangleq|\hb_m^{\mathrm H}(\bt)\gb(\bt)|/N$ once and reuse it in Sections~III-D, V-A, and V-F.
+\item $\Pp(\bt)$ hides its dependence on $\tilde{\mathbf H}$; write $\Pp$ or state the dependence once.
+\item $\Theta_m$ (Section~III-D) may be confused with the AoDs $\theta_m$; consider another symbol.
+\item $F$ is overloaded ($F(\bt,\mathbf p,q)$, $F(\bt)$, $F(\bt_n)$, $F^\star(q)$); acceptable, but state the convention once. $N_{\mathrm b}$ and $N_{\mathrm{bt}}$ look alike.
+\end{itemize}
+
+\comment{17. Introduction: uncited claim and double ``however''}{\Minor}{Writing}
+The sentence ``This separability is limited for a conventional FPA array if Eve is located in a direction close to that of an LU and the LoS path is dominant'' has no citation, although the supervisor's rule requires every claim in the introduction to be supported. In the third paragraph, ``However, these works \ldots'' is followed two sentences later by ``For secure transmission, however, \ldots''; use ``By contrast, \ldots'' for the second.
+
+\comment{18. Lemma 1 contains variances used only qualitatively}{\Minor}{Mathematics}
+The conditional variances in (22)--(23) are used only to argue concentration. Keeping only the means and the independence in the lemma, and moving the variances to Appendix~A, would shorten Section~III-C.
+
+\comment{19. Algorithm 2, line 7: reason for the acceptance test}{\Minor}{Algorithm}
+Explain in one clause why the new $(\mathbf p',q')$ is accepted only if it does not decrease $F$: Algorithm~1 is a grid search over $q$ and may return a slightly worse objective than the current allocation.
+
+\comment{20. Complexity: dominant term and run time}{\Minor}{Algorithm}
+State the dominant term for the default values (Stage~1: $\mathcal O(N_{\mathrm{AO}}N|\mathcal G|M^2)$ with $|\mathcal G|=1681$) and a measured average run time per design, which supports the claim of low complexity.
+
+\comment{21. ``As predicted by (33)''}{\Minor}{Writing}
+In Section~V-D, (33) holds for equal power among the LUs, whereas the proposed design optimizes the per-user powers; write ``consistent with (33)''.
+
+\comment{22. Conclusion is generic}{\Minor}{Writing}
+Add one quantitative takeaway (e.g., the gain at the default setting and the antenna saving in Fig.~6(b)) and one limitation (dependence on the accuracy of Eve's AoDs), in addition to the extensions already listed.
+
+\section*{5. Items Checked and Found Sound (No Change Needed)}
+\begin{itemize}
+\item Central-Wishart step: the inverse has the mean $N\mathbf B^{-1/2}\boldsymbol\Omega\mathbf B^{-1/2}/(N-M)$; the bounds (21) and their equality condition.
+\item Lemma~1 and its proof; the moments leading to (24); the range and exactness statements of Proposition~1 and their proofs in Appendix~B.
+\item Single-LU expressions (30)--(31) and the identity $c_1+d-N=(c_1-1)/((N-1)(\kappa_1+1)+1)\in[-1/4,1/4]$.
+\item High-SNR expansion (32) and $\alpha^\star=1/(1+\sqrt{\Theta})$ in (33).
+\item Proposition~2: the positive root (40) in rationalized form, the uniqueness of the water level, and the limit to classic water-filling.
+\item MM step: descent-lemma surrogate, feasibility of the linearized minimum-distance constraints, projection by enumeration, monotonicity (58), and convergence of the objective value with the stated bound.
+\item The argument for dropping $[\cdot]^+$ in (P3).
+\item All the numbers in Section~V match the stored results (\texttt{verify\_numbers.m}); the references are numbered in order of first citation, with no uncited entries.
+\end{itemize}
+
+\section*{Appendix: Data Used in the Comments}
+\begin{center}\small
+\begin{tabular}{>{\raggedright}p{7.6cm}>{\raggedright}p{4.3cm}>{\raggedleft\arraybackslash}p{3.3cm}}
+\toprule
+Quantity & Source & Value \\ \midrule
+ESSR at the default setting: proposed / AS region-wide / rate-oriented MA & \texttt{fig6\_region}, \texttt{extra\_as\_region} & 20.75 / 19.34 / 18.08 \\
+ESSR at the default setting: sparse FPA / AS compact / FPA & \texttt{fig6\_region} & 17.75 / 17.24 / 15.82 \\
+Proposed ESSR for AoD errors 0 / 0.05 / 0.1~rad & \texttt{extra\_eve\_aod\_error} & 20.75 / 20.13 / 18.73 \\
+Best benchmark for an AoD error of 0.1~rad & \texttt{extra\_eve\_aod\_error} & 17.93 \\
+Ergodic wiretap sum rate (Monte Carlo), 0--30~dB & \texttt{fig3\_accuracy} & 0.29--1.60 bps/Hz \\
+Maximum relative error of (27): versus SNR / versus $\kappa$ & \texttt{fig3\_accuracy} & $6.0\%$ / $0.7\%$ \\
+LU sum rate at 20~dB: Monte Carlo / closed form & \texttt{fig3\_accuracy} & 22.32 / 20.55 \\
+Approximate minus actual ESSR at 20~dB (all schemes) & \texttt{fig5\_snr} & $-1.76$ to $-1.52$ \\
+Occurrences: ``Hence,'' / ``Since'' / ``i.e.,'' / ``respectively'' & \texttt{main.tex} & 18 / 37 / 21 / 22 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

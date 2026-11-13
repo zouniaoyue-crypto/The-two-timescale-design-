@@ -110,3 +110,32 @@ revised papers at most 16 pages; manuscripts significantly exceeding the limits 
 | I83 | L | V-C | "99% of their total increase" | advisor (comment 63) | R fig4_convergence.mat | "converges within about 15 iterations" | fixed |
 | I84 | L | III-D, IV-B | index j coincides with the imaginary unit in the LoS correlations | own | text | indices (i, k) | fixed |
 | I85 | L | References | WongTWC2021 uncited after the fluid-antenna clause was deleted | advisor (comment 9) | text | bibitem removed; numbering re-checked | fixed |
+
+## Round rev-5a — referee-style review (`review/referee_report_rev5.pdf`; no manuscript changes)
+
+Comment numbers refer to the report; all items await the author's decision.
+
+| ID | Sev | Location | Finding (report comment) | Evidence | Proposed action | Status |
+|---|---|---|---|---|---|---|
+| I86 | H | V-F / II-B | no evidence of robustness to errors in Eve's statistical CSI after V-H removal (C1) | R extra_eve_aod_error.mat | figure or 2–3 sentences | proposed |
+| I87 | H | V-D, Figs. 5, 6(b), 7(a) | strongest benchmark (region-wide AS, 19.34 vs 20.75) absent from headline comparisons (C2) | R fig6_region, extra_as_region | add region-wide AS everywhere; quote gain over strongest benchmark | proposed |
+| I88 | H | V-B | design quality of surrogate (35) shown only indirectly (C3) | — | rank-consistency check; stochastic baseline optional | proposed |
+| I89 | H | Introduction | novelty positioning; AN-aided MA works; comparison table (C4) | web search (to verify) | table + approved references | proposed |
+| I90 | H | III-C, App. B, Fig. 3 | unproven asymptotic claim; heuristic trace calibration; relative errors (C5) | D, R fig3_accuracy | reword; report relative errors | proposed |
+| I91 | M | III-A | isotropic AN despite known LoS direction of Eve (C6) | D | justify; benchmark optional | proposed |
+| I92 | M | V | ESSR vs Rician factor and vs M missing (C7) | — | new simulations | proposed |
+| I93 | M | V-A | parameter table and itemized benchmarks (C8) | text | restructure | proposed |
+| I94 | M | Figs. 3–7 | readability, captions, confidence (C9) | figures | replot selectively | proposed |
+| I95 | M | whole text | "Hence" ×18, "Since" ×37, mechanism sentence ×6 (C10) | counts | reduce | proposed |
+| I96 | M | III-C | paragraph after Lemma 1 (C11) | text | three sentences | proposed |
+| I97 | M | V-E, V-G | results mixed with implementation details (C12) | text | move details | proposed |
+| I98 | M | II-B | movement time / pilot overhead (C13) | text | one sentence | proposed |
+| I99 | L | V-A | Δ in coordinate space (C14) | text | report physical separation | proposed |
+| I100 | L | Introduction | contributions explicit (C15) | text | author decision | proposed |
+| I101 | L | III-D, V | terminology/notation consistency (C16) | text | define ρ_m once; Θ_m symbol | proposed |
+| I102 | L | Introduction | uncited claim; double "however" (C17) | text | cite; "By contrast" | proposed |
+| I103 | L | Lemma 1 | variances only qualitative (C18) | text | move to App. A | proposed |
+| I104 | L | Alg. 2 | acceptance test reason (C19) | text | one clause | proposed |
+| I105 | L | IV-C | dominant complexity term, run time (C20) | text | add | proposed |
+| I106 | L | V-D | "as predicted by (33)" (C21) | text | "consistent with" | proposed |
+| I107 | L | VI | generic conclusion (C22) | text | quantitative takeaway + limitation | proposed |
