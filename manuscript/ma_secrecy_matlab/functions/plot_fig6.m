@@ -14,9 +14,8 @@ for k = numel(keys):-1:1                       % reverse order: the proposed des
     plot_curve(ax, resA.values, Y(:, k), items{k});
 end
 label_axes(ax, 'Side length of the movable region {\itA}/{\it\lambda}', 'ESSR (bps/Hz)');
-set(ax, 'XLim', [resA.values(1) resA.values(end)], 'XTick', resA.values, 'YLim', [15 25], 'YTick', 15:2:25);
-m = s.margins;
-manual_legend(gcf, [m(1) + 0.06, m(2) + 1.97 - 0.50, 2.30, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.15, 0.14);
+set(ax, 'XLim', [resA.values(1) resA.values(end)], 'XTick', resA.values, 'YLim', [14 26], 'YTick', 14:2:26);
+place_legend(ax, {items([1 4]), items([2 5]), items(3)}, 'nw');
 save_figure('fig6a_essr_region');
 if nargin < 2 || isempty(resN), return; end
 % ---------------- (b) number of MAs ----------------
@@ -29,6 +28,6 @@ for k = numel(keys):-1:1                       % reverse order: the proposed des
 end
 label_axes(ax, 'Number of MAs {\itN}', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [resN.values(1) resN.values(end)], 'XTick', resN.values, 'YLim', [8 24], 'YTick', 8:2:24);
-manual_legend(gcf, [m(1) + 2.92 - 2.30, m(2) + 0.06, 2.24, 0.46], {items([1 4]), items([2 5]), items(3)}, 1.12, 0.14);
+place_legend(ax, {items([1 4]), items([2 5]), items(3)}, 'se');
 save_figure('fig6b_essr_antennas');
 end

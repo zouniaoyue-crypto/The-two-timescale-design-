@@ -638,14 +638,6 @@ Fig.~\ref{fig:conv} shows the objective value of (P3) versus the number of itera
 
 \subsection{ESSR and AN Power Versus Transmit SNR}
 
-\begin{figure*}[t]
-\centering
-\subfloat[]{\includegraphics[width=\columnwidth]{fig7a_essr_offset_M3}\label{fig:offset_M3}}\hfil
-\subfloat[]{\includegraphics[width=\columnwidth]{fig7b_essr_offset_M1}\label{fig:offset_M1}}
-\caption{ESSR versus the AoD offset $\Delta$ between Eve and LU~$1$ for (a) $M=3$ and (b) $M=1$ ($N=8$, $A=4\lambda$, $\Ptot/\sigma^2=20$~dB).}
-\label{fig:offset}
-\end{figure*}
-
 Fig.~\ref{fig:snr}(a) shows that the proposed design achieves the highest ESSR over the entire SNR range, e.g., $14.8\%$ and $31.2\%$ higher than those of the rate-oriented MA and the FPA at $20$~dB, respectively. Although the rate-oriented MA exploits the same movable region, its gain over the FPA is less than half of that of the proposed design, because its positions only decorrelate the LUs, whereas the proposed positions also exploit the two Eve-related mechanisms in Section~\ref{sec:insight}. AS achieves an even smaller gain, since its $2N$ candidates form a compact array whose spatial resolution is insufficient to decorrelate the LoS components of Eve and LU~$1$. The sparse FPA has the same aperture as the MAs, yet it also achieves less than half of the gain of the proposed design over the FPA, because its fixed positions cannot adapt the LoS correlations to the AoDs of the LUs and Eve. The secrecy gain of the MAs therefore stems mainly from the optimized positions rather than from the large aperture. At high SNR, the absolute ESSR gains of the proposed design approach constants, since the antenna positions improve the constant term rather than the slope of the ESSR (see Section~\ref{sec:insight}). Without AN, i.e., with $q=0$ in Algorithm~\ref{alg:ao}, the ESSR of the proposed design saturates at high SNR, because the SINRs of the LUs and Eve then grow at the same rate with the transmit power~\cite{Goel2008}.
 
 Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates, which is consistent with~\eqref{eq:alphastar}. The proposed design allocates much less power to the AN than all the benchmarks, e.g., an AN power fraction of $0.27$ versus $0.47$ for the FPA at $20$~dB. The AN power fractions of the other benchmarks are comparable to that of the FPA. This difference is consistent with Section~\ref{sec:insight}: the optimized positions decrease $\Xi_m(\bt)$ and thus the AN power required for secrecy.
@@ -660,14 +652,21 @@ Fig.~\ref{fig:region}(b) shows the ESSR versus the number of MAs $N$. All the sc
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=\columnwidth]{fig7_essr_offset}
+\caption{Ergodic secrecy rate versus the AoD offset $\Delta$ between Eve and the LU for $M=1$ ($N=8$, $A=4\lambda$, $\Ptot/\sigma^2=20$~dB).}
+\label{fig:offset}
+\end{figure}
+
+Fig.~\ref{fig:offset} shows the ergodic secrecy rate of a single LU versus the AoD offset~$\Delta$, which determines how close Eve is to the LU in direction. For $M=1$, the objective of the rate-oriented MA does not depend on the antenna positions (see Section~\ref{sec:insight}), so that it keeps its UPA initialization and coincides with the FPA. The gain of the proposed design over these two schemes therefore stems only from the Eve-aware positioning, which reduces the normalized LoS correlation $\rho_1(\bt)$ in~\eqref{eq:c1} and~\eqref{eq:d1}. This gain first increases with $\Delta$, from $9\%$ at $\Delta=0.02$~rad to $79\%$ at $\Delta=0.2$~rad, and then decreases to $33\%$ at $\Delta=0.5$~rad. For a small $\Delta$, even an aperture of $4\lambda$ can hardly decorrelate the LoS components of Eve and the LU, whereas for a large $\Delta$, Eve becomes separable even with Eve-unaware positions. These results confirm that the MAs enhance secrecy even for a single LU. The sparse FPA also benefits from its large aperture, but the proposed design achieves a further gain by adapting the positions to the AoDs. For $M=3$, the gain of the proposed design over the rate-oriented MA follows the same trend, i.e., $2.4\%$, $14.8\%$, and $10.7\%$ at $\Delta=0.02$, $0.1$, and $0.5$~rad, respectively.
+
+\subsection{Benefit of the Long-Term Power Allocation}\label{sec:sim_pa}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=\columnwidth]{fig8_pa_spread}
 \caption{ESSR versus the large-scale fading spread $S$ of the LUs for different power allocation (PA) schemes ($N=8$, $M=3$, $A=4\lambda$, $\Ptot/\sigma^2=10$~dB, $\Delta=0.1$~rad).}
 \label{fig:pa}
 \end{figure}
-
-Fig.~\ref{fig:offset} shows the ESSR versus the AoD offset $\Delta$, which determines how close Eve is to LU~$1$ in direction. For $M=3$ in Fig.~\ref{fig:offset}(a), all the schemes benefit from a larger $\Delta$, because Eve becomes more separable from LU~$1$. When Eve is almost aligned with LU~$1$, the proposed design outperforms the rate-oriented MA only slightly, since even an aperture of $4\lambda$ can hardly decorrelate their LoS components. As $\Delta$ increases, the gain of the proposed design first increases and then decreases, because Eve eventually becomes separable even with Eve-unaware positions. For $M=1$ in Fig.~\ref{fig:offset}(b), the objective of the rate-oriented MA does not depend on the antenna positions (see Section~\ref{sec:insight}), so that it keeps its UPA initialization and coincides with the FPA. The proposed design, by contrast, substantially improves the ergodic secrecy rate by reducing the normalized LoS correlation $\rho_1(\bt)$ in~\eqref{eq:c1} and~\eqref{eq:d1}, which confirms that the MAs enhance secrecy even for a single LU. The sparse FPA also benefits from its large aperture for $M=1$, but the proposed design achieves a further gain by adapting the positions to the AoDs.
-
-\subsection{Benefit of the Long-Term Power Allocation}\label{sec:sim_pa}
 
 In the default setup, the LUs have identical large-scale fading coefficients and thus similar effective channel gains. To evaluate the long-term power allocation for heterogeneous LUs, we set $[\beta_1,\beta_2,\beta_3]=[0,-S/2,-S]$~dB and $\beta_{\mathrm e}=0$~dB, where the large-scale fading spread $S$ is the ratio of the largest to the smallest large-scale fading coefficient of the LUs in decibels. In this setting, LU~$1$, whose direction is close to that of Eve, is the strongest LU, and the other LUs become weaker than Eve as $S$ increases. The proposed power allocation, which combines the secrecy water-filling in Proposition~\ref{prop:wf} with the optimized AN power, is compared with two equal-power (EP) benchmarks with $p_m=\alpha\Ptot/M$ and $q=(1-\alpha)\Ptot/(N-M)$, where $\alpha$ is either optimized by a one-dimensional search~\cite{Zhou2010} or fixed to $0.5$~\cite{ChenArxiv2026}.\footnote{Since the power of an individual LU cannot be set to zero under EP, the operator $[\cdot]^+$ is retained in the objective of the EP benchmarks, and the gradient in Stage~2 is computed over the LUs with positive secrecy rates.} For all the schemes, the antenna positions are optimized by Algorithm~\ref{alg:ao}.
 

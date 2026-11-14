@@ -5,7 +5,7 @@ function res = rerun_as_swap(which, idx)
 %   The other schemes, the drops, and the Monte Carlo channel samples are unchanged
 %   (same seeds, which depend only on the drop index), so the comparisons remain paired.
 %   which : 'fig5_snr' (Fig. 5), 'fig6_region' (Fig. 6(a)), 'extra_angle_offset'
-%           (Fig. 7(a)), or 'extra_single_user' (Fig. 7(b)).
+%           (Section V-F, M = 3), or 'extra_single_user' (Fig. 7, M = 1).
 %   idx   : optional indices of the values to run in this call (default: all values).
 %   The AS results of each value are saved in results/<which>_AS_swap_<i>.mat as soon as
 %   they are available, so that an interrupted run resumes where it stopped and the values

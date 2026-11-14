@@ -131,3 +131,14 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | I108 | ma_secrecy_matlab/results/fig5_snr.mat, fig6_region.mat, extra_angle_offset.mat, extra_single_user.mat, extra_num_antennas{,_N4,_N6,_N8,_N10}.mat | AS columns re-run with the swap search (`rerun_as_swap.m`, resumable per value; `extra_num_antennas([], [4 6 8 10], {'AS'})`), same drops and channel samples | one AS search in all figures; all Sec. V numbers unchanged (`verify_numbers`) |
 | I109 | ma_secrecy_matlab/functions/new_figure.m | figures created without menu and tool bars | Octave (qt) shifted the first figure after `close all` down by 0.27 in and cut its x-label |
 | — | main_preview.pdf; ma_secrecy_matlab/readme.tex, readme.pdf | rebuilt; readme: Fig. 3–8 numbering, AS swap search for all N, `rerun_as_swap.m`, `plot_fig8.m`, run times, long table rows split (no overfull box) | consistency |
+
+## Round rev-5c — simulation section: Fig. 7 and figure formatting
+
+| ID | file:line | What | Why |
+|---|---|---|---|
+| I111 | main.tex:651–670 | Fig. 7: double-column figure (M = 3, M = 1) → single-column figure of the M = 1 panel (y-axis "Ergodic secrecy rate"); Fig. 7 now defined at the start of V-F and Fig. 8 at the start of V-G | M = 1 panel is the only support of the single-LU claim; the M = 3 panel repeats Figs. 5–6 at Δ = 0.1 rad |
+| I111 | main.tex:660 | V-F rewritten: M = 1 first (rate-oriented MA = FPA; gain only from Eve-aware positioning; 9% / 79% / 33% at Δ = 0.02 / 0.2 / 0.5 rad; reasons for small and large Δ); M = 3 summarized (2.4% / 14.8% / 10.7% at Δ = 0.02 / 0.1 / 0.5 rad) | conciseness; numbers recomputed by verify_numbers (V-F block added) |
+| I112 | ma_secrecy_matlab/functions/fig_style.m, manual_legend.m, place_legend.m (new), text_width.m (new), plot_fig3–8.m | all figure text 9 pt (was 8/9/7 pt); panels 3.5 × 2.6 in (was 3.5 × 2.45 in); markers 5 pt; curve widths 1.0 pt (proposed 1.2 pt); legends sized from Times-Roman glyph widths and placed at axes corners; Fig. 5(b) legend in the common style; y-limits adjusted where the larger legends would cover curves (Fig. 5(a) 0–40, Fig. 6(a) 14–26, Fig. 7 3–12) | IEEE journal graphics guidance (≈9–10 pt at final size; one column 3.5 in, two columns 7.16 in); identical layout in MATLAB and Octave |
+| I113 | functions/plot_fig5.m | "Proposed w/o AN" labeled next to its curve; inset with 9-pt integer ticks and an in-plot "20 dB" label | legend width; readability |
+| I112 | functions/save_figure.m | Octave PNGs: 600 dpi recorded in the header with ImageMagick (pixels unchanged) | Octave writes 72 dpi, which reads as a 29-in-wide image |
+| — | replot_all.m, run_all.m, rerun_as_swap.m, extra_angle_offset.m, extra_single_user.m, main_schemes.m, verify_numbers.m, readme.tex/pdf; results/fig7_essr_offset.png (new), fig7a_essr_offset_M3.png and fig7b_essr_offset_M1.png (removed) | figure numbers, plot calls, and descriptions updated | consistency |

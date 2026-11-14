@@ -25,8 +25,8 @@ fig5_snr(prm);                      % Fig. 5: ESSR and AN power vs. SNR
 fig6_region(prm);                   % Fig. 6(a): ESSR vs. region size
 extra_num_antennas(prm);            % Fig. 6(b): ESSR vs. number of MAs
 extra_as_swap_check(prm);           % Sec. V-A (footnote): AS swap search vs. exhaustive search, N <= 10
-extra_angle_offset(prm);            % Fig. 7(a): ESSR vs. AoD offset, M = 3
-extra_single_user(prm);             % Fig. 7(b): the same for M = 1
+extra_angle_offset(prm);            % Sec. V-F (text): ESSR vs. AoD offset, M = 3
+extra_single_user(prm);             % Fig. 7: ESSR vs. AoD offset, M = 1
 extra_pa_spread(prm, 10);           % Fig. 8: power allocation vs. large-scale fading spread, 10 dB
 extra_pa_spread(prm, 0);            % Sec. V-G (text): the same at 0 dB
 fig7_power_allocation(prm, 20);     % Sec. V-G (text): power allocation vs. SNR (spread 20 dB)

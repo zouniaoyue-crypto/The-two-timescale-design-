@@ -1,7 +1,7 @@
 function res = extra_angle_offset(prm)
 %EXTRA_ANGLE_OFFSET  ESSR (Monte Carlo) versus the AoD offset Delta between Eve and
 %   LU 1 for M = 3 LUs (theta_e = theta_1 + Delta cos(phit), phi_e = phi_1 + Delta sin(phit),
-%   phit ~ U[0, 2 pi)). Fig. 7(a) of main.tex (M = 3).
+%   phit ~ U[0, 2 pi)). Section V-F of main.tex (M = 3, quoted in the text without a figure).
 
 if nargin < 1, prm = default_params(); end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));

@@ -98,6 +98,23 @@ for v = n.values
          val(n, iN(v), 'MA_full') - val(n, iN(v), 'FPA_full'), sprintf('%.4f (AS)', val(n, iN(v), 'MA_full') - val(n, iN(v), 'AS')));
 end
 
+% ---------------- Section V-F (Fig. 7: M = 1; M = 3 in the text) ----------------
+u = ld('extra_single_user');  iD = @(r, v) find(abs(r.values - v) < 1e-9);
+show('V-F', 'M = 1: max |rate-oriented MA - FPA| over Delta and drops', ...
+     max(abs(reshape(u.essrDrops(:, col(u, 'MA_rate'), :) - u.essrDrops(:, col(u, 'FPA_full'), :), [], 1))), 'coincides (machine precision)');
+gU = 100*(u.essr(:, col(u, 'MA_full'))./u.essr(:, col(u, 'FPA_full')) - 1);
+for v = [0.02 0.2 0.5]
+    show('V-F', sprintf('M = 1: gain of the proposed design over the FPA, Delta = %.2f (%%)', v), gU(iD(u, v)), '9% / 79% / 33%');
+end
+show('V-F', 'M = 1: largest gain attained at Delta (rad)', u.values(find(gU == max(gU), 1)), '0.2 (first increases, then decreases)');
+show('V-F', 'M = 1: proposed above all benchmarks at every Delta (1 = yes)', ...
+     all(u.essr(:, col(u, 'MA_full')) > max(u.essr(:, [col(u, 'MA_rate') col(u, 'AS') col(u, 'SPA_full') col(u, 'FPA_full')]), [], 2)), 'further gain');
+a3 = ld('extra_angle_offset');
+gA = 100*(a3.essr(:, col(a3, 'MA_full'))./a3.essr(:, col(a3, 'MA_rate')) - 1);
+for v = [0.02 0.1 0.5]
+    show('V-F', sprintf('M = 3: gain over the rate-oriented MA, Delta = %.2f (%%)', v), gA(iD(a3, v)), '2.4% / 14.8% / 10.7%');
+end
+
 % ---------------- Section V-G (Fig. 8 at 10 dB; 0 and 20 dB in the text) ----------------
 s10 = ld('extra_pa_spread_10dB');
 g10 = 100*(s10.essr(:, col(s10, 'MA_full'))./s10.essr(:, col(s10, 'MA_EPA')) - 1);

@@ -68,7 +68,7 @@ extra_num_antennas(prm, [4 8]);  % Fig. 6(b) 中 N = 4 与 8 两个点（全部 
 extra_pa_spread(prm, 10);        % Fig. 7(b) 的 10 dB 曲线（0 dB 曲线：extra_pa_spread(prm, 0)）
 replot_all;                      % 全部结果就绪后重画 Fig. 3--7
 \end{lstlisting}
-\item 结果保存在 \code{results/}：\code{.mat} 数据与图。MATLAB 下每张图导出矢量 \code{.pdf}（嵌入字体，稿件优先引用）、\code{.eps}、600 dpi \code{.png} 与 \code{.fig}；Octave 下只导出 600 dpi \code{.png}（Octave 的矢量导出会压缩词间空格，图例符号也不随尺寸缩放）。只想重画图时运行 \code{replot\_all}；Octave 需要 qt 图形工具包，无显示器时用 \code{xvfb-run -a octave --no-gui --eval replot\_all}。
+\item 结果保存在 \code{results/}：\code{.mat} 数据与图。MATLAB 下每张图导出矢量 \code{.pdf}（嵌入字体，稿件优先引用）、\code{.eps}、600 dpi \code{.png} 与 \code{.fig}；Octave 下只导出 600 dpi \code{.png}（Octave 的矢量导出会压缩词间空格，图例符号也不随尺寸缩放；若装有 ImageMagick，PNG 文件头中的分辨率记为 600 dpi，即 3.5 in 宽）。只想重画图时运行 \code{replot\_all}；Octave 需要 qt 图形工具包，无显示器时用 \code{xvfb-run -a octave --no-gui --eval replot\_all}。
 \end{enumerate}
 
 % -----------------------------------------------------------------------------
@@ -90,8 +90,8 @@ fig7\_power\_allocation.m & 第~V-G 节（无图）：三种长时功率分配�
 extra\_eve\_aod\_error.m & 补充脚本（原第~V-H 节，\code{SUPPLEMENTARY = true} 时运行）：BS 已知的 Eve AoD 有误差 $\Delta_{\rm err}\in\{0,0.01,0.02,0.05,0.1\}$ rad 时各方案的 ESSR（20 dB）。\\
 extra\_as\_region.m & 补充脚本（\code{SUPPLEMENTARY = true} 时运行，正文不再引用；原 Fig.~6(a) 中的 “AS, region-wide” 曲线）：$2N$ 个候选天线铺满区域（间距 $A/3$）的 AS，ESSR vs $A$（不涉及 MA 优化）。\\
 extra\_num\_antennas.m & \textbf{新增。}Fig.~6(b)：ESSR vs MA 数 $N\in\{4,6,\ldots,16\}$（20 dB，$A=4\lambda$）。每个 $N$：FPA 为 $2\times(N/2)$ 的 $\lambda/2$ UPA，稀疏 FPA 为铺满区域的 $2\times(N/2)$ UPA，AS 从 $4\times(N/2)$ 的 $\lambda/2$ UPA 中选 $N$ 个，对所有 $N$ 都用交换搜索（\code{as\_swap.m}，与 Fig.~5、7 一致；穷举在 $N=12$ 时需 $\binom{24}{12}\approx2.7\times10^6$ 个子集，$N=16$ 时需 $\binom{32}{16}\approx6.0\times10^8$ 个，$N\le10$ 时与穷举的对比见 \code{extra\_as\_swap\_check}）。第三个参数可只运行部分方案并并入已有结果，例如 \code{extra\_num\_antennas([], [12 14 16], \{'AS'\})}。每个 $N$ 单独保存为 \code{extra\_num\_antennas\_N<N>.mat}，不同 $N$ 可在多个会话中并行运行（第二个参数为 $N$ 的子集），全部就绪后自动合并为 \code{extra\_num\_antennas.mat}。\\
-extra\_angle\_offset.m & Fig.~7(a)：ESSR vs Eve 相对 LU 1 的 AoD 偏移 $\Delta$（$M=3$）。\\
-extra\_single\_user.m & Fig.~7(b)：单用户（$M=1$）的保密速率与 AN 占比 vs $\Delta$。\\
+extra\_angle\_offset.m & 第~V-F 节（正文引用数值，无图）：ESSR vs Eve 相对 LU 1 的 AoD 偏移 $\Delta$（$M=3$）。\\
+extra\_single\_user.m & Fig.~7：单用户（$M=1$）的保密速率与 AN 占比 vs $\Delta$。\\
 extra\_random\_eve.m & 补充脚本（原第~V-H 节）：Eve 的 AoD 与 LU 无关（与 LU 同分布，\code{Delta = Inf}）时 5 种方案的 ESSR（20 dB）；第二个参数为 $M$，正文用 $M=3$ 与 $M=1$。\\
 extra\_pa\_spread.m & Fig.~8：三种功率分配的 ESSR vs LU 的大尺度衰落差异 $S$（第二个参数为 SNR；Fig.~8 用 10 dB，0 dB 的结果只在第~V-G 节正文中引用）。\\
 extra\_grid\_check.m & 第~V-A 节（正文引用数值）：Stage~1 网格间距减半（$\lambda/20$）时所提设计的 ESSR 变化（默认参数，前 20 个场景，与 \code{sweep\_schemes} 的场景相同）。\\
@@ -159,13 +159,14 @@ load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \cod
 \subsection{\code{functions/}：绘图（IEEE 风格）}
 \begin{longtable}{>{\ttfamily\small}p{4.6cm}p{11.2cm}}
 \toprule
-fig\_style.m & 全局样式（环境变量 \code{MA\_PLOT\_FONT} 可替换字体族，数据不变）：单栏宽 3.5 in $\times$ 2.45 in、Times New Roman、字号 8/9/7 pt（刻度/坐标轴标签/图例，均为整数）、线宽、标记大小、坐标轴边距。稿件中所有子图（含 figure* 中的 (a)(b)）都按 \code{width=\textbackslash columnwidth} 插入，即 100\% 原尺寸，因此各图的字号、标记与线宽完全一致。\\
+fig\_style.m & 全局样式（环境变量 \code{MA\_PLOT\_FONT} 可替换字体族，数据不变），按 IEEE Author Center 的期刊图片要求设定：每个子图均为 IEEE 单栏宽 3.5 in $\times$ 2.6 in（宽高比 1.35），Times New Roman，所有文字（刻度、坐标轴标签、图例、图内标注）统一为 9 pt（IEEE 建议成稿尺寸下约 9--10 pt），曲线线宽 1.0 pt（所提方案 1.2 pt），坐标轴 0.5 pt，空心标记 5 pt，600 dpi。稿件中所有子图（含 figure* 中的 (a)(b)）都按 \code{width=\textbackslash columnwidth} 插入，即 100\% 原尺寸，因此各图的字号、标记与线宽在成稿中完全一致；双栏图由两个单栏宽子图并排组成（总宽不超过 7.16 in）。\\
 scheme\_style.m, scheme\_name.m & 每种方案固定的图例名、颜色、线型、标记（所有图一致）。\\
 new\_figure.m, style\_axes.m & 建图（固定边距，标签不会被裁切）与坐标轴样式。\\
 plot\_curve.m, plot\_schemes.m, curve\_style.m & 画一条曲线（细线、空心标记，线宽取自 \code{scheme\_style}）；按方案批量画曲线（逆序绘制，使所提方案位于最上层）。\\
 fig\_palette.m & \textbf{新增。}统一的低饱和度配色：砖红 \#B03A2E（所提）、钢蓝 \#2E6DB4、青绿 \#2A9D8F、赭黄 \#C7852B、灰紫 \#7B5EA7，参考方案用中性灰；同一图中出现的颜色组合均通过色觉缺陷（CVD）分离度与对比度检验，且每条曲线另有独立的标记与线型，灰度打印仍可区分。\\
-label\_axes.m, add\_legend.m, axes\_note.m & 坐标轴标签、内置图例、坐标轴内文字标注。\\
-manual\_legend.m & 在透明覆盖坐标轴上按英寸位置“手绘”图例（多行多列、符号与曲线完全一致），MATLAB 与 Octave 的显示效果相同。Fig.~3、4、6 与 7 使用。\\
+label\_axes.m, add\_legend.m, axes\_note.m & 坐标轴标签、内置图例（各图已不再使用）、坐标轴内文字标注。\\
+manual\_legend.m & 在透明覆盖坐标轴上按英寸位置“手绘”图例（多行多列、符号与曲线完全一致），MATLAB 与 Octave 的显示效果相同；各列宽度可不同。\\
+place\_legend.m, text\_width.m & \textbf{新增。}按图例文字自动计算各列宽度与图例框大小，并把图例放在坐标轴的某个角（如 \code{'nw'}、\code{'se'}）；文字宽度由 Times-Roman 的标准字宽表计算（Times New Roman 与 Liberation Serif 字宽相同），因此不依赖显示器分辨率，MATLAB 与 Octave 的排版一致（Octave 在虚拟显示器上测得的文字宽度约偏小 25\%）。所有图的图例都用它绘制。\\
 plot\_fig3.m -- plot\_fig8.m & 各图的绘制（坐标范围、图例位置、文字标注、Fig.~5(a) 的局部放大图）。\\
 save\_figure.m & 导出（MATLAB：矢量 PDF/EPS + PNG + FIG；Octave：600 dpi PNG）。\\
 \bottomrule
@@ -323,14 +324,13 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角�
 \code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs SNR \\
 \code{fig5\_snr.mat}（字段 \code{essr\_tin}） & 补充结果 & 两种 Eve 模型下的 ESSR \\
 \code{fig6a\_essr\_region}, \code{fig6b\_essr\_antennas} & Fig.~6(a)(b) & ESSR vs 区域边长 $A$ / MA 数 $N$ \\
-\code{fig7a\_essr\_offset\_M3} & Fig.~7(a) & ESSR vs $\Delta$（$M=3$） \\
-\code{fig7b\_essr\_offset\_M1} & Fig.~7(b) & ESSR vs $\Delta$（$M=1$） \\
+\code{fig7\_essr\_offset} & Fig.~7 & 保密速率 vs $\Delta$（$M=1$） \\
 \code{fig8\_pa\_spread} & Fig.~8 & 功率分配 vs $S$ \\
 \code{extra\_eve\_aod\_error.mat} & 补充结果 & Eve 的 AoD 误差 \\
 \code{extra\_as\_region.mat} & 补充结果 & 候选天线铺满区域的 AS \\
 \code{extra\_num\_antennas.mat} & Fig.~6(b) & ESSR vs MA 数 $N$（各 $N$ 另存为 \code{\_N<N>.mat}）\\
-\code{extra\_angle\_offset.mat} & Fig.~7(a) & AoD 偏移 $\Delta$（$M=3$） \\
-\code{extra\_single\_user.mat} & Fig.~7(b) & AoD 偏移 $\Delta$（$M=1$） \\
+\code{extra\_angle\_offset.mat} & 第~V-F 节 & AoD 偏移 $\Delta$（$M=3$，无图） \\
+\code{extra\_single\_user.mat} & Fig.~7 & AoD 偏移 $\Delta$（$M=1$） \\
 \code{extra\_random\_eve\_M\{3,1\}.mat} & 补充结果 & Eve 的 AoD 与 LU 无关 \\
 \code{extra\_pa\_spread\_\{10,0\}dB.mat} & Fig.~8 & 功率分配 vs $S$ \\
 \code{extra\_as\_swap\_check.mat} & 第~V-A 节脚注 & AS 交换搜索 vs 穷举（$N\le10$）\\
@@ -347,9 +347,9 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角�
 \begin{description}
 \item[Fig.~3] 钢蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（空心方块 = 蒙特卡洛，实线 = 式 (20)），砖红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（空心三角 = 蒙特卡洛，虚线 = 式 (27)），均在所提设计处计算。式 (27) 与蒙特卡洛几乎重合；式 (20) 偏保守，且差距随莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍。因此在所有测试场景中近似 ESSR 都低于实际 ESSR（理论上它既不是上界也不是下界）；各方案的这一差距相近，近似目标不改变方案间的比较结论。
 \item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记；横轴只显示前 30 次迭代，各曲线约 15 次内收敛）。钢蓝色 = 10 dB，砖红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
-\item[Fig.~5] (a) ESSR（另含砖红色点线与叉号的“Proposed w/o AN”，高 SNR 时饱和）、(b) AN 功率占比 vs SNR。所提方案为砖红色实线与空心圆（线宽略粗），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为灰色虚线与菱形（所有图一致）；所有曲线为细线与空心标记，网格为极浅的灰色实线。(a) 中的局部放大图显示 20 dB 附近 $\pm0.5$ dB 的窗口（主图中用小矩形标出），速率导向 MA、稀疏 FPA 与 AS 在此几乎重合；15--25 dB 的窗口不适用，因为各曲线在该范围内上升约 10 bps/Hz，放大图的纵轴几乎不能放大。
+\item[Fig.~5] (a) ESSR（另含砖红色点线与叉号的“Proposed w/o AN”，在图中直接标注，高 SNR 时饱和）、(b) AN 功率占比 vs SNR。所提方案为砖红色实线与空心圆（线宽略粗），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为灰色虚线与菱形（所有图一致）；所有曲线为细线与空心标记，网格为极浅的灰色实线。(a) 中的局部放大图显示 20 dB 附近 $\pm0.5$ dB 的窗口（主图中用小矩形标出），速率导向 MA、稀疏 FPA 与 AS 在此几乎重合；15--25 dB 的窗口不适用，因为各曲线在该范围内上升约 10 bps/Hz，放大图的纵轴几乎不能放大。
 \item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与 AS（紧凑候选阵列，与其他各图相同）不随 $A$ 变化，稀疏 FPA 的阵列随 $A$ 扩展。(b) ESSR vs MA 数 $N$（$A=4\lambda$）：FPA、稀疏 FPA 与 AS 的阵列随 $N$ 变化（见 \code{extra\_num\_antennas}）；AS 对所有 $N$ 都用交换搜索（与其他各图相同）。
-\item[Fig.~7] ESSR vs AoD 偏移 $\Delta$：(a) $M=3$，(b) $M=1$，两个子图各用自己的纵轴范围。$M=1$ 时速率导向 MA 与 FPA 完全重合（两者都画出，FPA 画在上层，图中标注 “Rate-oriented MA = FPA”）。
+\item[Fig.~7] 单用户（$M=1$）的遍历保密速率 vs AoD 偏移 $\Delta$（单栏图）。速率导向 MA 与 FPA 完全重合（两者都画出，FPA 画在上层，图中标注 “Rate-oriented MA = FPA”），所提方案的增益只来自感知 Eve 的位置优化。原来的 $M=3$ 子图已删去：它在 $\Delta=0.1$ rad 处与 Fig.~5、6 的默认点相同，其随 $\Delta$ 的变化趋势在第~V-F 节正文中用 3 个数值给出（\code{extra\_angle\_offset.mat}）。
 \item[Fig.~8] ESSR vs 大尺度衰落差异 $S$（10 dB，单栏图）。砖红色空心圆 = 所提功率分配，灰紫色菱形 = EP + 优化 $\alpha$，深灰色倒三角 = EP + $\alpha=0.5$。颜色刻意与 Fig.~5--7 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
 \end{description}
 
@@ -367,7 +367,7 @@ fig5_snr(prm);
 \item \textbf{改扫描范围：}修改对应脚本中 \code{sweep\_schemes} 的取值向量。
 \item \textbf{改位置算法：}网格间距 \code{prm.gridStep}（越小越精细、越慢；0 表示纯 MM）、MM 次数 \code{prm.mmMaxIter}、停止阈值 \code{prm.aoTol}。注意区域变大时网格点数按 $(A/{\tt gridStep}+1)^2$ 增长。
 \item \textbf{加一个新方案：}(1) 在 \code{evaluate\_schemes.m} 的 \code{switch} 中加一个 \code{case}，给出位置 \code{T} 与功率 \code{p}, \code{q}；(2) 在 \code{scheme\_style.m} 中加图例名、颜色、线型、标记；(3) 若要画进 Fig.~5/6，把方案名加入 \code{main\_schemes.m}。
-\item \textbf{加一张新图：}复制一个 \code{figX\_*.m}（调用 \code{sweep\_schemes} 并保存 \code{.mat}）和对应的 \code{plot\_figX.m}（用 \code{new\_figure}、\code{plot\_schemes}、\code{label\_axes}、\code{add\_legend}、\code{save\_figure}），样式自动与其他图一致。
+\item \textbf{加一张新图：}复制一个 \code{figX\_*.m}（调用 \code{sweep\_schemes} 并保存 \code{.mat}）和对应的 \code{plot\_figX.m}（用 \code{new\_figure}、\code{plot\_schemes}、\code{label\_axes}、\code{place\_legend}、\code{save\_figure}），样式自动与其他图一致。
 \item \textbf{加速：}减小 \code{numDrops}、\code{S}、\code{numInit}；或在 \code{sweep\_schemes.m} 中把场景循环改为 \code{parfor}（需要 Parallel Computing Toolbox，并把循环内的累加改为先存入数组、循环后再求平均）。
 \item \textbf{只重画图：}\code{replot\_all}。改整体风格时只需修改 \code{fig\_style.m} 与 \code{scheme\_style.m}。
 \item \textbf{Octave：}需要 qt 图形工具包；无显示器时用 \code{xvfb-run -a octave --no-gui}；若出现 \code{ft\_text\_renderer: invalid bounding box}，安装 \code{fonts-freefont-otf}。

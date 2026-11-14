@@ -151,3 +151,11 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I109 | L | figures (Octave) | first figure after `close all` was shifted down by 0.27 in (qt canvas includes the tool bar), cutting the x-label | X (PNG row scan) | `new_figure.m`: MenuBar/ToolBar none | fixed |
 | I110 | L | Fig. 5(a) | 15–25 dB inset would not magnify (curves rise ≈10 bps/Hz over the window) | X prototype | inset at 20 ± 0.5 dB (≈5–6× vertical magnification), window marked in the main axes | fixed |
 
+
+## Round rev-5c — simulation section: Fig. 7 and figure formatting (author's request)
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I111 | M | V-F, Fig. 7 | the two panels of Fig. 7 overlap in content: at Δ = 0.1 rad the M = 3 panel repeats the default point of Figs. 5–6, whereas the M = 1 panel is the only evidence for the single-LU claim (abstract, introduction, Sec. III-D, conclusion) | R extra_single_user.mat, extra_angle_offset.mat | keep the M = 1 panel as a single-column Fig. 7 (rate-oriented MA = FPA, gain only from Eve-aware positioning: 9% / 79% / 33% at Δ = 0.02 / 0.2 / 0.5 rad); M = 3 trend in one sentence (2.4% / 14.8% / 10.7%); numbers in verify_numbers | fixed |
+| I112 | M | Figs. 3–8 | legends, in-plot labels, and the Fig. 5(a) inset at 7 pt and tick labels at 8 pt, below the IEEE guidance ("approximately 9–10 point when viewed at full size"); Fig. 5(b) used Octave's built-in legend (different style); fixed legend widths overlapped the text at larger fonts; PNG headers recorded 72 dpi | IEEE Author Center (journal graphics: resolution and size, file formatting) | all text 9 pt; every panel 3.5 × 2.6 in (one column; two panels per double-column figure); legends sized from the Times font metrics (place_legend.m, text_width.m); 600 dpi recorded in the PNG headers | fixed |
+| I113 | L | Fig. 5(a) | "Proposed w/o AN" as a sixth legend entry widened the legend over the curves | X (layout) | direct label next to the curve (IEEE: direct labels are preferred to keys) | fixed |

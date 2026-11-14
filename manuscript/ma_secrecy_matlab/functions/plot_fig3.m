@@ -10,9 +10,9 @@ data = {res.vsP, res.vsK};  xv = {res.Pvec, res.Kvec};
 files = {'fig3a_accuracy_snr', 'fig3b_accuracy_kappa'};
 ylims = {[0 40], [0 25]};  yt = {0:5:40, 0:5:25};
 lu  = struct('name', 'LUs, simulation',    'color', c.blue, 'ls', 'none', 'marker', 's',    'lw', 1.0, 'mfc', 'w');
-luA = struct('name', 'LUs, closed form',        'color', c.blue, 'ls', '-',    'marker', 'none', 'lw', 1.1, 'mfc', 'w');
+luA = struct('name', 'LUs, closed form',        'color', c.blue, 'ls', '-',    'marker', 'none', 'lw', 1.0, 'mfc', 'w');
 ev  = struct('name', 'Eve, simulation',    'color', c.red,  'ls', 'none', 'marker', '^',    'lw', 1.0, 'mfc', 'w');
-evA = struct('name', 'Eve, closed form', 'color', c.red,  'ls', '--',   'marker', 'none', 'lw', 1.1, 'mfc', 'w');
+evA = struct('name', 'Eve, closed form', 'color', c.red,  'ls', '--',   'marker', 'none', 'lw', 1.0, 'mfc', 'w');
 for sweep = 1:2
     X = xv{sweep};  Y = data{sweep};
     ax = new_figure();
@@ -20,11 +20,10 @@ for sweep = 1:2
     plot_curve(ax, X, Y(:,4), evA);  plot_curve(ax, X, Y(:,3), ev);
     set(ax, 'XLim', [X(1) X(end)], 'XTick', X, 'YLim', ylims{sweep}, 'YTick', yt{sweep});
     label_axes(ax, xl{sweep}, 'Ergodic sum rate (bps/Hz)');
-    m = s.margins;                                 % legend in the empty area of each panel
-    if sweep == 1
-        manual_legend(gcf, [m(1) + 0.06, m(2) + 1.30, 1.30, 0.62], {{lu}, {luA}, {ev}, {evA}}, 1.2, 0.14);
-    else
-        manual_legend(gcf, [m(1) + 0.30, m(2) + 0.62, 2.30, 0.34], {{lu, luA}, {ev, evA}}, 1.12, 0.15);
+    if sweep == 1                                  % legend in the empty area of each panel
+        place_legend(ax, {{lu}, {luA}, {ev}, {evA}}, 'nw');
+    else                                           % between the curves of the LUs and Eve
+        place_legend(ax, {{lu, luA}, {ev, evA}}, 'sc', 0, 0.60);
     end
     save_figure(files{sweep});
 end

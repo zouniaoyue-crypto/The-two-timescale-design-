@@ -157,3 +157,15 @@ I34–I36 unchanged; author information placeholders.
 
 Not adopted by the author in this round: comments 1, 2, 3, 5, 7, 13, 14, 19, 20, 22 (ISSUES: kept).
 Open items: I73, I34, I36; author information placeholders.
+
+## Round rev-5c — Fig. 7 and figure formatting (Octave 8.4; TeX Live)
+
+| Check | Method | Result |
+|---|---|---|
+| Build | `pdflatex` ×3 | 15 pages; 0 errors, 0 undefined references, 0 overfull boxes; citation order = bibliography order |
+| Code readme | `xelatex` ×2 | 15 pages; 0 errors, 0 overfull boxes |
+| Figure files | `identify` | 9 PNGs, each 2100 × 1560 px at 600 dpi (header) = 3.5 × 2.6 in; double-column figures place two such panels side by side (7.0 in ≤ 7.16 in) |
+| Figure text | fig_style.m; typeset pages 11–12 inspected | tick labels, axis labels, legends, in-plot labels, and inset ticks all 9 pt at final size; no legend overlaps a curve or another entry (contact sheet of all panels inspected) |
+| Text width model | `text_width('Rate-oriented MA', 9)` vs Octave extent | 0.940 in (Times-Roman metrics, +3%) vs 0.690 in from Octave's 100-dpi virtual screen (≈72/100 too small), so the metrics are used |
+| V-F numbers | `verify_numbers` (new block) | M = 1: rate-oriented MA − FPA = 0 to machine precision (≤ 3×10⁻¹⁵); gains over the FPA 9.07% / 79.27% / 32.61% at Δ = 0.02 / 0.2 / 0.5 rad, maximum at 0.2 rad; proposed above all benchmarks at every Δ. M = 3: gains over the rate-oriented MA 2.36% / 14.79% / 10.65% at Δ = 0.02 / 0.1 / 0.5 rad |
+| Other Section V numbers | `verify_numbers` | unchanged from rev-5b |

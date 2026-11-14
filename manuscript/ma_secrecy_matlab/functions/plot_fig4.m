@@ -9,10 +9,10 @@ s = fig_style();
 ax = new_figure();
 it = 0:res.nIt;
 c = fig_palette();  blue = c.blue;  red = c.red;
-sty = {struct('color', blue, 'ls', '-',  'marker', 'none', 'lw', 1.1), ...    % N = 8,  10 dB
-       struct('color', blue, 'ls', '--', 'marker', 'none', 'lw', 1.1), ...    % N = 12, 10 dB
-       struct('color', red,  'ls', '-',  'marker', 'none', 'lw', 1.1), ...    % N = 8,  20 dB
-       struct('color', red,  'ls', '--', 'marker', 'none', 'lw', 1.1)};       % N = 12, 20 dB
+sty = {struct('color', blue, 'ls', '-',  'marker', 'none', 'lw', 1.0), ...    % N = 8,  10 dB
+       struct('color', blue, 'ls', '--', 'marker', 'none', 'lw', 1.0), ...    % N = 12, 10 dB
+       struct('color', red,  'ls', '-',  'marker', 'none', 'lw', 1.0), ...    % N = 8,  20 dB
+       struct('color', red,  'ls', '--', 'marker', 'none', 'lw', 1.0)};       % N = 12, 20 dB
 items = {};  k = 0;
 for iP = 1:numel(res.Plist)
     for iN = 1:numel(res.Nlist)
@@ -23,20 +23,18 @@ for iP = 1:numel(res.Plist)
         items{end+1} = st; %#ok<AGROW>
     end
 end
-st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.3);
+st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.2);
 draw(ax, it, mean(res.histMM, 1), st, s);
-st.name = '{\itN} = 8, 20 dB, MM only';
+st.name = '{\itN} = 8, 20 dB, MM only';  st.span = true;
 xlim(ax, [0 30]);  set(ax, 'XTick', 0:5:30);   % converged within about 15 iterations
 set(ax, 'YLim', [0 24], 'YTick', 0:4:24);
 label_axes(ax, 'Number of iterations', 'Objective value of (P3) (bps/Hz)');
-% legend in the empty band below the 10-dB curves (2 columns)
-m = s.margins;
-manual_legend(gcf, [m(1) + 0.55, m(2) + 0.06, 2.30, 0.50], ...
-              {{items{1}, items{3}}, {items{2}, items{4}}, {st, []}}, 1.10, 0.145);
+% legend in the empty band below the 10-dB curves (2 columns), right of the initial rise
+place_legend(ax, {{items{1}, items{3}}, {items{2}, items{4}}, {st, []}}, 'se');
 save_figure('fig4_convergence');
 end
 
 function draw(ax, x, y, st, s)
-lw = 1.1;  if isfield(st, 'lw'), lw = st.lw; end
+lw = s.lw;  if isfield(st, 'lw'), lw = st.lw; end
 plot(ax, x, y, 'LineStyle', st.ls, 'Color', st.color, 'LineWidth', lw);
 end
