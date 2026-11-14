@@ -58,7 +58,7 @@ verify_numbers
 \end{lstlisting}
 逐条打印第 V 节引用的数值（由 \code{results/*.mat} 按方案名重新计算）及正文中的对应值。
 \item \textbf{快速功能测试：}把 \code{run\_all.m} 中的 \code{QUICK = false;} 改为 \code{true} 后运行 \code{run\_all}（每点只用 3 个场景，几分钟跑完，曲线很粗糙，只用于检查代码能否运行）。
-\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。实测耗时（Octave 8.4，4 核机器上 4 个会话并行，每个会话约占 1 个核）：Fig.~3（13 个横轴点，每点对 100 个场景运行所提设计）约 60--85 分钟，Fig.~4 约 45 分钟，Fig.~5（含 AS、稀疏 FPA、无 AN 方案与 TIN Eve 评估）约 100 分钟，Fig.~6(a) 约 50 分钟，\code{fig7\_power\_allocation}（第~V-G 节引用的 SNR 扫描，无图）约 85--95 分钟；Fig.~6、7 的其余部分：\code{extra\_num\_antennas}（Fig.~6(b)，其中 $N=10$ 一个点约 86 分钟（AS 需穷举 $\binom{20}{10}=184756$ 个子集），$N=12,14,16$ 的 AS（交换搜索）各约 15--20 分钟，其余每个 $N$ 约 8--15 分钟，按 $N$ 分到 4 个会话并行时约 1.5 小时），\code{extra\_as\_swap\_check}（$N\le10$ 时交换搜索与穷举的对比）约 95 分钟（其中 $N=10$ 约 65 分钟，主要是穷举），\code{extra\_as\_region} 约 20 分钟，\code{extra\_angle\_offset} 约 50 分钟，\code{extra\_single\_user} 约 15 分钟，\code{extra\_pa\_spread} 两次运行（10 dB 作图，0 dB 只在正文引用）各约 55--80 分钟。4 个会话并行时全部仿真约 4 小时；补充脚本（\code{SUPPLEMENTARY = true}，正文不再引用）\code{extra\_eve\_aod\_error} 约 45 分钟，\code{extra\_random\_eve} 两次运行（$M=3$、$M=1$）约 10 分钟与 3 分钟；MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
+\item \textbf{完整仿真：}\code{QUICK = false;}（默认），运行 \code{run\_all}。实测耗时（Octave 8.4，4 核机器上 4 个会话并行，每个会话约占 1 个核）：Fig.~3（13 个横轴点，每点对 100 个场景运行所提设计）约 60--85 分钟，Fig.~4 约 45 分钟，Fig.~5（含 AS、稀疏 FPA、无 AN 方案与 TIN Eve 评估）约 100 分钟，Fig.~6(a) 约 50 分钟，\code{fig7\_power\_allocation}（第~V-G 节引用的 SNR 扫描，无图）约 85--95 分钟；Fig.~6--8 的其余部分：\code{extra\_num\_antennas}（Fig.~6(b)；AS 对所有 $N$ 用交换搜索，AS 单独运行时 $N=4,6,8,10$ 分别约 4、6、8、10 分钟，$N=12,14,16$ 各约 15--20 分钟；其余方案每个 $N$ 约 8--15 分钟，按 $N$ 分到 4 个会话并行时约 1 小时），\code{extra\_as\_swap\_check}（$N\le10$ 时交换搜索与穷举的对比）约 95 分钟（其中 $N=10$ 约 65 分钟，主要是穷举），\code{extra\_angle\_offset} 约 50 分钟，\code{extra\_single\_user} 约 15 分钟，\code{extra\_pa\_spread} 两次运行（10 dB 作图，0 dB 只在正文引用）各约 55--80 分钟。4 个会话并行时全部仿真约 4 小时；补充脚本（\code{SUPPLEMENTARY = true}，正文不再引用）\code{extra\_as\_region} 约 20 分钟，\code{extra\_eve\_aod\_error} 约 45 分钟，\code{extra\_random\_eve} 两次运行（$M=3$、$M=1$）约 10 分钟与 3 分钟；只重算 AS 的 \code{rerun\_as\_swap}（本版用于把 AS 统一为交换搜索）每个横轴点约 7--8 分钟（Fig.~5 共 7 点，Fig.~6(a)、7(a)、7(b) 各 6 点，4 个会话并行时约 1 小时）。MATLAB 执行循环通常明显快于 Octave。想先快速看趋势，可把 \code{numDrops} 设为 20--30。
 \item 各脚本互相独立，可以开多个 MATLAB 会话并行运行，例如
 \begin{lstlisting}
 prm = default_params();          % 读取默认参数
@@ -323,12 +323,14 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角�
 \code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs SNR \\
 \code{fig5\_snr.mat}（字段 \code{essr\_tin}） & 补充结果 & 两种 Eve 模型下的 ESSR \\
 \code{fig6a\_essr\_region}, \code{fig6b\_essr\_antennas} & Fig.~6(a)(b) & ESSR vs 区域边长 $A$ / MA 数 $N$ \\
-\code{fig7a\_essr\_offset\_M3}, \code{fig7b\_essr\_offset\_M1} & Fig.~7(a)(b) & ESSR vs $\Delta$（$M=3$ / $M=1$） \\
+\code{fig7a\_essr\_offset\_M3} & Fig.~7(a) & ESSR vs $\Delta$（$M=3$） \\
+\code{fig7b\_essr\_offset\_M1} & Fig.~7(b) & ESSR vs $\Delta$（$M=1$） \\
 \code{fig8\_pa\_spread} & Fig.~8 & 功率分配 vs $S$ \\
 \code{extra\_eve\_aod\_error.mat} & 补充结果 & Eve 的 AoD 误差 \\
 \code{extra\_as\_region.mat} & 补充结果 & 候选天线铺满区域的 AS \\
 \code{extra\_num\_antennas.mat} & Fig.~6(b) & ESSR vs MA 数 $N$（各 $N$ 另存为 \code{\_N<N>.mat}）\\
-\code{extra\_angle\_offset.mat}, \code{extra\_single\_user.mat} & Fig.~7(a)(b) & AoD 偏移 $\Delta$（$M=3$；$M=1$） \\
+\code{extra\_angle\_offset.mat} & Fig.~7(a) & AoD 偏移 $\Delta$（$M=3$） \\
+\code{extra\_single\_user.mat} & Fig.~7(b) & AoD 偏移 $\Delta$（$M=1$） \\
 \code{extra\_random\_eve\_M\{3,1\}.mat} & 补充结果 & Eve 的 AoD 与 LU 无关 \\
 \code{extra\_pa\_spread\_\{10,0\}dB.mat} & Fig.~8 & 功率分配 vs $S$ \\
 \code{extra\_as\_swap\_check.mat} & 第~V-A 节脚注 & AS 交换搜索 vs 穷举（$N\le10$）\\

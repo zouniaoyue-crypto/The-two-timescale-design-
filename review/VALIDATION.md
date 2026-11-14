@@ -127,3 +127,33 @@ Other executed checks: Fig. 4 data (`fig4_convergence.mat`, N = 8, 20 dB): grid 
 
 Open items after this round: I73 (optional new reference on antenna movement time, needs the author's approval);
 I34–I36 unchanged; author information placeholders.
+
+## Round rev-5b — author's selection of the referee-style comments (Octave 8.4; TeX Live pdflatex/xelatex)
+
+| Check | Method | Result |
+|---|---|---|
+| Build | `pdflatex` ×3 | 15 pages (limit 15); 0 errors, 0 undefined references, 0 overfull boxes |
+| Code readme | `xelatex` ×2 | 15 pages; 0 errors, 0 overfull boxes |
+| References | first-citation order vs `\bibitem` order (script) | identical (27 references; HuSPL2024 moved to [6]) |
+| New/changed citations | Crossref (Tang et al., DOI 10.1109/TCOMM.2024.3465369); arXiv:2412.19656 (Cheng et al.); arXiv:2311.07104v1, Sec. I (Hu et al.) | metadata verified; Hu et al. state that FPA steering vectors weaken the secure beamforming gain due to the spatial correlation over desired and undesired angles; the survey [2] alone does not state the direction/LoS part |
+| Displays | `check.py` (before/after) | changed only as intended: Lemma 1 (means only), (30) via ρ₁ (same expression), (32)–(33) with Ξ, (40) with μ |
+| AS swap search re-runs | `rerun_as_swap` (Figs. 5, 6(a), 7(a), 7(b)); `extra_num_antennas([], [4 6 8 10], {'AS'})` | other schemes bit-identical (`isequal`); AS averages change by ≤ 0.003 bps/Hz (e.g., 3.983 → 3.980 at 0 dB, 17.24 at 20 dB unchanged); per-drop AS ESSR for N = 4, 6, 8, 10 bit-identical to `essrSwap` in `extra_as_swap_check.mat` |
+| Figures | `replot_all` (xvfb, Liberation Serif); PNG row scan | all 10 panels 2100 × 1470 px with identical margins; Fig. 5(a) inset at 20 ± 0.5 dB |
+| Connectors | grep | "Hence" 18 → 5; "thus" 11 → 13; "Since" 37 → 36 |
+
+`verify_numbers` after the AS re-runs (every quoted number unchanged):
+
+| Sec. | Quantity | Recomputed | Text |
+|---|---|---|---|
+| V-A | ρ₁ of the FPA at Δ = 0.1 (min over drops); grid halving; SE at 20 dB | 0.9439; 0.0107%; 0.545% | exceeds 0.94; 0.01%; 0.55% |
+| V-A (footnote) | swap search: maximum metric (worst N ≤ 10); largest average-ESSR difference | 92%; 0.0228% | at least 92%; less than 0.03% |
+| V-B | Eve-rate errors; ESSR approx./actual at 20 dB; gap range over the schemes | 0.0524 / 0.0128; 18.985 / 20.749; 1.5244–1.7650 | 0.052 / 0.013; 18.98 / 20.75; 1.52–1.76 |
+| V-C | monotone; iterations to 99% of the average increase | yes; 15 | converges within about 15 iterations |
+| V-D | gains over rate-oriented MA / FPA; AN fractions (proposed, FPA; others) | 14.79% / 31.18%; 0.270, 0.471; 0.40–0.43 | 14.8% / 31.2%; 0.27 / 0.47; comparable |
+| V-D | gain over FPA at 20 dB: proposed / rate-oriented / AS / sparse FPA; AS < rate-oriented at all SNRs | 4.93 / 2.26 / 1.42 / 1.93; yes | less than half; even smaller |
+| V-E | proposed − AS at A = 1.5λ / 2λ | 0.03 / 0.90 | comparable only for the smallest region |
+| V-E | proposed N = 4 − FPA N = 12; proposed N = 8 − rate-oriented N = 16; gains over FPA and AS vs N | +0.52; +0.23; decreasing (7.67 → 3.50; 5.47 → 2.18) | outperforms; decrease with N |
+| V-G | 10 dB: largest gain for S ≤ 10 dB; S = 20 dB; S = 20 dB at 0 / 10 / 20 dB | 1.34%; 13.87%; 40.33% / 13.87% / 0.78% | close; 14%; 40% / 14% / below 1% |
+
+Not adopted by the author in this round: comments 1, 2, 3, 5, 7, 13, 14, 19, 20, 22 (ISSUES: kept).
+Open items: I73, I34, I36; author information placeholders.

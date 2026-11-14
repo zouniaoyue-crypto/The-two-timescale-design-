@@ -23,7 +23,7 @@ if nargin >= 2 && ~isempty(resD1)
     j = find(strcmp(resD1.schemes, 'FPA_full'), 1);    % rate-oriented MA curve
     plot_curve(ax, resD1.values, resD1.essr(:, j), items{k});
     set(ax, 'YLim', [3 11], 'YTick', 3:1:11);
-    axes_note(ax, 0.97, 0.29, 'Rate-oriented MA = FPA', 'right', 'top');
+    axes_note(ax, 0.97, 0.25, 'Rate-oriented MA = FPA', 'right', 'top');
     manual_legend(gcf, [m(1) + 0.06, m(2) + 1.97 - 0.50, 2.30, 0.46], lg, 1.15, 0.14);
     save_figure('fig7b_essr_offset_M1');
 end
