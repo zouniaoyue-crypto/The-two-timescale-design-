@@ -2,9 +2,9 @@ function res = extra_num_antennas(prm, Nvals, schemesRun)
 %EXTRA_NUM_ANTENNAS  ESSR (Monte Carlo) versus the number of MAs N at the default SNR and
 %   region size (Fig. 6(b) of main.tex). For each N, the FPA is a 2 x N/2 UPA with lambda/2
 %   spacing, the sparse FPA a 2 x N/2 UPA spanning the movable region, and AS selects N of
-%   the 2N antennas of a 4 x N/2 UPA with lambda/2 spacing, by exhaustive search for
-%   N <= 10 and by the swap search (as_swap.m, validated in extra_as_swap_check.m) for
-%   N >= 12, where nchoosek(2N, N) exceeds prm.asMaxSubsets (2.7e6 subsets for N = 12).
+%   the 2N antennas of a 4 x N/2 UPA with lambda/2 spacing by the swap search (as_swap.m)
+%   for all N, as in the other figures; the exhaustive search over nchoosek(2N, N) subsets
+%   (2.7e6 for N = 12) is used only for the validation in extra_as_swap_check.m (N <= 10).
 %   Every N is saved in results/extra_num_antennas_N<N>.mat. Since the values of N use the
 %   same drops but are otherwise independent, they can be run in parallel sessions, e.g.,
 %   extra_num_antennas([], [4 16]) and extra_num_antennas([], [6 14]); as soon as all

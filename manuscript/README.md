@@ -31,7 +31,7 @@ In MATLAB or Octave, from `manuscript/ma_secrecy_matlab/`:
 |---|---|
 | `check_implementation` | self-test (gradient, water-filling, monotonicity), about 1 min |
 | `verify_numbers` | recomputes every number quoted in Section V from `results/*.mat`, about 10 s |
-| `replot_all` | redraws Figs. 3–7 from the stored results (Octave: `xvfb-run -a octave --no-gui --eval replot_all`) |
+| `replot_all` | redraws Figs. 3–8 from the stored results (Octave: `xvfb-run -a octave --no-gui --eval replot_all`) |
 | `run_all` | reruns all simulations (several hours; see `readme.pdf`) |
 
 ## Information the author must supply
@@ -39,4 +39,4 @@ In MATLAB or Octave, from `manuscript/ma_secrecy_matlab/`:
 - Author names, IEEE membership grades, affiliations and e-mail addresses (`main.tex`, lines 43–45).
 - A funding acknowledgment, if any.
 - Decisions on the open items in `../review/ISSUES.md` (I73 optional reference on antenna movement
-  time, I34 extra simulations, I36 vector figures, I35 novelty search and full reference verification).
+  time, I34 extra simulations, I36 vector figures). The novelty search (I35) was completed in rev-5b.

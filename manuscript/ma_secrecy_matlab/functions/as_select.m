@@ -6,10 +6,10 @@ function [T, best, sel] = as_select(sc, prm, Tc)
 %   as_metric.m). Only the selected subset is refined by power_opt.m (Algorithm 1).
 %   The optional Tc (K x 2) overrides the candidate positions (e.g., a UPA spanning C).
 %
-%   Search: exhaustive over all nchoosek(K, N) subsets if their number does not exceed
-%   prm.asMaxSubsets (2e5 by default, i.e., N <= 10 for K = 2N); otherwise, a swap search
-%   (as_swap.m) initialized by greedy removal, which is validated against the exhaustive
-%   search for N <= 10 in extra_as_swap_check.m.
+%   Search: the swap search (as_swap.m) for all N, as in all figures of main.tex
+%   (prm.asMaxSubsets = 0 by default); the exhaustive search over all nchoosek(K, N)
+%   subsets is used only if their number does not exceed prm.asMaxSubsets, i.e., for the
+%   validation of the swap search in extra_as_swap_check.m (N <= 10).
 %   Outputs: T (N x 2) selected positions, best (approximate ESSR of the selected subset),
 %   sel (1 x N indices of the selected candidates).
 
@@ -18,7 +18,7 @@ if nargin < 3                                    % default candidates: lambda/2 
     Tc = upa_positions(prm.asRows*prm.asCols, prm.asRows, prm.asCols, 0.5);
 end
 K = size(Tc, 1);
-if isfield(prm, 'asMaxSubsets'), Smax = prm.asMaxSubsets; else, Smax = 2e5; end
+if isfield(prm, 'asMaxSubsets'), Smax = prm.asMaxSubsets; else, Smax = 0; end
 if nchoosek(K, N) <= Smax                        % exhaustive search
     idx = nchoosek(1:K, N);                      % S x N subsets
     f = as_metric(sc, prm, Tc, idx);

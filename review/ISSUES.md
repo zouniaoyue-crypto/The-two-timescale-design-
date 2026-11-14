@@ -40,7 +40,7 @@ Evidence key: D = derivation, C = code, R = results file, P = reference PDF, X =
 | I32 | L | format | Index Terms alphabetical; "w.r.t." → "with respect to"; "widely studied … [18]" | S-F1/F4/F5 | text | adopt | fixed |
 | I33 | — | V-H | small table for robustness numbers | S-D4 | conflicts with Round-12 decision to remove tables | keep text; obsolete: Sec. V-H removed in rev-4c (I70) | closed |
 | I34 | — | V | new simulations E1–E6 | S-E/G2 | — | not added | needs-decision |
-| I35 | — | Intro | novelty search 2025–2026 | S-A2 | OpenAlex rate-limited (HTTP 429) | not completed | unverified |
+| I35 | — | Intro | novelty search 2025–2026 | S-A2 | OpenAlex rate-limited (HTTP 429) | searched in rev-5a/5b (arXiv, Crossref, web): no two-timescale secure MA design found; closest works [13]–[15] cited | fixed |
 | I36 | — | figures | vector PDF figures | S-D7 | — | PNG kept unless export verified | needs-decision |
 | I37 | L | Rem. 2, (28) | splitting (28) over two lines pushed one reference to p. 15; one-line form had its number on a separate line | own | D (algebra), X (2×10⁵ random cases) | equivalent one-line form d = A(N + 1/(κ₁+1) − c₁) | fixed |
 | I38 | L | Rem. 3, (29) | equation number pushed to its own line | own | layout | two-line align | fixed |
@@ -117,25 +117,37 @@ Comment numbers refer to the report; all items await the author's decision.
 
 | ID | Sev | Location | Finding (report comment) | Evidence | Proposed action | Status |
 |---|---|---|---|---|---|---|
-| I86 | H | V-F / II-B | no evidence of robustness to errors in Eve's statistical CSI after V-H removal (C1) | R extra_eve_aod_error.mat | figure or 2–3 sentences | proposed |
-| I87 | H | V-D, Figs. 5, 6(b), 7(a) | strongest benchmark (region-wide AS, 19.34 vs 20.75) absent from headline comparisons (C2) | R fig6_region, extra_as_region | add region-wide AS everywhere; quote gain over strongest benchmark | proposed |
-| I88 | H | V-B | design quality of surrogate (35) shown only indirectly (C3) | — | rank-consistency check; stochastic baseline optional | proposed |
-| I89 | H | Introduction | novelty positioning; AN-aided MA works; comparison table (C4) | web search (to verify) | table + approved references | proposed |
-| I90 | H | III-C, App. B, Fig. 3 | unproven asymptotic claim; heuristic trace calibration; relative errors (C5) | D, R fig3_accuracy | reword; report relative errors | proposed |
-| I91 | M | III-A | isotropic AN despite known LoS direction of Eve (C6) | D | justify; benchmark optional | proposed |
-| I92 | M | V | ESSR vs Rician factor and vs M missing (C7) | — | new simulations | proposed |
-| I93 | M | V-A | parameter table and itemized benchmarks (C8) | text | restructure | proposed |
-| I94 | M | Figs. 3–7 | readability, captions, confidence (C9) | figures | replot selectively | proposed |
-| I95 | M | whole text | "Hence" ×18, "Since" ×37, mechanism sentence ×6 (C10) | counts | reduce | proposed |
-| I96 | M | III-C | paragraph after Lemma 1 (C11) | text | three sentences | proposed |
-| I97 | M | V-E, V-G | results mixed with implementation details (C12) | text | move details | proposed |
-| I98 | M | II-B | movement time / pilot overhead (C13) | text | one sentence | proposed |
-| I99 | L | V-A | Δ in coordinate space (C14) | text | report physical separation | proposed |
-| I100 | L | Introduction | contributions explicit (C15) | text | author decision | proposed |
-| I101 | L | III-D, V | terminology/notation consistency (C16) | text | define ρ_m once; Θ_m symbol | proposed |
-| I102 | L | Introduction | uncited claim; double "however" (C17) | text | cite; "By contrast" | proposed |
-| I103 | L | Lemma 1 | variances only qualitative (C18) | text | move to App. A | proposed |
-| I104 | L | Alg. 2 | acceptance test reason (C19) | text | one clause | proposed |
-| I105 | L | IV-C | dominant complexity term, run time (C20) | text | add | proposed |
-| I106 | L | V-D | "as predicted by (33)" (C21) | text | "consistent with" | proposed |
-| I107 | L | VI | generic conclusion (C22) | text | quantitative takeaway + limitation | proposed |
+| I86 | H | V-F / II-B | no evidence of robustness to errors in Eve's statistical CSI after V-H removal (C1) | R extra_eve_aod_error.mat | figure or 2–3 sentences | kept (author: not adopted in rev-5b) |
+| I87 | H | V-D, Figs. 5, 6(b), 7(a) | strongest benchmark (region-wide AS, 19.34 vs 20.75) absent from headline comparisons (C2) | R fig6_region, extra_as_region | add region-wide AS everywhere; quote gain over strongest benchmark | kept (author: not adopted in rev-5b) |
+| I88 | H | V-B | design quality of surrogate (35) shown only indirectly (C3) | — | rank-consistency check; stochastic baseline optional | kept (author: not adopted in rev-5b) |
+| I89 | H | Introduction | novelty positioning; AN-aided MA works; comparison table (C4) | web search (to verify) | table + approved references | fixed (rev-5b): novelty vs [15] (Xie) and [17] (Zheng) explicit; AN-aided MA works [13] (Tang, TCOM 2025) and [14] (Cheng, arXiv) added after verification; no table (author) |
+| I90 | H | III-C, App. B, Fig. 3 | unproven asymptotic claim; heuristic trace calibration; relative errors (C5) | D, R fig3_accuracy | reword; report relative errors | kept (author: not adopted in rev-5b) |
+| I91 | M | III-A | isotropic AN despite known LoS direction of Eve (C6) | D | justify; benchmark optional | fixed (rev-5b): one justification sentence in III-A (isotropic AN needs no knowledge of Eve; focus on positions); no benchmark (author) |
+| I92 | M | V | ESSR vs Rician factor and vs M missing (C7) | — | new simulations | kept (author: not adopted in rev-5b) |
+| I93 | M | V-A | parameter table and itemized benchmarks (C8) | text | restructure | fixed (rev-5b): V-A split into setup / algorithm / evaluation paragraphs; benchmarks itemized; AS swap search in a footnote; no table (author) |
+| I94 | M | Figs. 3–7 | readability, captions, confidence (C9) | figures | replot selectively | fixed in part (rev-5b): Fig. 4 axis 0–30; Fig. 5(a) zoom inset; Fig. 6(a) one AS; AS = swap search in all figures; Fig. 7 split (M = 3, M = 1) + new Fig. 8; captions with key parameters. Fig. 3(a) axis and confidence bands not adopted (author) |
+| I95 | M | whole text | "Hence" ×18, "Since" ×37, mechanism sentence ×6 (C10) | counts | reduce | fixed (rev-5b): "Hence" 18 → 5; mechanism sentence in Sec. V replaced by references to Sec. III-D |
+| I96 | M | III-C | paragraph after Lemma 1 (C11) | text | three sentences | fixed (rev-5b): paragraph after Lemma 1 restructured (main step → accuracy condition → asymptotic exactness → not a bound); claim kept with its condition |
+| I97 | M | V-E, V-G | results mixed with implementation details (C12) | text | move details | fixed (rev-5b): AS search to V-A footnote; EP [·]⁺ detail to a V-G footnote; results paragraphs start with the figure |
+| I98 | M | II-B | movement time / pilot overhead (C13) | text | one sentence | kept (author: not adopted in rev-5b) |
+| I99 | L | V-A | Δ in coordinate space (C14) | text | report physical separation | kept (author: not adopted in rev-5b) |
+| I100 | L | Introduction | contributions explicit (C15) | text | author decision | fixed (rev-5b): "First/Second/Third" contributions; one-sentence outline |
+| I101 | L | III-D, V | terminology/notation consistency (C16) | text | define ρ_m once; Θ_m symbol | fixed (rev-5b): ρ_m(t) (normalized LoS correlation between Eve and the m-th LU) defined in III-D and reused; WF auxiliary ρ_m(ν) → μ_m(ν); Θ_m → Ξ_m; P⊥ without (t); F convention stated; N_bt → N_δ |
+| I102 | L | Introduction | uncited claim; double "however" (C17) | text | cite; "By contrast" | fixed (rev-5b): claim merged with the separability sentence and cited to [2], [6] (Hu et al., SPL 2024, Sec. I; moved to [6]); second "however" → "By contrast" |
+| I103 | L | Lemma 1 | variances only qualitative (C18) | text | move to App. A | fixed (rev-5b): Lemma 1 keeps means and independence; variances in App. A |
+| I104 | L | Alg. 2 | acceptance test reason (C19) | text | one clause | kept (author: not adopted in rev-5b) |
+| I105 | L | IV-C | dominant complexity term, run time (C20) | text | add | kept (author: not adopted in rev-5b) |
+| I106 | L | V-D | "as predicted by (33)" (C21) | text | "consistent with" | fixed (rev-5b): "which is consistent with (33)" |
+| I107 | L | VI | generic conclusion (C22) | text | quantitative takeaway + limitation | kept (author: not adopted in rev-5b) |
+
+## Round rev-5b — author's selection of the rev-5a comments
+
+The author selected comments 4, 6, 8, 9 (Fig. 4, Fig. 5(a), Fig. 6(a), Fig. 6(b), Fig. 7, captions), 10, 11, 12, 15, 16, 17, 18,
+and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not adopted; no comparison or parameter table.
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I108 | L | Figs. 5–7 | AS used the exhaustive search for N ≤ 10 but the swap search for N ≥ 12 (Fig. 6(b)) | C as_select.m | swap search for all N (`asMaxSubsets = 0`); AS re-run with `rerun_as_swap.m` on the same drops and channel samples; exhaustive search kept only for the validation in the footnote | fixed |
+| I109 | L | figures (Octave) | first figure after `close all` was shifted down by 0.27 in (qt canvas includes the tool bar), cutting the x-label | X (PNG row scan) | `new_figure.m`: MenuBar/ToolBar none | fixed |
+| I110 | L | Fig. 5(a) | 15–25 dB inset would not magnify (curves rise ≈10 bps/Hz over the window) | X prototype | inset at 20 ± 0.5 dB (≈5–6× vertical magnification), window marked in the main axes | fixed |
+

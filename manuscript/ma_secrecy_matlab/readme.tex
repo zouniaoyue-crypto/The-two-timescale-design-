@@ -33,7 +33,7 @@
 % -----------------------------------------------------------------------------
 \section{概述}
 % -----------------------------------------------------------------------------
-本代码包（文件夹 \code{ma\_secrecy\_matlab}）复现稿件第 V 节的全部仿真结果：Fig.~3--Fig.~7 以及第~V 节正文引用的全部数值（原第~V-H 节已删除，相应的鲁棒性仿真保留为补充脚本，见 \code{run\_all.m} 中的 \code{SUPPLEMENTARY}）。代码同时兼容 MATLAB（R2018b 及以上；导出矢量 PDF 推荐 R2020a 及以上）与 GNU Octave（$\ge 7$；本版结果用 Octave 8.4 算出），不需要任何工具箱，也不需要 CVX：
+本代码包（文件夹 \code{ma\_secrecy\_matlab}）复现稿件第 V 节的全部仿真结果：Fig.~3--Fig.~8 以及第~V 节正文引用的全部数值（原第~V-H 节已删除，相应的鲁棒性仿真保留为补充脚本，见 \code{run\_all.m} 中的 \code{SUPPLEMENTARY}）。代码同时兼容 MATLAB（R2018b 及以上；导出矢量 PDF 推荐 R2020a 及以上）与 GNU Octave（$\ge 7$；本版结果用 Octave 8.4 算出），不需要任何工具箱，也不需要 CVX：
 \begin{itemize}
 \item 功率分配（算法~1）：保密注水（命题~2）+ 二分法 + 一维“粗网格 + 细网格”搜索；
 \item 天线位置（算法~2）：逐天线更新，每根天线先在可移动区域的网格上做网格搜索（Stage~1，式 (49)），再做 MM 精修（Stage~2，式 (54)--(58)）；MM 子问题是二维凸 QP，用“枚举边与顶点”的方法精确求解；
@@ -85,18 +85,19 @@ replot\_all.m & 只从 \code{results/*.mat} 重画全部图，不重新仿真。
 fig3\_accuracy.m & Fig.~3：闭式近似在\textbf{所提设计处}的精度。每个横轴点对 100 个场景运行所提设计（算法~2 优化的位置与功率，\code{accuracy\_point.m}），再分别用蒙特卡洛（$10^4$ 个样本）与式 (20)、(27) 计算 LU 的遍历和速率与 Eve 的遍历窃听和速率；(a) 横轴为发射 SNR（$\kappa=10$ dB），(b) 横轴为莱斯因子（20 dB）。\\
 fig4\_convergence.m & Fig.~4：算法~2 的收敛曲线。$(N,\Ptot/\sigma^2)\in\{8,12\}\times\{10,20\}$ dB，UPA 初始化，关闭停止准则（\code{aoTol = 0}）固定迭代 50 次，对 100 个场景取平均。同时保存：默认停止准则下的终止迭代次数 \code{res.itStop}；两组随机初始化的轨迹 \code{res.histRnd}；去掉 Stage~1 网格搜索（纯 MM）的轨迹 \code{res.histMM}（图中灰色点线）。\\
 fig5\_snr.m & Fig.~5：(a) ESSR 与 (b) AN 功率占比 vs 发射 SNR（5 种方案，含稀疏 FPA）；同时计算无 AN 方案（Fig.~5(a) 中的砖红色点线）以及 TIN Eve 下的 ESSR（补充结果，正文不再引用）。\\
-fig6\_region.m & Fig.~6(a)：ESSR vs 区域边长 $A/\lambda$（5 种方案，含稀疏 FPA）。若 \code{extra\_as\_region}、\code{extra\_num\_antennas} 的结果已存在，同时画出 Fig.~6(a) 中的 “AS, region-wide” 曲线与 Fig.~6(b)。\\
+fig6\_region.m & Fig.~6(a)：ESSR vs 区域边长 $A/\lambda$（5 种方案，含稀疏 FPA）。若 \code{extra\_num\_antennas} 的结果已存在，同时画出 Fig.~6(b)。\\
 fig7\_power\_allocation.m & 第~V-G 节（无图）：三种长时功率分配（所提、等功率+优化 $\alpha$、等功率+$\alpha=0.5$）下的 ESSR vs SNR（0--30 dB），位置均由算法~2 针对各自的功率分配优化；正文引用其相对增益（0、10、20 dB）。第二个参数为 LU 衰落差异（默认 20：$[\beta_1,\beta_2,\beta_3]=[0,-10,-20]$ dB）。本版不再作图（原 Fig.~7(a) 让位于 Fig.~6(b) 的 ESSR vs $N$）。\\ \midrule
 extra\_eve\_aod\_error.m & 补充脚本（原第~V-H 节，\code{SUPPLEMENTARY = true} 时运行）：BS 已知的 Eve AoD 有误差 $\Delta_{\rm err}\in\{0,0.01,0.02,0.05,0.1\}$ rad 时各方案的 ESSR（20 dB）。\\
-extra\_as\_region.m & Fig.~6(a) 中的 “AS, region-wide”：$2N$ 个候选天线铺满区域（间距 $A/3$）的 AS，ESSR vs $A$（不涉及 MA 优化）。\\
-extra\_num\_antennas.m & \textbf{新增。}Fig.~6(b)：ESSR vs MA 数 $N\in\{4,6,\ldots,16\}$（20 dB，$A=4\lambda$）。每个 $N$：FPA 为 $2\times(N/2)$ 的 $\lambda/2$ UPA，稀疏 FPA 为铺满区域的 $2\times(N/2)$ UPA，AS 从 $4\times(N/2)$ 的 $\lambda/2$ UPA 中选 $N$ 个：$N\le10$ 时穷举，$N\ge12$ 时子集数过多（$N=12$ 时 $\binom{24}{12}\approx2.7\times10^6$，$N=16$ 时 $\binom{32}{16}\approx6.0\times10^8$），改用交换搜索（\code{as\_swap.m}）。第三个参数可只运行部分方案并并入已有结果，例如 \code{extra\_num\_antennas([], [12 14 16], \{'AS'\})}。每个 $N$ 单独保存为 \code{extra\_num\_antennas\_N<N>.mat}，不同 $N$ 可在多个会话中并行运行（第二个参数为 $N$ 的子集），全部就绪后自动合并为 \code{extra\_num\_antennas.mat}。\\
+extra\_as\_region.m & 补充脚本（\code{SUPPLEMENTARY = true} 时运行，正文不再引用；原 Fig.~6(a) 中的 “AS, region-wide” 曲线）：$2N$ 个候选天线铺满区域（间距 $A/3$）的 AS，ESSR vs $A$（不涉及 MA 优化）。\\
+extra\_num\_antennas.m & \textbf{新增。}Fig.~6(b)：ESSR vs MA 数 $N\in\{4,6,\ldots,16\}$（20 dB，$A=4\lambda$）。每个 $N$：FPA 为 $2\times(N/2)$ 的 $\lambda/2$ UPA，稀疏 FPA 为铺满区域的 $2\times(N/2)$ UPA，AS 从 $4\times(N/2)$ 的 $\lambda/2$ UPA 中选 $N$ 个，对所有 $N$ 都用交换搜索（\code{as\_swap.m}，与 Fig.~5、7 一致；穷举在 $N=12$ 时需 $\binom{24}{12}\approx2.7\times10^6$ 个子集，$N=16$ 时需 $\binom{32}{16}\approx6.0\times10^8$ 个，$N\le10$ 时与穷举的对比见 \code{extra\_as\_swap\_check}）。第三个参数可只运行部分方案并并入已有结果，例如 \code{extra\_num\_antennas([], [12 14 16], \{'AS'\})}。每个 $N$ 单独保存为 \code{extra\_num\_antennas\_N<N>.mat}，不同 $N$ 可在多个会话中并行运行（第二个参数为 $N$ 的子集），全部就绪后自动合并为 \code{extra\_num\_antennas.mat}。\\
 extra\_angle\_offset.m & Fig.~7(a)：ESSR vs Eve 相对 LU 1 的 AoD 偏移 $\Delta$（$M=3$）。\\
-extra\_single\_user.m & Fig.~7(a)：单用户（$M=1$）的保密速率与 AN 占比 vs $\Delta$。\\
+extra\_single\_user.m & Fig.~7(b)：单用户（$M=1$）的保密速率与 AN 占比 vs $\Delta$。\\
 extra\_random\_eve.m & 补充脚本（原第~V-H 节）：Eve 的 AoD 与 LU 无关（与 LU 同分布，\code{Delta = Inf}）时 5 种方案的 ESSR（20 dB）；第二个参数为 $M$，正文用 $M=3$ 与 $M=1$。\\
-extra\_pa\_spread.m & Fig.~7(b)：三种功率分配的 ESSR vs LU 的大尺度衰落差异 $S$（第二个参数为 SNR；Fig.~7(b) 用 10 dB，0 dB 的结果只在第~V-G 节正文中引用）。\\
+extra\_pa\_spread.m & Fig.~8：三种功率分配的 ESSR vs LU 的大尺度衰落差异 $S$（第二个参数为 SNR；Fig.~8 用 10 dB，0 dB 的结果只在第~V-G 节正文中引用）。\\
 extra\_grid\_check.m & 第~V-A 节（正文引用数值）：Stage~1 网格间距减半（$\lambda/20$）时所提设计的 ESSR 变化（默认参数，前 20 个场景，与 \code{sweep\_schemes} 的场景相同）。\\
-extra\_as\_swap\_check.m & 第~V-E 节（正文引用数值）：在 $N\le10$ 的 100 个场景上比较 AS 的交换搜索与穷举搜索（选中的子集是否相同、选择指标与 ESSR 的差异），结果保存为 \code{extra\_as\_swap\_check.mat}；须在 \code{extra\_num\_antennas} 之后运行。\\
+extra\_as\_swap\_check.m & 第~V-A 节 AS 基准的脚注（正文引用数值）：在 $N\le10$ 的 100 个场景上比较 AS 的交换搜索与穷举搜索（选中的子集是否相同、选择指标与 ESSR 的差异），结果保存为 \code{extra\_as\_swap\_check.mat}；须在 \code{extra\_num\_antennas} 之后运行。\\
 verify\_numbers.m & 由 \code{results/*.mat} 重新计算第 V 节正文中的全部数值并与正文对照打印（不运行仿真）。\\
+rerun\_as\_swap.m & \textbf{新增。}只重算已有结果文件中的 AS 基准（交换搜索，场景与信道样本不变），其余方案的结果保持不变，例如 \code{rerun\_as\_swap('fig5\_snr')}；可用于 \code{fig5\_snr}、\code{fig6\_region}、\code{extra\_angle\_offset}、\code{extra\_single\_user}。Fig.~6(b) 中 $N\le10$ 的 AS 用 \code{extra\_num\_antennas([], [4 6 8 10], \{'AS'\})} 重算。本版用它把各图的 AS 统一为交换搜索。\\
 \bottomrule
 \end{longtable}
 
@@ -134,9 +135,9 @@ lin\_constraints.m & 子问题 (57) 的线性约束：区域盒约束 + 线性�
 proj\_polygon.m & 二维凸 QP 的精确解（点到凸多边形的投影：枚举各约束线上的投影与两两交点）。若舍入误差使所有候选点都不可行（天线很密、多个相邻 MA 恰好相距 $D_{\min}$ 时多边形退化为线段），返回当前位置（可行，MM 步长为零，目标值不下降）；$N=16$ 时出现过这种情况。\\
 ao\_optimize.m & 算法~2：\code{position\_sweep} 与 \code{power\_opt} 交替迭代；新功率分配只在目标值不下降时接受；相对增量小于 \code{aoTol} 或达到 \code{aoMaxIter} 时停止。返回位置、功率与目标值历史 \code{hist}。\\
 rate\_oriented\_positions.m & 基准“速率导向 MA”：最大化 LU 的近似遍历和速率（等功率、忽略 Eve，即令 $\kappa_e=0$、$q=0$），使用与所提方案\textbf{相同}的位置更新与初始化（公平比较）。\\
-as\_select.m & 基准“天线选择（AS）”：用统计 CSI 计算各子集的近似 ESSR（与所提方案相同的目标，见 \code{as\_metric.m}）。子集数不超过 \code{asMaxSubsets}（默认 $2\times10^5$，即 $N\le10$）时穷举全部 $\binom{2N}{N}$ 个子集（$N=8$ 时 12870 个），否则调用交换搜索 \code{as\_swap.m}；可传入其他候选位置（如铺满区域的 UPA）。\\
+as\_select.m & 基准“天线选择（AS）”：用统计 CSI 计算各子集的近似 ESSR（与所提方案相同的目标，见 \code{as\_metric.m}）。默认对所有 $N$ 调用交换搜索 \code{as\_swap.m}；只有子集数不超过 \code{asMaxSubsets}（默认 0）时才穷举全部 $\binom{2N}{N}$ 个子集（$N=8$ 时 12870 个），仅用于 \code{extra\_as\_swap\_check} 中的验证；可传入其他候选位置（如铺满区域的 UPA）。\\
 as\_metric.m & AS 的选择指标：对一批子集向量化计算近似 ESSR（在 \code{asGrid} 个 $q$ 上取最大，每个 $q$ 用保密注水），分块处理以控制内存。\\
-as\_swap.m & AS 的低复杂度子集搜索（$N\ge12$）：以“贪婪删除”得到的子集与 4 个随机子集为初值，每步在全部 $N(K-N)$ 个“选中/未选中”交换中取指标最大者，直到指标不再增加，最后取各初值结果中最好的；随机初值用固定种子，并在退出时恢复全局随机数状态（不影响蒙特卡洛评估）。\\
+as\_swap.m & AS 的低复杂度子集搜索（所有 $N$）：以“贪婪删除”得到的子集与 4 个随机子集为初值，每步在全部 $N(K-N)$ 个“选中/未选中”交换中取指标最大者，直到指标不再增加，最后取各初值结果中最好的；随机初值用固定种子，并在退出时恢复全局随机数状态（不影响蒙特卡洛评估）。\\
 \bottomrule
 \end{longtable}
 
@@ -147,11 +148,11 @@ evaluate\_schemes.m & 对一个场景优化并评估一组方案（方案代码�
 mc\_rates.m & 蒙特卡洛精确评估（ZF + 零空间 AN）：最坏情况 Eve 的 ESSR（主结果）与 TIN Eve（补充结果）的 ESSR；不显式构造 $N\times N$ 投影矩阵。\\
 batch\_inv\_hpd.m & 对 $S$ 个 $M\times M$ Hermitian 正定矩阵批量求逆（向量化 Gauss--Jordan）。\\
 sweep\_schemes.m & 对某个参数（\code{'P\_dB'}、\code{'A'}、\code{'N'}、\code{'Delta'}、\code{'eveAoDErr'}、\code{'spread'} 等）扫描，对场景取平均；同时保存每个场景的 ESSR（\code{essrDrops}，可用于置信区间与逐场景比较）。\\
-main\_schemes.m & Fig.~5、Fig.~6、Fig.~7(a) 使用的 5 种方案（所提、速率导向 MA、AS、稀疏 FPA、FPA）。\\
+main\_schemes.m & Fig.~5、Fig.~6、Fig.~7 使用的 5 种方案（所提、速率导向 MA、AS、稀疏 FPA、FPA）。\\
 pick\_schemes.m & 从结果中按方案名取列。\\
 print\_table\_eve.m, print\_sweep.m & 在命令行打印 TIN Eve 的补充数值与 \code{extra\_*.m} 的结果（各方案 ESSR、AN 占比、相对增益）。\\
 results\_dir.m & 结果文件夹的路径（默认 \code{results/}，不存在时自动创建）；设置环境变量 \code{MA\_RESULTS\_DIR} 可把复核运行的输出写到别处，以免覆盖随稿提供的结果。\\
-load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \code{res}，文件不存在时返回空（Fig.~6、7 组合多个结果文件时使用）。\\
+load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \code{res}，文件不存在时返回空（Fig.~6--8 组合多个结果文件时使用）。\\
 \bottomrule
 \end{longtable}
 
@@ -165,7 +166,7 @@ plot\_curve.m, plot\_schemes.m, curve\_style.m & 画一条曲线（细线、空�
 fig\_palette.m & \textbf{新增。}统一的低饱和度配色：砖红 \#B03A2E（所提）、钢蓝 \#2E6DB4、青绿 \#2A9D8F、赭黄 \#C7852B、灰紫 \#7B5EA7，参考方案用中性灰；同一图中出现的颜色组合均通过色觉缺陷（CVD）分离度与对比度检验，且每条曲线另有独立的标记与线型，灰度打印仍可区分。\\
 label\_axes.m, add\_legend.m, axes\_note.m & 坐标轴标签、内置图例、坐标轴内文字标注。\\
 manual\_legend.m & 在透明覆盖坐标轴上按英寸位置“手绘”图例（多行多列、符号与曲线完全一致），MATLAB 与 Octave 的显示效果相同。Fig.~3、4、6 与 7 使用。\\
-plot\_fig3.m -- plot\_fig7.m & 各图的绘制（坐标范围、图例位置、文字标注）。\\
+plot\_fig3.m -- plot\_fig8.m & 各图的绘制（坐标范围、图例位置、文字标注、Fig.~5(a) 的局部放大图）。\\
 save\_figure.m & 导出（MATLAB：矢量 PDF/EPS + PNG + FIG；Octave：600 dpi PNG）。\\
 \bottomrule
 \end{longtable}
@@ -200,10 +201,10 @@ nGrid & 41 & $Q$ & 一维搜索（$q$ 或 $\alpha$）的粗、细网格点数 \\
 nBisect & 60 & $N_{\rm b}$ & 水位 $\nu$ 的二分次数 \\
 numInit & 3 & -- & 初始化个数：UPA + (numInit$-1$) 组随机位置，取目标值最大者 \\
 asGrid & 21 & -- & AS 选子集时 $q$ 的粗网格点数（选定后再用 \code{power\_opt} 精确优化）\\
-asMaxSubsets & $2\times10^5$ & -- & AS：子集数不超过该值时穷举（$N\le10$），否则用交换搜索 \\
+asMaxSubsets & 0 & -- & AS：子集数不超过该值时才穷举；默认 0，即所有 $N$ 都用交换搜索（\code{extra\_as\_swap\_check} 中设为 \code{inf} 以穷举验证） \\
 asSwapStarts & 5 & -- & AS 交换搜索的初值个数（贪婪删除 + 4 个随机子集）\\
 asSwapMaxIter & 100 & -- & AS 交换搜索中每个初值的最大交换次数 \\
-alphaFix & 0.5 & $\alpha$ & “等功率、固定 $\alpha$”基准（Fig.~7）的功率分割因子 \\ \midrule
+alphaFix & 0.5 & $\alpha$ & “等功率、固定 $\alpha$”基准（Fig.~8）的功率分割因子 \\ \midrule
 S & 5000 & -- & 每次蒙特卡洛评估的信道样本数（Fig.~3 至少用 $10^4$）\\
 numDrops & 100 & -- & 每个横轴点平均的随机场景数（所有方案共用）\\
 seed & 2026 & -- & 随机种子（第 $i$ 个场景用 \code{seed}$+i$，结果可逐位复现）\\
@@ -297,13 +298,13 @@ TIN Eve 的 SINR & 补充结果（正文不再引用） & \code{mc\_rates.m}（\
 \multicolumn{3}{l}{\textbf{Fig.~5、6、7(a) 的 5 种方案}（\code{main\_schemes.m}；功率由算法~1 优化）}\\
 MA\_full & Proposed & 所提方案：算法~2 联合优化位置、$p_m$ 与 $q$ \\
 MA\_rate & Rate-oriented MA & Zheng 等（TCOM 2025）的双时间尺度设计 + AN：位置最大化 LU 的近似遍历和速率（忽略 Eve），再用算法~1 优化 $(\mathbf p,q)$ \\
-AS & AS & 从 $4\times(N/2)$ 的 $\lambda/2$ UPA（$N=8$ 时 $4\times4$）中按近似 ESSR 选 $N$ 个天线（$N\le10$ 穷举，$N\ge12$ 交换搜索），再用算法~1 \\
+AS & AS & 从 $4\times(N/2)$ 的 $\lambda/2$ UPA（$N=8$ 时 $4\times4$）中按近似 ESSR 选 $N$ 个天线（交换搜索），再用算法~1 \\
 SPA\_full & Sparse FPA & 铺满区域的稀疏 $2\times(N/2)$ UPA（间距 $2A/(N-2)$、$A$；$N=8$ 时为 $A/3$、$A$），与 MA 同孔径但位置固定，用于区分位置优化与大孔径带来的增益 \\
 FPA\_full & FPA & $2\times(N/2)$ 紧凑 UPA（间距 $\lambda/2$）\\ \midrule
 \multicolumn{3}{l}{\textbf{只在部分图表中出现}}\\
 MA\_noAN & Proposed w/o AN & 算法~2，但 $q=0$（Fig.~5(a) 中的砖红色点线与叉号）\\
-AS\_region & AS, region-wide & 候选天线为铺满区域的 $4\times4$ UPA（间距 $A/3$；Fig.~6(a)）\\ \midrule
-\multicolumn{3}{l}{\textbf{Fig.~7(b) 的功率分配对比}（位置均由算法~2 针对各自的功率分配优化）}\\
+AS\_region & AS, region-wide & 候选天线为铺满区域的 $4\times4$ UPA（间距 $A/3$；补充结果，正文不再画出）\\ \midrule
+\multicolumn{3}{l}{\textbf{Fig.~8 的功率分配对比}（位置均由算法~2 针对各自的功率分配优化）}\\
 MA\_full & Proposed PA & 每用户保密注水 + 一维搜索 $q$ \\
 MA\_EPA & EP, opt.\ $\alpha$ & $p_m=\alpha\Ptot/M$，$q=(1-\alpha)\Ptot/(N-M)$，一维搜索 $\alpha$（灰紫色菱形）\\
 MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角）\\
@@ -322,14 +323,15 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角�
 \code{fig5a\_essr\_snr}, \code{fig5b\_an\_fraction} & Fig.~5(a)(b) & ESSR 与 AN 功率占比 vs SNR \\
 \code{fig5\_snr.mat}（字段 \code{essr\_tin}） & 补充结果 & 两种 Eve 模型下的 ESSR \\
 \code{fig6a\_essr\_region}, \code{fig6b\_essr\_antennas} & Fig.~6(a)(b) & ESSR vs 区域边长 $A$ / MA 数 $N$ \\
-\code{fig7a\_essr\_offset}, \code{fig7b\_pa\_spread} & Fig.~7(a)(b) & ESSR vs $\Delta$ / 功率分配 vs $S$ \\
+\code{fig7a\_essr\_offset\_M3}, \code{fig7b\_essr\_offset\_M1} & Fig.~7(a)(b) & ESSR vs $\Delta$（$M=3$ / $M=1$） \\
+\code{fig8\_pa\_spread} & Fig.~8 & 功率分配 vs $S$ \\
 \code{extra\_eve\_aod\_error.mat} & 补充结果 & Eve 的 AoD 误差 \\
-\code{extra\_as\_region.mat} & Fig.~6(a) & 候选天线铺满区域的 AS \\
+\code{extra\_as\_region.mat} & 补充结果 & 候选天线铺满区域的 AS \\
 \code{extra\_num\_antennas.mat} & Fig.~6(b) & ESSR vs MA 数 $N$（各 $N$ 另存为 \code{\_N<N>.mat}）\\
-\code{extra\_angle\_offset.mat}, \code{extra\_single\_user.mat} & Fig.~7(a) & AoD 偏移 $\Delta$；单用户 \\
+\code{extra\_angle\_offset.mat}, \code{extra\_single\_user.mat} & Fig.~7(a)(b) & AoD 偏移 $\Delta$（$M=3$；$M=1$） \\
 \code{extra\_random\_eve\_M\{3,1\}.mat} & 补充结果 & Eve 的 AoD 与 LU 无关 \\
-\code{extra\_pa\_spread\_\{10,0\}dB.mat} & Fig.~7(b) & 功率分配 vs $S$ \\
-\code{extra\_as\_swap\_check.mat} & 第~V-E 节 & AS 交换搜索 vs 穷举（$N\le10$）\\
+\code{extra\_pa\_spread\_\{10,0\}dB.mat} & Fig.~8 & 功率分配 vs $S$ \\
+\code{extra\_as\_swap\_check.mat} & 第~V-A 节脚注 & AS 交换搜索 vs 穷举（$N\le10$）\\
 \code{fig7\_pa\_hetero.mat} & 第~V-G 节 & 功率分配 vs SNR（衰落差异 20 dB，无图）\\
 \code{extra\_grid\_check.mat} & 第~V-A 节 & 网格间距 $\lambda/10$ 与 $\lambda/20$ 的 ESSR 对比 \\
 \bottomrule
@@ -342,10 +344,11 @@ MA\_fix & EP, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（深灰色倒三角�
 % -----------------------------------------------------------------------------
 \begin{description}
 \item[Fig.~3] 钢蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（空心方块 = 蒙特卡洛，实线 = 式 (20)），砖红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（空心三角 = 蒙特卡洛，虚线 = 式 (27)），均在所提设计处计算。式 (27) 与蒙特卡洛几乎重合；式 (20) 偏保守，且差距随莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍。因此在所有测试场景中近似 ESSR 都低于实际 ESSR（理论上它既不是上界也不是下界）；各方案的这一差距相近，近似目标不改变方案间的比较结论。
-\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记）。钢蓝色 = 10 dB，砖红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
-\item[Fig.~5] (a) ESSR（另含砖红色点线与叉号的“Proposed w/o AN”，高 SNR 时饱和）、(b) AN 功率占比 vs SNR。所提方案为砖红色实线与空心圆（线宽略粗），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为灰色虚线与菱形（所有图一致）；所有曲线为细线与空心标记，网格为极浅的灰色实线。
-\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与（紧凑候选阵列的）AS 不随 $A$ 变化，稀疏 FPA 与 “AS, region-wide”（青绿色点线、右三角）的阵列随 $A$ 扩展。(b) ESSR vs MA 数 $N$（$A=4\lambda$）：FPA、稀疏 FPA 与 AS 的阵列随 $N$ 变化（见 \code{extra\_num\_antennas}）；AS 在 $N\le10$ 时为穷举搜索，$N\ge12$ 时为交换搜索（曲线完整）。
-\item[Fig.~7] (a) ESSR vs AoD 偏移 $\Delta$：上方一组曲线为 $M=3$，下方一组为 $M=1$（$M=1$ 时速率导向 MA 与 FPA 完全重合，两者都画出，FPA 画在上层）。(b) ESSR vs 大尺度衰落差异 $S$（10 dB）。砖红色空心圆 = 所提功率分配，灰紫色菱形 = EP + 优化 $\alpha$，深灰色倒三角 = EP + $\alpha=0.5$。(b) 的颜色刻意与 Fig.~5、6、7(a) 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
+\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均，只画线、无标记；横轴只显示前 30 次迭代，各曲线约 15 次内收敛）。钢蓝色 = 10 dB，砖红色 = 20 dB；实线 = $N=8$，虚线 = $N=12$；灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。
+\item[Fig.~5] (a) ESSR（另含砖红色点线与叉号的“Proposed w/o AN”，高 SNR 时饱和）、(b) AN 功率占比 vs SNR。所提方案为砖红色实线与空心圆（线宽略粗），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为灰色虚线与菱形（所有图一致）；所有曲线为细线与空心标记，网格为极浅的灰色实线。(a) 中的局部放大图显示 20 dB 附近 $\pm0.5$ dB 的窗口（主图中用小矩形标出），速率导向 MA、稀疏 FPA 与 AS 在此几乎重合；15--25 dB 的窗口不适用，因为各曲线在该范围内上升约 10 bps/Hz，放大图的纵轴几乎不能放大。
+\item[Fig.~6] (a) ESSR vs 区域边长 $A$；FPA 与 AS（紧凑候选阵列，与其他各图相同）不随 $A$ 变化，稀疏 FPA 的阵列随 $A$ 扩展。(b) ESSR vs MA 数 $N$（$A=4\lambda$）：FPA、稀疏 FPA 与 AS 的阵列随 $N$ 变化（见 \code{extra\_num\_antennas}）；AS 对所有 $N$ 都用交换搜索（与其他各图相同）。
+\item[Fig.~7] ESSR vs AoD 偏移 $\Delta$：(a) $M=3$，(b) $M=1$，两个子图各用自己的纵轴范围。$M=1$ 时速率导向 MA 与 FPA 完全重合（两者都画出，FPA 画在上层，图中标注 “Rate-oriented MA = FPA”）。
+\item[Fig.~8] ESSR vs 大尺度衰落差异 $S$（10 dB，单栏图）。砖红色空心圆 = 所提功率分配，灰紫色菱形 = EP + 优化 $\alpha$，深灰色倒三角 = EP + $\alpha=0.5$。颜色刻意与 Fig.~5--7 的基准不同（这里的曲线是功率分配基准，不是速率导向 MA 或 AS）。
 \end{description}
 
 % -----------------------------------------------------------------------------

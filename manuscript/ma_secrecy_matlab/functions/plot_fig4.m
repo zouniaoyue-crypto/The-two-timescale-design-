@@ -1,8 +1,9 @@
 function plot_fig4(res)
 %PLOT_FIG4  Fig. 4: convergence of Algorithm 2. Objective value of (P3) versus the number
 %   of AO iterations, averaged over the drops, for (N, P_tot/sigma^2) in {8, 12} x {10, 20} dB
-%   (UPA initialization), drawn as continuous lines through all iterations without markers
-%   (colors: SNR; line styles: N). The dotted gray curve shows Algorithm 2 without the
+%   (UPA initialization), drawn as continuous lines without markers; the x-axis shows the
+%   first 30 of the res.nIt iterations, since all the curves converge within about 15
+%   iterations (colors: SNR; line styles: N). The dotted gray curve shows Algorithm 2 without the
 %   grid search of Stage 1 (pure MM updates) for N = 8, 20 dB.
 s = fig_style();
 ax = new_figure();
@@ -25,7 +26,7 @@ end
 st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.3);
 draw(ax, it, mean(res.histMM, 1), st, s);
 st.name = '{\itN} = 8, 20 dB, MM only';
-xlim(ax, [0 res.nIt]);  set(ax, 'XTick', 0:10:res.nIt);
+xlim(ax, [0 30]);  set(ax, 'XTick', 0:5:30);   % converged within about 15 iterations
 set(ax, 'YLim', [0 24], 'YTick', 0:4:24);
 label_axes(ax, 'Number of iterations', 'Objective value of (P3) (bps/Hz)');
 % legend in the empty band below the 10-dB curves (2 columns)

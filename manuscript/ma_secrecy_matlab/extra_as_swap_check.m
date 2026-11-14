@@ -1,6 +1,6 @@
 function res = extra_as_swap_check(prm, Nvals)
 %EXTRA_AS_SWAP_CHECK  Validation of the swap search of the AS benchmark (as_swap.m), which
-%   is used for N >= 12 in Fig. 6(b) of main.tex, against the exhaustive search for
+%   is used for all N in Figs. 5-7 of main.tex, against the exhaustive search for
 %   N <= 10 on the same 100 drops as extra_num_antennas.m. For each drop, the selection
 %   metric (approximate ESSR, as_metric.m) of both subsets is stored; if the subsets
 %   differ, the ESSR of the swap subset is evaluated by Monte Carlo simulation exactly as

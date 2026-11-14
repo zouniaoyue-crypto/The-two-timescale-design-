@@ -8,7 +8,7 @@ function res = fig7_power_allocation(prm, spread)
 %   For the equal-power schemes, the objective is the sum of [.]^+ terms, since an LU
 %   with a negative secrecy rate cannot be switched off. The large-scale fading of the
 %   LUs is beta_m (dB) = -spread (m-1)/(M-1), i.e., [0, -spread/2, -spread] dB for M = 3.
-%   main.tex uses spread = 20 dB (default, results/fig7_pa_hetero.mat). Fig. 7(b) shows the
+%   main.tex uses spread = 20 dB (default, results/fig7_pa_hetero.mat). Fig. 8 shows the
 %   PA versus the spread (extra_pa_spread.m).
 
 if nargin < 1 || isempty(prm), prm = default_params(); end

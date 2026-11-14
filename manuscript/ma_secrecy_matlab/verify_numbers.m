@@ -21,12 +21,18 @@ for dI = 1:prm.numDrops
     k0 = 2*pi/sc.lambda;
     rho(dI) = abs(exp(1j*k0*(T*sc.au(:, 1)))' * exp(1j*k0*(T*sc.ae))) / prm.N;
 end
-show('V-A', 'FPA LoS correlation |h1^H g|/N at Delta = 0.1, min over drops', min(rho), 'exceeds 0.94');
+show('V-A', 'FPA normalized LoS correlation rho_1 at Delta = 0.1, min over drops', min(rho), 'exceeds 0.94');
 g = ld('extra_grid_check');
 show('V-A', 'ESSR change when the grid spacing is halved (%)', 100*g.relChange, '0.01%');
 f5 = ld('fig5_snr');  i20 = find(f5.values == 20);
 x = squeeze(f5.essrDrops(i20, col(f5, 'MA_full'), :));
 show('V-A', 'standard error of the proposed average ESSR at 20 dB (%)', 100*std(x)/sqrt(numel(x))/mean(x), '0.55%');
+
+w = load(fullfile(R, 'extra_as_swap_check.mat'));  w = w.res;
+opt = (1 - w.fSwap./w.fExh) <= 1e-9;          % swap search attains the exhaustive optimum of the metric
+show('V-A', 'AS swap search attains the maximum metric, worst N <= 10 (% of drops)', 100*min(mean(opt, 2)), 'at least 92% (footnote)');
+show('V-A', 'AS swap search: largest |difference| of the average ESSR, N <= 10 (%)', ...
+     100*max(abs(1 - mean(w.essrSwap, 2)./mean(w.essrExh, 2))), 'less than 0.03% (footnote)');
 
 % ---------------- Section V-B (columns: LU MC, LU CF, Eve MC, Eve CF, ESSR MC, ESSR CF) ----
 a = ld('fig3_accuracy');  iP = find(a.Pvec == 20);
@@ -61,6 +67,23 @@ show('V-D', 'gain over the rate-oriented MA at 20 dB (%)', 100*(pr/val(f5, i20, 
 show('V-D', 'gain over the FPA at 20 dB (%)', 100*(pr/val(f5, i20, 'FPA_full') - 1), '31.2%');
 show('V-D', 'AN power fraction of the proposed design at 20 dB', f5.anfrac(i20, col(f5, 'MA_full')), '0.27');
 show('V-D', 'AN power fraction of the FPA at 20 dB', f5.anfrac(i20, col(f5, 'FPA_full')), '0.47');
+for k = {'MA_rate', 'AS', 'SPA_full'}
+    show('V-D', sprintf('AN power fraction of %s at 20 dB', k{1}), f5.anfrac(i20, col(f5, k{1})), 'comparable to the FPA');
+end
+gFPA = @(key) f5.essr(:, col(f5, key)) - f5.essr(:, col(f5, 'FPA_full'));
+gMA = gFPA('MA_full');  gRate = gFPA('MA_rate');  gAS = gFPA('AS');  gSPA = gFPA('SPA_full');
+show('V-D', 'gain over FPA: AS smaller than rate-oriented MA at all SNRs (1 = yes)', all(gAS < gRate), 'even smaller gain');
+show('V-D', 'gain over FPA at 20 dB: proposed', gMA(i20), 'reference');
+show('V-D', 'gain over FPA at 20 dB: rate-oriented MA', gRate(i20), 'less than half');
+show('V-D', 'gain over FPA at 20 dB: AS', gAS(i20), 'even smaller');
+show('V-D', 'gain over FPA at 20 dB: sparse FPA', gSPA(i20), 'less than half');
+
+% ---------------- Section V-E (Fig. 6(a)) ----------------
+r6 = ld('fig6_region');
+for i = 1:numel(r6.values)
+    show('V-E', sprintf('ESSR: proposed minus AS, A = %.1f lambda', r6.values(i)), ...
+         val(r6, i, 'MA_full') - val(r6, i, 'AS'), 'comparable only for the smallest A');
+end
 
 % ---------------- Section V-E ----------------
 n = ld('extra_num_antennas');  iN = @(v) find(n.values == v);
@@ -71,16 +94,11 @@ for v = n.values
          val(n, iN(v), 'SPA_full') - val(n, iN(v), 'MA_rate'), '> 0 iff N >= 14');
 end
 for v = n.values
-    show('V-E', sprintf('ESSR: AS, N = %d (exhaustive N <= 10, swap search N >= 12)', v), val(n, iN(v), 'AS'), 'Fig. 6(b)');
+    show('V-E', sprintf('gain of the proposed design over FPA / AS, N = %d', v), ...
+         val(n, iN(v), 'MA_full') - val(n, iN(v), 'FPA_full'), sprintf('%.4f (AS)', val(n, iN(v), 'MA_full') - val(n, iN(v), 'AS')));
 end
-show('V-E', 'number of AS subsets for N = 16 (1e8)', nchoosek(32, 16)/1e8, '6.0');
-w = load(fullfile(R, 'extra_as_swap_check.mat'));  w = w.res;
-opt = (1 - w.fSwap./w.fExh) <= 1e-9;          % swap search attains the exhaustive optimum of the metric
-show('V-E', 'swap search attains the maximum metric, worst N <= 10 (% of drops)', 100*min(mean(opt, 2)), 'at least 92%');
-show('V-E', 'swap search: largest |difference| of the average ESSR, N <= 10 (%)', ...
-     100*max(abs(1 - mean(w.essrSwap, 2)./mean(w.essrExh, 2))), 'less than 0.03%');
 
-% ---------------- Section V-G (Fig. 7(b) at 10 dB; 0 and 20 dB in the text) ----------------
+% ---------------- Section V-G (Fig. 8 at 10 dB; 0 and 20 dB in the text) ----------------
 s10 = ld('extra_pa_spread_10dB');
 g10 = 100*(s10.essr(:, col(s10, 'MA_full'))./s10.essr(:, col(s10, 'MA_EPA')) - 1);
 show('V-G', 'gain of the proposed PA over EP, optimized alpha, 10 dB, largest for S <= 10 dB (%)', max(g10(s10.values <= 10)), 'close');
