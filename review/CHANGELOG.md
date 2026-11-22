@@ -152,3 +152,9 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | I115 | main.tex:Sec. V-B, V-D, V-G | eq:esrapprox → $\sum_{m=1}^M\hat R_m^{\mathrm{sec}}$; eq:alphastar → "$\alpha^\star$ in Section~\ref{sec:insight}"; Proposition~\ref{prop:wf} → \eqref{eq:wf} (×2), worded as in the reference | labels removed by the synced Secs. III–IV; all other Sec. V text unchanged |
 | I116 | main.tex (bibliography) | five new references from the reference, verified (arXiv ×4, OpenAlex/DOI ×1); ChenArxiv2026 "early access" | author's reference version |
 | — | main_preview.pdf | rebuilt (14 pages, no errors, undefined references, or overfull boxes; citation order = bibliography order) | build check |
+
+## Round rev-6b — Stage 2 review (read-only)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I117–I140 | review/review_report.txt (new), review/ISSUES.md | Stage 2 review report (High: none; Medium: 4; Figure: 8; Low: 11) and issue entries, all "proposed" or "needs-decision" | author's instruction: report first, modify only after item-by-item approval; no change to main.tex or the code |

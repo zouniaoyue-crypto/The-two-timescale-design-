@@ -167,3 +167,32 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I114 | — | Secs. I–IV, VI, appendices, preamble, bibliography | merge the reference v7 (built on rev-5c) into main.tex | diff vs rev-5c | adopted except: ZF notation (reference: f_m) kept as \wb_m (author); Section V text kept as in rev-5c (author: no rewriting of the simulation section) | fixed |
 | I115 | M | Sec. V (V-B, V-D, V-G) | four cross-references in Sec. V pointed to labels removed by the reference (eq:esrapprox, eq:alphastar, prop:wf ×2) | build (undefined references) | replaced by the reference's own wording only at these four places; all other Sec. V edits of the reference listed in review/review_report.txt for decision | fixed (build) |
 | I116 | — | bibliography | five new entries from the reference: ChenArxiv2025EE (arXiv:2501.10694), YuArxiv2025 (arXiv:2507.05784), ZhuArxiv2024NF (arXiv:2409.19316), YanArxiv2025 (arXiv:2502.20856), Liang2008 (DOI 10.1109/TIT.2008.921678) | arXiv / OpenAlex lookups | all verified (title, authors, year); Liang2008 volume/pages not independently checked | fixed |
+
+## Round rev-6b — Stage 2 review (read-only; see `review/review_report.txt`; every item awaits the author's approval)
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I117 | — | Sec. V (V-A to V-F) | reference v7 also edited Sec. V in 10 places (not synced, per the author's instruction) | report S-3 a–j | per-item decision by the author | needs-decision |
+| I118 | M | Fig. 5(a); main.tex:605 (last sentence); plot_fig5.m:3-4,14,20-23 | "Proposed w/o AN" changes the power allocation (q = 0), contradicting V-A (line 571), is not a listed benchmark, not in the legend | report M-1 | proposed: remove curve and sentence, re-plot from stored results | proposed |
+| I119 | M | main.tex:607 (V-D) | "allocates much less power to the AN than all the benchmarks" is false at 0–5 dB (5 dB: 0.039 vs AS 0.004, FPA 0.028) | results/fig5_snr.mat | proposed: qualify to P_tot/σ² ≥ 10 dB | proposed |
+| I120 | M | main.tex:613 (V-E) | "sparse FPA outperforms the rate-oriented MA for N ≥ 14": curves cross between N = 10 and 12; resolved only at N = 16 | results/extra_num_antennas.mat (paired SEs) | proposed: "approaches ... slightly exceeds it for N = 16" | proposed |
+| I121 | M | main.tex:361 (Prop. 1), 681 (App. B) | glyph ϰ (\varkappa) next to κ_m (same sentence) | notation rules | proposed: κ_1 → ∞ with fixed ratios κ_m/κ_1 | needs-decision |
+| I122 | Fig | Figs. 3–8 | raster PNG (Octave, gAMA/cHRM chunks → gray panel background); legends force headroom; no confidence bars | pdfimages; renders | proposed: MATLAB vector export (save_figure.m), shared legends, 95% bars | proposed |
+| I123 | Fig | Fig. 1 (main.tex:94-171) | null-space AN and AoD offset Δ not drawn; Eve not next to LU 1 | render | proposed: AN lobe, Δ mark, Eve placement | proposed |
+| I124 | Fig | Fig. 2 (main.tex:196-216) | timescale of the variables not shown; 7-pt font | render | proposed: annotate "fixed: t, p, q" / "update w̄_m, P⊥"; \footnotesize | proposed |
+| I125 | Fig | Fig. 3 (plot_fig3.m) | Eve curves compressed at the bottom; different legends; polyline closed forms | render | proposed: separate y-scales, common legend, fine-grid closed forms | proposed |
+| I126 | Fig | Fig. 5 (plot_fig5.m) | inset (19.5–20.5 dB) shows interpolation only; unresolved ordering; 5-dB grid misses the AN onset | plot_fig5.m:38; fig5_snr.mat | proposed: gain-over-FPA view with bands; 2.5-dB grid (MATLAB run) | proposed |
+| I127 | Fig | Fig. 6 (plot_fig6.m) | duplicate legends at different positions; wasted y-range; overlapping benchmarks | render | proposed: shared legend, YLim, guide lines at 18.44/20.75 bps/Hz | proposed |
+| I128 | Fig | Fig. 7 (plot_fig7.m) | no sample at Δ = 0.4; legend headroom; annotation duplicates legend | extra_single_user.mat | proposed: add Δ samples (MATLAB run), YLim [3 10], merged legend entry | proposed |
+| I129 | Fig | Fig. 8 (plot_fig8.m) | markers ◇/▽ reused with other meanings; "Proposed PA" vs "Proposed" | render | proposed: unique markers, consistent label | proposed |
+| I130 | L | main.tex:343 | overbar means LoS (h̄, ḡ, H̄, X̄, Ȳ) and unit norm (w̄_m) | notation | proposed: one clause, no symbol change | proposed |
+| I131 | L | main.tex:76 | [YuArxiv2025] states neglected movement latency, not outdated CSI | citation check | proposed: re-anchor the citation | needs-decision |
+| I132 | L | main.tex:78 | [ZhuArxiv2024NF] partly verbatim (instantaneous-CSI beamforming not found verbatim) | citation check | acceptable; author to check its Sec. III-D | proposed |
+| I133 | L | bibliography (Liang2008) | volume/pages not independently checked | DOI lookup | author to confirm | needs-decision |
+| I134 | L | main.tex:42 | \revisionmarktrue: 24 red \rev{} passages | build | switch off for the clean version | proposed |
+| I135 | L | main.tex:601 (V-C) | convergence wording understates speed (≥ 95.8% of the increase within 3 iterations) | fig4 data | proposed wording keeps "about 15 iterations" | proposed |
+| I136 | L | main.tex:613 (V-E) | N = 8 proposed vs N = 16 rate-oriented MA: +0.23 bps/Hz (1.1%), resolved | extra_num_antennas.mat | proposed: "slightly outperforms" | proposed |
+| I137 | L | main.tex:607 (V-D) | α* explains the saturation level, not the increase with SNR | (32) | proposed: rephrase; optional 1 − α* check | proposed |
+| I138 | L | main.tex:624 (V-F) | sparse-FPA dip at Δ = 0.3 and AS > sparse FPA at Δ = 0.5 unexplained | extra_single_user.mat | proposed: one clause (grating lobes) | proposed |
+| I139 | L | notation.tex:45 | unused macro \sbe | grep | delete | proposed |
+| I140 | L | code comments (default_params.m:46, scheme_style.m:16, fig_palette.m:11,13; "Section V-H" in 6 files) | stale figure/section references | grep | update comments | proposed |

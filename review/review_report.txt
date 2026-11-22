@@ -1,0 +1,385 @@
+REVIEW REPORT - STAGE 2 (READ-ONLY)
+Two-timescale MA-enabled secure multiuser downlink (IEEE TCOM draft)
+==================================================================================================
+
+Version reviewed  manuscript/main.tex at commit d59270c (rev-6a = rev-5c merged with the author's
+                  reference version v7), compiled to manuscript/main.pdf (14 pages; 0 errors,
+                  0 undefined references, 0 overfull boxes).
+Cross-checked     compiled PDF (pages rendered at 200 dpi), figure files in
+                  ma_secrecy_matlab/results/, plotting scripts (functions/plot_fig*.m), sweep
+                  scripts, and the stored results (*.mat).
+Conventions       "line" = line of manuscript/main.tex at d59270c. Equation, figure, algorithm,
+                  proposition, and remark numbers are those of the compiled PDF. Code paths are
+                  relative to manuscript/ma_secrecy_matlab/. "Paired SE" = standard error of the
+                  mean per-drop difference over the 100 AoD drops shared by all schemes; a
+                  difference with |mean/SE| < 2 is called "not resolved".
+Status            NOTHING in this report has been applied to the manuscript or the code. Every
+                  item awaits your decision (approve / reject / modify). Items marked
+                  [needs MATLAB run] require new simulations on your computer; all other items
+                  need only text edits or re-plotting from the stored results.
+
+SUMMARY
+  Part A  Stage 1 record, for confirmation              S-1 ... S-3
+  Part B  [High - Logic/Derivation Error]                none found (verification list given)
+  Part C  [Medium - Notation/Simulation Inconsistency]   M-1 ... M-4
+  Part D  [Figure - Visual & Presentation Upgrade]       F-0 (all data figures), F-1 ... F-8
+  Part E  [Low - Ambiguity/Optimization Suggestion]      L-1 ... L-11
+
+
+==================================================================================================
+PART A. STAGE 1 RECORD (for confirmation)
+==================================================================================================
+
+S-1  ZF notation (Stage 1, item 2): done; please confirm.
+     The reference's \rev{\mathbf f}_m was replaced by the original \wb_m (w̄_m) in all 25 places,
+     and no \mathbf f remains. The notation is consistent throughout: definition (12) (line 284);
+     precoder w_m = sqrt(p_m) w̄_m (line 282), while (P1) in (11) optimizes the general precoders
+     w_m (lines 229-267); SINRs (14)-(15) (lines 294-297); LoS quantities X̄_m (line 343);
+     Appendix A (line 648); Appendix B (lines 653, 655, 677, 681, including the limit w̄_m^∞).
+     The only side effect is the double role of the overbar (see L-1).
+
+S-2  Section V boundary (Stage 1, item 3): four cross-reference repairs; confirm or revert.
+     The reference v7 deleted the labels eq:esrapprox, eq:alphastar, and prop:wf (the displayed
+     approximate ESSR, the displayed alpha*, and Proposition 2 became inline text), which Section V
+     still referenced. Without a repair, the build has undefined references. Only these four
+     places were changed, using v7's own wording:
+       line 589 (V-B)  "the approximate ESSR in (eq:esrapprox)"
+                       -> "the approximate ESSR sum_{m=1}^M R̂_m^sec"
+       line 607 (V-D)  "consistent with (eq:alphastar)"  -> "consistent with alpha* in Section III-D"
+       line 635 (V-G)  "secrecy water-filling in Proposition 2" -> "... in (36)"
+       line 637 (V-G)  "(see Proposition 2)" -> "(see (36))"
+     All other symbols, parameters, and references in Section V were checked against the merged
+     Sections I-IV and agree: N, M, A, D_min, kappa_m, kappa_e, beta_m, beta_e, sigma_m^2,
+     sigma_e^2, P_tot, Delta, rho_1(t) (defined in III-D, line 384; used in lines 565 and 624),
+     (30)-(31), eta_m(t) in (20), Xi_m(t) in (32), alpha and alpha* (III-D 3), lines 391-396),
+     (27), (36), Algorithms 1-2, the grid G of (41), delta_0, epsilon_in, N_MM, epsilon, N_AO,
+     Q (Algorithm 1), N_b (line 542), and the "shortest phase period" (IV-B). The parameter values
+     in V-A agree with default_params.m (grid 0.1 lambda, Q = 41, N_b = 60, N_MM = 20, N_AO = 50,
+     epsilon = 1e-4, epsilon_in = 1e-6, delta_0 = 1, 3 initializations, 5 swap starts,
+     5e3 / 1e4 channel samples). No other conflict was found.
+
+S-3  The reference v7 also edited Section V, contrary to the premise of Stage 1, item 3. These
+     edits were NOT synced. For your decision (my assessment in brackets):
+     a) line 565 (V-A): \tilde\phi -> \varpi for the random offset direction [do not adopt: the
+        glyph ϖ is on the project's list of glyphs to avoid]; deletes "Note that Delta is an
+        offset in the elevation-azimuth coordinates rather than the physical angle between the two
+        directions." [keep: it prevents reading Delta as a physical angle]; "Similar to" ->
+        "As in" [neutral].
+     b) line 567 (V-A): "is executed from" -> "is initialized with" [neutral; may adopt].
+     c) line 574 (V-A, AS footnote): deletes the description of the swap search (start subsets,
+        exchange rule) and "over all the (2N choose N) subsets" [keep: the swap search is not
+        described anywhere else, and the benchmark must be reproducible].
+     d) line 589 (V-B): "which confirms its accuracy at the optimized antenna positions" instead of
+        "which indicates that it captures the LoS correlation between Eve and the LUs"; adds "the
+        approximation preserves the ranking of the designs". [If adopted, qualify the ranking
+        claim. In the Fig. 5 data, the approximate ESSR ranks the five schemes as the actual ESSR
+        only for P_tot/sigma^2 >= 10 dB; at 0 and 5 dB it places AS above the rate-oriented MA,
+        and at 5 dB also the FPA above the sparse FPA. The proposed design is ranked first at
+        every SNR under both metrics, and it is the best scheme in all 100 drops at 20 dB.]
+     e) line 601 (V-C): "becomes nearly flat within about three iterations" instead of "converges
+        within about 15 iterations" [both are true; L-6 proposes a wording that keeps both].
+     f) line 605 (V-D): merges the three benchmark explanations into one sentence and drops the
+        link to "the two Eve-related mechanisms in Section III-D" [keep the current text, which
+        ties the result to the analysis].
+     g) line 607 (V-D): moves "because the optimized positions decrease Xi_m(t) in (32)" into the
+        second sentence [neutral].
+     h) line 611 (V-E): "where the ESSRs of the FPA and AS do not depend on A" [adopt: fixes the
+        current "the FPA and AS do not depend on A"].
+     i) line 613 (V-E): adds "for which the AN occupies a single dimension" after "N = 4 MAs"
+        [correct, since N - M = 1; adopt]; replaces "outperforms" by "achieves an ESSR comparable
+        to that of" for the proposed design with N = 8 versus the rate-oriented MA with N = 16
+        [see L-7].
+     j) line 624 (V-F): "can hardly" -> "cannot effectively" [neutral]; deletes "The sparse FPA
+        also benefits from its large aperture, but the proposed design achieves a further gain by
+        adapting the positions to the AoDs." [keep: it is the only sentence that explains the
+        sparse-FPA curve in Fig. 7].
+
+
+==================================================================================================
+PART B. [High - Logic/Derivation Error]
+==================================================================================================
+
+No item found. The modeling and solution chain is consistent: (P1) in (11) -> ZF-AN restriction
+with long-term (p, q) (III-A, stated as a design choice) -> closed-form approximations (20), (27)
+(III-B, III-C; validated in V-B) -> approximate problem (P3) -> alternating optimization with
+Algorithm 1 for (p, q) and Algorithm 2 for t. The following steps were re-derived on the merged
+text and are correct:
+  - (12)-(15): ZF precoding and null-space AN, |h_m^H w̄_m|^2 = 1/[(H^H H)^{-1}]_{m,m},
+    H^H P⊥ = 0, tr(P⊥) = N - M.
+  - (20)-(21): eta_m(t) = zeta_m (N - M)/(N omega_m(t)); both bounds follow from Phi(t) ⪰ N I_M
+    and [Phi^{-1}]_{m,m} >= 1/[Phi]_{m,m} = 1/(N(kappa_m + 1)), with equality for mutually
+    orthogonal LoS components.
+  - (22)-(27), Proposition 1, Appendix B: c_m, d in [0, N]; exactness for kappa_m = 0; the limit
+    for growing Rician factors (H/sqrt(ϰ) -> L_0 almost surely, dominated convergence,
+    N[Omega^2]_{m,m} = O(ϰ^{-2}) versus omega_m = O(ϰ^{-1})).
+  - (32): high-SNR expansion; alpha* = 1/(1 + sqrt(Xi)) is the stationary point of
+    log(alpha) + log(1 - alpha) - log(1 + alpha(Xi - 1)) (verified by substitution); Xi decreases
+    when c_m decreases or d increases.
+  - Remark 1 (new in v7): Sigma_dir = (N - M) q P⊥ ḡ ḡ^H P⊥ / Ȳ satisfies tr(Sigma_dir) =
+    (N - M) q and H^H Sigma_dir = 0; E{g^H Sigma_dir g | H} = (N - M) q beta~_e (kappa_e Ȳ + 1);
+    psi_dir - psi = (N - M - 1) kappa_e d >= 0.
+  - Algorithm 2: the objective is nondecreasing because (41) includes the current position in the
+    arg max (line 477) and the power update is accepted only if the objective does not decrease
+    (IV-C); the upper bound in IV-C follows from (21).
+
+
+==================================================================================================
+PART C. [Medium - Notation/Simulation Inconsistency]
+==================================================================================================
+
+M-1  [Medium - Notation/Simulation Inconsistency] Fig. 5(a), "Proposed w/o AN" (known issue).
+     Recommendation: remove it (I agree with your inclination).
+     Location  Fig. 5(a) (fig5a_essr_snr, lines 581-587); text: last sentence of line 605 (V-D);
+               code: functions/plot_fig5.m lines 3-4, 14, 20-23; fig5_snr.m lines 6 and 13.
+     Problem   (i) Section V-A (line 571) states that all compared schemes use the power
+               allocation of Algorithm 1 "so that the performance differences result only from
+               the antenna positions"; the w/o-AN curve changes the power allocation (q = 0) and
+               violates this premise. (ii) It is not listed among the benchmarks in V-A and
+               appears in no other figure. (iii) It is not in the legend (direct label only), it
+               uses the same red as "Proposed", and its direct label crosses the 25-dB grid line
+               just below the dotted curve. (iv) Its message (saturation without AN) is a known result that the text
+               already attributes to [Goel2008]; it is not specific to MAs.
+     Proposal  (a) Delete the sentence "Without AN, i.e., with q = 0 in Algorithm 2, ... [Goel2008]."
+               in line 605. [Goel2008] remains cited in line 74, so no reference is orphaned.
+               (b) plot_fig5.m: plot `keys` instead of `[keys, {'MA_noAN'}]` (line 14), delete the
+               direct label (lines 20-23), and update the header comment (lines 3-4).
+               (c) Regenerate Fig. 5(a) from the stored results/fig5_snr.mat; no new simulation.
+               (d) Optional: keep 'MA_noAN' in fig5_snr.m (its column is also read by the
+               supplementary print_table_eve.m) and only update the comment in line 6.
+     Touches   manuscript (one sentence) + code (plot only).
+
+M-2  [Medium - Notation/Simulation Inconsistency] V-D: AN-power claim contradicted by Fig. 5(b).
+     Location  line 607, second sentence: "The proposed design allocates much less power to the
+               AN than all the benchmarks, e.g., an AN power fraction of 0.27 versus 0.47 for the
+               FPA at 20 dB."
+     Evidence  results/fig5_snr.mat (res.anfrac). At 5 dB: proposed 0.039 versus AS 0.004 and
+               FPA 0.028. At 0 dB: proposed 0 versus sparse FPA 0.014. The claim holds for
+               P_tot/sigma^2 >= 10 dB (10 dB: 0.211 versus 0.268-0.339; 20 dB: 0.270 versus
+               0.402-0.471).
+     Proposal  "For P_tot/sigma^2 >= 10 dB, the proposed design allocates less power to the AN
+               than all the benchmarks, e.g., ..." (numbers unchanged).
+     Touches   manuscript.
+
+M-3  [Medium - Notation/Simulation Inconsistency] V-E: crossover of the sparse FPA and the
+     rate-oriented MA misstated.
+     Location  line 613, last sentence: "The sparse FPA ... outperforms the rate-oriented MA for
+               N >= 14, ..."; Fig. 6(b).
+     Evidence  results/extra_num_antennas.mat, mean ESSR (sparse FPA versus rate-oriented MA):
+               N = 10: 18.83 vs 18.89; N = 12: 19.67 vs 19.56; N = 14: 20.44 vs 20.13;
+               N = 16: 20.96 vs 20.52 bps/Hz. The plotted curves already cross between N = 10 and
+               N = 12. The paired differences are resolved only at N = 16 (+0.44, SE 0.18);
+               N = 12: +0.11 (SE 0.20); N = 14: +0.32 (SE 0.19).
+     Proposal  "The sparse FPA, whose grating lobes are strong for small N, approaches the
+               rate-oriented MA as N increases and slightly exceeds it for N = 16, because more
+               antennas in C suppress these lobes."
+     Touches   manuscript.
+
+M-4  [Medium - Notation/Simulation Inconsistency] Glyph ϰ (\varkappa) next to kappa_m.
+     Location  line 361 (Proposition 1: "... if kappa_m = 0 ... vanish as K = ϰ K_0 with ϰ -> ∞");
+               line 681 (Appendix B, seven occurrences). Related: the Fig. 3 caption (line 551) and
+               the x-axis of Fig. 3(b) use kappa = kappa_m = kappa_e.
+     Problem   ϰ and kappa are nearly indistinguishable in print, appear in the same sentence with
+               different meanings (a scaling factor versus the Rician factors), and ϰ is a "var"
+               glyph of the kind the notation rules avoid.
+     Proposal  Remove the auxiliary scalar. Proposition 1: "... vanish as kappa_1 -> ∞ with the
+               ratios kappa_m/kappa_1, m in M, fixed." Appendix B: "let K = kappa_1 K_0 with
+               K_0 ≜ diag(1, kappa_2/kappa_1, ..., kappa_M/kappa_1)" and replace ϰ by kappa_1.
+               The content is unchanged (a fixed diagonal K_0 ≻ 0 is equivalent to fixed positive
+               ratios), but this edits a formal statement, so it needs your approval.
+     Touches   manuscript.
+
+
+==================================================================================================
+PART D. [Figure - Visual & Presentation Upgrade]
+==================================================================================================
+
+F-0  [Figure - Visual & Presentation Upgrade] All data figures (Figs. 3-8): global issues.
+     1) Raster figures. All nine panels are 600-dpi PNGs produced by Octave (2100 x 1560 px each;
+        `pdfimages -list main.pdf`), so text and lines are not vector. The PNGs carry gAMA/cHRM/
+        bKGD chunks, which make each panel background render as RGB 254 on the 255 page (a faint
+        gray rectangle, visible in the rendered pages).
+        Fix: regenerate in MATLAB. save_figure.m already exports vector PDF
+        (exportgraphics(..., 'ContentType', 'vector')) and EPS, and \includegraphics picks the PDF
+        first (\graphicspath, line 16). In MATLAB the font is Times New Roman, matching IEEEtran
+        (Octave substitutes Liberation Serif). If PNG must stay, strip the chunks
+        (convert -strip, or -define png:exclude-chunks=gAMA,cHRM,bKGD).
+     2) Legends inside the axes force empty headroom: Fig. 5(a) y-axis up to 40 for data <= 31;
+        Fig. 5(b) up to 0.8 for data <= 0.49; Fig. 6(a) up to 26 for data <= 22; Fig. 7 up to 12
+        for data <= 8.7. About 25-40% of each axes is legend or white space.
+        Fix: for the two-panel Figs. 5 and 6, one shared legend row above both panels (figure-
+        level legend spanning the text width), then tighten YLim to the data.
+     3) Statistical resolution is not shown. The gaps among the benchmarks are comparable to the
+        paired SEs (0.1-0.2 bps/Hz, e.g., rate-oriented MA minus sparse FPA at 20 dB: +0.33,
+        SE 0.22, not resolved). Fix: 95% confidence bars or bands computed from res.essrDrops in
+        at least Figs. 5(a) and 6(b), or one sentence in V-A stating the paired SE.
+     4) One marker per scheme across all figures (Fig. 8 breaks this; see F-8).
+
+F-1  [Figure - Visual & Presentation Upgrade] Fig. 1 (TikZ, lines 94-171).
+     Shortcomings  The two elements that the analysis builds on are not drawn: the null-space AN
+                   (no AN beam toward Eve) and the AoD offset Delta between LU 1 and Eve (the
+                   parameter of Fig. 7 and of the default setup). Eve is drawn between LU 1 and
+                   LU M, whereas V-A places Eve close to LU 1. The RF-chain boxes use the same
+                   beige as the data block of Fig. 2 (no shared meaning).
+     Proposal      (a) Add a light AN lobe from the array toward Eve labeled "null-space AN z".
+                   (b) Move Eve next to LU 1 and mark the angle Delta between the LoS rays to LU 1
+                   and Eve. (c) Keep the color code of Fig. 2 for time blocks only; draw the RF
+                   chains in neutral gray. (d) Keep the existing legend row (it is good).
+
+F-2  [Figure - Visual & Presentation Upgrade] Fig. 2 (TikZ, lines 196-216).
+     Shortcomings  The figure does not show which quantities belong to which timescale, which is
+                   the point of the protocol (line 292: t, p, q fixed in a frame; w̄_m and P⊥
+                   updated in each CI). The first block merges three actions (statistical CSI,
+                   optimization of t and powers, MA movement) without their order. The font is
+                   \scriptsize (7 pt), versus \footnotesize (8 pt) in Fig. 1 and 9 pt in Figs. 3-8.
+     Proposal      (a) Annotate the frame brace "fixed: t, p, q" and each CI "update w̄_m, P⊥(t)".
+                   (b) Split the first block into "optimize t, p, q (statistical CSI)" and "move
+                   MAs", or add an arrow showing the order. (c) Use \footnotesize in both TikZ
+                   figures.
+
+F-3  [Figure - Visual & Presentation Upgrade] Fig. 3 (functions/plot_fig3.m).
+     Shortcomings  The Eve curves (0-2 bps/Hz) are squeezed at the bottom of 0-40 and 0-25 axes,
+                   so the accuracy of (27), the main analytical result, cannot be judged by eye;
+                   Fig. 3(b) has an empty band between 3 and 19 bps/Hz. The legends differ between
+                   the panels (4 rows at top left versus 2 x 2 in the center). The closed forms are
+                   drawn as polylines through the 7 (6) simulation points.
+     Proposal      (a) Separate y-scales for the LUs and Eve: either a right y-axis for Eve, or
+                   two stacked axes per panel (LUs on top, Eve below, shared x-axis). (b) One
+                   common legend. (c) Evaluate the closed forms on a fine grid (cheap, no Monte
+                   Carlo) so that lines are smooth and only the simulations carry markers.
+                   (d) Optional: add the approximate versus the actual ESSR, the quantity used in
+                   the V-B argument. (a)-(c) re-plot only; (c)-(d) need the closed forms on a fine
+                   grid [short MATLAB run].
+
+F-4  Fig. 4: no change proposed (as you indicated).
+
+F-5  [Figure - Visual & Presentation Upgrade] Fig. 5 (functions/plot_fig5.m).
+     (a) Remove the w/o-AN curve (M-1). The rate-oriented MA, sparse FPA, and AS curves overlap
+         within about 1 bps/Hz over the whole range. The inset covers only 19.5-20.5 dB (dx = 0.5,
+         line 38), where each curve has a single sample, so its sloped segments are linear
+         interpolation toward 15 and 25 dB rather than data; it has no zoom rectangle in the main
+         axes, its "20 dB" label collides with the AS marker and the frame, and it highlights an
+         ordering (rate-oriented MA above sparse FPA) that is not resolved (+0.33, SE 0.22).
+         Proposal: replace the inset by a gain view, i.e., ESSR minus ESSR of the FPA versus SNR
+         with 95% bands (at 20 dB: 4.93, 2.26, 1.93, and 1.42 bps/Hz for the proposed design,
+         rate-oriented MA, sparse FPA, and AS), either as panel (a) itself or as an extra panel.
+         Re-plot only.
+     (b) The AN fraction jumps from about 0 to 0.21-0.34 between 5 and 10 dB, but the SNR grid
+         has 5-dB steps. Proposal: refine the grid to 2.5 dB in 0-15 dB [needs MATLAB run]; write
+         the symbol on the axis ("AN power fraction (N-M)q/P_tot"); YLim [0 0.55] with the
+         shared legend of F-0.
+
+F-6  [Figure - Visual & Presentation Upgrade] Fig. 6 (functions/plot_fig6.m).
+     Shortcomings  Two identical legends at different positions ('nw' in (a), 'se' in (b)).
+                   (a): YLim [14 26] for data 15.8-22.0. (b): the three benchmark curves overlap
+                   for N >= 8 and their differences are mostly not resolved (M-3), while the
+                   strongest claims of V-E (N = 4 proposed above N = 12 FPA; N = 8 proposed above
+                   N = 16 rate-oriented MA) are not visible without reading values.
+     Proposal      (a) One shared legend above both panels; YLim [15 23] in (a). (b) Draw the FPA
+                   and AS in (a) as unmarked horizontal reference lines (they do not depend on A).
+                   (c) In (b), add dotted horizontal guides at the ESSR of the proposed design with
+                   N = 4 (18.44) and N = 8 (20.75) bps/Hz, which show the antenna saving directly;
+                   add 95% bars. Re-plot only.
+
+F-7  [Figure - Visual & Presentation Upgrade] Fig. 7 (functions/plot_fig7.m).
+     Shortcomings  Samples at Delta = 0.02, 0.05, 0.1, 0.2, 0.3, 0.5 rad (no 0.4), so the
+                   segment 0.3-0.5 hides the shape where the gain decreases. The legend fills the
+                   top quarter (YLim [3 12], data <= 8.7). The annotation "Rate-oriented MA = FPA"
+                   repeats two legend entries. The sparse FPA dips at Delta = 0.3 (7.61 after 7.90
+                   bps/Hz, results/extra_single_user.mat), which the text does not explain (L-9).
+     Proposal      (a) Add Delta = 0.4 (and 0.15, 0.25 if time permits) [needs MATLAB run].
+                   (b) YLim [3 10]; one legend entry "Rate-oriented MA (= FPA for M = 1)" instead
+                   of two entries plus the annotation. (c) Keep the y-label "Ergodic secrecy rate"
+                   (correct for M = 1).
+
+F-8  [Figure - Visual & Presentation Upgrade] Fig. 8 (functions/plot_fig8.m,
+     functions/scheme_style.m, functions/fig_palette.m).
+     Shortcomings  The markers ◇ and ▽ denote the FPA and the sparse FPA in Figs. 5-7 but
+                   "EP, optimized alpha" and "EP, alpha = 0.5" in Fig. 8. The proposed scheme is
+                   "Proposed" in Figs. 5-7 and "Proposed PA" in Fig. 8. The V-G numbers at
+                   S = 20 dB for 0 and 20 dB SNR (40%, below 1%) appear in no figure.
+     Proposal      (a) Markers not used elsewhere for the two EP benchmarks (e.g., pentagram and
+                   right-pointing triangle). (b) Label "Proposed (Algorithm 1)" or keep
+                   "Proposed PA" (PA is defined in the caption). (c) Optional: a second panel with
+                   ESSR versus SNR at S = 20 dB, which turns the two quoted numbers into a visible
+                   trend [needs MATLAB run unless the supplementary sweep is stored].
+
+
+==================================================================================================
+PART E. [Low - Ambiguity/Optimization Suggestion]
+==================================================================================================
+
+L-1  Overbar with two meanings (side effect of keeping w̄_m). The overbar means "LoS component"
+     in h̄_m, ḡ, H̄, X̄_m, Ȳ and "unit norm" in w̄_m. At line 343 ("X̄_m ≜ |ḡ^H(t) w̄_m|^2 and Ȳ ...
+     are the LoS counterparts of X_m and Y"), w̄_m could be misread as an LoS quantity.
+     Proposal: no symbol change; append to line 343 "..., where w̄_m still depends on the full
+     channel H(t)", or state once in the Notations (line 84) that the overbar denotes LoS
+     components except in w̄_m, which denotes a unit-norm precoder.
+
+L-2  Citation support, line 76: "... the instantaneous CSI may become outdated when the antenna
+     movement delay exceeds the coherence time [ChenArxiv2025EE], an issue neglected in most
+     MA-enabled PLS designs [YuArxiv2025]."
+     [ChenArxiv2025EE] supports the first clause ("The I-CSI can quickly become outdated if these
+     delays exceed the channel coherence time."), although it lists several delays (CSI
+     estimation and feedback, position design, antenna movement), not the movement delay alone.
+     [YuArxiv2025] supports it only partly: its related work states that "most of these
+     investigations assume that the latency of antenna movement is negligible or tolerable", but
+     it does not link this to outdated CSI. Proposal: anchor the citation to what the source
+     states, e.g., "..., whereas most MA-enabled PLS designs assume that the antenna movement
+     delay is negligible [YuArxiv2025]." Please confirm that "these investigations" in
+     [YuArxiv2025] are PLS designs.
+
+L-3  Citation support, line 78: "two-timescale designs have been developed for MA systems
+     [ZhengTCOM2025, HuTVT2025, ZhuArxiv2024NF, YanArxiv2025], where the antenna positions are
+     optimized based on the statistical CSI, whereas the beamforming is designed based on the
+     instantaneous CSI." [YanArxiv2025] supports it directly (two-timescale problem; instantaneous
+     and statistical CSI). [ZhuArxiv2024NF] supports the statistical-CSI position design with less
+     frequent updates verbatim; the instantaneous-CSI beamforming part was not found verbatim in
+     the accessible text (its Section III-D should be checked in the PDF). Acceptable as is.
+
+L-4  Bibliography: Liang2008 was verified through its DOI (10.1109/TIT.2008.921678); its volume and
+     page numbers were not checked independently. Please confirm them against your copy.
+
+L-5  Revision marks: line 42 sets \revisionmarktrue, so 24 \rev{...} passages print in red. Keep
+     this for the marked copy; set \revisionmarkfalse for the clean submission.
+
+L-6  V-C, line 601: "converges within about 15 iterations" understates how fast Algorithm 2
+     reaches its final value. From the Fig. 4 data, the fraction of the total increase reached
+     after 1/2/3/5/15 iterations is 0.81/0.93/0.96/0.97/0.99 (N = 8, 10 dB) and at least
+     0.958 after three iterations in all four settings. Proposal: "... increases monotonically,
+     attains more than 95% of its total increase within three iterations, and converges within
+     about 15 iterations."
+
+L-7  V-E, line 613: "the proposed design with N = 8 MAs outperforms the rate-oriented MA with
+     N = 16 MAs": +0.23 bps/Hz (paired SE 0.08, resolved), i.e., 1.1%. Proposal: "slightly
+     outperforms" (more accurate than v7's "comparable", since the difference is resolved).
+
+L-8  V-D, line 607: "increases with the SNR and saturates, which is consistent with alpha* in
+     Section III-D". alpha* explains the saturation level (AN fraction 1 - alpha* =
+     sqrt(Xi)/(1 + sqrt(Xi)) at high SNR under equal power), not the increase with SNR.
+     Proposal: "... saturates at high SNR, which is consistent with alpha* in Section III-D".
+     Optional quantitative support: compute 1 - alpha* from Xi(t) at the stored designs and
+     compare it with 0.27 (proposed) and 0.47 (FPA) [short MATLAB run].
+
+L-9  V-F, line 624: the sparse-FPA curve in Fig. 7 is non-monotonic (7.90 at Delta = 0.2,
+     7.61 at 0.3 bps/Hz), and AS exceeds the sparse FPA at Delta = 0.5 (8.39 versus 8.16 bps/Hz;
+     results/extra_single_user.mat). A reviewer may ask why. Proposal:
+     one clause attributing the dip to the grating lobes of the sparse array (as already argued
+     for Fig. 6(b) in line 613).
+
+L-10 notation.tex, line 45: the macro \sbe (bar sigma_e^2) is no longer used after v7 replaced
+     bar sigma_e^2 by zeta_e^{-1}. Harmless; delete for tidiness.
+
+L-11 Code comments (no effect on results):
+     default_params.m:46, functions/scheme_style.m:16, functions/fig_palette.m:11 and 13 say
+     "(Fig. 7)" for the power-allocation study, which is Fig. 8 -> "(Fig. 8)".
+     fig5_snr.m:9 and 16, extra_eve_aod_error.m:3, extra_random_eve.m:4,
+     functions/print_table_eve.m:2, functions/design_scenario.m:5 cite "Section V-H of main.tex",
+     which was removed in rev-5b -> "supplementary results (not in main.tex)".
+
+==================================================================================================
+Approval sheet (fill in A = approve, R = reject, or M = modify with a note):
+  S-1 [ ]  S-2 [ ]  S-3a [ ] b [ ] c [ ] d [ ] e [ ] f [ ] g [ ] h [ ] i [ ] j [ ]
+  M-1 [ ]  M-2 [ ]  M-3 [ ]  M-4 [ ]
+  F-0 [ ]  F-1 [ ]  F-2 [ ]  F-3 [ ]  F-5 [ ]  F-6 [ ]  F-7 [ ]  F-8 [ ]
+  L-1 [ ]  L-2 [ ]  L-3 [ ]  L-4 [ ]  L-5 [ ]  L-6 [ ]  L-7 [ ]  L-8 [ ]  L-9 [ ]  L-10 [ ]  L-11 [ ]
+==================================================================================================
