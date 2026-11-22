@@ -142,3 +142,13 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | I113 | functions/plot_fig5.m | "Proposed w/o AN" labeled next to its curve; inset with 9-pt integer ticks and an in-plot "20 dB" label | legend width; readability |
 | I112 | functions/save_figure.m | Octave PNGs: 600 dpi recorded in the header with ImageMagick (pixels unchanged) | Octave writes 72 dpi, which reads as a 29-in-wide image |
 | — | replot_all.m, run_all.m, rerun_as_swap.m, extra_angle_offset.m, extra_single_user.m, main_schemes.m, verify_numbers.m, readme.tex/pdf; results/fig7_essr_offset.png (new), fig7a_essr_offset_M3.png and fig7b_essr_offset_M1.png (removed) | figure numbers, plot calls, and descriptions updated | consistency |
+
+## Round rev-6a — synchronization with the author's reference version v7
+
+| ID | file:line | What | Why |
+|---|---|---|---|
+| I114 | main.tex (whole file except Sec. V) | text, equations, preamble (revision marks \rev, red), and bibliography taken from main_revised_v7.tex: Lemma 1 and Proposition 2 turned into inline derivations, Remark 1 (Eve-aware AN) added, ζ_e⁻¹ replaces σ̄_e², \hat R replaces \tilde R, R_m replaces \bar R_m, r_m replaces y_m, F_m(p;q) replaces f_m(p;q), \varkappa in Prop. 1, new contribution paragraph, etc. | author's reference version (merge only) |
+| I114 | main.tex (25 places) | reference notation \rev{\mathbf f}_m for the normalized ZF vector replaced by \wb_m (w̄_m) | author: keep the original ZF notation |
+| I115 | main.tex:Sec. V-B, V-D, V-G | eq:esrapprox → $\sum_{m=1}^M\hat R_m^{\mathrm{sec}}$; eq:alphastar → "$\alpha^\star$ in Section~\ref{sec:insight}"; Proposition~\ref{prop:wf} → \eqref{eq:wf} (×2), worded as in the reference | labels removed by the synced Secs. III–IV; all other Sec. V text unchanged |
+| I116 | main.tex (bibliography) | five new references from the reference, verified (arXiv ×4, OpenAlex/DOI ×1); ChenArxiv2026 "early access" | author's reference version |
+| — | main_preview.pdf | rebuilt (14 pages, no errors, undefined references, or overfull boxes; citation order = bibliography order) | build check |
