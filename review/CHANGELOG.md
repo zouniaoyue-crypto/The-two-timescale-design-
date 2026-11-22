@@ -158,3 +158,33 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | ID | File:line | What | Why |
 |---|---|---|---|
 | I117–I140 | review/review_report.txt (new), review/ISSUES.md | Stage 2 review report (High: none; Medium: 4; Figure: 8; Low: 11) and issue entries, all "proposed" or "needs-decision" | author's instruction: report first, modify only after item-by-item approval; no change to main.tex or the code |
+
+## Round rev-6c — implementation of the Stage 2 items approved by the author
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I117 (S-3a) | main.tex:567 | "Similar to [ChenArxiv2026]" → "\rev{As in} [ChenArxiv2026]" (v7 wording); \tilde\phi and the sentence on Δ kept | author: follow the report's recommendations |
+| I117 (S-3b) | main.tex:569 | "is executed from ... and two sets" → "is initialized with ... and with two sets" (v7) | same |
+| I117 (S-3d) | main.tex:592 | v7 wording ("confirms its accuracy at the optimized antenna positions", "In contrast", "all tested cases", gap "varies by less than 0.25 bps/Hz ... (from 1.52 to 1.76)"); ranking claim qualified: preserved at 20 dB and for P_tot/σ² ≥ 10 dB, below 10 dB only the order of the benchmarks differs | verify_numbers.m (fig5_snr.mat, F vs essr): spread 0.2406; rankings equal at every SNR ≥ 10 dB; proposed first at all SNRs |
+| I117 (S-3g) + I119 (M-2) | main.tex:611 | "For P_tot/σ² ≥ 10 dB, the proposed design allocates less power to the AN than all the benchmarks, ..., because the optimized positions decrease Ξ_m(t) in (32)"; former last sentence merged (v7) | fig5_snr.mat (anfrac): at 5 dB 0.039 vs AS 0.004 and FPA 0.028 |
+| I117 (S-3h) | main.tex:615 | "where the ESSRs of the FPA and AS do not depend on A" (v7) | grammar |
+| I117 (S-3i) + I136 (L-7) | main.tex:617 | "for which the AN occupies a single dimension" (v7); N = 8 proposed vs N = 16 rate-oriented MA: "slightly outperforms" | extra_num_antennas.mat: +0.2275 bps/Hz, paired SE 0.080 |
+| I117 (S-3j) | main.tex:628 | "can hardly" → "cannot effectively" (v7); sentence on the sparse FPA kept | author |
+| I117 (S-3c, S-3f) | main.tex:576, 609 | no change (AS footnote and V-D benchmark explanations kept as recommended) | author |
+| I118 (M-1) | main.tex:609; plot_fig5.m; fig5_snr.m:6 | sentence on the design without AN deleted; curve and direct label removed from Fig. 5(a) (MA_noAN still computed and stored in fig5_snr.mat, not plotted) | contradicted V-A (all schemes use Algorithm 1) |
+| I120 (M-3) | main.tex:617 | "approaches the rate-oriented MA as N increases and slightly exceeds it for N = 16" | paired differences resolved only at N = 16 (+0.44, SE 0.18) |
+| I121 (M-4) | main.tex:363, 685 | ϰ replaced: Proposition 1 "as κ_1 → ∞ with fixed ratios κ_m/κ_1 > 0, m ∈ M"; App. B "K = κ_1 K_0 with K_0 ≜ diag(1, κ_2/κ_1, ..., κ_M/κ_1) ≻ 0" (7 occurrences) | glyph next to κ_m; statement unchanged |
+| I122 (F-0) | main.tex:571 | new sentence: at 20 dB, the standard error of the average ESSR difference between any two schemes does not exceed 0.22 bps/Hz | F-0(3), option "sentence in V-A"; max over the 10 pairs = 0.2167 |
+| I122 (F-0) | main.tex:585, 598; functions/plot_fig5.m, plot_fig6.m, plot_legend_strip.m (new) | one-row legend shared by the two panels of Figs. 5 and 6 (results/legend_main_schemes, natural size, 9 pt); in-axes legends removed; y-ranges 5(a) [0, 35], 5(b) [0, 0.6], 6(a) [14, 24], 6(b) [10, 24]; inset of 5(a) moved into the freed upper-left area | F-0(2) |
+| I122 (F-0) | functions/save_figure.m, plot_legend_strip.m | PNG export drops the ancillary chunks (pixels identical, files reproducible byte for byte); MATLAB path unchanged (vector PDF/EPS), legend strip drawn at box size in MATLAB | F-0(1); the 254-gray seen in the review renders is a pdftoppm downsampling artifact (images are DeviceRGB, pure white at native resolution) |
+| I124 (F-2) | main.tex:196-219 | Fig. 2 redrawn: first block split into "Optimize t and powers (statistical CSI)" → "Move MAs"; braces state "t and powers fixed" (frame) and "precoders and AN updated" (CI); \footnotesize; wider last CI box | F-2; p, q, w̄_m, P⊥ are named in words because they are defined only in Sec. III-A |
+| I128 (F-7) | extra_single_user.m; results/extra_single_user.mat; functions/plot_fig7.m | Δ = 0.4 rad added (Octave 8.4, same parameters and drop seeds as the stored points, merged by scheme name, old rows unchanged); in-figure annotation removed, both legend entries kept | F-7(a), (b) |
+| I129 (F-8a) | functions/scheme_style.m, curve_style.m, plot_curve.m, manual_legend.m | EP benchmarks: pentagram (optimized α), right-pointing triangle (α = 0.5); star markers drawn 1.4× larger | F-8(a) |
+| I131 (L-2) | main.tex:76 | "..., whereas most MA-enabled PLS designs assume that this delay is negligible or tolerable [YuArxiv2025]." | source, Sec. 2.2.2: "most of these investigations assume that the latency of antenna movement is negligible or tolerable" (MA PLS works) |
+| I132 (L-3) | — | checked, no change | [ZhuArxiv2024NF] Sec. III-D: APV on statistical CSI, DBFM on instantaneous CSI (verbatim) |
+| I135 (L-6) | main.tex:605 | "attains more than 95% of its total increase within three iterations, and converges within about 15 iterations" | fig4_convergence.mat: smallest fraction 0.9575 |
+| I138 (L-9) | main.tex:628 | sparse FPA not monotonic in Δ: Eve approaches a grating lobe around Δ = 0.3 rad, which increases ρ_1(t) | extra_single_user.mat: 7.90 / 7.61 / 7.99 bps/Hz at Δ = 0.2 / 0.3 / 0.4; mean ρ_1 of the sparse FPA 0.279 / 0.319 / 0.319 / 0.252 at Δ = 0.2 / 0.25 / 0.3 / 0.4 |
+| I139 (L-10) | notation.tex:45 | unused macro \sbe deleted | — |
+| — | ma_secrecy_matlab/verify_numbers.m | new checks for every new or changed statement in Sec. V (paired SE, ranking, 95%, AN fraction ≥ 10 dB, crossover, N = 8 vs 16, Δ = 0.4, ρ_1 of the sparse FPA) | CLAUDE.md rule 3 |
+| — | ma_secrecy_matlab/readme.tex, readme.pdf | updated: legend strip, Fig. 5 without the w/o-AN curve, Δ grid of Fig. 7, Fig. 8 markers, PNG export | documentation |
+| — | results/*.png, main_preview.pdf | all figures replotted; manuscript rebuilt (14 pages; 0 errors, undefined references, overfull boxes, or LaTeX warnings) | build check |

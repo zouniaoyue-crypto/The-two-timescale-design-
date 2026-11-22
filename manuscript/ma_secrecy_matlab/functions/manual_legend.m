@@ -29,13 +29,13 @@ for r = 1:nr
         it = items{r}{c};
         if isempty(it), continue; end
         x = x0(c);
-        [lw, mfc] = curve_style(it, s);
+        [lw, mfc, ms] = curve_style(it, s);
         if ~strcmp(it.ls, 'none')
             plot(lax, x + [0 tok], [y y], 'LineStyle', it.ls, 'Color', it.color, 'LineWidth', lw);
         end
         if ~strcmp(it.marker, 'none')
             plot(lax, x + tok/2, y, 'LineStyle', 'none', 'Marker', it.marker, 'Color', it.color, ...
-                 'MarkerSize', s.ms, 'LineWidth', lw, 'MarkerFaceColor', mfc, 'MarkerEdgeColor', it.color);
+                 'MarkerSize', ms, 'LineWidth', lw, 'MarkerFaceColor', mfc, 'MarkerEdgeColor', it.color);
         end
         text(x + tok + 0.06, y, it.name, 'Parent', lax, 'FontName', s.font, ...
              'FontSize', s.fsLegend, 'VerticalAlignment', 'middle');

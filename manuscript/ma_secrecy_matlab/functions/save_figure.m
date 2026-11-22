@@ -12,9 +12,13 @@ drawnow;
 if exist('OCTAVE_VERSION', 'builtin')
     print(fig, [f '.png'], '-dpng', '-r600');
     % Octave records 72 dpi in the PNG header; record the true 600 dpi (3.5 in wide), so
-    % that the resolution is read correctly, e.g., by the IEEE graphics checker (needs
-    % ImageMagick; the pixels are unchanged, and the step is skipped if it is missing)
-    system(sprintf('convert "%s.png" -units PixelsPerInch -density 600 "%s.png" 2>/dev/null', f, f));
+    % that the resolution is read correctly, e.g., by the IEEE graphics checker, and drop
+    % the ancillary chunks (color, background, text, and time chunks), which carry no image
+    % data, so that each PNG holds only the pixels and the resolution and is identical
+    % between identical runs. Needs ImageMagick; the pixels are unchanged, and the step is
+    % skipped if ImageMagick is missing.
+    system(sprintf(['convert "%s.png" -define png:exclude-chunk=bKGD,cHRM,gAMA,iCCP,sRGB,tIME,tEXt,zTXt,iTXt,date ' ...
+                    '-units PixelsPerInch -density 600 "%s.png" 2>/dev/null'], f, f));
 else
     if ~isempty(which('exportgraphics'))                                 % R2020a+
         exportgraphics(fig, [f '.pdf'], 'ContentType', 'vector');

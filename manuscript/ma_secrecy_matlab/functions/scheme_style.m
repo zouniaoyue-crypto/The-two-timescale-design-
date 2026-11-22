@@ -14,8 +14,8 @@ switch key
     case 'AS_region', st = mk('AS, region-wide',        c.teal,   ':',  '>', 1.2);
     case 'MA_noAN',   st = mk('Proposed w/o AN',        c.red,    ':',  'x', 1.0);
     % power-allocation study (Fig. 7)
-    case 'MA_EPA',    st = mk('Equal power, opt. {\it\alpha}', c.purple, '-', 'd', 1.0);
-    case 'MA_fix',    st = mk('Equal power, {\it\alpha} = 0.5', c.dark,  '-', 'v', 1.0);
+    case 'MA_EPA',    st = mk('Equal power, opt. {\it\alpha}', c.purple, '-', 'p', 1.0);
+    case 'MA_fix',    st = mk('Equal power, {\it\alpha} = 0.5', c.dark,  '-', '>', 1.0);
     otherwise, error('scheme_style: unknown scheme %s', key);
 end
 end
