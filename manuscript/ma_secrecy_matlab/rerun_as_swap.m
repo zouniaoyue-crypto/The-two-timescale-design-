@@ -4,7 +4,7 @@ function res = rerun_as_swap(which, idx)
 %   the AS benchmark uses the same subset search in all figures of main.tex (Section V-A).
 %   The other schemes, the drops, and the Monte Carlo channel samples are unchanged
 %   (same seeds, which depend only on the drop index), so the comparisons remain paired.
-%   which : 'fig5_snr' (Fig. 5), 'fig6_region' (Fig. 6(a)), 'extra_angle_offset'
+%   which : 'fig5_snr' (Fig. 5), 'fig7_region' (Fig. 7(a)), 'extra_angle_offset'
 %           (Section V-F, M = 3), or 'extra_single_user' (Fig. 7, M = 1).
 %   idx   : optional indices of the values to run in this call (default: all values).
 %   The AS results of each value are saved in results/<which>_AS_swap_<i>.mat as soon as
@@ -19,7 +19,7 @@ if isempty(here), here = pwd; end
 addpath(here);  addpath(fullfile(here, 'functions'));
 switch which
     case 'fig5_snr',                                   field = 'P_dB';
-    case 'fig6_region',                                field = 'A';
+    case 'fig7_region',                                field = 'A';
     case {'extra_angle_offset', 'extra_single_user'},  field = 'Delta';
     otherwise, error('rerun_as_swap: unknown results file %s', which);
 end

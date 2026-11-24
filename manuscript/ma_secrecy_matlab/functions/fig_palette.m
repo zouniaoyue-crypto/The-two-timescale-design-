@@ -8,9 +8,9 @@ c.red    = hex('B03A2E');     % proposed design, Eve (Fig. 3), 20 dB (Fig. 4)
 c.blue   = hex('2E6DB4');     % rate-oriented MA, LUs (Fig. 3), 10 dB (Fig. 4)
 c.teal   = hex('2A9D8F');     % antenna selection
 c.ochre  = hex('C7852B');     % sparse FPA
-c.purple = hex('7B5EA7');     % equal power, optimized alpha (Fig. 7)
+c.purple = hex('7B5EA7');     % Monte Carlo ESSR (Fig. 4); equal power, optimized alpha (suppl.)
 c.gray   = [0.43 0.43 0.43];  % FPA (reference), MM only (Fig. 4)
-c.dark   = [0.23 0.23 0.23];  % equal power, alpha = 0.5 (Fig. 7)
+c.dark   = [0.23 0.23 0.23];  % equal power, alpha = 0.5 (supplementary)
 end
 
 function rgb = hex(h)

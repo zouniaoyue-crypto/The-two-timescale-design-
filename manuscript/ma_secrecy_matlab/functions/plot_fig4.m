@@ -4,7 +4,9 @@ function plot_fig4(res)
 %   (UPA initialization), drawn as continuous lines without markers; the x-axis shows the
 %   first 30 of the res.nIt iterations, since all the curves converge within about 15
 %   iterations (colors: SNR; line styles: N). The dotted gray curve shows Algorithm 2 without the
-%   grid search of Stage 1 (pure MM updates) for N = 8, 20 dB.
+%   grid search of Stage 1 (pure MM updates) for N = 8, 20 dB. If available (res.essrIt),
+%   the Monte Carlo ESSR of the iterates for N = 8, 20 dB is drawn in purple with filled
+%   markers, i.e., the actual ESSR along the iterations of the deterministic objective.
 s = fig_style();
 ax = new_figure();
 it = 0:res.nIt;
@@ -26,11 +28,21 @@ end
 st = struct('color', c.gray, 'ls', ':', 'marker', 'none', 'lw', 1.2);
 draw(ax, it, mean(res.histMM, 1), st, s);
 st.name = '{\itN} = 8, 20 dB, MM only';  st.span = true;
+rows = {{items{1}, items{3}}, {items{2}, items{4}}, {st, []}};
+if isfield(res, 'essrIt') && any(res.essrIt(:))
+    mc = struct('color', c.purple, 'ls', '-', 'marker', 'o', 'lw', 0.8, 'mfc', c.purple);
+    e = mean(res.essrIt, 1);  k = 1:2:numel(e);       % markers at every second iteration
+    plot(ax, it, e, 'LineStyle', '-', 'Color', c.purple, 'LineWidth', 0.8);
+    plot(ax, it(k), e(k), 'LineStyle', 'none', 'Marker', 'o', 'Color', c.purple, ...
+         'MarkerSize', s.ms, 'MarkerFaceColor', c.purple, 'LineWidth', 0.8);
+    mc.name = '{\itN} = 8, 20 dB, Monte Carlo';  mc.span = true;
+    rows{end+1} = {mc, []};
+end
 xlim(ax, [0 30]);  set(ax, 'XTick', 0:5:30);   % converged within about 15 iterations
 set(ax, 'YLim', [0 24], 'YTick', 0:4:24);
-label_axes(ax, 'Number of iterations', 'Objective value of (P3) (bps/Hz)');
+label_axes(ax, 'Number of iterations', 'ESSR (bps/Hz)');
 % legend in the empty band below the 10-dB curves (2 columns), right of the initial rise
-place_legend(ax, {{items{1}, items{3}}, {items{2}, items{4}}, {st, []}}, 'se');
+place_legend(ax, rows, 'se');
 save_figure('fig4_convergence');
 end
 

@@ -4,7 +4,9 @@ function res = sweep_schemes(prm, field, values, schemes)
 %   values and all schemes.
 %   res.essr(i, k), res.anfrac(i, k), res.F(i, k): averages for value i and scheme k;
 %   res.essrDrops(i, k, d): ESSR of drop d (for statistics beyond the average);
-%   res.essr_tin(i, k): ESSR for an eavesdropper treating interference as noise.
+%   res.essr_tin(i, k): ESSR for an eavesdropper treating interference as noise;
+%   res.anpred(i, k): high-SNR prediction 1 - alpha* of the AN power fraction (an_highsnr.m).
+%   field = 'kappa_common': common Rician factor (dB) of the LUs and Eve, kappa_m = kappa_e.
 %   field = 'spread': beta_m (dB) = -value (m-1)/(M-1), i.e., [0, -value/2, -value] for M = 3.
 %   field = 'eveAoDErr': error (rad) of the AoD of Eve known at the BS (design_scenario.m);
 %   the designs are evaluated for the true AoD.
@@ -16,10 +18,13 @@ res.anfrac = zeros(numel(values), K);
 res.F = zeros(numel(values), K);
 res.essrDrops = zeros(numel(values), K, prm.numDrops);
 res.essr_tin = zeros(numel(values), K);
+res.anpred = zeros(numel(values), K);
 for i = 1:numel(values)
     pr = prm;
     if strcmp(field, 'spread')
         pr.beta_dB = -values(i) * (0:prm.M-1) / max(prm.M - 1, 1);
+    elseif strcmp(field, 'kappa_common')
+        pr.kappa_dB = values(i);  pr.kappae_dB = values(i);
     else
         pr.(field) = values(i);
     end
@@ -34,6 +39,7 @@ for i = 1:numel(values)
             res.essrDrops(i, k, dI) = r.essr;
             res.essr_tin(i, k) = res.essr_tin(i, k) + r.essr_tin/prm.numDrops;
             res.anfrac(i, k) = res.anfrac(i, k) + r.anfrac/prm.numDrops;
+            res.anpred(i, k) = res.anpred(i, k) + r.anpred/prm.numDrops;
             res.F(i, k)      = res.F(i, k)      + r.F/prm.numDrops;
         end
     end

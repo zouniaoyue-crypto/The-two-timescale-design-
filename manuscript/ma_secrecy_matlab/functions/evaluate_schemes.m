@@ -13,7 +13,10 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %     'MA_noAN'  - MA positions + {p_m}, no AN (q = 0)
 %     'MA_EPA'   - MA positions + equal user power, power-splitting factor alpha optimized
 %     'MA_fix'   - MA positions + equal user power, fixed alpha = prm.alphaFix
+%     'MA_eq'    - MA positions designed by Algorithm 2 under equal power p_m = q = P_tot/N
+%                  (best of prm.numInit initializations)
 %     'FPA_full' - compact lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
+%     'FPA_eq'   - compact lambda/2 UPA + equal power p_m = q = P_tot/N
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
 %     'AS'       - antenna selection: N of the 2N antennas of a lambda/2 UPA are selected
 %                  by exhaustive search based on the statistical CSI (as_select.m),
@@ -22,7 +25,8 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %                  spans the movable region C (spacing A/(asCols-1) x A/(asRows-1))
 %   out.<scheme> has fields essr (Monte Carlo ESSR, worst-case Eve), essr_tin (Eve treating
 %   the other LUs' signals as noise), Rb, Re, F (approximate ESSR),
-%   anfrac ((N-M) q / P_tot), T, p, q, hist.
+%   anfrac ((N-M) q / P_tot), anpred (high-SNR prediction 1 - alpha* of the AN power
+%   fraction for the designed positions, an_highsnr.m), T, p, q, hist.
 
 if nargin < 4, seed = 1; end
 if nargin < 5, scTrue = sc; end
@@ -40,8 +44,8 @@ for k = 1:numel(schemes)
     name = schemes{k};
     hist = [];
     switch name
-        case {'MA_full', 'MA_EPA', 'MA_noAN', 'MA_fix'}
-            mode = lower(name(4:end));          % 'full', 'epa', 'noan' or 'fix'
+        case {'MA_full', 'MA_EPA', 'MA_noAN', 'MA_fix', 'MA_eq'}
+            mode = lower(name(4:end));          % 'full', 'epa', 'noan', 'fix' or 'eq'
             best = -inf;
             for i = 1:numel(inits)
                 [Ti, pi_, qi, hi] = ao_optimize(sc, inits{i}, prm, mode);
@@ -55,6 +59,9 @@ for k = 1:numel(schemes)
         case 'FPA_full'
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, 'full');
+        case 'FPA_eq'
+            T = Tupa;
+            [p, q] = power_opt(sc, T, prm, 'eq');
         case 'AS'
             T = as_select(sc, prm);
             [p, q] = power_opt(sc, T, prm, 'full');
@@ -89,6 +96,7 @@ for k = 1:numel(schemes)
     r.essr_tin = st.essr_tin;                  % eavesdropper treating interference as noise
     r.F = objective_F(sc, T, p, q, true);      % approximate ESSR as predicted at the BS
     r.anfrac = (sc.N - sc.M)*q/sc.P;
+    r.anpred = an_highsnr(sc, T);              % high-SNR prediction of r.anfrac (Section III-D)
     r.T = T;  r.p = p;  r.q = q;  r.hist = hist;
     out.(name) = r;
 end

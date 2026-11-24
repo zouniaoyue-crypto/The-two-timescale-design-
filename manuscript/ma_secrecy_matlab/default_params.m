@@ -43,10 +43,10 @@ prm.asMaxSubsets = 0;   % AS: exhaustive search only if nchoosek(2N, N) <= asMax
                          %   exhaustive search is used only for validation, extra_as_swap_check.m)
 prm.asSwapStarts = 5;    % AS swap search: greedy-removal start + 4 random starts
 prm.asSwapMaxIter = 100; % AS swap search: maximum number of exchanges per start
-prm.alphaFix   = 0.5;    % fixed power-splitting factor of the equal-power benchmark (Fig. 7)
+prm.alphaFix   = 0.5;    % fixed power-splitting factor of the 'fix' benchmark (supplementary only)
 
 % ---------------- evaluation ----------------
-prm.S          = 5000;   % Monte Carlo channel realizations per evaluation
+prm.S          = 1000;   % Monte Carlo channel realizations per evaluation (Fig. 3: 10^4)
 prm.numDrops   = 100;    % random user/Eve drops per point
 prm.seed       = 2026;   % base random seed
 end

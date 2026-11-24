@@ -3,8 +3,8 @@ function res = extra_single_user(prm)
 %   and AN power fraction versus the AoD offset Delta between Eve and the LU. The
 %   ergodic rate of the LU does not depend on the antenna positions for a given power, so
 %   that the rate-oriented MA design keeps its initial positions (compact UPA) and
-%   coincides with the FPA, whereas the proposed design reduces the leakage. Fig. 7 of
-%   main.tex.
+%   coincides with the FPA, whereas the proposed design reduces the leakage. Supplementary
+%   result (former Fig. 7 of main.tex, removed in rev-7; plot_offset.m).
 
 if nargin < 1, prm = default_params(); end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));

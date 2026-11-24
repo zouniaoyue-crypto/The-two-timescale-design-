@@ -1,11 +1,11 @@
 function res = extra_as_swap_check(prm, Nvals)
 %EXTRA_AS_SWAP_CHECK  Validation of the swap search of the AS benchmark (as_swap.m), which
-%   is used for all N in Figs. 5-7 of main.tex, against the exhaustive search for
+%   is used for all N in Figs. 5, 7, and 8 of main.tex, against the exhaustive search for
 %   N <= 10 on the same 100 drops as extra_num_antennas.m. For each drop, the selection
-%   metric (approximate ESSR, as_metric.m) of both subsets is stored; if the subsets
-%   differ, the ESSR of the swap subset is evaluated by Monte Carlo simulation exactly as
-%   in evaluate_schemes.m and compared with the stored ESSR of the exhaustive subset
-%   (results/extra_num_antennas_N<N>.mat). Saved in results/extra_as_swap_check.mat.
+%   metric (approximate ESSR, as_metric.m) of both subsets is stored, and the ESSR of the
+%   exhaustive subset and, if different, of the swap subset is evaluated by Monte Carlo
+%   simulation as in evaluate_schemes.m (power allocation of Algorithm 1, prm.S samples).
+%   Saved in results/extra_as_swap_check.mat.
 
 if nargin < 1 || isempty(prm), prm = default_params(); end
 if nargin < 2, Nvals = [4 6 8 10]; end
@@ -17,8 +17,6 @@ res.essrExh = nan(I, D);  res.essrSwap = nan(I, D);
 for i = 1:I
     N = Nvals(i);
     pr = prm;  pr.N = N;  pr.upaCols = N/2;  pr.asCols = N/2;
-    St = load(fullfile(results_dir(), sprintf('extra_num_antennas_N%d.mat', N)));
-    k = find(strcmp(St.r.schemes, 'AS'), 1);
     Tc = upa_positions(pr.asRows*pr.asCols, pr.asRows, pr.asCols, 0.5);
     t0 = tic;
     for dI = 1:D
@@ -29,7 +27,9 @@ for i = 1:I
         [sS, fS] = as_swap(scD, pr, Tc, N);
         res.fExh(i, dI) = fE;  res.fSwap(i, dI) = fS;
         res.same(i, dI) = isequal(sort(sE), sort(sS));
-        res.essrExh(i, dI) = St.r.essrDrops(1, k, dI);
+        T = Tc(sE, :);
+        [p, q] = power_opt(scD, T, pr, 'full');
+        [~, ~, res.essrExh(i, dI)] = mc_rates(sc, T, p, q, pr.S, prm.seed + dI);
         if res.same(i, dI)
             res.essrSwap(i, dI) = res.essrExh(i, dI);
         else

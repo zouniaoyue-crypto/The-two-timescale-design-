@@ -1,8 +1,8 @@
 function res = extra_pa_spread(prm, P_dB)
 %EXTRA_PA_SPREAD  Power-allocation study versus the spread of the large-scale fading of
 %   the LUs, beta_m (dB) = -spread (m-1)/(M-1), i.e., [0, -spread/2, -spread] dB for M = 3,
-%   at a given P_tot/sigma^2 (default 10 dB; main.tex uses 0 and 10 dB). Fig. 8 of
-%   main.tex. Schemes as in fig7_power_allocation.m.
+%   at a given P_tot/sigma^2 (default 10 dB). Supplementary result (former Fig. 8 of
+%   main.tex, removed in rev-7; plot_pa_spread.m). Schemes as in extra_pa_hetero.m.
 
 if nargin < 1 || isempty(prm), prm = default_params(); end
 if nargin < 2, P_dB = 10; end

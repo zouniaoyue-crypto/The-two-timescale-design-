@@ -4,7 +4,9 @@ function [p, q, Gbest] = power_opt(sc, T, prm, mode)
 %   mode = 'noan'  : q = 0 (no AN), {p_m} by secrecy water-filling
 %   mode = 'epa'   : equal power p_m = alpha P/M, q = (1-alpha) P/(N-M), alpha by 1-D search
 %   mode = 'fix'   : equal power with the fixed power-splitting factor alpha = prm.alphaFix
-%                    (no power optimization; benchmark of Section V)
+%                    (no power optimization; supplementary benchmark)
+%   mode = 'eq'    : equal power on all N spatial streams, p_m = q = P_tot/N, i.e.,
+%                    alpha = M/N (no power optimization; benchmarks of Section V)
 %
 %   The one-dimensional search uses a coarse grid followed by a fine grid around the
 %   best coarse point (both with prm.nGrid points).
@@ -27,8 +29,8 @@ switch mode
         [alpha, Gbest] = search1d(G, 0, 1, prm.nGrid);
         p = alpha*P/M*ones(M,1);
         q = (1 - alpha)*P/(N - M);
-    case 'fix'
-        alpha = prm.alphaFix;
+    case {'fix', 'eq'}
+        if strcmp(mode, 'eq'), alpha = M/N; else, alpha = prm.alphaFix; end
         Gbest = Gepa(alpha);
         p = alpha*P/M*ones(M,1);
         q = (1 - alpha)*P/(N - M);

@@ -6,8 +6,11 @@ function plot_fig5(res)
 %   around x0 = 20 dB (the default SNR), where the rate-oriented MA, the sparse FPA, and
 %   AS nearly overlap. A wider window (e.g., 15-25 dB) is not used, because the ESSRs rise
 %   by about 10 bps/Hz over it, so that an inset of this size would not magnify the
-%   curves. The proposed design without AN ('MA_noAN', evaluated by fig5_snr.m) is not
-%   plotted.
+%   curves. Panel (b) also shows, as thin horizontal dotted lines, the high-SNR prediction
+%   1 - alpha* of the AN power fraction (Section III-D 3) of main.tex, an_highsnr.m) for the
+%   designs of the proposed scheme and the FPA at the highest SNR, i.e., their predicted
+%   saturation levels. The equal-power schemes of Fig. 6
+%   are plotted by plot_fig6.m.
 xl = 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)';
 keys = main_schemes();
 items = cellfun(@scheme_style, keys, 'UniformOutput', false);
@@ -23,6 +26,14 @@ save_figure('fig5a_essr_snr');
 % (b) AN power fraction
 [Y, keysB] = pick_schemes(res, 'anfrac', keys);
 ax = plot_schemes(res.values, Y, keysB);
+if isfield(res, 'anpred')
+    for key = {'MA_full', 'FPA_full'}
+        j = find(strcmp(res.schemes, key{1}), 1);
+        st = scheme_style(key{1});
+        y = res.anpred(end, j);                    % prediction for the designs at the highest SNR
+        plot(ax, res.values([1 end]), [y y], 'LineStyle', ':', 'Color', st.color, 'LineWidth', 0.8);
+    end
+end
 label_axes(ax, xl, 'AN power fraction');
 set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 0.6], 'YTick', 0:0.1:0.6);
 save_figure('fig5b_an_fraction');

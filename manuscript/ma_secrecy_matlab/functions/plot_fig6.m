@@ -1,33 +1,16 @@
-function plot_fig6(resA, resN)
-%PLOT_FIG6  Fig. 6: (a) ESSR versus the side length A of the movable region (resA,
-%   fig6_region.m); (b) ESSR versus the number of MAs N (resN, extra_num_antennas.m).
-%   Both panels show the schemes in main_schemes.m, including the sparse FPA spanning the
-%   movable region and AS with the compact candidate array, whose subset is selected by the
-%   swap search (as_swap.m) for all N, as in Figs. 5 and 7. AS with region-wide candidates
-%   (extra_as_region.m) is a supplementary result and is not plotted. The legend is shared
-%   by both panels and saved separately (plot_legend_strip.m, results/legend_main_schemes).
-s = fig_style();
-% ---------------- (a) region size ----------------
-[Y, keys] = pick_schemes(resA, 'essr');
-ax = new_figure();
+function plot_fig6(res)
+%PLOT_FIG6  Fig. 6: ESSR versus the transmit SNR for the 2 x 2 power-allocation design
+%   (pa_schemes.m): the proposed design and the FPA, each with the power allocation of
+%   Algorithm 1 and with equal power p_m = q = P_tot/N (fig5_snr.m). The four-entry legend
+%   is placed in the empty upper-left area of the panel.
+xl = 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)';
+keys = pa_schemes();
+[Y, keys] = pick_schemes(res, 'essr', keys);
+if isempty(keys), return; end
+ax = plot_schemes(res.values, Y, keys);
+label_axes(ax, xl, 'ESSR (bps/Hz)');
+set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 35], 'YTick', 0:5:35);
 items = cellfun(@scheme_style, keys, 'UniformOutput', false);
-for k = numel(keys):-1:1                       % reverse order: the proposed design on top
-    plot_curve(ax, resA.values, Y(:, k), items{k});
-end
-label_axes(ax, 'Side length of the movable region {\itA}/{\it\lambda}', 'ESSR (bps/Hz)');
-set(ax, 'XLim', [resA.values(1) resA.values(end)], 'XTick', resA.values, 'YLim', [14 24], 'YTick', 14:2:24);
-save_figure('fig6a_essr_region');
-plot_legend_strip('legend_main_schemes', items);   % one row above both panels (main.tex)
-if nargin < 2 || isempty(resN), return; end
-% ---------------- (b) number of MAs ----------------
-ax = new_figure();
-keys = main_schemes();
-items = cellfun(@scheme_style, keys, 'UniformOutput', false);
-for k = numel(keys):-1:1                       % reverse order: the proposed design on top
-    j = find(strcmp(resN.schemes, keys{k}), 1);
-    plot_curve(ax, resN.values, resN.essr(:, j), items{k});
-end
-label_axes(ax, 'Number of MAs {\itN}', 'ESSR (bps/Hz)');
-set(ax, 'XLim', [resN.values(1) resN.values(end)], 'XTick', resN.values, 'YLim', [10 24], 'YTick', 10:2:24);
-save_figure('fig6b_essr_antennas');
+place_legend(ax, {items(1:2), items(3:4)}, 'nw');
+save_figure('fig6_essr_power');
 end
