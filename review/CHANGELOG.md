@@ -188,3 +188,9 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | — | ma_secrecy_matlab/verify_numbers.m | new checks for every new or changed statement in Sec. V (paired SE, ranking, 95%, AN fraction ≥ 10 dB, crossover, N = 8 vs 16, Δ = 0.4, ρ_1 of the sparse FPA) | CLAUDE.md rule 3 |
 | — | ma_secrecy_matlab/readme.tex, readme.pdf | updated: legend strip, Fig. 5 without the w/o-AN curve, Δ grid of Fig. 7, Fig. 8 markers, PNG export | documentation |
 | — | results/*.png, main_preview.pdf | all figures replotted; manuscript rebuilt (14 pages; 0 errors, undefined references, overfull boxes, or LaTeX warnings) | build check |
+
+## Round rev-7a — revision plan (no manuscript, code, or result changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I141–I151 | review/revision_plan_rev7.md (new), review/ISSUES.md | unified revision plan for questions (2)–(7): MM comparison with Zheng et al., feasibility and predicted impact, macro assessment, Δ, ergodic-approximation layers, sample size, benchmark redesign, Section V structure, Rician-factor figure | author's request: plan first, apply after approval |

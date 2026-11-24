@@ -196,3 +196,19 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I138 | L | main.tex:624 (V-F) | sparse-FPA dip at Δ = 0.3 and AS > sparse FPA at Δ = 0.5 unexplained | extra_single_user.mat | approved (author) | fixed (rev-6c) |
 | I139 | L | notation.tex:45 | unused macro \sbe | grep | approved (author) | fixed (rev-6c) |
 | I140 | L | code comments (default_params.m:46, scheme_style.m:16, fig_palette.m:11,13; "Section V-H" in 6 files) | stale figure/section references | grep | not approved (author) | closed (no change) |
+
+## Round rev-7 — revision plan for the solution method and the simulation section (`review/revision_plan_rev7.md`; proposed, awaiting the author's decisions)
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I141 (D1) | — | Sec. IV-B (Stage 2) | MM with descent-lemma minorizer and backtracking vs. Zheng et al.'s MM–SCA with closed-form curvature and CVX | plan §1–2; Fig. 4 data (local MM −4.1% after 50 iterations); grid check 0.011% | proposed: keep ours | proposed |
+| I142 (D2) | M | Sec. III-D, IV-A, IV-B, App. C | derivation depth: (a) explicit Lipschitz bound; (b) single-LU optimality (ρ₁ = 0) with region condition; (c) explicit optimal q; (d) runtime comparison; (e) KKT statement (needs new refs) | plan §3; Fig. 7 saturation 8.692/8.693/8.694 bps/Hz at Δ = 0.3/0.4/0.5 | proposed | proposed |
+| I143 (D3) | M | Sec. V-A, V-F, Fig. 7 | AoD offset Δ: keep the scenario, reinterpret through D2(b), add random-Eve robustness, drop secondary discussion | plan §4; extra_random_eve_M1/M3, extra_angle_offset | proposed: option B | proposed |
+| I144 (D4) | L | Fig. 4 | optionally add Monte Carlo ESSR along iterations (as in Zheng et al., Figs. 3–4) | plan §5 | proposed (optional) | proposed |
+| I145 (D5) | L | Sec. V-A | sample size: 100 drops × 10³ realizations (Fig. 3: 10⁴) | plan §6 | proposed | proposed |
+| I146 (D6) | — | Sec. V-A | keep the rate-oriented MA benchmark | plan §7.1 | proposed | proposed |
+| I147 (D7) | M | Sec. V-G, Fig. 8, Sec. IV-A | remove Fig. 8 and V-G; 2 × 2 power-allocation benchmarks (equal p, q: p_m = q = P/N); display the optimal q | plan §7.2; extra_pa_spread_* (EP with optimized α above the proposed by 1.1% at 0 dB) | proposed | proposed |
+| I148 (D8) | L | Sec. V-A | keep AS (as in Chen et al.) with a rationale sentence; no APS curve | plan §7.3 | proposed | proposed |
+| I149 (D9) | M | Sec. V | seven-scheme suite and figure assignment | plan §7.4 | proposed | proposed |
+| I150 (D10) | L | Sec. V | merge the seven subsections into four, grouped by purpose | plan §8.1 | proposed | proposed |
+| I151 (D11) | M | Sec. V | add ESSR vs. Rician factor: (a) common κ, (b) Eve's κ_e | plan §8.2 | proposed | proposed |
