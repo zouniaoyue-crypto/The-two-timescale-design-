@@ -228,3 +228,18 @@ Widths are from `legend_widths.m` (the metrics and column layout of `plot_legend
 | D9 | Seven schemes, layout **L-A′** (§3.2) | Keeps every panel at the column size; ≤ 5 scheme curves per panel |
 | D10 | Four subsections: V-A Setup and Benchmarks; V-B Accuracy and Convergence; V-C Secrecy Performance Versus Transmit SNR (Figs. 5, 6); V-D Impact of System Parameters (1) region size and number of MAs, Fig. 7; 2) Rician factors, Fig. 8) | Plan §8.1, with the Δ item removed (D3) |
 | D11 | Two panels, κ ∈ {−10, −5, 0, 5, 10, 15, 20} dB, 20 dB, schemes 1, 3–6 (your decision) | Plan §8.2 |
+
+---
+
+## 5. Execution outcome (rev-7c/7d)
+
+The selection of §4 was implemented and every Section V result was rerun at full scale: 100 drops, 10³ realizations, Octave 8.4. All numbers are in `review/verify_numbers_rev7.txt`.
+
+| Prediction in this report | Full-scale result |
+|---|---|
+| Zheng-type Stage 2: same objective, ≈ 2.6× MM iterations (§1) | Confirmed with 100 drops: objective −0.05% ± 0.06%, curvature ≈ 12× the accepted δ_n, MM iterations 2.65×, run time 17× (`extra_mm_compare.mat`) |
+| AN-fraction prediction within ≈ 0.01 (§2) | Confirmed at 30 dB: 0.29 vs. 0.28 (proposed), 0.49 vs. 0.49 (FPA) |
+| Equal-power loss ≈ 1.8 bps/Hz for the MAs (§3.2) | Confirmed: 1.79–1.94 bps/Hz at all SNRs |
+| Equal-power loss ≈ 0.4 bps/Hz for the FPA (§3.2) | **Not confirmed**: 0.72 and 0.64 bps/Hz at 20 and 30 dB. The estimate covered only the AN split; for the FPA, the per-user allocation also matters because Eve lies in the main lobe of LU 1. The text states only the measured values |
+| Random-Eve gain ≈ 10% (§4, D3) | 10.3% over the rate-oriented MA at 20 dB |
+| Rician factors: schemes converge for small κ; Eve-aware gain grows with κ_e (D11) | Confirmed: spread < 0.04 bps/Hz at κ = −10 dB; gain over the rate-oriented MA from 1.0% (κ_e = −10 dB) to 17.0% (20 dB) |

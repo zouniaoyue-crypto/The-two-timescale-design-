@@ -202,3 +202,33 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | I141 (D1) | review/experiments/rev7b_d1/ (new: experiment copies, d1_A/B/C.mat, logs, checks) | small-scale S0-vs-S1 verification: 10 drops at 20 dB; S0, Stage 1 only, S1-best (oracle curvature), S1-Zheng (Lemma 1 + closed-form curvature of Zheng et al.), and both without Stage 1 | author's request (D1 Q1–Q3) |
 | I141–I151 | review/rev7b_d1_report.md (new) | answers to Q1–Q3, D2 recommendation, benchmark list, figure assignment (layout L-A′), legend label sets A/B/C with measured widths, final selection of D1–D11 | author's request; decisions delegated to Claude by the author on 2026-11-24 |
 | I141–I151 | review/ISSUES.md:200–214 | decisions and statuses recorded (decided; implementation in rev-7c) | shared state |
+
+## Round rev-7c/7d — execution of the rev-7 selection (decisions delegated by the author on 2026-11-24)
+
+Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel realizations; Fig. 3 unchanged with 10⁴), four to five parallel sessions, about 3.1 h. Every number below is printed by `ma_secrecy_matlab/verify_numbers.m`; the full output is in `review/verify_numbers_rev7.txt`.
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I145 (D5) | default_params.m | `S = 1000` (was 5000) | D5 |
+| I147 (D7) | functions/power_opt.m (`'eq'`), ao_optimize.m, evaluate_schemes.m (`MA_eq`, `FPA_eq`), pa_schemes.m (new), scheme_style.m | equal-power benchmarks p_m = q = P_tot/N; dotted lines with filled markers in the color of the counterpart | D7 (2 × 2 design) |
+| I142 (D2c) | functions/an_highsnr.m (new), evaluate_schemes.m (`anpred`), sweep_schemes.m, plot_fig5.m | high-SNR prediction 1 − α⋆ of the AN fraction (root of eq:alphastar), drawn as dotted saturation levels in Fig. 5(b) | D2(c) |
+| I144 (D4) | ao_optimize.m (`iters`), fig4_convergence.m (`essrIt`), plot_fig4.m, fig_palette.m | Monte Carlo ESSR of the iterates (N = 8, 20 dB) in Fig. 4, purple with filled markers | D4 |
+| I149 (D9) | fig5_snr.m, functions/plot_fig6.m (new), plot_fig7.m (was plot_fig6.m), fig7_region.m (was fig6_region.m) | layout L-A′: Fig. 5 (a) ESSR, (b) AN fraction; new one-column Fig. 6 (2 × 2 power allocation); Fig. 7 (A, N) | D9 |
+| I151 (D11) | fig8_rician.m (new), functions/plot_fig8.m (new), sweep_schemes.m (`kappa_common`) | Fig. 8: ESSR vs. (a) κ = κ_m = κ_e, (b) κ_e | D11 |
+| I142 (D2d) | extra_mm_compare.m (new), functions/mmcmp_*.m (new, ported from review/experiments/rev7b_d1) | Stage 2 vs. the surrogate of [ZhengTCOM2025], 100 drops | D2(d) |
+| I143, I147 | functions/plot_offset.m, plot_pa_spread.m (renamed), extra_pa_hetero.m (was fig7_power_allocation.m), results/extra_pa_hetero.mat (renamed), run_all.m, replot_all.m | removed figures and sections kept as supplementary scripts (not rerun) | D3, D7 |
+| — | extra_as_swap_check.m | ESSR of the exhaustive subset evaluated by Monte Carlo instead of read from extra_num_antennas_N<N>.mat, which hold swap subsets since the AS unification | the check would otherwise compare the swap search with itself |
+| — | verify_numbers.m | rewritten for the new Section V; uses results_dir() | CLAUDE.md rule 3 |
+| — | readme.tex, readme.pdf | new scripts, schemes, outputs, figures, run times; equation numbers updated to the current main.tex (they were stale: e.g., water-filling (40) → (37), "Proposition 2" removed) | documentation |
+| — | results/ | new: fig6_essr_power, fig7a/7b, fig8a/8b PNGs, fig7_region.mat, fig8_rician_a/b.mat, extra_mm_compare.mat; rerun: fig4, fig5_snr, extra_num_antennas*, extra_random_eve_M3, extra_grid_check, extra_as_swap_check; removed: fig6_region.mat, fig6a/6b, fig7_essr_offset, fig8_pa_spread PNGs | reruns |
+| — | main.tex:39–46 | revision marks: previous round accepted, this round in red | file convention |
+| I142 (D2b) | main.tex:391 | III-D 2): ρ₁ = 0 optimal for any (p₁, q); sufficient region condition λ/(2‖a_e − a₁‖) + (N/2 − 1)D_min ≤ A (even N, D_min ≤ λ/(2‖a_e − a₁‖)); infeasible if λ/(2‖a_e − a₁‖) > √2 A | D2(b), exact remark without a figure |
+| I142 (D2c) | main.tex:399 (eq:alphastar), 443 (eq:qstat) | III-D 3): α⋆ for unequal Ξ_m as the unique root of a strictly concave objective; IV-A: stationarity condition of q⋆ with its interpretation | D2(c) |
+| I142 (D2a) | main.tex:507 | IV-B: backtracking terminates after at most 1 + ⌈log₂(L/δ₀)⌉⁺ trials; accepted δ_n ≤ max{δ₀, 2L} | D2(a) (short form; explicit constant omitted) |
+| I150 (D10) | main.tex:573–650 | Section V regrouped: V-A Setup and Benchmarks; V-B Accuracy and Convergence (1), 2)); V-C Secrecy Performance Versus Transmit SNR; V-D Impact of System Parameters (1), 2)) | D10 |
+| I145, I148, I147 | main.tex:577–587 | V-A: grid check 0.04% (rerun), standard errors 0.55% / 0.22, 10³ realizations, AS rationale ("reconfigures the array by switching instead of antenna movement"), equal-power benchmark item | D5, D8, D7 |
+| I144, I142 (D2d) | main.tex:596–605, Fig. 4 caption | V-B 2): Monte Carlo ESSR along the iterations (15.82 → 20.70 bps/Hz, 1.61–1.76 above the objective); comparison with the surrogate of [ZhengTCOM2025]: objective within 0.1%, curvature ≈ 12×, MM iterations 2.6× | D4, D2(d) |
+| I143 (D3), I147 (D7) | main.tex:607–629, Fig. 6 (new) | V-C: gains 14.8% / 31.1% at 20 dB; random-Eve gain 10.3%; AN fraction predictions 0.29 / 0.49 vs. 0.28 / 0.49 at 30 dB; Fig. 6 paragraph (equal-power loss 1.79–1.94 bps/Hz for the MAs, 1.83 → 0.64 for the FPA) | D3, D7 |
+| I151 (D11) | main.tex:631–646, Fig. 8 (new) | V-D 2): Rician factors (spread < 0.04 bps/Hz at κ = −10 dB; gains 19.3% / 49.4% at κ = 20 dB; gain over the rate-oriented MA 1.0% → 17.0% from κ_e = −10 to 20 dB) | D11 |
+| I143, I147 | main.tex (former V-F, V-G, Figs. 7–8) | removed: AoD-offset subsection and figure, power-allocation subsection and figure, heterogeneous-LU discussion | D3 (option C), D7 |
+| — | main.tex:80, 651 | contributions and conclusion: "its gain persists for a single LU" (no longer simulated) → gain grows with the Rician factor of Eve | consistency with the new Section V |
