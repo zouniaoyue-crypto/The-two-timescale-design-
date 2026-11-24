@@ -194,3 +194,11 @@ no comparison or parameter table (author). Line numbers refer to `manuscript/mai
 | ID | File:line | What | Why |
 |---|---|---|---|
 | I141–I151 | review/revision_plan_rev7.md (new), review/ISSUES.md | unified revision plan for questions (2)–(7): MM comparison with Zheng et al., feasibility and predicted impact, macro assessment, Δ, ergodic-approximation layers, sample size, benchmark redesign, Section V structure, Rician-factor figure | author's request: plan first, apply after approval |
+
+## Round rev-7b — D1 verification and final selection (no manuscript or production-code changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I141 (D1) | review/experiments/rev7b_d1/ (new: experiment copies, d1_A/B/C.mat, logs, checks) | small-scale S0-vs-S1 verification: 10 drops at 20 dB; S0, Stage 1 only, S1-best (oracle curvature), S1-Zheng (Lemma 1 + closed-form curvature of Zheng et al.), and both without Stage 1 | author's request (D1 Q1–Q3) |
+| I141–I151 | review/rev7b_d1_report.md (new) | answers to Q1–Q3, D2 recommendation, benchmark list, figure assignment (layout L-A′), legend label sets A/B/C with measured widths, final selection of D1–D11 | author's request; decisions delegated to Claude by the author on 2026-11-24 |
+| I141–I151 | review/ISSUES.md:200–214 | decisions and statuses recorded (decided; implementation in rev-7c) | shared state |

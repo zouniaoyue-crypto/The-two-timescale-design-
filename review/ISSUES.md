@@ -197,18 +197,18 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I139 | L | notation.tex:45 | unused macro \sbe | grep | approved (author) | fixed (rev-6c) |
 | I140 | L | code comments (default_params.m:46, scheme_style.m:16, fig_palette.m:11,13; "Section V-H" in 6 files) | stale figure/section references | grep | not approved (author) | closed (no change) |
 
-## Round rev-7 — revision plan for the solution method and the simulation section (`review/revision_plan_rev7.md`; proposed, awaiting the author's decisions)
+## Round rev-7 — revision plan for the solution method and the simulation section (`review/revision_plan_rev7.md`; decisions in `review/rev7b_d1_report.md` §4)
 
 | ID | Sev | Location | Finding | Evidence | Decision | Status |
 |---|---|---|---|---|---|---|
-| I141 (D1) | — | Sec. IV-B (Stage 2) | MM with descent-lemma minorizer and backtracking vs. Zheng et al.'s MM–SCA with closed-form curvature and CVX | plan §1–2; Fig. 4 data (local MM −4.1% after 50 iterations); grid check 0.011% | proposed: keep ours | proposed |
-| I142 (D2) | M | Sec. III-D, IV-A, IV-B, App. C | derivation depth: (a) explicit Lipschitz bound; (b) single-LU optimality (ρ₁ = 0) with region condition; (c) explicit optimal q; (d) runtime comparison; (e) KKT statement (needs new refs) | plan §3; Fig. 7 saturation 8.692/8.693/8.694 bps/Hz at Δ = 0.3/0.4/0.5 | proposed | proposed |
-| I143 (D3) | M | Sec. V-A, V-F, Fig. 7 | AoD offset Δ: keep the scenario, reinterpret through D2(b), add random-Eve robustness, drop secondary discussion | plan §4; extra_random_eve_M1/M3, extra_angle_offset | proposed: option B | proposed |
-| I144 (D4) | L | Fig. 4 | optionally add Monte Carlo ESSR along iterations (as in Zheng et al., Figs. 3–4) | plan §5 | proposed (optional) | proposed |
-| I145 (D5) | L | Sec. V-A | sample size: 100 drops × 10³ realizations (Fig. 3: 10⁴) | plan §6 | proposed | proposed |
-| I146 (D6) | — | Sec. V-A | keep the rate-oriented MA benchmark | plan §7.1 | proposed | proposed |
-| I147 (D7) | M | Sec. V-G, Fig. 8, Sec. IV-A | remove Fig. 8 and V-G; 2 × 2 power-allocation benchmarks (equal p, q: p_m = q = P/N); display the optimal q | plan §7.2; extra_pa_spread_* (EP with optimized α above the proposed by 1.1% at 0 dB) | proposed | proposed |
-| I148 (D8) | L | Sec. V-A | keep AS (as in Chen et al.) with a rationale sentence; no APS curve | plan §7.3 | proposed | proposed |
-| I149 (D9) | M | Sec. V | seven-scheme suite and figure assignment | plan §7.4 | proposed | proposed |
-| I150 (D10) | L | Sec. V | merge the seven subsections into four, grouped by purpose | plan §8.1 | proposed | proposed |
-| I151 (D11) | M | Sec. V | add ESSR vs. Rician factor: (a) common κ, (b) Eve's κ_e | plan §8.2 | proposed | proposed |
+| I141 (D1) | — | Sec. IV-B (Stage 2) | MM with descent-lemma minorizer and backtracking vs. Zheng et al.'s MM–SCA with closed-form curvature and CVX | plan §1–2; rev7b report §1 (10 drops, 20 dB): S1-Zheng = S0 within noise (+0.017 ± 0.040 bps/Hz), 2.6× MM iterations, 16× run time; without Stage 1: S0 −3.8%, S1-Zheng −5.2% | S2 ruled out (author); **S0 kept** (selected under the author's delegation, rev-7b) | decided (rev-7b) |
+| I142 (D2) | M | Sec. III-D, IV-A, IV-B, V-B | derivation depth (a)–(e) | plan §3; rev7b report §2 | (a) finite termination and bounded δ_n in IV-B (no explicit constant); (b) brief remark in III-D 2); (c) displayed stationarity condition of q⋆ in IV-A, general α⋆ in III-D 3), prediction in Fig. 5(b); (d) one sentence in V-B from extra_mm_compare; (e) skipped | decided (rev-7b); to implement (rev-7c) |
+| I143 (D3) | M | Sec. V-A, V-F, Fig. 7 | AoD offset Δ | plan §4; extra_random_eve_M3 (+10.2% over the rate-oriented MA, stored) | option C (author): Δ sweep (Fig. 7) and V-F removed, default scenario kept; random-Eve sentence (M = 3) kept, rerun with the new suite and sample size | decided (rev-7b); to implement (rev-7c) |
+| I144 (D4) | L | Fig. 4 | Monte Carlo ESSR along the iterations (as in Zheng et al., Figs. 3–4) | plan §5; rev7b report §4 | approximate-first kept (author); Monte Carlo ESSR curve for the default setting added | decided (rev-7b); to implement (rev-7c) |
+| I145 (D5) | L | Sec. V-A | sample size: 100 drops × 10³ realizations (Fig. 3: 10⁴) | plan §6 | approved (author); applied to all Monte Carlo results of Sec. V (grid check and AS footnote check rerun) | decided (rev-7b); to implement (rev-7c) |
+| I146 (D6) | — | Sec. V-A | keep the rate-oriented MA benchmark | plan §7.1; rev7b report §3.1 | approved (author) | decided (rev-7b) |
+| I147 (D7) | M | Sec. V-G, Fig. 8, Sec. IV-A | remove Fig. 8 and V-G; 2 × 2 power-allocation benchmarks; display the optimal q | plan §7.2; rev7b report §3 | approved (author); equal power p_m = q = P_tot/N; heterogeneous-LU sentence dropped; legend labels Set B (rev7b report §3.3) | decided (rev-7b); to implement (rev-7c) |
+| I148 (D8) | L | Sec. V-A | keep AS (as in Chen et al.) with a rationale sentence; no APS curve | plan §7.3 | approved (author) | decided (rev-7b); to implement (rev-7c) |
+| I149 (D9) | M | Sec. V | seven-scheme suite and figure assignment | plan §7.4; rev7b report §3.2 | layout L-A′: Fig. 5 (a) ESSR, (b) AN fraction + high-SNR prediction; new one-column Fig. 6 (2 × 2 power allocation); Fig. 7 (A, N); Fig. 8 (Rician); ≤ 5 scheme curves per panel | decided (rev-7b); to implement (rev-7c) |
+| I150 (D10) | L | Sec. V | four subsections grouped by purpose | plan §8.1 | approved (author); V-D without the Δ item | decided (rev-7b); to implement (rev-7c) |
+| I151 (D11) | M | Sec. V | ESSR vs. Rician factor: (a) common κ, (b) κ_e | plan §8.2 | approved (author): κ ∈ {−10, …, 20} dB, 20 dB, schemes 1, 3–6 | decided (rev-7b); to implement (rev-7c) |

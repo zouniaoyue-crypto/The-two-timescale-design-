@@ -1,0 +1,10 @@
+C drop  1 S1zhengLocal F 17.2688 essr 18.9311 AO 50 MM 7594 solver 7594 time 158.16 s
+C drop  2 S1zhengLocal F 18.7309 essr 20.5023 AO 50 MM 7625 solver 7625 time 160.35 s
+C drop  3 S1zhengLocal F 17.9958 essr 19.7394 AO 50 MM 7236 solver 7236 time 158.24 s
+C drop  4 S1zhengLocal F 19.0087 essr 20.7897 AO 36 MM 4289 solver 4289 time 76.45 s
+C drop  5 S1zhengLocal F 18.1494 essr 19.8710 AO 50 MM 6338 solver 6338 time 133.91 s
+C drop  6 S1zhengLocal F 17.3108 essr 18.9842 AO 50 MM 6181 solver 6181 time 110.82 s
+C drop  7 S1zhengLocal F 18.2511 essr 19.9917 AO 50 MM 6563 solver 6563 time 140.57 s
+C drop  8 S1zhengLocal F 15.7044 essr 17.0725 AO 13 MM 1769 solver 1769 time 38.63 s
+C drop  9 S1zhengLocal F 18.2228 essr 19.9501 AO 50 MM 7667 solver 7667 time 169.57 s
+C drop 10 S1zhengLocal F 18.5832 essr 20.3017 AO 50 MM 7952 solver 7952 time 178.48 s

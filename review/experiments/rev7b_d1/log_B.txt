@@ -1,0 +1,10 @@
+B drop  1 S1zheng      F 18.2840 essr 20.0402 AO  7 MM  684 solver  684 time 14.53 s
+B drop  2 S1zheng      F 19.8685 essr 21.6701 AO 12 MM 1053 solver 1053 time 19.78 s
+B drop  3 S1zheng      F 18.2477 essr 19.9691 AO  7 MM  409 solver  409 time 8.76 s
+B drop  4 S1zheng      F 19.0120 essr 20.7925 AO  9 MM  484 solver  484 time 7.49 s
+B drop  5 S1zheng      F 18.9047 essr 20.6790 AO 11 MM  759 solver  759 time 14.93 s
+B drop  6 S1zheng      F 17.8225 essr 19.5113 AO  9 MM  441 solver  441 time 7.49 s
+B drop  7 S1zheng      F 20.0102 essr 21.8587 AO 24 MM 1670 solver 1670 time 35.02 s
+B drop  8 S1zheng      F 16.7967 essr 18.3612 AO  7 MM  437 solver  437 time 9.52 s
+B drop  9 S1zheng      F 20.1213 essr 21.9182 AO  4 MM  224 solver  224 time 4.56 s
+B drop 10 S1zheng      F 20.1702 essr 21.9666 AO  8 MM  661 solver  661 time 13.16 s
