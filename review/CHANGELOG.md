@@ -232,3 +232,10 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I151 (D11) | main.tex:631–646, Fig. 8 (new) | V-D 2): Rician factors (spread < 0.04 bps/Hz at κ = −10 dB; gains 19.3% / 49.4% at κ = 20 dB; gain over the rate-oriented MA 1.0% → 17.0% from κ_e = −10 to 20 dB) | D11 |
 | I143, I147 | main.tex (former V-F, V-G, Figs. 7–8) | removed: AoD-offset subsection and figure, power-allocation subsection and figure, heterogeneous-LU discussion | D3 (option C), D7 |
 | — | main.tex:80, 651 | contributions and conclusion: "its gain persists for a single LU" (no longer simulated) → gain grows with the Rician factor of Eve | consistency with the new Section V |
+
+## Round rev-8a — analysis of the author's figure guidelines and items 2.1–2.7 (no manuscript or production-code changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I152–I160 | review/revision_plan_rev8.md (new), review/ISSUES.md | point-by-point analysis and recommendations; unified plan and decision checklist | author's request |
+| I152, I153, I155, I156, I159 | review/experiments/rev8a_figstyle/ (new: proto_figs.m, previews) | prototype of the proposed figure style on the stored rev-7 data (production plot code unchanged) | to decide on the figures by looking at them |

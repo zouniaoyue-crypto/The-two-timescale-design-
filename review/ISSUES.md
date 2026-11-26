@@ -212,3 +212,17 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I149 (D9) | M | Sec. V | seven-scheme suite and figure assignment | plan §7.4; rev7b report §3.2 | layout L-A′: Fig. 5 (a) ESSR, (b) AN fraction + high-SNR prediction; new one-column Fig. 6 (2 × 2 power allocation); Fig. 7 (A, N); Fig. 8 (Rician); ≤ 5 scheme curves per panel | fixed (rev-7c/7d) |
 | I150 (D10) | L | Sec. V | four subsections grouped by purpose | plan §8.1 | approved (author); V-D without the Δ item | fixed (rev-7c/7d) |
 | I151 (D11) | M | Sec. V | ESSR vs. Rician factor: (a) common κ, (b) κ_e | plan §8.2 | approved (author): κ ∈ {−10, …, 20} dB, 20 dB, schemes 1, 3–6 | fixed (rev-7c/7d) |
+
+## Round rev-8 — figure guidelines and items 2.1–2.7 (`review/revision_plan_rev8.md`; proposed, awaiting the author's decisions)
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I152 (1.1) | M | Figs. 5, 7, 8 | legends outside the plot area (shared strip) | author's guideline | proposed: in-panel legends with small axis changes (prototype) | proposed |
+| I153 (1.2) | M | Figs. 4–8 | palette and markers: colors reused with different meanings (Fig. 4 red/blue = SNR; purple Monte Carlo; colored auxiliary lines); FPA gray close to the steel blue (normal-vision ΔE 12.9 < 15) | dataviz validator; rev8a_figstyle previews | proposed: keep the four validated hues, FPA → charcoal, one grammar (color = scheme, line style = array type, filled = equal power, black = analytical) | proposed |
+| I154 (2.1) | L | main.tex V-A; captions of Figs. 3, 5, 6, 7, 8; notation.tex (\Derr unused) | residual Δ = 0.1 rad after the Δ sweep was removed | grep | proposed: scenario stated once without the symbol; one caption rule; delete \Derr | proposed |
+| I155 (2.2) | M | Fig. 4, V-B 2) | Monte Carlo curve abrupt; SNR encoded by scheme colors | author's review | proposed: remove it (reverses D4, I144); single-hue curves, direct SNR labels, 3-entry legend | proposed |
+| I156 (2.3) | M | Fig. 8 | panels (a) κ and (b) κ_e show similar trends | fig8_rician_a/b.mat | proposed: keep (b) only; (a) as one sentence | proposed |
+| I157 (2.4) | M | Remark 1 (III-C) | quantitative claim for directional AN invites simulation; not a positioning benchmark | analysis | proposed: one sentence in III-A + future work | proposed |
+| I158 (2.5) | L | III-D 3) | value of the high-SNR analysis | Figs. 5(a), 5(b), 6 numbers; Zhou–McKay link | proposed: keep, shorten, add the α⋆ = 1/2 link to [Zhou2010] | proposed |
+| I159 (2.6) | L | Fig. 5(b) | colored auxiliary lines without legend entry | author's review | proposed: black × markers at 30 dB for all five schemes with a legend entry | proposed |
+| I160 (2.7) | — | IV-B Stage 2 | S0 vs. S1-best vs. S1-Zheng | rev7b D1 data; analysis | proposed: S0 (S1-best is a numerical oracle without guarantee or analytical content) | proposed |
