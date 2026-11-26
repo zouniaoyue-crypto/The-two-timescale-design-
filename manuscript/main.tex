@@ -289,7 +289,7 @@ is the normalized ZF precoding vector. As $\bH(\bt)$ has full column rank with p
 \begin{equation}\label{eq:an}
 \PHp\triangleq\bI_N-\bH(\bt)\big(\bH^{\mathrm H}(\bt)\bH(\bt)\big)^{-1}\bH^{\mathrm H}(\bt)
 \end{equation}
-is the orthogonal projector onto the null space of $\bH^{\mathrm H}(\bt)$. Because $\bH^{\mathrm H}(\bt)\PHp=\mathbf 0$ and $\tr(\PHp)=N-M$, the AN causes no interference to the LUs, and the transmit power in each CI is $\sum_{m=1}^Mp_m+(N-M)q$. \rev{Although the AN could also be steered toward the LoS component of Eve, the isotropic AN requires no CSI of Eve in each CI, also impairs eavesdroppers unknown to the BS, and ensures that the secrecy gain obtained from the statistical CSI of Eve can be attributed to the MAs.}
+is the orthogonal projector onto the null space of $\bH^{\mathrm H}(\bt)$. Because $\bH^{\mathrm H}(\bt)\PHp=\mathbf 0$ and $\tr(\PHp)=N-M$, the AN causes no interference to the LUs, and the transmit power in each CI is $\sum_{m=1}^Mp_m+(N-M)q$. \rev{Although the AN could also be steered toward the LoS component of Eve, the isotropic AN requires no CSI of Eve in each CI, impairs eavesdroppers unknown to the BS as well, and ensures that the secrecy gain obtained from the statistical CSI of Eve can be attributed to the MAs.}
 
 The powers $\bp\triangleq[p_1,\ldots,p_M]^{\mathrm T}$ and $q$ constitute the long-term power allocation, which remains fixed within a frame so that it can be optimized jointly with the antenna positions based on the statistical CSI, whereas $\wb_m$ and $\PHp$ are updated in each CI according to $\bH(\bt)$. As a result, the ZF-AN design involves no optimization in each CI. With this design, the SINRs in~\eqref{eq:sinr_gen} and~\eqref{eq:sinre_gen} reduce to
 \begin{align}
