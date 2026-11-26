@@ -268,3 +268,18 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I158, I159 | verify_numbers.m | Monte Carlo lines of V-B 2) removed; 30-dB predictions and AN fractions for all five schemes, largest/smallest difference, α⋆ of the proposed design and the FPA; V-D 2) labels "common kappa (text)" / "Fig. 8" | rule 3 |
 | — | readme.tex/.pdf | Fig. 4, 5, 7, 8 descriptions, palette, legends, outputs, scheme table (FPA_noAN), new scripts; output table set with p-columns (it overflowed by 158 pt before) | documentation |
 | I161–I164 | extra_num_users.m, extra_eve_beta.m, extra_no_an.m (new); extra_eve_aod_error.m, functions/design_scenario.m (stale "Section V-H" headers); functions/evaluate_schemes.m (`FPA_noAN`), scheme_style.m, plot_candidates.m (new); run_all.m (SUPPLEMENTARY block) | candidate comparisons requested by the author (not in main.tex); results and analysis in rev-8c | author's request |
+
+## Round rev-8c — candidate comparisons and the author's items 1–3 (2026-11-26)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I161–I164 | results/extra_num_users*.mat, extra_eve_aod_error.mat, extra_eve_beta.mat, extra_no_an.mat (new or rerun; S = 10^3, 100 drops) | full runs of the four candidate comparisons (about 55 min in four parallel sessions); M = 3, zero AoD error, and β_e = 0 dB reproduce Fig. 5 at 20 dB exactly | author's request |
+| I161–I164 | review/experiments/rev8c_candidates/analyze_candidates.m, analysis.txt (new) | all numbers of the candidate text | rule 3 |
+| I161–I164 | functions/plot_candidates.m; results/supp_essr_users, supp_essr_aod_error, supp_essr_betae, supp_essr_noan, supp_fig6_noan (.png) | candidate figures in the main-figure style | author's request |
+| I161–I164 | main_candidates.tex/.pdf (new; 16 pages, clean build) | independent review copy of main.tex with the candidate text (blue, tagged [C1]–[C4]) and Figs. 9–13; Figs. 3–8 keep their numbers; main.tex unchanged by the candidates | author's request ("saved independently") |
+| I165 | functions/plot_fig4.m | Fig. 4: SNR by color with color-matched labels "P_tot/σ² = 10 dB" and "P_tot/σ² = 20 dB"; legend (two columns) lists only the line styles in a neutral color; MM only in red (20 dB) dotted | author's item 1 |
+| I166 | functions/plot_fig5.m; main.tex:592 (caption), main.tex:621 (V-C) | Fig. 5(b): black dotted high-SNR limit lines (15–30 dB) for the proposed design and the FPA, legend entry "High-SNR limit, (33)"; caption and text say "limits ... shown by dotted lines"; verify_numbers labels updated | author's item 2 |
+| I167 | functions/fig_style.m, plot_fig3.m, plot_fig5.m, plot_fig7.m | two-column legends in all figures; legend font 8 pt (axes 9 pt), row 0.15 in, line samples 0.22 in, column gap 0.10 in | author's item 3 |
+| I165–I167 | readme.tex/.pdf | Fig. 4/5/7 descriptions, style row (legend 8 pt), palette roles, supp_fig6_noan | documentation |
+| — | results/fig3*–fig8*.png | replotted; main.tex rebuilt (14 pages, clean) | items 1–3 |
+

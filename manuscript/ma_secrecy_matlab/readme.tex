@@ -166,17 +166,17 @@ load\_results.m & \textbf{新增。}读取 \code{results/<name>.mat} 中的 \cod
 \subsection{\code{functions/}：绘图（IEEE 风格）}
 \begin{longtable}{>{\ttfamily\small}p{4.6cm}p{11.2cm}}
 \toprule
-fig\_style.m & 全局样式（环境变量 \code{MA\_PLOT\_FONT} 可替换字体族，数据不变），按 IEEE Author Center 的期刊图片要求设定：每个子图均为 IEEE 单栏宽 3.5 in $\times$ 2.6 in（宽高比 1.35），Times New Roman，所有文字（刻度、坐标轴标签、图例、图内标注）统一为 9 pt（IEEE 建议成稿尺寸下约 9--10 pt），曲线线宽 1.0 pt（所提方案 1.2 pt），坐标轴 0.5 pt，空心标记 5 pt，600 dpi。稿件中所有子图（含 figure* 中的 (a)(b)）都按 \code{width=\textbackslash columnwidth} 插入，即 100\% 原尺寸，因此各图的字号、标记与线宽在成稿中完全一致；双栏图由两个单栏宽子图并排组成（总宽不超过 7.16 in）。\\
+fig\_style.m & 全局样式（环境变量 \code{MA\_PLOT\_FONT} 可替换字体族，数据不变），按 IEEE Author Center 的期刊图片要求设定：每个子图均为 IEEE 单栏宽 3.5 in $\times$ 2.6 in（宽高比 1.35），Times New Roman，刻度与坐标轴标签为 9 pt（IEEE 建议成稿尺寸下约 9--10 pt），图例与图内标注为 8 pt（rev-8 起，图例行高 0.15 in、线段样本 0.22 in，使坐标轴内的两列图例更紧凑），曲线线宽 1.0 pt（所提方案 1.4 pt），坐标轴 0.5 pt，空心标记 5 pt，600 dpi。稿件中所有子图（含 figure* 中的 (a)(b)）都按 \code{width=\textbackslash columnwidth} 插入，即 100\% 原尺寸，因此各图的字号、标记与线宽在成稿中完全一致；双栏图由两个单栏宽子图并排组成（总宽不超过 7.16 in）。\\
 scheme\_style.m, scheme\_name.m & 每种方案固定的图例名、颜色、线型、标记（所有图一致）。\\
 new\_figure.m, style\_axes.m & 建图（固定边距，标签不会被裁切）与坐标轴样式。\\
 plot\_curve.m, plot\_schemes.m, curve\_style.m & 画一条曲线（细线、空心标记，线宽取自 \code{scheme\_style}；五角星、六角星标记按 1.4 倍尺寸绘制，使其看起来与圆、方块、三角一样大）；按方案批量画曲线（逆序绘制，使所提方案位于最上层）。\\
-fig\_palette.m & 统一的低饱和度配色：砖红 \#B03A2E（所提方案；Fig.~4 中算法~2 的全部曲线）、钢蓝 \#2E6DB4（速率导向 MA）、青绿 \#2A9D8F（AS）、赭黄 \#C7852B（稀疏 FPA）、炭灰 \#3D3D3D（FPA，Fig.~4 的“MM only”）；黑色只用于解析标记（Fig.~5(b) 的高 SNR 预测 $\times$）；灰紫与深灰只用于补充图。rev-8 的约定：颜色区分方案，线型区分阵列类型（实线 = MA，点划线 = AS，虚线 = 固定阵列，点线 = 等功率或无 AN），每个方案有自己的空心标记（等功率方案为实心）。所有颜色两两之间均通过 OKLab 色差检验（正常视觉与模拟色觉缺陷）及对白底的对比度检验，灰度打印仍可区分。\\
+fig\_palette.m & 统一的低饱和度配色：砖红 \#B03A2E（所提方案；Fig.~4 中 20 dB 的曲线）、钢蓝 \#2E6DB4（速率导向 MA；Fig.~4 中 10 dB 的曲线）、青绿 \#2A9D8F（AS）、赭黄 \#C7852B（稀疏 FPA）、炭灰 \#3D3D3D（FPA；Fig.~4 图例中的线型样本）；黑色只用于解析标记（Fig.~5(b) 的高 SNR 预测 $\times$）；灰紫与深灰只用于补充图。rev-8 的约定：颜色区分方案，线型区分阵列类型（实线 = MA，点划线 = AS，虚线 = 固定阵列，点线 = 等功率或无 AN），每个方案有自己的空心标记（等功率方案为实心）。所有颜色两两之间均通过 OKLab 色差检验（正常视觉与模拟色觉缺陷）及对白底的对比度检验，灰度打印仍可区分。\\
 label\_axes.m, add\_legend.m, axes\_note.m & 坐标轴标签、内置图例（各图已不再使用）、坐标轴内文字标注。\\
 manual\_legend.m & 在透明覆盖坐标轴上按英寸位置“手绘”图例（多行多列、符号与曲线完全一致），MATLAB 与 Octave 的显示效果相同；各列宽度可不同。文字按基线对齐（Octave 的 \code{middle} 按实际字形居中，带下行字母与不带下行字母的条目在多列图例中会上下错位）。\\
 place\_legend.m, text\_width.m & \textbf{新增。}按图例文字自动计算各列宽度与图例框大小，并把图例放在坐标轴的某个角（如 \code{'nw'}、\code{'se'}）；文字宽度由 Times-Roman 的标准字宽表计算（Times New Roman 与 Liberation Serif 字宽相同），因此不依赖显示器分辨率，MATLAB 与 Octave 的排版一致（Octave 在虚拟显示器上测得的文字宽度约偏小 25\%）。所有图的图例都用它绘制。\\
 legend\_rows.m & \textbf{新增。}把图例条目按行排成 \code{nc} 列（供 \code{place\_legend.m} 使用），最后一行不足时留空。（rev-7 的 \code{plot\_legend\_strip.m} 与共用图例 \code{legend\_main\_schemes} 已在 rev-8 删除。）\\
-plot\_fig3.m -- plot\_fig8.m & 各图的绘制（坐标范围、图例位置、Fig.~5(a) 的局部放大图）。rev-8 起所有图例都画在坐标轴内的空白处：Fig.~5(a)、7(b) 为单列，Fig.~5(b)、6、7(a)、8 为两列。\\
-plot\_candidates.m & \textbf{新增。}rev-8 候选对比的补充图（\code{supp\_essr\_users}、\code{supp\_essr\_aod\_error}、\code{supp\_essr\_betae}、\code{supp\_essr\_noan}），样式与 Fig.~5--8 相同；仅在 \code{replot\_all} 中设 \code{SUPPLEMENTARY = true} 时绘制。\\
+plot\_fig3.m -- plot\_fig8.m & 各图的绘制（坐标范围、图例位置、Fig.~5(a) 的局部放大图）。rev-8 起所有图例都画在坐标轴内的空白处，且一律为两列（Fig.~3--8 与补充图相同；按行填充，例如第一行为 Proposed 与 Rate-oriented MA），图例文字 8 pt、行高 0.15 in。\\
+plot\_candidates.m & \textbf{新增。}rev-8 候选对比的补充图（\code{supp\_essr\_users}、\code{supp\_essr\_aod\_error}、\code{supp\_essr\_betae}、\code{supp\_essr\_noan}，以及把两条无 AN 曲线加入 Fig.~6 的备选图 \code{supp\_fig6\_noan}），样式与 Fig.~5--8 相同；仅在 \code{replot\_all} 中设 \code{SUPPLEMENTARY = true} 时绘制。\\
 plot\_offset.m, plot\_pa\_spread.m & 补充图（原 Fig.~7、Fig.~8；输出 \code{supp\_essr\_offset}、\code{supp\_pa\_spread}），仅在 \code{replot\_all} 中设 \code{SUPPLEMENTARY = true} 时重画。\\
 save\_figure.m & 导出（MATLAB：矢量 PDF/EPS + PNG + FIG；Octave：600 dpi PNG）。\\
 \bottomrule
@@ -359,10 +359,10 @@ MA\_fix & Equal power, $\alpha=0.5$ & 同上但 $\alpha=0.5$ 固定（原 Fig.~8
 % -----------------------------------------------------------------------------
 \begin{description}
 \item[Fig.~3] 钢蓝色 = LU 的遍历和速率 $\sum_m\bar R_m$（空心方块 = 蒙特卡洛，实线 = 式 (20)），砖红色 = Eve 的遍历窃听和速率 $\sum_m\bar R_{e,m}$（空心三角 = 蒙特卡洛，虚线 = 式 (27)），均在所提设计处计算。式 (27) 与蒙特卡洛几乎重合；式 (20) 偏保守，且差距随莱斯因子增大：其矩匹配近似在 LoS 主导时把 $\E\{[(\bH^H\bH)^{-1}]_{m,m}\}$ 最多高估 $N/(N-M)$ 倍。因此在所有测试场景中近似 ESSR 都低于实际 ESSR（理论上它既不是上界也不是下界）；各方案的这一差距相近，近似目标不改变方案间的比较结论。
-\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均；横轴只显示前 30 次迭代，各曲线约 15 次内收敛），纵轴为 (P3) 的目标值。算法~2 的四条曲线均为砖红色（与所提方案同色），线型区分 $N$（实线 = $N=8$，虚线 = $N=12$），两组 SNR 用图中的直接标注（“$P_{\rm tot}/\sigma^2$ = 20 dB”“10 dB”）区分；炭灰色点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB）。三项图例放在右下角 10 dB 曲线下方的空白处。rev-7 中的蒙特卡洛 ESSR 曲线已在 rev-8 删除。
-\item[Fig.~5] (a) ESSR、(b) AN 功率占比 vs SNR，每个子图在坐标轴内有自己的图例。所提方案为砖红色实线与空心圆（线宽 1.4），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为炭灰色虚线与菱形（线宽 1.0；所有图一致）；网格为极浅的灰色实线。(a) 单列图例在左上角；右下角的局部放大图显示 20 dB 附近 $\pm0.5$ dB 的窗口（主图中用小矩形标出，“20 dB”标在放大图右上角），速率导向 MA、稀疏 FPA 与 AS 在此几乎重合；15--25 dB 的窗口不适用，因为各曲线在该范围内上升约 10 bps/Hz，放大图的纵轴几乎不能放大。(b) 两列三行图例在左上角，纵轴 0--0.8；黑色 $\times$ 为 5 种方案在 30 dB 处的设计的高 SNR 预测 $1-\alpha^\star$（式 (33)），图例项为 “High-SNR prediction, (33)”。
+\item[Fig.~4] 目标值随迭代次数的变化（100 个场景平均；横轴只显示前 30 次迭代，各曲线约 15 次内收敛），纵轴为 (P3) 的目标值。颜色区分 SNR（钢蓝 = 10 dB，砖红 = 20 dB），并在每组曲线旁用同色文字直接标注“$P_{\rm tot}/\sigma^2$ = 10 dB”“$P_{\rm tot}/\sigma^2$ = 20 dB”，因此图例中不再出现功率；图例只说明线型（中性炭灰色）：实线 = 算法~2、$N=8$，虚线 = 算法~2、$N=12$，点线 = 去掉 Stage~1 的纯 MM（$N=8$，20 dB，故为砖红色）。两列图例放在右下角 10 dB 曲线下方的空白处。rev-7 中的蒙特卡洛 ESSR 曲线已在 rev-8 删除。
+\item[Fig.~5] (a) ESSR、(b) AN 功率占比 vs SNR，每个子图在坐标轴内有自己的图例。所提方案为砖红色实线与空心圆（线宽 1.4），速率导向 MA 为钢蓝色实线与方块，AS 为青绿色点划线与三角，稀疏 FPA 为赭黄色虚线与倒三角，FPA 为炭灰色虚线与菱形（线宽 1.0；所有图一致）；网格为极浅的灰色实线。(a) 两列图例在左上角；右下角的局部放大图显示 20 dB 附近 $\pm0.5$ dB 的窗口（主图中用小矩形标出，“20 dB”标在放大图右上角），速率导向 MA、稀疏 FPA 与 AS 在此几乎重合；15--25 dB 的窗口不适用，因为各曲线在该范围内上升约 10 bps/Hz，放大图的纵轴几乎不能放大。(b) 两列三行图例在左上角，纵轴 0--0.8；黑色细点线为所提方案与 FPA 在 30 dB 处的设计的高 SNR 极限 $1-\alpha^\star$（式 (33)），只画在 15--30 dB（高 SNR 区），图例项为 “High-SNR limit, (33)”（黑色专用于解析结果）；其余三种方案的极限值在正文中给出（\code{verify\_numbers}）。
 \item[Fig.~6] 单栏图：$2\times2$ 功率分配对比 vs SNR（数据同 Fig.~5）。所提方案与 FPA 的样式与 Fig.~5 相同；两种等功率方案沿用对应方案的颜色与标记，改为点线 + 实心标记（“MA, equal power”为砖红色实心圆，“FPA, equal power”为灰色实心菱形）。$2\times2$ 的图例画在左上角，按行对应 MA 与 FPA、按列对应功率分配。
-\item[Fig.~7] 每个子图在坐标轴内有自己的图例。(a) ESSR vs 区域边长 $A$，两列图例在左上角，纵轴 14--26；FPA 与 AS（紧凑候选阵列，与其他各图相同）不随 $A$ 变化，稀疏 FPA 的阵列随 $A$ 扩展。(b) ESSR vs MA 数 $N$（$A=4\lambda$），单列图例在右下角：FPA、稀疏 FPA 与 AS 的阵列随 $N$ 变化（见 \code{extra\_num\_antennas}）；AS 对所有 $N$ 都用交换搜索（与其他各图相同）。
+\item[Fig.~7] 每个子图在坐标轴内有自己的图例。(a) ESSR vs 区域边长 $A$，两列图例在左上角，纵轴 14--26；FPA 与 AS（紧凑候选阵列，与其他各图相同）不随 $A$ 变化，稀疏 FPA 的阵列随 $A$ 扩展。(b) ESSR vs MA 数 $N$（$A=4\lambda$），两列图例在右下角：FPA、稀疏 FPA 与 AS 的阵列随 $N$ 变化（见 \code{extra\_num\_antennas}）；AS 对所有 $N$ 都用交换搜索（与其他各图相同）。
 \item[Fig.~8] 单栏图：ESSR vs Eve 的莱斯因子 $\kappa_e$（$\kappa_m=10$ dB，20 dB），两列图例在左下角，纵轴 12--22。$\kappa_e=10$ dB 的点与 Fig.~5(a) 的 20 dB 点完全相同（同一场景与样本）。公共莱斯因子 $\kappa=\kappa_m=\kappa_e$ 的扫描（原 Fig.~8(a)）只在第~V-D 节正文中引用数值。原 Fig.~7（AoD 偏移，$M=1$）与原 Fig.~8（衰落差异下的功率分配）已从稿件中删除，对应补充图为 \code{supp\_essr\_offset}、\code{supp\_pa\_spread}（\code{replot\_all} 中设 \code{SUPPLEMENTARY = true}）。
 \end{description}
 

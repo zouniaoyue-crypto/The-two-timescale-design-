@@ -3,10 +3,11 @@ function s = fig_style()
 %   journal graphics: every panel is exported at the final size of one IEEE column
 %   (3.5 in wide; two-column figures place two such panels side by side within the
 %   7.16-in text width) and included with \includegraphics[width=\columnwidth], so that
-%   all text appears at its nominal size in the article. All text (tick labels, axis
-%   labels, legends, and in-plot labels) is 9 pt (IEEE: "approximately 9-10 point when
-%   viewed at full size"), in Times (Liberation Serif, which is metric-compatible, is used
-%   when Times New Roman is not installed). Raster output: 600 dpi (IEEE: > 600 dpi for
+%   all text appears at its nominal size in the article. Tick and axis labels are 9 pt
+%   (IEEE: "approximately 9-10 point when viewed at full size"); legends and in-plot
+%   labels are 8 pt with compact rows, so that the legends, which are drawn inside the
+%   axes in two columns in all figures, cover less of the curves. Font: Times (Liberation
+%   Serif, which is metric-compatible, is used when Times New Roman is not installed). Raster output: 600 dpi (IEEE: > 600 dpi for
 %   line art); MATLAB additionally exports vector PDF/EPS with embedded fonts.
 %   Every series has its own color, marker, and line style, so that the figures remain
 %   readable in grayscale.
@@ -19,7 +20,7 @@ plotFont = getenv('MA_PLOT_FONT');
 if ~isempty(plotFont), s.font = plotFont; end
 s.fsTick    = 9;                   % tick labels
 s.fsLabel   = 9;                   % axis labels
-s.fsLegend  = 9;                   % legends and in-plot labels
+s.fsLegend  = 8;                   % legends and in-plot labels
 s.lw        = 1.0;                 % default line width of the curves (pt)
 s.ms        = 5;                   % marker size (hollow markers)
 s.axLw      = 0.5;                 % axes and legend box line width (pt)
@@ -28,7 +29,7 @@ s.gridColor = [0.89 0.89 0.89];    % faint solid grid
 s.legEdge   = [0.78 0.78 0.78];    % legend box color
 s.edge      = [0.15 0.15 0.15];    % axes color
 s.margins   = [0.48 0.44 0.12 0.08];   % axes margins [left bottom right top] (in)
-s.legRow    = 0.17;                % legend row height (in)
-s.legTok    = 0.24;                % length of the line samples in legends (in)
-s.legGap    = 0.12;                % horizontal gap between legend columns (in)
+s.legRow    = 0.15;                % legend row height (in)
+s.legTok    = 0.22;                % length of the line samples in legends (in)
+s.legGap    = 0.10;                % horizontal gap between legend columns (in)
 end

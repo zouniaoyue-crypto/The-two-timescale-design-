@@ -49,8 +49,10 @@
 % main_candidates.tex is a review copy of main.tex (rev-8c) that adds the candidate
 % comparisons C1-C4 in blue, each tagged [C1]-[C4] (supplementary simulations in
 % ma_secrecy_matlab/extra_num_users.m, extra_eve_aod_error.m, extra_eve_beta.m,
-% extra_no_an.m; figures by functions/plot_candidates.m). main.tex is unchanged; the
-% blocks that are kept will be moved to main.tex after the author's decision.
+% extra_no_an.m; figures by functions/plot_candidates.m; numbers in
+% review/experiments/rev8c_candidates/analysis.txt). Figs. 3-8 keep their numbers; the
+% candidate figures follow as Figs. 9-13. main.tex is unchanged; the blocks that are
+% kept will be moved to main.tex after the author's decision.
 \newcommand{\cand}[1]{{\color{blue}#1}}
 
 \begin{document}
@@ -596,7 +598,7 @@ All the results are averaged over $100$ random AoD realizations, which are share
 \centering
 \subfloat[]{\includegraphics[width=\columnwidth]{fig5a_essr_snr}\label{fig:snr_essr}}\hfil
 \subfloat[]{\includegraphics[width=\columnwidth]{fig5b_an_fraction}\label{fig:snr_an}}
-\caption{(a) ESSR and (b) optimized AN power fraction $(N-M)q/\Ptot$ versus the transmit SNR $\Ptot/\sigma^2$. \rev{The high-SNR predictions in (b) are evaluated by~\eqref{eq:alphastar} for the designs at $30$~dB.}}
+\caption{(a) ESSR and (b) optimized AN power fraction $(N-M)q/\Ptot$ versus the transmit SNR $\Ptot/\sigma^2$. \rev{The high-SNR limits in (b) are evaluated by~\eqref{eq:alphastar} for the designs of the proposed scheme and the FPA at $30$~dB.}}
 \label{fig:snr}
 \end{figure*}
 
@@ -625,9 +627,11 @@ All the results are averaged over $100$ random AoD realizations, which are share
 
 Fig.~\ref{fig:snr}(a) shows that the proposed design achieves the highest ESSR over the entire SNR range, e.g., \rev{$14.8\%$ and $31.1\%$} higher than those of the rate-oriented MA and the FPA at $20$~dB, respectively. Although the rate-oriented MA exploits the same movable region, its gain over the FPA is less than half of that of the proposed design, because its positions only decorrelate the LUs, whereas the proposed positions also exploit the two Eve-related mechanisms in Section~\ref{sec:insight}. AS achieves an even smaller gain, since its $2N$ candidates form a compact array whose spatial resolution is insufficient to decorrelate the LoS components of Eve and LU~$1$. The sparse FPA has the same aperture as the MAs, yet it also achieves less than half of the gain of the proposed design over the FPA, because its fixed positions cannot adapt the LoS correlations to the AoDs of the LUs and Eve. The secrecy gain of the MAs therefore stems mainly from the optimized positions rather than from the large aperture. At high SNR, the absolute ESSR gains of the proposed design approach constants, since the antenna positions improve the constant term rather than the slope of the ESSR (see Section~\ref{sec:insight}). \rev{These gains do not rely on the proximity of Eve to LU~$1$: if the AoDs of Eve are drawn independently of those of the LUs, the proposed design still achieves a $10.3\%$ higher ESSR than the rate-oriented MA at $20$~dB.}
 
-Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates. For $\Ptot/\sigma^2\ge10$~dB, the proposed design allocates less power to the AN than all the benchmarks, e.g., an AN power fraction of \rev{$0.27$ versus $0.47$} for the FPA at $20$~dB, because the optimized positions decrease $\Xi_m(\bt)$ in~\eqref{eq:highsnr}. \rev{The saturation levels agree with the high-SNR predictions $1-\alpha^\star$ by~\eqref{eq:alphastar}, which are evaluated with $\Xi_m(\bt)$ of the designs at $30$~dB and marked by crosses: although~\eqref{eq:alphastar} assumes equal power among the LUs, the predictions exceed the AN power fractions at $30$~dB by at most $0.011$ for all the schemes. In particular, $\alpha^\star=0.71$ for the proposed design, whereas $\alpha^\star=0.51$ for the FPA is close to the equal split of~\cite{Zhou2010}. Thus, \eqref{eq:alphastar} explicitly links the antenna positions to the optimal AN power.} The AN power fractions of the other benchmarks are comparable to that of the FPA.
+Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with the SNR and saturates. For $\Ptot/\sigma^2\ge10$~dB, the proposed design allocates less power to the AN than all the benchmarks, e.g., an AN power fraction of \rev{$0.27$ versus $0.47$} for the FPA at $20$~dB, because the optimized positions decrease $\Xi_m(\bt)$ in~\eqref{eq:highsnr}. \rev{The saturation levels agree with the high-SNR limits $1-\alpha^\star$ by~\eqref{eq:alphastar}, which are evaluated with $\Xi_m(\bt)$ of the designs at $30$~dB and shown by dotted lines for the proposed design and the FPA: although~\eqref{eq:alphastar} assumes equal power among the LUs, these limits exceed the AN power fractions at $30$~dB by at most $0.011$ for all the schemes. In particular, $\alpha^\star=0.71$ for the proposed design, whereas $\alpha^\star=0.51$ for the FPA is close to the equal split of~\cite{Zhou2010}. Thus, \eqref{eq:alphastar} explicitly links the antenna positions to the optimal AN power.} The AN power fractions of the other benchmarks are comparable to that of the FPA.
 
 \rev{Fig.~\ref{fig:power} shows the gain of the long-term power allocation. With equal power, the ESSR of the MAs decreases by $1.79$ to $1.94$~bps/Hz over the considered SNRs, whereas that of the FPA decreases by $1.83$~bps/Hz at $0$~dB and by $0.64$~bps/Hz at $30$~dB. At low SNR, both losses are large, because equal power allocates the fraction $(N-M)/N=0.625$ of the transmit power to the AN, whereas the optimized AN power fraction is close to zero when the noise dominates. At high SNR, the loss of the MAs is larger, because the optimized positions decrease $\Xi_m(\bt)$, so that the optimal AN power fraction, which is predicted by $1-\alpha^\star$ in Fig.~\ref{fig:snr}(b) \rev{($0.29$ versus $0.49$ for the FPA at $30$~dB)}, departs further from $0.625$. Nevertheless, the MAs with equal power outperform the FPA with the optimized power allocation for $\Ptot/\sigma^2\ge10$~dB. Therefore, the antenna positions and the long-term power allocation provide complementary gains, both of which are achieved by the proposed design.}
+
+\cand{[C4] Fig.~\ref{fig:cand_noan} shows the ESSRs of the proposed design and the FPA without AN, i.e., with $q=0$, where the MAs are positioned by Algorithm~\ref{alg:ao} with $q=0$. For $\Ptot/\sigma^2\le5$~dB, the ESSRs with and without AN nearly coincide, since the optimized AN power fraction is then close to zero. As the SNR increases, the ESSRs without AN saturate, because the SINR of Eve grows with the transmit power as fast as those of the LUs: without AN, the proposed design achieves $13.06$ and $13.85$~bps/Hz at $20$ and $30$~dB, whereas the AN increases its ESSR by $58.9\%$ and $121.1\%$, respectively. Even without AN, the proposed design outperforms the FPA by $30.5\%$ to $31.2\%$ for $\Ptot/\sigma^2\ge5$~dB, because the optimized positions still reduce the information leakage and decorrelate the LUs. Hence, the gains of the antenna positions and the AN are complementary.}
 
 \subsection{\rev{Impact of System Parameters}}\label{sec:sim_reg}
 
@@ -638,11 +642,52 @@ Fig.~\ref{fig:snr}(b) shows that the optimized AN power fraction increases with 
 \label{fig:kappa}
 \end{figure}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{supp_essr_noan}
+\caption{\cand{[C4] ESSR of the proposed design and the FPA with and without AN versus the transmit SNR $\Ptot/\sigma^2$.}}
+\label{fig:cand_noan}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{supp_fig6_noan}
+\caption{\cand{[C4, alternative layout] Fig.~\ref{fig:power} with the curves without AN of Fig.~\ref{fig:cand_noan} added, which would replace both figures.}}
+\label{fig:cand_noan_alt}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{supp_essr_users}
+\caption{\cand{[C1] ESSR versus the number of LUs $M$.}}
+\label{fig:cand_users}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{supp_essr_betae}
+\caption{\cand{[C3] ESSR versus the large-scale fading coefficient $\beta_{\mathrm e}$ of Eve with $\beta_m=1$.}}
+\label{fig:cand_betae}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{supp_essr_aod_error}
+\caption{\cand{[C2] ESSR versus the AoD error of Eve at the BS.}}
+\label{fig:cand_aod}
+\end{figure}
+
 \rev{\textit{1) Region size and number of MAs:}} Fig.~\ref{fig:region}(a) shows the ESSR versus the side length $A$ of the movable region, where the ESSRs of the FPA and AS do not depend on $A$. The gain of the proposed design grows with $A$, because a larger region provides more spatial degrees of freedom for decorrelating the LoS components of Eve and the LUs. The ESSRs of the rate-oriented MA and the sparse FPA increase much more slowly: the former exploits the enlarged region only to decorrelate the LUs, and the latter cannot adapt its positions to the AoDs. AS performs comparably to the proposed design only for the smallest region, which its candidate array covers entirely.
 
 Fig.~\ref{fig:region}(b) shows the ESSR versus the number of MAs $N$. All the schemes benefit from more antennas, which provide a larger array gain and more dimensions for the AN. The gains of the proposed design over the FPA and AS decrease with $N$, because the apertures of their arrays grow with $N$ and allow them to separate Eve from LU~$1$ better even without position optimization. Nevertheless, the proposed design with $N=4$ MAs, for which the AN occupies a single dimension, outperforms the FPA with $N=12$ antennas, and that with $N=8$ MAs slightly outperforms the rate-oriented MA with $N=16$ MAs. The secrecy-aware positioning can thus substantially reduce the number of antennas and RF chains required for a target ESSR. The sparse FPA, whose grating lobes are strong for small $N$, approaches the rate-oriented MA as $N$ increases and slightly exceeds it for $N=16$, because more antennas in $\mathcal C$ suppress these lobes.
 
 \rev{\textit{2) Rician factors:} We first consider a common Rician factor $\kappa=\kappa_m=\kappa_{\mathrm e}$, for which the figure is omitted for brevity. For $\kappa=-10$~dB, the ESSRs of all the schemes differ by less than $0.04$~bps/Hz, because the antenna positions affect~\eqref{eq:Rm} and~\eqref{eq:Re} only through the LoS components, which are then weak, e.g., by~\eqref{eq:etabound}, the positions can increase $\eta_m(\bt)$ by a factor of at most $\kappa_m+1$. As $\kappa$ increases, the ESSR of the FPA decreases, since Eve lies within the main lobe of its beam toward LU~$1$, whereas the proposed design increases its ESSR by decorrelating the dominant LoS components of Eve and the LUs. Consequently, the gains of the proposed design over the rate-oriented MA and the FPA grow to $19.3\%$ and $49.4\%$ at $\kappa=20$~dB, respectively. Fig.~\ref{fig:kappa} isolates the Rician factor of Eve with $\kappa_m=10$~dB. As $\kappa_{\mathrm e}$ decreases, the statistical CSI of Eve carries less spatial information (see Section~\ref{sec:insight}), and the gain of the proposed design over the rate-oriented MA decreases to $1.0\%$ at $\kappa_{\mathrm e}=-10$~dB. As $\kappa_{\mathrm e}$ increases, the ESSRs of all the benchmarks decrease, whereas that of the proposed design increases, so that this gain grows to $17.0\%$ at $\kappa_{\mathrm e}=20$~dB. Hence, the Eve-aware positioning is most beneficial when the channel of Eve has a strong LoS component, which the rate-oriented design cannot exploit.}
+
+\cand{[C1] \textit{3) Number of LUs:} Fig.~\ref{fig:cand_users} shows the ESSR versus the number of LUs $M$. For $M=1$, the rate-oriented MA achieves the same ESSR as the FPA, because the approximate rate of a single LU does not depend on $\bt$ (see Section~\ref{sec:insight}), whereas the proposed design achieves a $77.2\%$ higher ESSR by reducing the LoS correlation between Eve and the LU. In this case, the FPA allocates $84\%$ of the transmit power to the AN, whereas the proposed design allocates $50\%$. As $M$ increases, the gain of the proposed design over the rate-oriented MA remains between $2.47$ and $3.39$~bps/Hz, whereas its gains over the FPA and the sparse FPA grow for $M\ge3$ and reach $64.4\%$ and $47.4\%$ at $M=6$, respectively. The fixed arrays cannot decorrelate the LoS components of more LUs, which increases the power cost of the ZF precoding, so that the ESSR of the FPA even decreases from $M=5$ to $M=6$.}
+
+\cand{[C3] \textit{4) Large-scale fading of Eve:} Fig.~\ref{fig:cand_betae} shows the ESSR versus the large-scale fading coefficient $\beta_{\mathrm e}$ of Eve, i.e., Eve is farther from the BS than the LUs for $\beta_{\mathrm e}<0$~dB and closer for $\beta_{\mathrm e}>0$~dB. As $\beta_{\mathrm e}$ increases from $-10$ to $10$~dB, the ESSR of the proposed design decreases by $2.2\%$, whereas those of the rate-oriented MA and the FPA decrease by $5.7\%$ and $10.8\%$, respectively. Since both the information leakage and the AN received by Eve scale with $\beta_{\mathrm e}$, the approximate wiretap rate in~\eqref{eq:Re} approaches $\log_2(1+\xi_m(\bt)p_m/(q\psi(\bt)))$ as $\zeta_{\mathrm e}$ increases, which is determined by the leakage-to-AN ratio that the optimized positions reduce. Consequently, the gains of the proposed design over the rate-oriented MA and the FPA grow from $11.1\%$ and $21.1\%$ at $\beta_{\mathrm e}=-10$~dB to $15.3\%$ and $32.8\%$ at $\beta_{\mathrm e}=10$~dB, respectively.}
+
+\cand{[C2] \textit{5) Errors in the statistical CSI of Eve:} To evaluate the robustness of the proposed design, the AoDs of Eve known at the BS are assumed to deviate from the true ones by an error in a random direction of the elevation--azimuth plane. The BS optimizes the positions and the powers with the erroneous AoDs, whereas the ESSR is evaluated with the true ones. Fig.~\ref{fig:cand_aod} shows that the ESSR of the proposed design decreases by less than $0.5\%$ for errors up to $0.02$~rad and by $2.95\%$ for an error of $0.05$~rad. The ESSRs of the benchmarks decrease by at most $1.82\%$, because their positions are fixed or adapt little to the AoDs of Eve. Even for an error of $0.1$~rad, which equals the offset of Eve from LU~$1$, the proposed design outperforms the rate-oriented MA by $4.4\%$ and all the other benchmarks.}
 
 % =============================================================================
 \section{Conclusion}\label{sec:conclusion}

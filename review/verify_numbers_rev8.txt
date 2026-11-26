@@ -38,18 +38,18 @@ V-C   proposed AN fraction below all benchmarks at 5 dB (1 = yes)        0.0000 
 V-C   AN power fraction of MA_rate at 20 dB                              0.4307   text: comparable to the FPA
 V-C   AN power fraction of AS at 20 dB                                   0.4278   text: comparable to the FPA
 V-C   AN power fraction of SPA_full at 20 dB                             0.4021   text: comparable to the FPA
-V-C   MA_full: AN fraction at 30 dB                                      0.2759   text: Fig. 5(b), markers
-V-C   MA_full: high-SNR prediction 1 - alpha* for the designs at 30 dB     0.2863   text: Fig. 5(b), x
-V-C   MA_rate: AN fraction at 30 dB                                      0.4425   text: Fig. 5(b), markers
-V-C   MA_rate: high-SNR prediction 1 - alpha* for the designs at 30 dB     0.4501   text: Fig. 5(b), x
-V-C   AS: AN fraction at 30 dB                                           0.4413   text: Fig. 5(b), markers
-V-C   AS: high-SNR prediction 1 - alpha* for the designs at 30 dB        0.4486   text: Fig. 5(b), x
-V-C   SPA_full: AN fraction at 30 dB                                     0.4083   text: Fig. 5(b), markers
-V-C   SPA_full: high-SNR prediction 1 - alpha* for the designs at 30 dB     0.4162   text: Fig. 5(b), x
-V-C   FPA_full: AN fraction at 30 dB                                     0.4859   text: Fig. 5(b), markers
-V-C   FPA_full: high-SNR prediction 1 - alpha* for the designs at 30 dB     0.4899   text: Fig. 5(b), x
-V-C   largest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0104   text: exceed by at most 0.011
-V-C   smallest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0040   text: all positive (exceed)
+V-C   MA_full: AN fraction at 30 dB                                      0.2759   text: Fig. 5(b), curves
+V-C   MA_full: high-SNR limit 1 - alpha* for the designs at 30 dB        0.2863   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   MA_rate: AN fraction at 30 dB                                      0.4425   text: Fig. 5(b), curves
+V-C   MA_rate: high-SNR limit 1 - alpha* for the designs at 30 dB        0.4501   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   AS: AN fraction at 30 dB                                           0.4413   text: Fig. 5(b), curves
+V-C   AS: high-SNR limit 1 - alpha* for the designs at 30 dB             0.4486   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   SPA_full: AN fraction at 30 dB                                     0.4083   text: Fig. 5(b), curves
+V-C   SPA_full: high-SNR limit 1 - alpha* for the designs at 30 dB       0.4162   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   FPA_full: AN fraction at 30 dB                                     0.4859   text: Fig. 5(b), curves
+V-C   FPA_full: high-SNR limit 1 - alpha* for the designs at 30 dB       0.4899   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   largest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0104   text: exceed by at most 0.011
+V-C   smallest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0040   text: all positive (exceed)
 V-C   alpha* (= 1 - prediction) of the proposed design at 30 dB          0.7137   text: 0.71
 V-C   alpha* (= 1 - prediction) of the FPA at 30 dB                      0.5101   text: 0.51
 V-C   Fig. 6: equal-power loss of the MAs, smallest over the SNRs (bps/Hz)     1.7909   text: 1.79

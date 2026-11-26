@@ -5,8 +5,8 @@ function plot_fig7(resA, resN)
 %   movable region and AS with the compact candidate array, whose subset is selected by the
 %   swap search (as_swap.m) for all N, as in Figs. 5 and 8. AS with region-wide candidates
 %   (extra_as_region.m) is a supplementary result and is not plotted. Each panel has its
-%   own legend inside the axes: (a) two columns in the upper-left area, (b) one column in
-%   the lower-right area.
+%   own two-column legend inside the axes: (a) in the upper-left area, (b) in the
+%   lower-right area.
 % ---------------- (a) region size ----------------
 [Y, keys] = pick_schemes(resA, 'essr');
 ax = new_figure();
@@ -28,6 +28,6 @@ for k = numel(keys):-1:1                       % reverse order: the proposed des
 end
 label_axes(ax, 'Number of MAs {\itN}', 'ESSR (bps/Hz)');
 set(ax, 'XLim', [resN.values(1) resN.values(end)], 'XTick', resN.values, 'YLim', [10 24], 'YTick', 10:2:24);
-place_legend(ax, legend_rows(items, 1), 'se');
+place_legend(ax, legend_rows(items, 2), 'se');
 save_figure('fig7b_essr_antennas');
 end

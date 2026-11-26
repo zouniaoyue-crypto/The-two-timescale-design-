@@ -226,3 +226,18 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I158 (2.5) | L | III-D 3) | value of the high-SNR analysis | Figs. 5(a), 5(b), 6 numbers; Zhou–McKay link | approved: III-D 3) kept with the α⋆ = 1/2 link to [Zhou2010]; V-C states that the predictions exceed Algorithm 1 by at most 0.011 and α⋆ = 0.71 vs. 0.51; Fig. 6 paragraph refers back | fixed (rev-8b) |
 | I159 (2.6) | L | Fig. 5(b) | colored auxiliary lines without legend entry | author's review | approved: black × at 30 dB for all five schemes, legend entry “High-SNR prediction, (33)” | fixed (rev-8b) |
 | I160 (2.7) | — | IV-B Stage 2 | S0 vs. S1-best vs. S1-Zheng | rev7b D1 data; analysis | approved: S0 kept (no change) | closed (rev-8b; no change) |
+
+## Round rev-8c — candidate comparisons (author's request, 2026-11-26) and the author's items 1–5 on the figures and simulations
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I161 (C1) | M | Section V (missing) | ESSR vs number of LUs M not shown; the single-LU claim of the abstract has no numerical support in Section V | extra_num_users.mat; analysis.txt | candidate in main_candidates.tex (Fig. 11, V-D 3)); recommendation: keep as a figure | needs-decision |
+| I162 (C2) | M | Section V (missing) | robustness to errors in the AoDs of Eve at the BS not shown | extra_eve_aod_error.mat (rerun with the current code) | candidate (Fig. 13, V-D 5)); recommendation: keep as two sentences, figure optional | needs-decision |
+| I163 (C3) | L | Section V (missing) | dependence on the large-scale fading (distance) of Eve not shown | extra_eve_beta.mat | candidate (Fig. 12, V-D 4)); recommendation: one or two sentences, no figure | needs-decision |
+| I164 (C4) | M | Section V (missing) | contribution of the AN not isolated (ESSR without AN) | extra_no_an.mat + fig5_snr.mat | candidate (Fig. 9, alternative Fig. 10 = Fig. 6 with the no-AN curves); recommendation: merge into Fig. 6 | needs-decision |
+| I165 (item 1) | L | Fig. 4 | single-hue curves less readable than SNR colors; "10 dB" label without the standard notation | author's review | colors by SNR (blue 10 dB, red 20 dB) with color-matched direct labels "P_tot/σ² = 10 dB / 20 dB"; legend lists line styles only (neutral color): N = 8, N = 12, MM only | fixed (rev-8c) |
+| I166 (item 2) | L | Fig. 5(b), caption, V-C | × markers at 30 dB not a standard way to show an analytical limit | author's review | high-SNR limits (33) as black dotted horizontal lines over 15–30 dB for the proposed design and the FPA (bracketing the others), legend entry "High-SNR limit, (33)"; caption and V-C text updated; all five limits still quoted | fixed (rev-8c) |
+| I167 (item 3) | L | all figures | legends switch between one and two columns; legends large | author's review | two-column legends in every figure (row-wise order), legend text 8 pt, rows 0.15 in; positions in the empty areas | fixed (rev-8c) |
+| I168 (item 4) | M | Sections III–V | audit: analytical insights without a simulation echo | rev-8c analysis (chat report) | reported to the author (mechanism-level evidence, region-size threshold, per-LU fairness, two-timescale vs. instantaneous CSI, run time) | needs-decision |
+| I169 (item 5) | M | benchmarks | benchmark suite (rate-oriented MA, AS, sparse FPA) gives uniformly ordered curves with little insight | rev-8c analysis (chat report) | reported to the author (keep rate-oriented MA, FPA, equal power; region-wide AS instead of compact AS; sparse FPA only where aperture matters; no-AN variant; optional PSO and instantaneous-CSI benchmarks) | needs-decision |
+

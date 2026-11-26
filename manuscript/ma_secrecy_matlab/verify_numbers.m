@@ -113,15 +113,15 @@ show('V-C', 'proposed AN fraction below all benchmarks at 5 dB (1 = yes)', lessA
 for k = {'MA_rate', 'AS', 'SPA_full'}
     show('V-C', sprintf('AN power fraction of %s at 20 dB', k{1}), f5.anfrac(i20, col(f5, k{1})), 'comparable to the FPA');
 end
-dPred = zeros(1, numel(withAN));                  % x markers of Fig. 5(b)
+dPred = zeros(1, numel(withAN));                  % high-SNR limits of Fig. 5(b) (dotted lines)
 for i = 1:numel(withAN)
     k = withAN{i};
-    show('V-C', sprintf('%s: AN fraction at 30 dB', k), f5.anfrac(i30, col(f5, k)), 'Fig. 5(b), markers');
-    show('V-C', sprintf('%s: high-SNR prediction 1 - alpha* for the designs at 30 dB', k), f5.anpred(i30, col(f5, k)), 'Fig. 5(b), x');
+    show('V-C', sprintf('%s: AN fraction at 30 dB', k), f5.anfrac(i30, col(f5, k)), 'Fig. 5(b), curves');
+    show('V-C', sprintf('%s: high-SNR limit 1 - alpha* for the designs at 30 dB', k), f5.anpred(i30, col(f5, k)), 'Fig. 5(b), dotted lines (proposed, FPA); text: all five');
     dPred(i) = f5.anpred(i30, col(f5, k)) - f5.anfrac(i30, col(f5, k));
 end
-show('V-C', 'largest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes', max(dPred), 'exceed by at most 0.011');
-show('V-C', 'smallest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes', min(dPred), 'all positive (exceed)');
+show('V-C', 'largest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes', max(dPred), 'exceed by at most 0.011');
+show('V-C', 'smallest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes', min(dPred), 'all positive (exceed)');
 show('V-C', 'alpha* (= 1 - prediction) of the proposed design at 30 dB', 1 - f5.anpred(i30, col(f5, 'MA_full')), '0.71');
 show('V-C', 'alpha* (= 1 - prediction) of the FPA at 30 dB', 1 - f5.anpred(i30, col(f5, 'FPA_full')), '0.51');
 lossMA = f5.essr(:, col(f5, 'MA_full')) - f5.essr(:, col(f5, 'MA_eq'));

@@ -21,7 +21,7 @@ for sweep = 1:2
     set(ax, 'XLim', [X(1) X(end)], 'XTick', X, 'YLim', ylims{sweep}, 'YTick', yt{sweep});
     label_axes(ax, xl{sweep}, 'Ergodic sum rate (bps/Hz)');
     if sweep == 1                                  % legend in the empty area of each panel
-        place_legend(ax, {{lu}, {luA}, {ev}, {evA}}, 'nw');
+        place_legend(ax, {{lu, luA}, {ev, evA}}, 'nw');
     else                                           % between the curves of the LUs and Eve
         place_legend(ax, {{lu, luA}, {ev, evA}}, 'sc', 0, 0.60);
     end
