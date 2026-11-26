@@ -283,3 +283,20 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I165–I167 | readme.tex/.pdf | Fig. 4/5/7 descriptions, style row (legend 8 pt), palette roles, supp_fig6_noan | documentation |
 | — | results/fig3*–fig8*.png | replotted; main.tex rebuilt (14 pages, clean) | items 1–3 |
 
+
+## Round rev-8d — author's selection (2026-11-26): C1 and C4 adopted, B1 adopted in minimal form, minor insights removed
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I161 | main.tex:629–635 | Fig. 8 becomes a figure* with (a) ESSR vs the number of LUs M (`fig8a_essr_users`) and (b) ESSR vs κ_e (`fig8b_essr_kappae`); label `fig:param` | C1 adopted |
+| I161 | main.tex:641 | V-D 2) "Number of LUs": at M = 1 the rate-oriented MA equals the FPA (approximate rate of a single LU independent of t), the proposed design +77.2%; AN fraction 84% (FPA) vs 50%; gain over the rate-oriented MA 2.47–3.39 bps/Hz; gains over the FPA and sparse FPA grow for M ≥ 3 to 64.4% and 47.4% at M = 6; FPA saturates for M ≥ 5 (the drop from M = 5 to 6, −0.20 bps/Hz, is within its standard error 0.46, so no decrease is claimed); Rician item renumbered 3) and refers to Fig. 8(b) | C1 adopted; numbers in verify_numbers (V-D2) |
+| I164 | main.tex:607 | Fig. 6 caption: "... with the power allocation of Algorithm 1, with equal power p_m = q = P_tot/N, and without AN (q = 0) ..." | C4 adopted (Fig. 10 layout) |
+| I164 | main.tex:625 | V-C: paragraph on the no-AN curves (nearly coincide for ≤ 5 dB; saturation; AN gain 58.9% / 121.1% at 20 / 30 dB; MAs over FPA without AN 30.5–31.2% for ≥ 5 dB; complementary gains) | C4 adopted; numbers in verify_numbers (V-C) |
+| I168 | main.tex:387 | III-D 2): the sufficient condition for ρ₁(t) = 0 (pairs of MAs), the infeasibility condition, and the conclusion on the required region size removed; the statement that any feasible t with ρ₁(t) = 0 maximizes the approximate secrecy rate is kept | minor insight not examined in Section V (author's guideline: highlight the core focus) |
+| I168 | main.tex (checked, kept) | kept after the check: III-D 1) κ_e = 0 case (Fig. 8(b)); III-D 2) footnote on the exact rate for M = 1 (Fig. 8(a)); III-D 3) α⋆ = 1/2 link (analytical, referred to in V-C); IV-A interpretation of (38) (links to Fig. 5(b)); footnote on multiple non-colluding Eves (exact one-line extension of Algorithm 1, needs no simulation); IV-C complexity statements (analytical) | redundancy check |
+| I161, I164 | functions/plot_fig6.m, plot_fig8.m (new signatures `plot_fig6(res, resN)`, `plot_fig8(resU, resB)`), scheme_style.m (labels "MA, no AN", "FPA, no AN"); fig5_snr.m, extra_no_an.m, extra_num_users.m, fig8_rician.m, replot_all.m, run_all.m (extra_no_an, table_mechanisms, extra_num_users moved to the main list; extra_eve_aod_error and extra_eve_beta stay supplementary) | Figs. 6 and 8 from the stored results (no new runs) | C1/C4 adopted |
+| I168 | table_mechanisms.m (new), results/table_mechanisms.mat | ρ₁, normalized η_m, ξ_m, ψ, Ξ_m of the designs at 20 dB (same drops as Fig. 5; per-drop ESSRs identical to fig5_snr.mat) | B1 adopted |
+| I168 | main.tex:619 | V-C: two sentences instead of a table (author's clarification: keep only what is necessary): ρ₁ 0.98 → 0.52, ξ₁ 54.5 → 24.7, ψ 13.3 → 58.3 (FPA → proposed); rate-oriented MA 0.83 / 53.4 / 25.6 | B1, minimal form |
+| I168 | main.tex:380 | III-D 1): the explicit minimum of c_m(t) and maximum of d(t) (derivation not used or verified later) replaced by "both effects are strongest if v(t) = 0, i.e., ..." | author's guideline: delete derivations of little value that are not verified later |
+| — | verify_numbers.m | lines for Fig. 6 (no AN), the mechanism numbers, Fig. 8(a); Rician lines relabeled V-D3 | rule 3 |
+| — | readme.tex/.pdf | Figs. 6 and 8, Table I, scripts, scheme labels, outputs | documentation |

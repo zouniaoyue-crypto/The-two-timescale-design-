@@ -18,5 +18,5 @@ for pnl = panels
     save(fullfile(results_dir(), ['fig8_rician_' pnl '.mat']), 'res', 'prm', '-v7');
 end
 rb = load_results('fig8_rician_b');
-if ~isempty(rb), plot_fig8(rb); end
+if ~isempty(rb), plot_fig8(load_results('extra_num_users'), rb); end
 end

@@ -142,6 +142,32 @@ for v = [10 15]
     show('V-C', sprintf('MA, equal power minus rate-oriented MA at %d dB (paired SE %.3f)', v, std(d)/sqrt(numel(d))), mean(d), 'not quoted');
 end
 
+% ---------------- Section V-C: Fig. 6 without AN (extra_no_an.mat, same drops) ----------------
+na = ld('extra_no_an');  iN = arrayfun(@(v) find(f5.values == v), na.values);
+ma  = f5.essr(iN, col(f5, 'MA_full'));  fp  = f5.essr(iN, col(f5, 'FPA_full'));
+ma0 = na.essr(:, col(na, 'MA_noAN'));    fp0 = na.essr(:, col(na, 'FPA_noAN'));
+lo5 = na.values <= 5;  hi5 = na.values >= 5;
+show('V-C', 'Fig. 6: largest |with AN - without AN| for P/sigma^2 <= 5 dB, MAs and FPA (bps/Hz)', ...
+     max(abs([ma(lo5) - ma0(lo5); fp(lo5) - fp0(lo5)])), 'nearly coincide');
+show('V-C', 'Fig. 6: gain of the AN for the proposed design at 20 dB (%)', 100*(ma(na.values == 20)/ma0(na.values == 20) - 1), '58.9%');
+show('V-C', 'Fig. 6: gain of the AN for the proposed design at 30 dB (%)', 100*(ma(na.values == 30)/ma0(na.values == 30) - 1), '121.1%');
+g0 = 100*(ma0./fp0 - 1);
+show('V-C', 'Fig. 6: MAs over FPA without AN, smallest for P/sigma^2 >= 5 dB (%)', min(g0(hi5)), '30.5%');
+show('V-C', 'Fig. 6: MAs over FPA without AN, largest for P/sigma^2 >= 5 dB (%)', max(g0(hi5)), '31.2%');
+show('V-C', 'Fig. 6: ESSR slope without AN, 25 -> 30 dB, proposed (bps/Hz per dB)', (ma0(end) - ma0(end-1))/5, 'saturate');
+
+% ---------------- Section V-C: mechanisms of the designs (table_mechanisms.mat, same drops) ----------------
+tm = ld('table_mechanisms');
+jt = cellfun(@(k) find(strcmp(tm.schemes, k), 1), withAN);
+show('V-C', 'mechanisms: consistency, max |ESSR per drop - Fig. 5 at 20 dB| (bps/Hz)', ...
+     max(max(abs(tm.essr(:, jt) - squeeze(f5.essrDrops(i20, jj, :)).'))), '0 (identical designs)');
+for kk = {'FPA_full', 'MA_rate', 'MA_full'}
+    k = find(strcmp(tm.schemes, kk{1}), 1);
+    show('V-C', sprintf('mechanisms %s: mean rho_1', kk{1}), mean(tm.rho1(:, k)), '0.98 / 0.83 / 0.52');
+    show('V-C', sprintf('mechanisms %s: mean xi_1', kk{1}), mean(tm.xi(:, k, 1)), '54.5 / 53.4 / 24.7');
+    show('V-C', sprintf('mechanisms %s: mean psi', kk{1}), mean(tm.psi(:, k)), '13.3 / 25.6 / 58.3');
+end
+
 % ---------------- Section V-D 1) (Fig. 7) ----------------
 r7 = ld('fig7_region');
 for i = 1:numel(r7.values)
@@ -162,21 +188,39 @@ for v = n.values
          val(n, iN(v), 'MA_full') - val(n, iN(v), 'FPA_full'), sprintf('%.4f (AS)', val(n, iN(v), 'MA_full') - val(n, iN(v), 'AS')));
 end
 
-% ---------------- Section V-D 2) (Fig. 8: kappa_e sweep; common kappa in the text) ----------------
+% ---------------- Section V-D 2) (Fig. 8(a): number of LUs, extra_num_users.mat) ----------------
+u = ld('extra_num_users');  ju = cellfun(@(k) col(u, k), withAN);  iM = @(v) find(u.values == v);
+show('V-D2', 'Fig. 8(a): M = 1, rate-oriented MA minus FPA (bps/Hz)', u.essr(iM(1), ju(2)) - u.essr(iM(1), ju(5)), 'same ESSR');
+show('V-D2', 'Fig. 8(a): M = 1, gain of the proposed design over the FPA (%)', 100*(u.essr(iM(1), ju(1))/u.essr(iM(1), ju(5)) - 1), '77.2%');
+show('V-D2', 'Fig. 8(a): M = 1, AN power fraction of the FPA (%)', 100*u.anfrac(iM(1), ju(5)), '84%');
+show('V-D2', 'Fig. 8(a): M = 1, AN power fraction of the proposed design (%)', 100*u.anfrac(iM(1), ju(1)), '50%');
+gr = u.essr(:, ju(1)) - u.essr(:, ju(2));
+show('V-D2', 'Fig. 8(a): gain over the rate-oriented MA, smallest over M (bps/Hz)', min(gr), '2.47');
+show('V-D2', 'Fig. 8(a): gain over the rate-oriented MA, largest over M (bps/Hz)', max(gr), '3.39');
+gF = 100*(u.essr(:, ju(1))./u.essr(:, ju(5)) - 1);  gS = 100*(u.essr(:, ju(1))./u.essr(:, ju(4)) - 1);
+show('V-D2', 'Fig. 8(a): gains over FPA increasing for M >= 3 (1 = yes)', all(diff(gF(u.values >= 3)) > 0), 'grow for M >= 3');
+show('V-D2', 'Fig. 8(a): gains over sparse FPA increasing for M >= 3 (1 = yes)', all(diff(gS(u.values >= 3)) > 0), 'grow for M >= 3');
+show('V-D2', 'Fig. 8(a): gain over the FPA at M = 6 (%)', gF(end), '64.4%');
+show('V-D2', 'Fig. 8(a): gain over the sparse FPA at M = 6 (%)', gS(end), '47.4%');
+d56 = squeeze(u.essrDrops(iM(6), ju(5), :));  d55 = squeeze(u.essrDrops(iM(5), ju(5), :));
+show('V-D2', sprintf('Fig. 8(a): FPA, ESSR(M = 6) - ESSR(M = 5) (SE %.3f, independent drops)', ...
+     sqrt(var(d56)/numel(d56) + var(d55)/numel(d55))), mean(d56) - mean(d55), 'saturates for M >= 5');
+
+% ---------------- Section V-D 3) (Fig. 8(b): kappa_e sweep; common kappa in the text) ----------------
 ka = ld('fig8_rician_a');  kb = ld('fig8_rician_b');
 ja = cellfun(@(k) col(ka, k), withAN);  jb = cellfun(@(k) col(kb, k), withAN);
 lo = ka.values == min(ka.values);  hi = ka.values == max(ka.values);
-show('V-D2', 'common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)', max(ka.essr(lo, ja)) - min(ka.essr(lo, ja)), 'less than 0.04');
-show('V-D2', 'common kappa (text): proposed increasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(1))) > 0), 'increases');
-show('V-D2', 'common kappa (text): FPA decreasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(5))) < 0), 'decreases');
-show('V-D2', 'common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(2)) - 1), '19.3%');
-show('V-D2', 'common kappa (text): gain over the FPA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(5)) - 1), '49.4%');
+show('V-D3', 'common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)', max(ka.essr(lo, ja)) - min(ka.essr(lo, ja)), 'less than 0.04');
+show('V-D3', 'common kappa (text): proposed increasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(1))) > 0), 'increases');
+show('V-D3', 'common kappa (text): FPA decreasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(5))) < 0), 'decreases');
+show('V-D3', 'common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(2)) - 1), '19.3%');
+show('V-D3', 'common kappa (text): gain over the FPA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(5)) - 1), '49.4%');
 lo = kb.values == min(kb.values);  hi = kb.values == max(kb.values);
-show('V-D2', 'Fig. 8: gain over the rate-oriented MA at kappa_e = -10 dB (%)', 100*(kb.essr(lo, jb(1))/kb.essr(lo, jb(2)) - 1), '1.0%');
-show('V-D2', 'Fig. 8: gain over the rate-oriented MA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(2)) - 1), '17.0%');
-show('V-D2', 'Fig. 8: gain over the FPA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(5)) - 1), 'not quoted');
-show('V-D2', 'Fig. 8: proposed increasing in kappa_e (1 = yes)', all(diff(kb.essr(:, jb(1))) > 0), 'increases');
-show('V-D2', 'Fig. 8: every benchmark decreasing in kappa_e (1 = yes)', all(all(diff(kb.essr(:, jb(2:end)), 1, 1) < 0)), 'all the benchmarks decrease');
-show('V-D2', 'Fig. 8: ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)', ...
+show('V-D3', 'Fig. 8(b): gain over the rate-oriented MA at kappa_e = -10 dB (%)', 100*(kb.essr(lo, jb(1))/kb.essr(lo, jb(2)) - 1), '1.0%');
+show('V-D3', 'Fig. 8(b): gain over the rate-oriented MA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(2)) - 1), '17.0%');
+show('V-D3', 'Fig. 8(b): gain over the FPA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(5)) - 1), 'not quoted');
+show('V-D3', 'Fig. 8(b): proposed increasing in kappa_e (1 = yes)', all(diff(kb.essr(:, jb(1))) > 0), 'increases');
+show('V-D3', 'Fig. 8(b): every benchmark decreasing in kappa_e (1 = yes)', all(all(diff(kb.essr(:, jb(2:end)), 1, 1) < 0)), 'all the benchmarks decrease');
+show('V-D3', 'Fig. 8(b): ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)', ...
      max(abs(kb.essr(kb.values == 10, jb) - f5.essr(i20, jj))), 'consistency check');
 end

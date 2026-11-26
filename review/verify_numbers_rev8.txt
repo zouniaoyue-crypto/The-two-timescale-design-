@@ -63,6 +63,22 @@ V-C   Fig. 6: MA, equal power above the FPA at every SNR >= 10 dB (1 = yes)     
 V-C   Fig. 6: MA, equal power minus FPA at 5 dB (bps/Hz)                -0.0740   text: below at 5 dB
 V-C   MA, equal power minus rate-oriented MA at 10 dB (paired SE 0.067)     0.0994   text: not quoted
 V-C   MA, equal power minus rate-oriented MA at 15 dB (paired SE 0.078)     0.6839   text: not quoted
+V-C   Fig. 6: largest |with AN - without AN| for P/sigma^2 <= 5 dB, MAs and FPA (bps/Hz)     0.0758   text: nearly coincide
+V-C   Fig. 6: gain of the AN for the proposed design at 20 dB (%)       58.9019   text: 58.9%
+V-C   Fig. 6: gain of the AN for the proposed design at 30 dB (%)      121.1399   text: 121.1%
+V-C   Fig. 6: MAs over FPA without AN, smallest for P/sigma^2 >= 5 dB (%)    30.4893   text: 30.5%
+V-C   Fig. 6: MAs over FPA without AN, largest for P/sigma^2 >= 5 dB (%)    31.2463   text: 31.2%
+V-C   Fig. 6: ESSR slope without AN, 25 -> 30 dB, proposed (bps/Hz per dB)     0.0497   text: saturate
+V-C   mechanisms: consistency, max |ESSR per drop - Fig. 5 at 20 dB| (bps/Hz)     0.0000   text: 0 (identical designs)
+V-C   mechanisms FPA_full: mean rho_1                                    0.9777   text: 0.98 / 0.83 / 0.52
+V-C   mechanisms FPA_full: mean xi_1                                    54.4904   text: 54.5 / 53.4 / 24.7
+V-C   mechanisms FPA_full: mean psi                                     13.2879   text: 13.3 / 25.6 / 58.3
+V-C   mechanisms MA_rate: mean rho_1                                     0.8333   text: 0.98 / 0.83 / 0.52
+V-C   mechanisms MA_rate: mean xi_1                                     53.3633   text: 54.5 / 53.4 / 24.7
+V-C   mechanisms MA_rate: mean psi                                      25.6410   text: 13.3 / 25.6 / 58.3
+V-C   mechanisms MA_full: mean rho_1                                     0.5231   text: 0.98 / 0.83 / 0.52
+V-C   mechanisms MA_full: mean xi_1                                     24.7040   text: 54.5 / 53.4 / 24.7
+V-C   mechanisms MA_full: mean psi                                      58.3372   text: 13.3 / 25.6 / 58.3
 V-D1  ESSR: proposed minus AS, A = 1.5 lambda                            0.0356   text: comparable only for the smallest A
 V-D1  ESSR: proposed minus AS, A = 2.0 lambda                            0.8995   text: comparable only for the smallest A
 V-D1  ESSR: proposed minus AS, A = 3.0 lambda                            2.3738   text: comparable only for the smallest A
@@ -85,14 +101,25 @@ V-D1  gain of the proposed design over FPA / AS, N = 10                  4.4743 
 V-D1  gain of the proposed design over FPA / AS, N = 12                  4.1092   text: 2.8168 (AS)
 V-D1  gain of the proposed design over FPA / AS, N = 14                  3.7979   text: 2.4917 (AS)
 V-D1  gain of the proposed design over FPA / AS, N = 16                  3.5091   text: 2.1822 (AS)
-V-D2  common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)     0.0333   text: less than 0.04
-V-D2  common kappa (text): proposed increasing in kappa (1 = yes)        1.0000   text: increases
-V-D2  common kappa (text): FPA decreasing in kappa (1 = yes)             1.0000   text: decreases
-V-D2  common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)    19.3130   text: 19.3%
-V-D2  common kappa (text): gain over the FPA at kappa = 20 dB (%)       49.4119   text: 49.4%
-V-D2  Fig. 8: gain over the rate-oriented MA at kappa_e = -10 dB (%)     1.0171   text: 1.0%
-V-D2  Fig. 8: gain over the rate-oriented MA at kappa_e = 20 dB (%)     17.0206   text: 17.0%
-V-D2  Fig. 8: gain over the FPA at kappa_e = 20 dB (%)                  36.3227   text: not quoted
-V-D2  Fig. 8: proposed increasing in kappa_e (1 = yes)                   1.0000   text: increases
-V-D2  Fig. 8: every benchmark decreasing in kappa_e (1 = yes)            1.0000   text: all the benchmarks decrease
-V-D2  Fig. 8: ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)     0.0000   text: consistency check
+V-D2  Fig. 8(a): M = 1, rate-oriented MA minus FPA (bps/Hz)              0.0000   text: same ESSR
+V-D2  Fig. 8(a): M = 1, gain of the proposed design over the FPA (%)    77.1674   text: 77.2%
+V-D2  Fig. 8(a): M = 1, AN power fraction of the FPA (%)                84.0650   text: 84%
+V-D2  Fig. 8(a): M = 1, AN power fraction of the proposed design (%)    50.4363   text: 50%
+V-D2  Fig. 8(a): gain over the rate-oriented MA, smallest over M (bps/Hz)     2.4725   text: 2.47
+V-D2  Fig. 8(a): gain over the rate-oriented MA, largest over M (bps/Hz)     3.3905   text: 3.39
+V-D2  Fig. 8(a): gains over FPA increasing for M >= 3 (1 = yes)          1.0000   text: grow for M >= 3
+V-D2  Fig. 8(a): gains over sparse FPA increasing for M >= 3 (1 = yes)     1.0000   text: grow for M >= 3
+V-D2  Fig. 8(a): gain over the FPA at M = 6 (%)                         64.3557   text: 64.4%
+V-D2  Fig. 8(a): gain over the sparse FPA at M = 6 (%)                  47.3570   text: 47.4%
+V-D2  Fig. 8(a): FPA, ESSR(M = 6) - ESSR(M = 5) (SE 0.455, independent drops)    -0.2001   text: saturates for M >= 5
+V-D3  common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)     0.0333   text: less than 0.04
+V-D3  common kappa (text): proposed increasing in kappa (1 = yes)        1.0000   text: increases
+V-D3  common kappa (text): FPA decreasing in kappa (1 = yes)             1.0000   text: decreases
+V-D3  common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)    19.3130   text: 19.3%
+V-D3  common kappa (text): gain over the FPA at kappa = 20 dB (%)       49.4119   text: 49.4%
+V-D3  Fig. 8(b): gain over the rate-oriented MA at kappa_e = -10 dB (%)     1.0171   text: 1.0%
+V-D3  Fig. 8(b): gain over the rate-oriented MA at kappa_e = 20 dB (%)    17.0206   text: 17.0%
+V-D3  Fig. 8(b): gain over the FPA at kappa_e = 20 dB (%)               36.3227   text: not quoted
+V-D3  Fig. 8(b): proposed increasing in kappa_e (1 = yes)                1.0000   text: increases
+V-D3  Fig. 8(b): every benchmark decreasing in kappa_e (1 = yes)         1.0000   text: all the benchmarks decrease
+V-D3  Fig. 8(b): ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)     0.0000   text: consistency check

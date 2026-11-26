@@ -13,5 +13,5 @@ addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 res = sweep_schemes(prm, 'P_dB', 0:5:30, [main_schemes(), {'MA_eq', 'FPA_eq'}]);
 save(fullfile(results_dir(), 'fig5_snr.mat'), 'res', 'prm', '-v7');
 plot_fig5(res);
-plot_fig6(res);
+plot_fig6(res, load_results('extra_no_an'));   % Fig. 6 also uses the no-AN results
 end

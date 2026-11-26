@@ -1,8 +1,8 @@
 function res = extra_num_users(prm, Mvals)
-%EXTRA_NUM_USERS  Supplementary result (rev-8 candidate, not in main.tex): ESSR (Monte
-%   Carlo) versus the number of LUs M at the default SNR, N = 8, and A = 4 lambda, for the
-%   schemes in main_schemes.m. Eve lies close to LU 1 as in the default scenario (for M = 1,
-%   the single-LU case of Section III-D 2)). Every M is saved in
+%EXTRA_NUM_USERS  Fig. 8(a) of main.tex: ESSR (Monte Carlo) versus the number of LUs M
+%   at the default SNR, N = 8, and A = 4 lambda, for the schemes in main_schemes.m. Eve
+%   lies close to LU 1 as in the default scenario (for M = 1, the single-LU case of
+%   Section III-D 2)). Every M is saved in
 %   results/extra_num_users_M<M>.mat, so that subsets can run in parallel sessions, e.g.,
 %   extra_num_users([], [1 2 3]) and extra_num_users([], [4 5 6]); as soon as all values
 %   of the default set are available, they are merged into results/extra_num_users.mat.
@@ -36,4 +36,5 @@ for i = 1:I
 end
 save(fullfile(results_dir(), 'extra_num_users.mat'), 'res', 'prm', '-v7');
 print_sweep(res, 'M');
+plot_fig8(res, load_results('fig8_rician_b'));          % Fig. 8(a)
 end

@@ -19,13 +19,13 @@ end
 if ~isempty(R.fig3_accuracy),    plot_fig3(R.fig3_accuracy);    close all; disp('replotted Fig. 3'); end
 if ~isempty(R.fig4_convergence), plot_fig4(R.fig4_convergence); close all; disp('replotted Fig. 4'); end
 if ~isempty(R.fig5_snr)
-    plot_fig5(R.fig5_snr);  plot_fig6(R.fig5_snr);  close all;  disp('replotted Figs. 5 and 6');
+    plot_fig5(R.fig5_snr);  plot_fig6(R.fig5_snr, R.extra_no_an);  close all;  disp('replotted Figs. 5 and 6');
 end
 if ~isempty(R.fig7_region)
     plot_fig7(R.fig7_region, R.extra_num_antennas);  close all;  disp('replotted Fig. 7');
 end
-if ~isempty(R.fig8_rician_b)
-    plot_fig8(R.fig8_rician_b);  close all;  disp('replotted Fig. 8');
+if ~isempty(R.fig8_rician_b) || ~isempty(R.extra_num_users)
+    plot_fig8(R.extra_num_users, R.fig8_rician_b);  close all;  disp('replotted Fig. 8');
 end
 if SUPPLEMENTARY && ~isempty(R.extra_single_user)
     plot_offset(R.extra_single_user);  close all;  disp('replotted the AoD-offset figure');
