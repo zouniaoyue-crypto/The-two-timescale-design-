@@ -300,3 +300,24 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I168 | main.tex:380 | III-D 1): the explicit minimum of c_m(t) and maximum of d(t) (derivation not used or verified later) replaced by "both effects are strongest if v(t) = 0, i.e., ..." | author's guideline: delete derivations of little value that are not verified later |
 | — | verify_numbers.m | lines for Fig. 6 (no AN), the mechanism numbers, Fig. 8(a); Rician lines relabeled V-D3 | rule 3 |
 | — | readme.tex/.pdf | Figs. 6 and 8, Table I, scripts, scheme labels, outputs | documentation |
+
+## Round rev-8e — benchmark suite: one FPA, APS instead of AS, Eve-nulling MA (author's items 1–4)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I170–I173 | functions/main_schemes.m | suite {Proposed, rate-oriented MA, Eve-nulling MA, APS, FPA} | items 1, 2, 4 |
+| I173 | functions/eve_nulling_positions.m (new), evaluate_schemes.m ('MA_null') | element-wise search over the Stage-1 grid minimizing ‖H̄ᴴ(t)ḡ(t)‖² (same initializations; best of them), then Algorithm 1 | item 4 |
+| I171 | evaluate_schemes.m ('APS'), functions/snap_to_grid.m (new), default_params.m (apsStep = 0.5) | APS = Algorithm 2 with grid spacing λ/2 and mmMaxIter = 0; initializations snapped to the grid (no new random numbers) | item 2 |
+| I170–I173 | functions/merge_schemes.m (new), extra_add_schemes.m (new), extra_num_antennas.m, extra_num_users.m (robust merge, optional scheme subset) | the two new schemes added to all stored sweeps with the same drops (about 12 min in four sessions); table_mechanisms rerun with the new suite | rule 3 (no other scheme rerun) |
+| I170–I173 | functions/scheme_style.m, fig_palette.m, plot_fig5.m (inset now proposed vs APS), plot_fig7.m; results/fig3*–fig8*.png | styles: Eve-nulling MA ochre solid ▽, APS teal dash-dot △; figures replotted | items 1, 2, 4 |
+| I170–I173 | main.tex:578–586 | V-A benchmark list: Eve-nulling MA and APS added (with [HuTVT2025] for APS), AS (and its swap-search footnote) and sparse FPA removed, "No AN" item added; rate-oriented MA described as exploiting only the LU decorrelation | items 1–4 |
+| — | main.tex:597 | V-B 1): gap 1.57–1.76 bps/Hz (< 0.2 across the schemes); approximate and actual rankings coincide at all SNRs (new suite) | verify_numbers |
+| I173 | main.tex:620 | V-C: Eve-nulling MA ρ₁ = 0.47, ψ = 56.9, η at 82% of its bound vs 98% (proposed); beats the rate-oriented MA for ≥ 10 dB, not at 0 dB; proposed +8.0% at 20 dB; "neither group of mechanisms suffices alone"; APS 0.5–1.5% below the proposed design; AS / sparse-FPA sentences and the aperture conclusion removed | items 1, 2, 4 |
+| I173 | main.tex:622 | V-C: AN fraction of APS close to the proposed one, Eve-nulling MA in between (replaces "comparable to that of the FPA") | new suite |
+| I170–I173 | main.tex:638, 640 | V-D 1): Eve-nulling MA above the rate-oriented MA for A ≥ 3λ and N ≥ 8, below for N = 4; APS within 0.7% for all A, gap 2.6% (N = 4) → 0 (N = 16); AS / sparse-FPA sentences removed | new suite |
+| I173 | main.tex:642 | V-D 2): at M = 1 the Eve-nulling MA and APS match the proposed design (within 0.01 bps/Hz; confirms III-D 2)); Eve-nulling MA below the rate-oriented MA for M ≥ 5; gain over APS 3.5% at M = 6; sparse-FPA numbers removed | new suite |
+| I173 | main.tex:644 | V-D 3): rate-oriented MA and FPA decrease with κ_e; Eve-nulling MA above the rate-oriented MA only for κ_e ≥ 5 dB, 5.4–8.5% below the proposed design | new suite |
+| — | main.tex:649 | conclusion: benchmarks described as single-mechanism MA designs, discrete positions, and the FPA | new suite |
+| — | verify_numbers.m, run_all.m (extra_as_swap_check moved to SUPPLEMENTARY), readme.tex/.pdf | numbers of the new text; documentation of the new schemes, tools and styles | rule 3 |
+| I172 | — | PSO not implemented (decision, I172) | item 3 |
+

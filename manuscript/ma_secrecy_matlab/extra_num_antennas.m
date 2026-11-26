@@ -1,20 +1,19 @@
 function res = extra_num_antennas(prm, Nvals, schemesRun)
 %EXTRA_NUM_ANTENNAS  ESSR (Monte Carlo) versus the number of MAs N at the default SNR and
-%   region size (Fig. 7(b) of main.tex). For each N, the FPA is a 2 x N/2 UPA with lambda/2
-%   spacing, the sparse FPA a 2 x N/2 UPA spanning the movable region, and AS selects N of
-%   the 2N antennas of a 4 x N/2 UPA with lambda/2 spacing by the swap search (as_swap.m)
-%   for all N, as in the other figures; the exhaustive search over nchoosek(2N, N) subsets
-%   (2.7e6 for N = 12) is used only for the validation in extra_as_swap_check.m (N <= 10).
+%   region size (Fig. 7(b) of main.tex), for the schemes in main_schemes.m. For each N, the
+%   FPA is a 2 x N/2 UPA with lambda/2 spacing (the stored files of rev-7 also contain AS
+%   and the sparse FPA, which are no longer plotted).
 %   Every N is saved in results/extra_num_antennas_N<N>.mat. Since the values of N use the
 %   same drops but are otherwise independent, they can be run in parallel sessions, e.g.,
 %   extra_num_antennas([], [4 16]) and extra_num_antennas([], [6 14]); as soon as all
 %   values of the default set are available, they are merged into extra_num_antennas.mat.
 %   The optional schemesRun (subset of main_schemes()) runs only these schemes and merges
-%   them into the existing file of each N, e.g., extra_num_antennas([], [12 14 16], {'AS'}).
+%   them into the existing file of each N (merge_schemes.m), e.g.,
+%   extra_num_antennas([], [], {'MA_null', 'APS'}).
 
 if nargin < 1 || isempty(prm), prm = default_params(); end
 Nall = [4 6 8 10 12 14 16];
-if nargin < 2, Nvals = Nall; end
+if nargin < 2 || isempty(Nvals), Nvals = Nall; end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 schemes = main_schemes();
 if nargin < 3 || isempty(schemesRun), schemesRun = schemes; end
@@ -40,22 +39,11 @@ for i = 1:I
         return;
     end
     S = load(f);
-    [~, k] = ismember(S.r.schemes, schemes);
-    res.essr(i, k) = S.r.essr;  res.essr_tin(i, k) = S.r.essr_tin;
-    res.anfrac(i, k) = S.r.anfrac;  res.F(i, k) = S.r.F;
-    res.essrDrops(i, k, :) = S.r.essrDrops;
+    [in, k] = ismember(S.r.schemes, schemes);       % stored schemes outside main_schemes are skipped
+    res.essr(i, k(in)) = S.r.essr(in);  res.essr_tin(i, k(in)) = S.r.essr_tin(in);
+    res.anfrac(i, k(in)) = S.r.anfrac(in);  res.F(i, k(in)) = S.r.F(in);
+    res.essrDrops(i, k(in), :) = S.r.essrDrops(:, in, :);
 end
 save(fullfile(results_dir(), 'extra_num_antennas.mat'), 'res', 'prm', '-v7');
 print_sweep(res, 'N');
-end
-
-function r = merge_schemes(r, rn)
-% adds (or replaces) the schemes of rn in r; both are results of sweep_schemes for one N
-for k = 1:numel(rn.schemes)
-    j = find(strcmp(r.schemes, rn.schemes{k}), 1);
-    if isempty(j), j = numel(r.schemes) + 1;  r.schemes{j} = rn.schemes{k}; end
-    r.essr(:, j) = rn.essr(:, k);  r.essr_tin(:, j) = rn.essr_tin(:, k);
-    r.anfrac(:, j) = rn.anfrac(:, k);  r.F(:, j) = rn.F(:, k);
-    r.essrDrops(:, j, :) = rn.essrDrops(:, k, :);
-end
 end

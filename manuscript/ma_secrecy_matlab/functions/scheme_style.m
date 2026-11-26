@@ -1,9 +1,10 @@
 function st = scheme_style(key)
 %SCHEME_STYLE  Legend name, color, line style, line width, marker, and marker face of each
 %   scheme. The same scheme is drawn identically in all figures: the color identifies the
-%   scheme (fig_palette.m), the line style the array type (solid: MAs; dash-dotted: AS;
-%   dashed: fixed arrays; dotted: equal power or no AN), and each scheme has its own hollow
-%   marker (circle, square, triangles, diamond). The proposed design is distinguished by
+%   scheme (fig_palette.m), the line style the array type (solid: MAs with continuous
+%   positions; dash-dotted: discrete positions, i.e., APS (and AS in the supplementary
+%   scripts); dashed: fixed arrays; dotted: equal power or no AN), and each scheme has its
+%   own hollow marker (circle, square, triangles, diamond). The proposed design is distinguished by
 %   its color and a thicker line (1.4 pt versus 1.0 pt). The equal-power variants
 %   (p_m = q = P_tot/N; Fig. 6) keep the color and marker of their counterpart and are
 %   drawn with dotted lines and filled markers.
@@ -11,6 +12,8 @@ c = fig_palette();
 switch key
     case 'MA_full',   st = mk('Proposed',               c.red,    '-',  'o', 1.4);
     case 'MA_rate',   st = mk('Rate-oriented MA',       c.blue,   '-',  's', 1.0);
+    case 'MA_null',   st = mk('Eve-nulling MA',         c.ochre,  '-',  'v', 1.0);
+    case 'APS',       st = mk('APS',                    c.teal,   '-.', '^', 1.0);
     case 'AS',        st = mk('AS',                     c.teal,   '-.', '^', 1.0);
     case 'SPA_full',  st = mk('Sparse FPA',             c.ochre,  '--', 'v', 1.0);
     case 'FPA_full',  st = mk('FPA',                    c.gray,   '--', 'd', 1.0);

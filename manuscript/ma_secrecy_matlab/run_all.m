@@ -30,11 +30,11 @@ table_mechanisms(prm);              % Sec. V-C (text): LoS correlation, leakage,
 extra_random_eve(prm, 3);           % Sec. V-C (text): AoDs of Eve independent of the LUs, M = 3
 fig7_region(prm);                   % Fig. 7(a): ESSR vs. region size
 extra_num_antennas(prm);            % Fig. 7(b): ESSR vs. number of MAs
-extra_as_swap_check(prm);           % Sec. V-A (footnote): AS swap search vs. exhaustive search, N <= 10
 extra_num_users(prm);               % Fig. 8(a): ESSR vs. the number of LUs
 fig8_rician(prm);                   % Fig. 8(b) and Sec. V-D (text): ESSR vs. the Rician factors
 if SUPPLEMENTARY                    % not reported in main.tex
     extra_as_region(prm);           %   AS with candidates spanning the region
+    extra_as_swap_check(prm);       %   AS swap search vs. exhaustive search, N <= 10 (rev-7 footnote)
     extra_random_eve(prm, 1);       %   AoDs of Eve independent of the LUs, M = 1
     print_table_eve(load_results('fig5_snr'), [10 20 30]);   % Eve treating interference as noise
     extra_angle_offset(prm);        %   ESSR vs. AoD offset, M = 3 (former Sec. V-F)

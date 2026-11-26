@@ -10,6 +10,11 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %                  best of prm.numInit initializations)
 %     'MA_rate'  - rate-oriented MA [ZhengTCOM2025]: positions maximize the ergodic sum
 %                  rate (Eve ignored), then {p_m}, q optimized by Algorithm 1
+%     'MA_null'  - Eve-nulling MA: positions minimize the LoS correlations between Eve
+%                  and the LUs (eve_nulling_positions.m), then Algorithm 1
+%     'APS'      - alternating position selection [HuTVT2025]: Algorithm 2 with the MAs
+%                  restricted to the grid over C with spacing prm.apsStep (lambda/2),
+%                  i.e., Stage 1 only, no MM refinement
 %     'MA_noAN'  - MA positions + {p_m}, no AN (q = 0)
 %     'MA_EPA'   - MA positions + equal user power, power-splitting factor alpha optimized
 %     'MA_fix'   - MA positions + equal user power, fixed alpha = prm.alphaFix
@@ -57,6 +62,21 @@ for k = 1:numel(schemes)
         case 'MA_rate'
             T = rate_oriented_positions(sc, inits, prm);
             [p, q] = power_opt(sc, T, prm, 'full');
+        case 'MA_null'
+            T = eve_nulling_positions(sc, inits, prm);
+            [p, q] = power_opt(sc, T, prm, 'full');
+        case 'APS'
+            % alternating position selection [HuTVT2025]: Algorithm 2 restricted to the
+            % lambda/2 grid over C (Stage 1 only, no MM refinement), initializations
+            % snapped to the grid
+            prA = prm;  prA.gridStep = prm.apsStep;  prA.mmMaxIter = 0;
+            best = -inf;
+            for i = 1:numel(inits)
+                [Ti, pi_, qi, hi] = ao_optimize(sc, snap_to_grid(inits{i}, sc, prA.gridStep), prA, 'full');
+                if hi(end) > best
+                    best = hi(end);  T = Ti;  p = pi_;  q = qi;  hist = hi;
+                end
+            end
         case 'FPA_full'
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, 'full');

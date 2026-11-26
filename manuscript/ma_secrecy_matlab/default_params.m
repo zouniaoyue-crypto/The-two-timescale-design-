@@ -38,6 +38,7 @@ prm.nGrid      = 41;     % grid size of the one-dimensional search (coarse and f
 prm.nBisect    = 60;     % bisection iterations for the water level nu
 prm.numInit    = 3;      % initializations of Algorithm 2: UPA + (numInit-1) random
 prm.asGrid     = 21;     % coarse grid of q used to rank the antenna subsets of the AS benchmark
+prm.apsStep    = 0.5;    % grid spacing (in lambda) of the APS benchmark (discrete positions)
 prm.asMaxSubsets = 0;   % AS: exhaustive search only if nchoosek(2N, N) <= asMaxSubsets; 0 = swap
                          %   search (as_swap.m) for all N, as in all figures of main.tex (the
                          %   exhaustive search is used only for validation, extra_as_swap_check.m)

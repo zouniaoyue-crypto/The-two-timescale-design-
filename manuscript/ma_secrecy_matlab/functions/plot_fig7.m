@@ -1,10 +1,8 @@
 function plot_fig7(resA, resN)
 %PLOT_FIG7  Fig. 7: (a) ESSR versus the side length A of the movable region (resA,
 %   fig7_region.m); (b) ESSR versus the number of MAs N (resN, extra_num_antennas.m).
-%   Both panels show the schemes in main_schemes.m, including the sparse FPA spanning the
-%   movable region and AS with the compact candidate array, whose subset is selected by the
-%   swap search (as_swap.m) for all N, as in Figs. 5 and 8. AS with region-wide candidates
-%   (extra_as_region.m) is a supplementary result and is not plotted. Each panel has its
+%   Both panels show the schemes in main_schemes.m (proposed, rate-oriented MA, Eve-nulling
+%   MA, APS on the lambda/2 grid over the region, and FPA), as in Figs. 5 and 8. Each panel has its
 %   own two-column legend inside the axes: (a) in the upper-left area, (b) in the
 %   lower-right area.
 % ---------------- (a) region size ----------------

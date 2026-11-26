@@ -2,8 +2,7 @@ function plot_fig5(res, limKeys)
 %PLOT_FIG5  Fig. 5: (a) ESSR and (b) optimized AN power fraction versus the transmit SNR
 %   for the schemes in main_schemes.m, each panel with its own legend inside the axes.
 %   The inset of (a), in the empty lower-right area, enlarges the window [x0 - dx, x0 + dx]
-%   around x0 = 20 dB (the default SNR), where the rate-oriented MA, the sparse FPA, and
-%   AS nearly overlap. A wider window (e.g., 15-25 dB) is not used, because the ESSRs rise
+%   around x0 = 20 dB (the default SNR), where the proposed design and APS nearly overlap. A wider window (e.g., 15-25 dB) is not used, because the ESSRs rise
 %   by about 10 bps/Hz over it, so that an inset of this size would not magnify the
 %   curves. Panel (b) also shows the high-SNR limits 1 - alpha* of the AN power fraction
 %   (eq. (33) of main.tex, an_highsnr.m) for the designs at the highest SNR, i.e., the
@@ -47,11 +46,11 @@ save_figure('fig5b_an_fraction');
 end
 
 function add_inset(ax, x, Y, keys, s)
-% Enlarged view of the middle benchmarks around x0, drawn in the empty area below the
+% Enlarged view of the proposed design and APS around x0, drawn in the empty area below the
 % high-SNR part of the curves; the zoomed window is marked in the main axes. The y-range
 % has extra headroom, so that the label of x0 in the upper-right corner clears the curves.
 x0 = 20;  dx = 0.5;
-inner = {'MA_rate', 'SPA_full', 'AS'};
+inner = {'MA_full', 'APS'};
 lo = inf;  hi = -inf;
 for k = 1:numel(inner)
     j = find(strcmp(keys, inner{k}), 1);

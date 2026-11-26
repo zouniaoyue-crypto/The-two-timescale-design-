@@ -8,8 +8,8 @@ function c = fig_palette()
 %   the figures remain readable in grayscale print.
 c.red    = hex('B03A2E');     % proposed design, Algorithm 2 (Fig. 4), Eve (Fig. 3)
 c.blue   = hex('2E6DB4');     % rate-oriented MA, LUs (Fig. 3)
-c.teal   = hex('2A9D8F');     % antenna selection
-c.ochre  = hex('C7852B');     % sparse FPA
+c.teal   = hex('2A9D8F');     % APS (antenna selection in the supplementary scripts)
+c.ochre  = hex('C7852B');     % Eve-nulling MA (sparse FPA in the supplementary scripts)
 c.gray   = hex('3D3D3D');     % charcoal: FPA (reference), MM only (Fig. 4)
 c.black  = [0 0 0];           % analytical marks (high-SNR prediction, Fig. 5(b))
 c.purple = hex('7B5EA7');     % supplementary only: equal power, optimized alpha
