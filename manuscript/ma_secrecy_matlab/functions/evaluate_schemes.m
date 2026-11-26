@@ -17,6 +17,7 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %                  (best of prm.numInit initializations)
 %     'FPA_full' - compact lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
 %     'FPA_eq'   - compact lambda/2 UPA + equal power p_m = q = P_tot/N
+%     'FPA_noAN' - compact lambda/2 UPA + {p_m}, no AN (q = 0)
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
 %     'AS'       - antenna selection: N of the 2N antennas of a lambda/2 UPA are selected
 %                  by exhaustive search based on the statistical CSI (as_select.m),
@@ -62,6 +63,9 @@ for k = 1:numel(schemes)
         case 'FPA_eq'
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, 'eq');
+        case 'FPA_noAN'
+            T = Tupa;
+            [p, q] = power_opt(sc, T, prm, 'noan');
         case 'AS'
             T = as_select(sc, prm);
             [p, q] = power_opt(sc, T, prm, 'full');

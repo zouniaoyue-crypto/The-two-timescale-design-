@@ -37,8 +37,11 @@ for r = 1:nr
             plot(lax, x + tok/2, y, 'LineStyle', 'none', 'Marker', it.marker, 'Color', it.color, ...
                  'MarkerSize', ms, 'LineWidth', lw, 'MarkerFaceColor', mfc, 'MarkerEdgeColor', it.color);
         end
-        text(x + tok + 0.06, y, it.name, 'Parent', lax, 'FontName', s.font, ...
-             'FontSize', s.fsLegend, 'VerticalAlignment', 'middle');
+        % baseline alignment (cap height centered on the row), so that entries with and
+        % without descenders line up in multi-column legends (Octave centers 'middle' on
+        % the extent of the actual glyphs)
+        text(x + tok + 0.06, y - 0.33*s.fsLegend/72, it.name, 'Parent', lax, 'FontName', s.font, ...
+             'FontSize', s.fsLegend, 'VerticalAlignment', 'baseline');
     end
 end
 end

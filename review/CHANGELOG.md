@@ -239,3 +239,32 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 |---|---|---|---|
 | I152–I160 | review/revision_plan_rev8.md (new), review/ISSUES.md | point-by-point analysis and recommendations; unified plan and decision checklist | author's request |
 | I152, I153, I155, I156, I159 | review/experiments/rev8a_figstyle/ (new: proto_figs.m, previews) | prototype of the proposed figure style on the stored rev-7 data (production plot code unchanged) | to decide on the figures by looking at them |
+
+## Round rev-8b — implementation of the approved rev-8 plan (author's approval of all recommendations, 2026-11-26)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I157 | main.tex:292 | pointer to Remark 1 replaced by one sentence on why the AN is isotropic (no CSI of Eve per CI, unknown eavesdroppers, attribution of the gain to the MAs) | plan §2.4 |
+| I157 | main.tex (former 371–373) | Remark 1 (Eve-aware AN, `rem:an`) deleted | plan §2.4 |
+| I158 | main.tex:398 | III-D 3): sentence linking (33) to [Zhou2010]: for M = 1 and κ_e = 0, Ξ₁ = 1 and α⋆ = 1/2, the equal split that is near-optimal for non-colluding eavesdroppers in Rayleigh fading | plan §2.5 |
+| I154 | main.tex:571 | V-A: Eve's AoDs stated as θ₁ + 0.1 cos φ̃, φ₁ + 0.1 sin φ̃ (rad) without the symbol Δ; ρ₁ of the FPA exceeds 0.94 (verify_numbers V-A) | plan §2.1 |
+| I154 | main.tex:557, 564, 592, 607, 615 | captions of Figs. 3–7: only swept or non-default parameters (N = 8, M = 3, A = 4λ, 20 dB, Δ removed where default; Fig. 7 keeps "with N = 8" / "with A = 4λ") | plan §2.1 caption rule |
+| I155 | main.tex:564 | Fig. 4 caption: Monte Carlo clause and "lines without markers" removed | plan §2.2 |
+| I155 | main.tex:598 | V-B 2): the three sentences on the Monte Carlo ESSR of the iterates removed | plan §2.2 (reverses D4/I144) |
+| I159 | main.tex:592 | Fig. 5 caption: dotted-line clause replaced by "the high-SNR predictions in (b) are evaluated by (33) for the designs at 30 dB" | plan §2.6 |
+| I158, I159 | main.tex:621 | V-C: predictions marked by crosses; they exceed the AN power fractions of Algorithm 1 at 30 dB by at most 0.011 for all five schemes although (33) assumes equal user power; α⋆ = 0.71 (proposed) vs. 0.51 (FPA, close to the equal split of [Zhou2010]) | plan §2.5–2.6; numbers from verify_numbers (V-C) |
+| I158 | main.tex:623 | Fig. 6 paragraph: optimal AN fraction "(0.29 versus 0.49 for the FPA at 30 dB)" added | plan §2.5 echo |
+| I152 | main.tex (Figs. 5, 7, 8 environments) | `\includegraphics{legend_main_schemes}` lines removed | plan §1.1 |
+| I156 | main.tex:627–633 | Fig. 8 is a one-column figure (`fig8_essr_kappae`); caption "ESSR versus the Rician factor κ_e of Eve with κ_m = 10 dB" | plan §2.3 |
+| I156 | main.tex:638 | V-D 2): common-κ result stated in text ("figure omitted for brevity"; < 0.04 bps/Hz at −10 dB; 19.3% and 49.4% at 20 dB); reference to Fig. 8 instead of 8(b) | plan §2.3; numbers from fig8_rician_a.mat |
+| I157 | main.tex:643 | conclusion: joint design of the AN covariance and the antenna positions added to the future work | plan §2.4 |
+| I154 | notation.tex:48 | unused macro `\Derr` deleted | plan §2.1 |
+| I153 | functions/fig_palette.m, scheme_style.m | FPA (and Fig. 4 "MM only") charcoal 3D3D3D; proposed line width 1.4; black for analytical marks; header comments state the grammar (color = scheme, line style = array type) | plan §1.2 |
+| I152, I159 | functions/plot_fig5.m | in-panel legends; inset moved to the lower right (label "20 dB" in its upper-right corner); (b) black × at 30 dB for all five schemes with legend entry, y 0–0.8 | plan §1.1, §2.6 |
+| I155 | functions/plot_fig4.m; fig4_convergence.m | single-hue Algorithm 2 curves, N by line style, direct SNR labels, 3-entry legend, y-label "Objective value of (P3) (bps/Hz)"; the Monte Carlo evaluation of the iterates is no longer computed (each drop and random initialization has its own seed, so the other stored fields are unaffected) | plan §2.2 |
+| I152 | functions/plot_fig7.m, plot_fig8.m (new signature `plot_fig8(resB)`), legend_rows.m (new); fig8_rician.m, replot_all.m | in-panel legends; Fig. 7(a) y 14–26; Fig. 8 one panel, y 12–22, legend lower left; `plot_legend_strip.m` and the PNGs `legend_main_schemes`, `fig8a_essr_kappa`, `fig8b_essr_kappae` deleted | plan §1.1, §2.3 |
+| I153 | functions/manual_legend.m, curve_style.m | legend text aligned on the baseline (Octave centers 'middle' on the actual glyphs, which misaligned entries with and without descenders); optional explicit marker size `st.ms` | visual check of the replotted figures |
+| — | results/fig3*–fig8*.png | all figures replotted from the stored results (no new main simulation) | plan §3 |
+| I158, I159 | verify_numbers.m | Monte Carlo lines of V-B 2) removed; 30-dB predictions and AN fractions for all five schemes, largest/smallest difference, α⋆ of the proposed design and the FPA; V-D 2) labels "common kappa (text)" / "Fig. 8" | rule 3 |
+| — | readme.tex/.pdf | Fig. 4, 5, 7, 8 descriptions, palette, legends, outputs, scheme table (FPA_noAN), new scripts; output table set with p-columns (it overflowed by 158 pt before) | documentation |
+| I161–I164 | extra_num_users.m, extra_eve_beta.m, extra_no_an.m (new); extra_eve_aod_error.m, functions/design_scenario.m (stale "Section V-H" headers); functions/evaluate_schemes.m (`FPA_noAN`), scheme_style.m, plot_candidates.m (new); run_all.m (SUPPLEMENTARY block) | candidate comparisons requested by the author (not in main.tex); results and analysis in rev-8c | author's request |

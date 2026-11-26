@@ -21,7 +21,7 @@ for dI = 1:prm.numDrops
     k0 = 2*pi/sc.lambda;
     rho(dI) = abs(exp(1j*k0*(T*sc.au(:, 1)))' * exp(1j*k0*(T*sc.ae))) / prm.N;
 end
-show('V-A', 'FPA normalized LoS correlation rho_1 at Delta = 0.1, min over drops', min(rho), 'exceeds 0.94');
+show('V-A', 'FPA normalized LoS correlation rho_1 (default offset 0.1 rad), min over drops', min(rho), 'exceeds 0.94');
 g = ld('extra_grid_check');
 show('V-A', 'ESSR change when the grid spacing is halved (%)', 100*g.relChange, '0.04%');
 f5 = ld('fig5_snr');  i20 = find(f5.values == 20);  i30 = find(f5.values == 30);
@@ -79,12 +79,6 @@ end
 show('V-B2', 'all trajectories monotone (1 = yes)', mono, 'increases monotonically');
 show('V-B2', 'iterations for the average curves to reach 99% of their increase', itMax, 'converges within about 15');
 show('V-B2', 'smallest fraction of the total increase reached after three iterations', frac3, 'more than 95%');
-e = mean(c.essrIt, 1);  hm = squeeze(mean(c.hist(c.Nlist == 8, c.Plist == 20, :, :), 3)).';
-show('V-B2', 'Monte Carlo ESSR of the iterates (N = 8, 20 dB): initial value', e(1), '15.82');
-show('V-B2', 'Monte Carlo ESSR of the iterates (N = 8, 20 dB): final value', e(end), '20.70');
-show('V-B2', 'Monte Carlo ESSR of the average iterates nondecreasing (1 = yes)', all(diff(e) >= -1e-9), 'increases together with the objective');
-show('V-B2', 'Monte Carlo ESSR minus objective, smallest over the iterations (bps/Hz)', min(e - hm), '1.61');
-show('V-B2', 'Monte Carlo ESSR minus objective, largest over the iterations (bps/Hz)', max(e - hm), '1.76');
 mm = ld('extra_mm_compare');  dF = mm.S1zheng.F - mm.S0.F;
 show('V-B2', sprintf('surrogate of [6] minus Stage 2: average objective (%%, %d drops, paired SE %.3f%%)', numel(dF), ...
      100*std(dF)/sqrt(numel(dF))/mean(mm.S0.F)), 100*mean(dF)/mean(mm.S0.F), 'within 0.1%');
@@ -119,10 +113,17 @@ show('V-C', 'proposed AN fraction below all benchmarks at 5 dB (1 = yes)', lessA
 for k = {'MA_rate', 'AS', 'SPA_full'}
     show('V-C', sprintf('AN power fraction of %s at 20 dB', k{1}), f5.anfrac(i20, col(f5, k{1})), 'comparable to the FPA');
 end
-for k = {'MA_full', 'FPA_full'}
-    show('V-C', sprintf('%s: AN fraction at 30 dB', k{1}), f5.anfrac(i30, col(f5, k{1})), '0.28 (proposed) / 0.49 (FPA)');
-    show('V-C', sprintf('%s: high-SNR prediction 1 - alpha* for the designs at 30 dB', k{1}), f5.anpred(i30, col(f5, k{1})), '0.29 (proposed) / 0.49 (FPA)');
+dPred = zeros(1, numel(withAN));                  % x markers of Fig. 5(b)
+for i = 1:numel(withAN)
+    k = withAN{i};
+    show('V-C', sprintf('%s: AN fraction at 30 dB', k), f5.anfrac(i30, col(f5, k)), 'Fig. 5(b), markers');
+    show('V-C', sprintf('%s: high-SNR prediction 1 - alpha* for the designs at 30 dB', k), f5.anpred(i30, col(f5, k)), 'Fig. 5(b), x');
+    dPred(i) = f5.anpred(i30, col(f5, k)) - f5.anfrac(i30, col(f5, k));
 end
+show('V-C', 'largest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes', max(dPred), 'exceed by at most 0.011');
+show('V-C', 'smallest prediction - AN fraction of Algorithm 1 at 30 dB over the five schemes', min(dPred), 'all positive (exceed)');
+show('V-C', 'alpha* (= 1 - prediction) of the proposed design at 30 dB', 1 - f5.anpred(i30, col(f5, 'MA_full')), '0.71');
+show('V-C', 'alpha* (= 1 - prediction) of the FPA at 30 dB', 1 - f5.anpred(i30, col(f5, 'FPA_full')), '0.51');
 lossMA = f5.essr(:, col(f5, 'MA_full')) - f5.essr(:, col(f5, 'MA_eq'));
 lossFPA = f5.essr(:, col(f5, 'FPA_full')) - f5.essr(:, col(f5, 'FPA_eq'));
 show('V-C', 'Fig. 6: equal-power loss of the MAs, smallest over the SNRs (bps/Hz)', min(lossMA), '1.79');
@@ -161,21 +162,21 @@ for v = n.values
          val(n, iN(v), 'MA_full') - val(n, iN(v), 'FPA_full'), sprintf('%.4f (AS)', val(n, iN(v), 'MA_full') - val(n, iN(v), 'AS')));
 end
 
-% ---------------- Section V-D 2) (Fig. 8) ----------------
+% ---------------- Section V-D 2) (Fig. 8: kappa_e sweep; common kappa in the text) ----------------
 ka = ld('fig8_rician_a');  kb = ld('fig8_rician_b');
 ja = cellfun(@(k) col(ka, k), withAN);  jb = cellfun(@(k) col(kb, k), withAN);
 lo = ka.values == min(ka.values);  hi = ka.values == max(ka.values);
-show('V-D2', '(a) largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)', max(ka.essr(lo, ja)) - min(ka.essr(lo, ja)), 'less than 0.04');
-show('V-D2', '(a) proposed increasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(1))) > 0), 'increases');
-show('V-D2', '(a) FPA decreasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(5))) < 0), 'decreases');
-show('V-D2', '(a) gain over the rate-oriented MA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(2)) - 1), '19.3%');
-show('V-D2', '(a) gain over the FPA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(5)) - 1), '49.4%');
+show('V-D2', 'common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)', max(ka.essr(lo, ja)) - min(ka.essr(lo, ja)), 'less than 0.04');
+show('V-D2', 'common kappa (text): proposed increasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(1))) > 0), 'increases');
+show('V-D2', 'common kappa (text): FPA decreasing in kappa (1 = yes)', all(diff(ka.essr(:, ja(5))) < 0), 'decreases');
+show('V-D2', 'common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(2)) - 1), '19.3%');
+show('V-D2', 'common kappa (text): gain over the FPA at kappa = 20 dB (%)', 100*(ka.essr(hi, ja(1))/ka.essr(hi, ja(5)) - 1), '49.4%');
 lo = kb.values == min(kb.values);  hi = kb.values == max(kb.values);
-show('V-D2', '(b) gain over the rate-oriented MA at kappa_e = -10 dB (%)', 100*(kb.essr(lo, jb(1))/kb.essr(lo, jb(2)) - 1), '1.0%');
-show('V-D2', '(b) gain over the rate-oriented MA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(2)) - 1), '17.0%');
-show('V-D2', '(b) gain over the FPA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(5)) - 1), 'not quoted');
-show('V-D2', '(b) proposed increasing in kappa_e (1 = yes)', all(diff(kb.essr(:, jb(1))) > 0), 'increases');
-show('V-D2', '(b) every benchmark decreasing in kappa_e (1 = yes)', all(all(diff(kb.essr(:, jb(2:end)), 1, 1) < 0)), 'all the benchmarks decrease');
-show('V-D2', '(b) ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)', ...
+show('V-D2', 'Fig. 8: gain over the rate-oriented MA at kappa_e = -10 dB (%)', 100*(kb.essr(lo, jb(1))/kb.essr(lo, jb(2)) - 1), '1.0%');
+show('V-D2', 'Fig. 8: gain over the rate-oriented MA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(2)) - 1), '17.0%');
+show('V-D2', 'Fig. 8: gain over the FPA at kappa_e = 20 dB (%)', 100*(kb.essr(hi, jb(1))/kb.essr(hi, jb(5)) - 1), 'not quoted');
+show('V-D2', 'Fig. 8: proposed increasing in kappa_e (1 = yes)', all(diff(kb.essr(:, jb(1))) > 0), 'increases');
+show('V-D2', 'Fig. 8: every benchmark decreasing in kappa_e (1 = yes)', all(all(diff(kb.essr(:, jb(2:end)), 1, 1) < 0)), 'all the benchmarks decrease');
+show('V-D2', 'Fig. 8: ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)', ...
      max(abs(kb.essr(kb.values == 10, jb) - f5.essr(i20, jj))), 'consistency check');
 end

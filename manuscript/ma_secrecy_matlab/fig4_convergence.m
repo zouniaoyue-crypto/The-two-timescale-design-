@@ -9,10 +9,9 @@ function res = fig4_convergence(prm)
 %                   terminates (per setting and drop);
 %     res.histRnd : trajectories from two random initializations (N = 8, 20 dB);
 %     res.histMM  : trajectories without the grid search of Stage 1, i.e., pure
-%                   element-wise MM updates (prm.gridStep = 0; N = 8, 20 dB);
-%     res.essrIt  : Monte Carlo ESSR (prm.S channel realizations, exact ZF/null-space-AN
-%                   rates) of the iterates (t, p, q) of the UPA-initialized runs for
-%                   N = 8, 20 dB, i.e., the actual ESSR along the iterations.
+%                   element-wise MM updates (prm.gridStep = 0; N = 8, 20 dB).
+%   (Result files of rev-7 also contain res.essrIt, the Monte Carlo ESSR of the iterates for
+%   N = 8, 20 dB, which was removed from Fig. 4 in rev-8 and is no longer computed.)
 %   For N = 12, the UPA initialization is a 3 x 4 UPA with lambda/2 spacing.
 
 if nargin < 1, prm = default_params(); end
@@ -25,7 +24,6 @@ res.hist   = zeros(numel(res.Nlist), numel(res.Plist), D, res.nIt + 1);
 res.itStop = zeros(numel(res.Nlist), numel(res.Plist), D);
 res.histRnd = zeros(2, D, res.nIt + 1);
 res.histMM  = zeros(D, res.nIt + 1);
-res.essrIt  = zeros(D, res.nIt + 1);
 for iN = 1:numel(res.Nlist)
     for iP = 1:numel(res.Plist)
         pr = prm;  pr.N = res.Nlist(iN);  pr.P_dB = res.Plist(iP);
@@ -35,14 +33,7 @@ for iN = 1:numel(res.Nlist)
         for dI = 1:D
             sc = gen_scenario(pr, prm.seed + dI);
             T0 = upa_positions(sc.N, rc(1), rc(2), 0.5);
-            if pr.N == 8 && pr.P_dB == 20
-                [~, ~, ~, h, its] = ao_optimize(sc, T0, pr, 'full');
-                for k = 1:numel(its)                           % actual ESSR of each iterate
-                    [~, ~, res.essrIt(dI, k)] = mc_rates(sc, its(k).T, its(k).p, its(k).q, prm.S, prm.seed + dI);
-                end
-            else
-                [~, ~, ~, h] = ao_optimize(sc, T0, pr, 'full');
-            end
+            [~, ~, ~, h] = ao_optimize(sc, T0, pr, 'full');
             res.hist(iN, iP, dI, :) = h;
             stop = find(diff(h) < prm.aoTol*max(1, abs(h(2:end))), 1);
             if isempty(stop), stop = res.nIt; end
