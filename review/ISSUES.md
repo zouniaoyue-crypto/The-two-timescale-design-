@@ -250,3 +250,12 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 | I172 (3) | L | benchmarks | PSO would be an algorithm-level comparison only: same objective, no performance gain expected for the proposed design (the λ/10 grid is within 0.04% of the λ/20 grid; Fig. 4 and the surrogate of [ZhengTCOM2025] in V-B 2) already cover convergence and complexity), new code and long run times | analysis | not included | closed (rev-8e; decision) |
 | I173 (4) | M | Figs. 5, 7, 8; V-A, V-C, V-D | with APS and without PSO, three benchmarks remain | analysis.txt | Eve-nulling MA added (positions minimize ‖H̄ᴴ(t)ḡ(t)‖², i.e., v(t) → 0; LU correlation ignored), the counterpart of the rate-oriented MA; equal power on every scheme (6 benchmarks) not adopted: duplicates Fig. 6, about 1.8–1.9 bps/Hz loss for every MA scheme, 9 curves per figure | fixed (rev-8e) |
 
+## Round rev-8f — benchmark suite review (author's items 1–4, 2026-11-27; analysis only, see `review/rev8f_benchmark_plan.md`)
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I174 (1) | M | Figs. 5, 7, 8; V | Eve-nulling MA is an in-house heuristic without literature counterpart | author; plan §1 | remove (code kept as supplementary) | needs-decision (approved in principle) |
+| I175 (2) | M | Figs. 5, 7, 8; V | APS too close to the proposed design | pilot_output.txt (grid check); analysis.txt; Hu et al. Sec. IV | configuration and code consistent with Hu et al.; closeness due to the 2-D region (81 grid points for N = 8) vs. Hu's 1-D span (13–17 points for N = 10); discard | needs-decision |
+| I176 (3) | M | benchmarks | Eve-aware AN as a benchmark | pilot (approximate ESSR): FPA + Eve-aware AN 16.31 vs. FPA 14.21, rate-oriented MA 16.51, proposed 18.98 at 20 dB | proposed: add "FPA with Eve-aware AN" (not MA + Eve-aware AN) | needs-decision |
+| I177 (4) | L | Fig. 6 | six overlapping curves; casual "no AN" labels | figure | split into (a) equal power and (b) without AN; labels "MA/FPA with equal power", "MA/FPA without AN" | needs-decision |
+

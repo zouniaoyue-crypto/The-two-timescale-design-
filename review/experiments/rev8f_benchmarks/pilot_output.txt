@@ -1,0 +1,9 @@
+APS drop 1: max distance to the lambda/2 grid 0.00e+00, distinct 8, min spacing 0.50
+APS drop 2: max distance to the lambda/2 grid 0.00e+00, distinct 8, min spacing 0.50
+APS drop 3: max distance to the lambda/2 grid 0.00e+00, distinct 8, min spacing 1.00
+P_dB =  10: approx. ESSR F: FPA iso 6.25 (stored 6.25) | FPA Eve-aware AN 7.37 (AN frac 0.30) | rate-MA 7.78 | proposed 9.73
+P_dB =  20: approx. ESSR F: FPA iso 14.21 (stored 14.21) | FPA Eve-aware AN 16.31 (AN frac 0.35) | rate-MA 16.51 | proposed 18.98
+P_dB =  30: approx. ESSR F: FPA iso 23.93 (stored 23.93) | FPA Eve-aware AN 26.16 (AN frac 0.36) | rate-MA 26.30 | proposed 28.87
+kappae_dB = -10: approx. ESSR F: FPA iso 16.55 (stored 16.55) | FPA Eve-aware AN 16.65 (AN frac 0.37) | rate-MA 18.05 | proposed 18.26
+kappae_dB =   0: approx. ESSR F: FPA iso 15.58 (stored 15.58) | FPA Eve-aware AN 16.33 (AN frac 0.38) | rate-MA 17.27 | proposed 18.50
+kappae_dB =  20: approx. ESSR F: FPA iso 13.74 (stored 13.74) | FPA Eve-aware AN 16.35 (AN frac 0.34) | rate-MA 16.34 | proposed 19.15

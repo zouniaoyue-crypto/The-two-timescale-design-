@@ -321,3 +321,10 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | — | verify_numbers.m, run_all.m (extra_as_swap_check moved to SUPPLEMENTARY), readme.tex/.pdf | numbers of the new text; documentation of the new schemes, tools and styles | rule 3 |
 | I172 | — | PSO not implemented (decision, I172) | item 3 |
 
+## Round rev-8f — benchmark analysis (no manuscript or production-code changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I174–I177 | review/rev8f_benchmark_plan.md (new) | analysis report and revision plan | author's request |
+| I175, I176 | review/experiments/rev8f_benchmarks/ (new: pilot.m, shadow/rate_coeffs.m, pilot_output.txt) | APS grid check; approximate ESSR of the FPA with Eve-aware AN (ψ_dir = (N−M)(κ_e d + 1)) at 10/20/30 dB and κ_e = −10/0/20 dB | evidence for the decisions |
+
