@@ -269,3 +269,25 @@ Evidence: `review/verify_numbers_rev8.txt`, `review/experiments/rev8g_benchmarks
 | I179 | M | V-D 1), conclusion, intro | The FPA with Eve-aware AN is 0.9% above the proposed design at A = 1.5λ (paired difference 0.15, SE 0.095) and approaches it for N = 16 (1.5%); the gain over this benchmark does not grow with κ_e (16.6–20.4%) | fig7_region.mat, extra_num_antennas.mat, fig8_rician_b.mat | reported in V-D 1); conclusion qualified ("even with Eve-aware AN unless the movable region is very small"); intro claim narrowed to the gain over the MA design of [ZhengTCOM2025] | fixed (rev-8g) |
 | I180 | L | V-D 3) | The FPA with Eve-aware AN falls below the FPA for κ_e ≤ 0 dB (−5.2% at −10 dB; −2.8% at common κ = −10 dB) | fig8_rician_b.mat, fig8_rician_a.mat; check_ean_direction.txt (same power allocation: −0.95 bps/Hz, SE 0.01) | explained by the AN direction (nearly equal mean AN power at Eve, larger fluctuation of a rank-one AN), not by the power allocation | fixed (rev-8g) |
 | I181 | L | Figs. 5(a), 6(a), 7(b), 8(a) | With the longer label "FPA with Eve-aware AN", the two-column legends covered parts of the curves | figure check | y-axes extended (Figs. 5(a), 6: 0–40; Fig. 7(b): 6–24; Fig. 8(a): 0–45 with the legend in the upper left) | fixed (rev-8g) |
+
+## Round rev-9a — modeling–derivation review (analysis only, see `review/rev9_modeling_review.md`)
+
+| ID | Rec. | Sev | Location | Finding | Evidence | Proposal | Status |
+|---|---|---|---|---|---|---|---|
+| I182 | R1 | M | III-B l. 332; V-B 1) l. 596 | loss of the LU-rate approximation (20) not quantified where it is derived; the analytical cause sits in V-B 1) | fig3_accuracy.mat: MC − (20) → 1.99 bps/Hz at κ = 20 dB vs limit M log2(N/(N−M)) = 2.03 | add the closed-form, t-independent limit log2(N/(N−M)) per LU to III-B; V-B 1) checks it | needs-decision |
+| I183 | R2 | M | III-E after (P3) | no summary of what the surrogate (P3) costs; Proposition 1 unused in the main text | chain map in the report | two sentences after (P3) using R1 and Proposition 1 | needs-decision |
+| I184 | R3 | L | IV-B l. 503 | backtracking-bound sentence re-proves a standard result (defensive); italic L clashes with bold L(t) | guideline §1 | delete (finite termination already implied; [Beck2017]) | needs-decision |
+| I185 | R4 | L | IV-C l. 544 | stationarity caveat is defensive; the preceding sentence is already precise | guideline §1 | delete, or fold into one clause | needs-decision |
+| I186 | R5 | L | IV-A l. 436 (footnote) | multi-Eve generalization misplaced; 'maximum over the Eves' makes F nonsmooth, which Stage 2 does not handle | guideline §1 | delete (or move a shortened pointer to III-C) | needs-decision |
+| I187 | R6 | L | III-A l. 292 | experimental-attribution clause defends the evaluation, not the model | guideline §1 | keep the two operational reasons only | needs-decision |
+| I188 | R7 | L | II-D (P1) | short-term variables not shown as functions of H(t); (P1) lacks final punctuation | CLAUDE.md punctuation rule | one sentence after (P1) and a final period | needs-decision |
+| I189 | R8 | L | III-C l. 351 | reason for calibrating d(t) only in App. B | guideline §2 (why) | half-sentence in the main text | needs-decision |
+| I190 | R9 | L | III-D 1)–2) l. 382 | ρ₁(t) defined inside the single-LU case but used for M = 3 in V | notation flow | define ρ_m(t) after (29) | needs-decision |
+| I191 | R10 | L | IV-A l. 438–442 | algorithmic decision (grid search) stated after a derivation the algorithm does not use | guideline §2 | reorder: method first, structure (38) second | needs-decision |
+| I192 | R11 | L | IV-A l. 430 | verbal concavity argument hard to read | — | replace by the explicit second derivative | needs-decision |
+| I193 | R12 | L | III-B l. 318 | dummy variable z clashes with the AN vector z | CLAUDE.md one meaning per symbol | reword the Jensen sentence without a dummy variable | needs-decision |
+| I194 | R13 | L | App. B l. 660; IV-B l. 475 | A (matrix) vs side length A; bold r_n vs received signal r_m | CLAUDE.md one meaning per symbol | use X; optionally v_{−n}, Φ_{−n} | needs-decision |
+| I195 | R14 | L | IV-B l. 487–493 | routine derivative displays (44)–(46) in the main text | guideline §2 | optional: move to App. C | needs-decision |
+| I196 | R15 | L | V-B 1) l. 596 | rank-one AN explanation stated qualitatively | App. A moments | optional: relative-variance comparison in one clause | needs-decision |
+| I197 | R16 | L | Intro l. 80 | high-SNR AN-power result (α⋆) not credited among the contributions | — | optional clause | needs-decision |
+| I198 | R17 | L | II–III | (P1) → (P2) restriction step could be avoided by formulating with ZF-AN directly | — | not recommended (keep chain, apply R7) | needs-decision |

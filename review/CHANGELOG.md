@@ -355,3 +355,9 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I180 | main.tex:644 | V-D 3): common-κ claim restricted to the MA designs and the FPA (< 0.04 bps/Hz); gains at κ = 20 dB 19.3 / 31.5 / 49.4%; Eve-aware AN below the FPA for κ_e ≤ 0 dB (5.2%; 2.8% at κ = −10 dB) with its cause; proposed 16.6–20.4% above the Eve-aware AN; Eve-nulling sentence and the "balanced with the decorrelation among the LUs" clause removed (it relied on the Eve-nulling MA) | verify_numbers, check_ean_direction |
 | I179 | main.tex:649 | conclusion: outperforms "the rate-oriented MA design, with a gain that grows with the Rician factor of Eve, and the FPA, even with Eve-aware AN unless the movable region is very small" | new suite |
 | — | verify_numbers.m, review/verify_numbers_rev8.txt, review/experiments/rev8g_benchmarks/ (analyze_suite.m, analysis.txt, check_ean_direction.m/.txt), readme.tex/.pdf, main_preview.pdf | numbers and evidence of the new text; documentation of the suite, files and styles | rule 3 |
+
+## Round rev-9a — modeling–derivation review (no manuscript or code changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I182–I198 | review/rev9_modeling_review.md (new) | review along modeling → analysis → algorithm with the IEEE modeling and derivation guidelines; 17 recommendations (R1–R17) with draft text; derivations re-checked; equation numbers checked against main.aux | author's request (report only) |
