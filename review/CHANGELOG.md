@@ -328,3 +328,30 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I174–I177 | review/rev8f_benchmark_plan.md (new) | analysis report and revision plan | author's request |
 | I175, I176 | review/experiments/rev8f_benchmarks/ (new: pilot.m, shadow/rate_coeffs.m, pilot_output.txt) | APS grid check; approximate ESSR of the FPA with Eve-aware AN (ψ_dir = (N−M)(κ_e d + 1)) at 10/20/30 dB and κ_e = −10/0/20 dB | evidence for the decisions |
 
+## Round rev-8g — final benchmark suite: Eve-nulling MA and APS removed, FPA with Eve-aware AN added, Fig. 6 split
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I174, I175 | functions/main_schemes.m, evaluate_schemes.m (docs) | main suite {Proposed, rate-oriented MA, FPA with Eve-aware AN, FPA}; 'MA_null' and 'APS' kept as supplementary schemes | author's approval of the rev-8f plan |
+| I176 | functions/rate_coeffs.m | `sc.anDir`: ψ = (N−M)(κ_e d + 1) for the Eve-aware AN | benchmark definition |
+| I176 | functions/mc_rates.m | `sc.anDirG`: exact received AN power of the rank-one AN, (N−M)\|gᴴP⊥ḡ\|²/‖P⊥ḡ‖² | exact Monte Carlo evaluation |
+| I176 | functions/evaluate_schemes.m | case 'FPA_ean' (compact UPA; Algorithm 1 with ψ_dir; F and the high-SNR limit with ψ_dir; r.ReApprox stored) | new benchmark |
+| I176 | functions/scheme_style.m, fig_palette.m | "FPA with Eve-aware AN" teal dashed △; labels "MA/FPA with equal power", "MA/FPA without AN"; ochre only in supplementary figures | I176, I177 |
+| I176 | extra_add_schemes.m (default 'FPA_ean'), table_mechanisms.m (ψ_dir; ReMC, ReApprox, F stored), extra_ean_check.m (new), run_all.m | FPA_ean added to all stored sweeps on the same drops (other schemes unchanged); mechanism table rerun; AN-power oracle check | runs |
+| I177 | functions/plot_fig6.m, pa_schemes.m, fig5_snr.m, extra_no_an.m (docs) | Fig. 6 split: fig6a_essr_power_eq (Algorithm 1 vs equal power) and fig6b_essr_power_noan (with vs without AN) | I177 |
+| I181 | functions/plot_fig5.m (inset: rate-oriented MA vs FPA with Eve-aware AN; y 0–40; legend rows via legend_rows), plot_fig6.m (y 0–40), plot_fig7.m ((b) y 6–24), plot_fig8.m ((a) y 0–45, legend upper left); results/fig5–fig8 png | legends clear the curves | I181 |
+| — | main.tex:80 | intro: "its gain over the MA design of [ZhengTCOM2025] grows with the Rician factor of Eve" | I179 |
+| — | main.tex:292 | III-A: pointer to V-A; "does not depend on the CSI of Eve" (was "requires no CSI of Eve in each CI") | the Eve-aware AN also needs no instantaneous CSI of Eve |
+| — | main.tex:575 | SE of paired differences ≤ 0.21 bps/Hz (eight schemes of Figs. 5–6) | verify_numbers |
+| I174–I176 | main.tex:577–584 | V-A: "first three" adopt Algorithm 1 (differences from the positions and, for the Eve-aware AN, the AN direction); Eve-nulling MA and APS items removed; FPA item before the new "FPA with Eve-aware AN" item (Σ, received AN power and its conditional mean, ψ replaced by (N−M)(κ_e d+1) ≥ ψ); items renamed "MA and FPA with equal power", "MA and FPA without AN" | new suite |
+| I178 | main.tex:596 | V-B 1): gap 1.57–1.76 for the isotropic-AN schemes; Eve-aware AN gap 1.11 (wiretap rates 2.18 vs 2.63, rank-one AN power fluctuates more); AN power of Algorithm 1 near-optimal (+0.09% by an oracle grid); rankings coincide except the two FPA schemes at 0 dB (0.01 bps/Hz) | verify_numbers |
+| I177 | main.tex:604–610 | Fig. 6 as figure* with (a) fig6a_essr_power_eq and (b) fig6b_essr_power_noan; caption | I177 |
+| I176 | main.tex:620 | V-C Fig. 5(a): gains 14.8/19.1/31.1% over the rate-oriented MA / FPA with Eve-aware AN / FPA; Eve-aware AN raises the normalized AN power at Eve to 46.4 (< 58.3 of the proposed design; Eve nearly orthogonal to the null space), ξ₁ stays 54.5; +10.1% over the FPA, below both MA designs at all SNRs; Eve-nulling and APS sentences removed | table_mechanisms, verify_numbers |
+| — | main.tex:622 | V-C Fig. 5(b): limits exceed the AN fractions by at most 0.013 (four schemes; was 0.011); Eve-aware AN fraction 0.35 at 20 dB, below the FPA for ≥ 15 dB; APS / Eve-nulling sentence removed | verify_numbers |
+| I177 | main.tex:624, 626 | "Fig. 6(a)", "Fig. 6(b)" | split |
+| I179 | main.tex:638 | V-D 1) region: both FPA schemes independent of A; at A = 1.5λ the Eve-aware AN beats the rate-oriented MA and is 0.9% above the proposed design; gain 26.2% at A = 6λ; Eve-nulling / APS sentences removed | verify_numbers |
+| I179 | main.tex:640 | V-D 1) N: two FPA schemes coincide at N = 4 (one-dimensional null space); Eve-aware AN gains most with N (its normalized AN power at Eve scales with N−M), beats the rate-oriented MA for N ≥ 12; gain of the proposed design over it 70.9% → 1.5%; Eve-nulling / APS sentences removed | verify_numbers |
+| — | main.tex:642 | V-D 2): Eve-aware AN +35.6% over the FPA at M = 1, proposed +30.7% over it; its gain over the FPA → 2.6% at M = 6 (N−M = 2); both FPA schemes saturate for M ≥ 5; gains 64.4% / 60.1% at M = 6; Eve-nulling / APS sentences removed | verify_numbers |
+| I180 | main.tex:644 | V-D 3): common-κ claim restricted to the MA designs and the FPA (< 0.04 bps/Hz); gains at κ = 20 dB 19.3 / 31.5 / 49.4%; Eve-aware AN below the FPA for κ_e ≤ 0 dB (5.2%; 2.8% at κ = −10 dB) with its cause; proposed 16.6–20.4% above the Eve-aware AN; Eve-nulling sentence and the "balanced with the decorrelation among the LUs" clause removed (it relied on the Eve-nulling MA) | verify_numbers, check_ean_direction |
+| I179 | main.tex:649 | conclusion: outperforms "the rate-oriented MA design, with a gain that grows with the Rician factor of Eve, and the FPA, even with Eve-aware AN unless the movable region is very small" | new suite |
+| — | verify_numbers.m, review/verify_numbers_rev8.txt, review/experiments/rev8g_benchmarks/ (analyze_suite.m, analysis.txt, check_ean_direction.m/.txt), readme.tex/.pdf, main_preview.pdf | numbers and evidence of the new text; documentation of the suite, files and styles | rule 3 |

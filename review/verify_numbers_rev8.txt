@@ -1,17 +1,28 @@
 V-A   FPA normalized LoS correlation rho_1 (default offset 0.1 rad), min over drops     0.9439   text: exceeds 0.94
 V-A   ESSR change when the grid spacing is halved (%)                    0.0402   text: 0.04%
 V-A   standard error of the proposed average ESSR at 20 dB (%)           0.5464   text: 0.55%
-V-A   largest standard error of a paired ESSR difference at 20 dB, seven schemes of Figs. 5-6 (bps/Hz)     0.2168   text: does not exceed 0.22
+V-A   largest standard error of a paired ESSR difference at 20 dB, 8 schemes of Figs. 5-6 (bps/Hz)     0.2038   text: does not exceed 0.22
 V-B1  max |Eve MC - closed form| versus the SNR (bps/Hz)                 0.0524   text: 0.052
 V-B1  max |Eve MC - closed form| versus the Rician factor (bps/Hz)       0.0128   text: 0.013
 V-B1  approximate ESSR of the proposed design at 20 dB                  18.9848   text: 18.98
 V-B1  actual (Monte Carlo) ESSR of the proposed design at 20 dB         20.7486   text: 20.75
-V-B1  actual minus approximate ESSR at 20 dB, smallest over the schemes of Fig. 5     1.5685   text: 1.52
-V-B1  actual minus approximate ESSR at 20 dB, largest over the schemes of Fig. 5     1.7621   text: 1.76
-V-B1  spread of this gap over the schemes at 20 dB (bps/Hz)              0.1936   text: less than 0.25
-V-B1  approximate and actual rankings equal at every SNR >= 10 dB (1 = yes)     1.0000   text: preserved for >= 10 dB
-V-B1  rankings differ at some SNR below 10 dB (1 = yes)                  0.0000   text: differ below 10 dB
-V-B1  proposed design ranked first by both at every SNR (1 = yes)        1.0000   text: only the benchmarks change order
+V-B1  actual minus approximate ESSR at 20 dB, smallest over the schemes with isotropic AN     1.5685   text: 1.57
+V-B1  actual minus approximate ESSR at 20 dB, largest over the schemes with isotropic AN     1.7616   text: 1.76
+V-B1  actual minus approximate ESSR at 20 dB, FPA with Eve-aware AN      1.1062   text: 1.11
+V-B1  FPA with Eve-aware AN at 20 dB: sum of the wiretap rates by (eq:Re) (bps/Hz)     2.1801   text: 2.18
+V-B1  FPA with Eve-aware AN at 20 dB: sum of the wiretap rates, Monte Carlo (bps/Hz)     2.6304   text: 2.63
+V-B1  MA_full at 20 dB: wiretap sum rate by (eq:Re) minus Monte Carlo (bps/Hz)    -0.0071   text: not quoted (isotropic AN)
+V-B1  MA_rate at 20 dB: wiretap sum rate by (eq:Re) minus Monte Carlo (bps/Hz)    -0.2001   text: not quoted (isotropic AN)
+V-B1  FPA_full at 20 dB: wiretap sum rate by (eq:Re) minus Monte Carlo (bps/Hz)     0.0575   text: not quoted (isotropic AN)
+V-B1  FPA_full: ESSR gain of the best AN power fraction (Monte Carlo search) (%, SE 0.053%)     0.2648   text: Eve-aware AN: 0.09%
+V-B1  FPA_ean: ESSR gain of the best AN power fraction (Monte Carlo search) (%, SE 0.022%)     0.0925   text: Eve-aware AN: 0.09%
+V-B1  0 dB: rankings differ for FPA_full / FPA_ean; their actual ESSR difference (bps/Hz)     0.0087   text: differ by 0.01
+V-B1  5 dB: approximate and actual rankings coincide (1 = yes)           1.0000   text: coincide
+V-B1  10 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
+V-B1  15 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
+V-B1  20 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
+V-B1  25 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
+V-B1  30 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
 V-B2  all trajectories monotone (1 = yes)                                1.0000   text: increases monotonically
 V-B2  iterations for the average curves to reach 99% of their increase    15.0000   text: converges within about 15
 V-B2  smallest fraction of the total increase reached after three iterations     0.9575   text: more than 95%
@@ -20,134 +31,147 @@ V-B2  surrogate of [6]: ratio of the numbers of MM iterations            2.6494 
 V-B2  surrogate of [6]: median curvature / median accepted delta_n      11.8740   text: about 12 times
 V-B2  surrogate of [6]: ratio of the run times                          17.4372   text: not quoted
 V-C   gain over the rate-oriented MA at 20 dB (%)                       14.7680   text: 14.8%
+V-C   gain over the FPA with Eve-aware AN at 20 dB (%)                  19.1077   text: 19.1%
 V-C   gain over the FPA at 20 dB (%)                                    31.1315   text: 31.1%
 V-C   gain over FPA at 20 dB: proposed                                   4.9253   text: reference
 V-C   gain over FPA at 20 dB: rate-oriented MA (ratio to the proposed)     0.4580   text: less than half
-V-C   Eve-nulling minus rate-oriented MA at 0 dB (paired SE 0.077)      -0.2037   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 5 dB (paired SE 0.126)       0.0590   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 10 dB (paired SE 0.154)      0.6246   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 15 dB (paired SE 0.168)      1.0276   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 20 dB (paired SE 0.173)      1.1402   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 25 dB (paired SE 0.172)      1.1789   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   Eve-nulling minus rate-oriented MA at 30 dB (paired SE 0.176)      1.2545   text: < 0 at 0 dB; > 0 for >= 10 dB
-V-C   gain of the proposed design over the Eve-nulling MA at 20 dB (%)     7.9584   text: 8.0%
-V-C   gain of the proposed design over APS, largest over the SNRs (%)     1.5423   text: within 1.5%
-V-C   gain of the proposed design over APS, smallest over the SNRs (%)     0.4998   text: positive
+V-C   FPA with Eve-aware AN over the FPA at 20 dB (%)                   10.0949   text: 10.1%
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 0 dB (paired SE 0.092)     0.5752   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 5 dB (paired SE 0.135)     0.7675   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 10 dB (paired SE 0.166)     0.6751   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 15 dB (paired SE 0.189)     0.5944   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 20 dB (paired SE 0.200)     0.6586   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 25 dB (paired SE 0.202)     0.7013   text: below both MA designs
+V-C   rate-oriented MA minus FPA with Eve-aware AN at 30 dB (paired SE 0.204)     0.6593   text: below both MA designs
 V-C   proposed above all benchmarks of Fig. 5 at every SNR (1 = yes)     1.0000   text: highest ESSR
 V-C   random Eve (M = 3): gain over the rate-oriented MA at 20 dB (%)    10.2537   text: 10.3%
 V-C   random Eve (M = 3): gain over the FPA at 20 dB (%)                21.8024   text: not quoted
 V-C   AN power fraction of the proposed design at 20 dB                  0.2699   text: 0.27
 V-C   AN power fraction of the FPA at 20 dB                              0.4712   text: 0.47
+V-C   AN power fraction of the FPA with Eve-aware AN at 20 dB            0.3525   text: 0.35
 V-C   proposed AN fraction below all benchmarks at every SNR >= 10 dB (1 = yes)     1.0000   text: for P/sigma^2 >= 10 dB
 V-C   proposed AN fraction below all benchmarks at 5 dB (1 = yes)        0.0000   text: not claimed below 10 dB
-V-C   AN power fraction of APS at 20 dB                                  0.2776   text: APS close to the proposed; Eve-nulling between proposed and rate-oriented
-V-C   AN power fraction of MA_null at 20 dB                              0.3148   text: APS close to the proposed; Eve-nulling between proposed and rate-oriented
-V-C   AN power fraction of MA_rate at 20 dB                              0.4307   text: APS close to the proposed; Eve-nulling between proposed and rate-oriented
+V-C   Eve-aware AN fraction below that of the FPA at every SNR >= 15 dB (1 = yes)     1.0000   text: for P/sigma^2 >= 15 dB
+V-C   Eve-aware AN fraction minus that of the FPA at 10 dB              -0.0011   text: not claimed at 10 dB
 V-C   MA_full: AN fraction at 30 dB                                      0.2759   text: Fig. 5(b), curves
-V-C   MA_full: high-SNR limit 1 - alpha* for the designs at 30 dB        0.2863   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   MA_full: high-SNR limit 1 - alpha* for the designs at 30 dB        0.2863   text: Fig. 5(b), dotted lines (proposed, FPA); text: all four
 V-C   MA_rate: AN fraction at 30 dB                                      0.4425   text: Fig. 5(b), curves
-V-C   MA_rate: high-SNR limit 1 - alpha* for the designs at 30 dB        0.4501   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
-V-C   MA_null: AN fraction at 30 dB                                      0.3196   text: Fig. 5(b), curves
-V-C   MA_null: high-SNR limit 1 - alpha* for the designs at 30 dB        0.3265   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
-V-C   APS: AN fraction at 30 dB                                          0.2829   text: Fig. 5(b), curves
-V-C   APS: high-SNR limit 1 - alpha* for the designs at 30 dB            0.2924   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
+V-C   MA_rate: high-SNR limit 1 - alpha* for the designs at 30 dB        0.4501   text: Fig. 5(b), dotted lines (proposed, FPA); text: all four
+V-C   FPA_ean: AN fraction at 30 dB                                      0.3573   text: Fig. 5(b), curves
+V-C   FPA_ean: high-SNR limit 1 - alpha* for the designs at 30 dB        0.3704   text: Fig. 5(b), dotted lines (proposed, FPA); text: all four
 V-C   FPA_full: AN fraction at 30 dB                                     0.4859   text: Fig. 5(b), curves
-V-C   FPA_full: high-SNR limit 1 - alpha* for the designs at 30 dB       0.4899   text: Fig. 5(b), dotted lines (proposed, FPA); text: all five
-V-C   largest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0104   text: exceed by at most 0.011
-V-C   smallest limit - AN fraction of Algorithm 1 at 30 dB over the five schemes     0.0040   text: all positive (exceed)
+V-C   FPA_full: high-SNR limit 1 - alpha* for the designs at 30 dB       0.4899   text: Fig. 5(b), dotted lines (proposed, FPA); text: all four
+V-C   largest limit - AN fraction of Algorithm 1 at 30 dB over the four schemes     0.0131   text: exceed by at most 0.013
+V-C   smallest limit - AN fraction of Algorithm 1 at 30 dB over the four schemes     0.0040   text: all positive (exceed)
 V-C   alpha* (= 1 - prediction) of the proposed design at 30 dB          0.7137   text: 0.71
 V-C   alpha* (= 1 - prediction) of the FPA at 30 dB                      0.5101   text: 0.51
-V-C   Fig. 6: equal-power loss of the MAs, smallest over the SNRs (bps/Hz)     1.7909   text: 1.79
-V-C   Fig. 6: equal-power loss of the MAs, largest over the SNRs (bps/Hz)     1.9387   text: 1.94
-V-C   Fig. 6: equal-power loss of the FPA at 0 dB (bps/Hz)               1.8285   text: 1.83
-V-C   Fig. 6: equal-power loss of the FPA at 30 dB (bps/Hz)              0.6421   text: 0.64
-V-C   Fig. 6: loss of the MAs larger than that of the FPA at every SNR >= 10 dB (1 = yes)     1.0000   text: loss of the MAs larger at high SNR
-V-C   Fig. 6: AN power fraction of the equal-power schemes ((N-M)/N)     0.6250   text: 0.625
+V-C   Fig. 6(a): equal-power loss of the MAs, smallest over the SNRs (bps/Hz)     1.7909   text: 1.79
+V-C   Fig. 6(a): equal-power loss of the MAs, largest over the SNRs (bps/Hz)     1.9387   text: 1.94
+V-C   Fig. 6(a): equal-power loss of the FPA at 0 dB (bps/Hz)            1.8285   text: 1.83
+V-C   Fig. 6(a): equal-power loss of the FPA at 30 dB (bps/Hz)           0.6421   text: 0.64
+V-C   Fig. 6(a): loss of the MAs larger than that of the FPA at every SNR >= 10 dB (1 = yes)     1.0000   text: loss of the MAs larger at high SNR
+V-C   Fig. 6(a): AN power fraction of the equal-power schemes ((N-M)/N)     0.6250   text: 0.625
 V-C   optimized AN power fraction of the proposed design at 0 dB         0.0000   text: close to zero
-V-C   Fig. 6: MA, equal power above the FPA at every SNR >= 10 dB (1 = yes)     1.0000   text: for P/sigma^2 >= 10 dB
-V-C   Fig. 6: MA, equal power minus FPA at 5 dB (bps/Hz)                -0.0740   text: below at 5 dB
-V-C   MA, equal power minus rate-oriented MA at 10 dB (paired SE 0.067)     0.0994   text: not quoted
-V-C   MA, equal power minus rate-oriented MA at 15 dB (paired SE 0.078)     0.6839   text: not quoted
-V-C   Fig. 6: largest |with AN - without AN| for P/sigma^2 <= 5 dB, MAs and FPA (bps/Hz)     0.0758   text: nearly coincide
-V-C   Fig. 6: gain of the AN for the proposed design at 20 dB (%)       58.9019   text: 58.9%
-V-C   Fig. 6: gain of the AN for the proposed design at 30 dB (%)      121.1399   text: 121.1%
-V-C   Fig. 6: MAs over FPA without AN, smallest for P/sigma^2 >= 5 dB (%)    30.4893   text: 30.5%
-V-C   Fig. 6: MAs over FPA without AN, largest for P/sigma^2 >= 5 dB (%)    31.2463   text: 31.2%
-V-C   Fig. 6: ESSR slope without AN, 25 -> 30 dB, proposed (bps/Hz per dB)     0.0497   text: saturate
+V-C   Fig. 6(a): MA with equal power above the FPA at every SNR >= 10 dB (1 = yes)     1.0000   text: for P/sigma^2 >= 10 dB
+V-C   Fig. 6(a): MA with equal power minus FPA at 5 dB (bps/Hz)         -0.0740   text: below at 5 dB
+V-C   MA with equal power minus rate-oriented MA at 10 dB (paired SE 0.067)     0.0994   text: not quoted
+V-C   MA with equal power minus rate-oriented MA at 15 dB (paired SE 0.078)     0.6839   text: not quoted
+V-C   Fig. 6(b): largest |with AN - without AN| for P/sigma^2 <= 5 dB, MAs and FPA (bps/Hz)     0.0758   text: nearly coincide
+V-C   Fig. 6(b): gain of the AN for the proposed design at 20 dB (%)    58.9019   text: 58.9%
+V-C   Fig. 6(b): gain of the AN for the proposed design at 30 dB (%)   121.1399   text: 121.1%
+V-C   Fig. 6(b): MAs over FPA without AN, smallest for P/sigma^2 >= 5 dB (%)    30.4893   text: 30.5%
+V-C   Fig. 6(b): MAs over FPA without AN, largest for P/sigma^2 >= 5 dB (%)    31.2463   text: 31.2%
+V-C   Fig. 6(b): ESSR slope without AN, 25 -> 30 dB, proposed (bps/Hz per dB)     0.0497   text: saturate
 V-C   mechanisms: consistency, max |ESSR per drop - Fig. 5 at 20 dB| (bps/Hz)     0.0000   text: 0 (identical designs)
-V-C   mechanisms FPA_full: mean rho_1                                    0.9777   text: 0.98 / 0.83 / 0.52 / 0.47
-V-C   mechanisms FPA_full: mean xi_1                                    54.4904   text: 54.5 / 53.4 / 24.7 / not quoted
-V-C   mechanisms FPA_full: mean psi                                     13.2879   text: 13.3 / 25.6 / 58.3 / 56.9
-V-C   mechanisms FPA_full: mean eta_m / upper bound (21) (%)            76.6943   text: proposed 98% / Eve-nulling 82%
-V-C   mechanisms MA_rate: mean rho_1                                     0.8333   text: 0.98 / 0.83 / 0.52 / 0.47
-V-C   mechanisms MA_rate: mean xi_1                                     53.3633   text: 54.5 / 53.4 / 24.7 / not quoted
-V-C   mechanisms MA_rate: mean psi                                      25.6410   text: 13.3 / 25.6 / 58.3 / 56.9
-V-C   mechanisms MA_rate: mean eta_m / upper bound (21) (%)             99.6284   text: proposed 98% / Eve-nulling 82%
-V-C   mechanisms MA_full: mean rho_1                                     0.5231   text: 0.98 / 0.83 / 0.52 / 0.47
-V-C   mechanisms MA_full: mean xi_1                                     24.7040   text: 54.5 / 53.4 / 24.7 / not quoted
-V-C   mechanisms MA_full: mean psi                                      58.3372   text: 13.3 / 25.6 / 58.3 / 56.9
-V-C   mechanisms MA_full: mean eta_m / upper bound (21) (%)             98.4492   text: proposed 98% / Eve-nulling 82%
-V-C   mechanisms MA_null: mean rho_1                                     0.4740   text: 0.98 / 0.83 / 0.52 / 0.47
-V-C   mechanisms MA_null: mean xi_1                                     26.3365   text: 54.5 / 53.4 / 24.7 / not quoted
-V-C   mechanisms MA_null: mean psi                                      56.8639   text: 13.3 / 25.6 / 58.3 / 56.9
-V-C   mechanisms MA_null: mean eta_m / upper bound (21) (%)             82.3359   text: proposed 98% / Eve-nulling 82%
-V-D1  Eve-nulling minus rate-oriented MA, A = 1.5 lambda (paired SE 0.058)    -0.1852   text: > 0 for A >= 3 lambda
-V-D1  Eve-nulling minus rate-oriented MA, A = 2.0 lambda (paired SE 0.079)     0.1164   text: > 0 for A >= 3 lambda
-V-D1  Eve-nulling minus rate-oriented MA, A = 3.0 lambda (paired SE 0.139)     0.7148   text: > 0 for A >= 3 lambda
-V-D1  Eve-nulling minus rate-oriented MA, A = 4.0 lambda (paired SE 0.173)     1.1402   text: > 0 for A >= 3 lambda
-V-D1  Eve-nulling minus rate-oriented MA, A = 5.0 lambda (paired SE 0.175)     1.6298   text: > 0 for A >= 3 lambda
-V-D1  Eve-nulling minus rate-oriented MA, A = 6.0 lambda (paired SE 0.147)     1.4477   text: > 0 for A >= 3 lambda
-V-D1  gain of the proposed design over APS, largest over A (%)           0.7378   text: within 0.7%
+V-C   mechanisms FPA_full: mean rho_1                                    0.9777   text: 0.98 / 0.83 / 0.52 / (FPA)
+V-C   mechanisms FPA_full: mean xi_1                                    54.4904   text: 54.5 / 53.4 / 24.7 / 54.5
+V-C   mechanisms FPA_full: mean psi (Eve-aware AN: (N-M)(kappa_e d + 1))    13.2879   text: 13.3 / 25.6 / 58.3 / 46.4
+V-C   mechanisms FPA_full: mean Xi_1                                     6.7187   text: not quoted
+V-C   mechanisms FPA_full: mean eta_m / upper bound (21) (%)            76.6943   text: not quoted
+V-C   mechanisms MA_rate: mean rho_1                                     0.8333   text: 0.98 / 0.83 / 0.52 / (FPA)
+V-C   mechanisms MA_rate: mean xi_1                                     53.3633   text: 54.5 / 53.4 / 24.7 / 54.5
+V-C   mechanisms MA_rate: mean psi (Eve-aware AN: (N-M)(kappa_e d + 1))    25.6410   text: 13.3 / 25.6 / 58.3 / 46.4
+V-C   mechanisms MA_rate: mean Xi_1                                      4.1437   text: not quoted
+V-C   mechanisms MA_rate: mean eta_m / upper bound (21) (%)             99.6284   text: not quoted
+V-C   mechanisms MA_full: mean rho_1                                     0.5231   text: 0.98 / 0.83 / 0.52 / (FPA)
+V-C   mechanisms MA_full: mean xi_1                                     24.7040   text: 54.5 / 53.4 / 24.7 / 54.5
+V-C   mechanisms MA_full: mean psi (Eve-aware AN: (N-M)(kappa_e d + 1))    58.3372   text: 13.3 / 25.6 / 58.3 / 46.4
+V-C   mechanisms MA_full: mean Xi_1                                      1.0096   text: not quoted
+V-C   mechanisms MA_full: mean eta_m / upper bound (21) (%)             98.4492   text: not quoted
+V-C   mechanisms FPA_ean: mean rho_1                                     0.9777   text: 0.98 / 0.83 / 0.52 / (FPA)
+V-C   mechanisms FPA_ean: mean xi_1                                     54.4904   text: 54.5 / 53.4 / 24.7 / 54.5
+V-C   mechanisms FPA_ean: mean psi (Eve-aware AN: (N-M)(kappa_e d + 1))    46.4394   text: 13.3 / 25.6 / 58.3 / 46.4
+V-C   mechanisms FPA_ean: mean Xi_1                                      1.9288   text: not quoted
+V-C   mechanisms FPA_ean: mean eta_m / upper bound (21) (%)             76.6943   text: not quoted
+V-D1  FPA with Eve-aware AN: max - min of the ESSR over A (bps/Hz)       0.0000   text: does not depend on A
+V-D1  Eve-aware AN minus rate-oriented MA, A = 1.5 lambda (paired SE 0.109)     0.5990   text: > 0 for small regions
+V-D1  Eve-aware AN minus rate-oriented MA, A = 2.0 lambda (paired SE 0.146)     0.2886   text: > 0 for small regions
+V-D1  Eve-aware AN minus rate-oriented MA, A = 3.0 lambda (paired SE 0.179)    -0.1550   text: > 0 for small regions
+V-D1  Eve-aware AN minus rate-oriented MA, A = 4.0 lambda (paired SE 0.200)    -0.6586   text: > 0 for small regions
+V-D1  Eve-aware AN minus rate-oriented MA, A = 5.0 lambda (paired SE 0.201)    -0.9293   text: > 0 for small regions
+V-D1  Eve-aware AN minus rate-oriented MA, A = 6.0 lambda (paired SE 0.187)    -1.4277   text: > 0 for small regions
+V-D1  Eve-aware AN minus proposed, A = 1.5 lambda (paired SE 0.095) (bps/Hz)     0.1511   text: slightly exceeds
+V-D1  Eve-aware AN over the proposed design, A = 1.5 lambda (%)          0.8751   text: 0.9%
+V-D1  gain of the proposed design over the Eve-aware AN, A = 6 lambda (%)    26.1892   text: 26.2%
 V-D1  gain of the proposed design over the FPA, A = 1.5 / 6 lambda (%)     9.1398   text: grows (38.9% at 6)
 V-D1  ESSR: proposed, N = 4 minus FPA, N = 12                            0.5236   text: > 0
+V-D1  ESSR: proposed, N = 4 minus FPA with Eve-aware AN, N = 8           1.0292   text: > 0 (not quoted)
 V-D1  ESSR: proposed, N = 8 minus rate-oriented MA, N = 16 (paired SE 0.081)     0.2215   text: slightly outperforms
 V-D1  gain over the FPA decreasing in N (1 = yes)                        1.0000   text: decreases with N
-V-D1  Eve-nulling minus rate-oriented MA, N = 4 (paired SE 0.372)       -2.0484   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 6 (paired SE 0.195)        0.4696   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 8 (paired SE 0.173)        1.1402   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 10 (paired SE 0.144)       1.4056   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 12 (paired SE 0.149)       1.4396   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 14 (paired SE 0.146)       1.4638   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  Eve-nulling minus rate-oriented MA, N = 16 (paired SE 0.130)       1.5530   text: < 0 for N = 4; > 0 for N >= 8
-V-D1  gain of the proposed design over APS, N = 4 (%)                    2.6158   text: 2.6%
-V-D1  proposed minus APS, N = 16 (paired SE 0.009) (bps/Hz)              0.0022   text: vanishes
+V-D1  N = 4: |FPA with Eve-aware AN - FPA| (bps/Hz)                      0.0000   text: coincide (N - M = 1)
+V-D1  gain of the Eve-aware AN over the FPA increasing in N (1 = yes)     1.0000   text: grows with N
+V-D1  Eve-aware AN minus rate-oriented MA, N = 4 (paired SE 0.271)      -3.8845   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 6 (paired SE 0.222)      -2.1110   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 8 (paired SE 0.200)      -0.6586   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 10 (paired SE 0.182)      0.2865   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 12 (paired SE 0.186)      0.9671   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 14 (paired SE 0.175)      1.4860   text: > 0 for N >= 12
+V-D1  Eve-aware AN minus rate-oriented MA, N = 16 (paired SE 0.173)      1.9981   text: > 0 for N >= 12
+V-D1  gain of the proposed design over the Eve-aware AN, N = 4 (%)      70.8867   text: 70.9%
+V-D1  gain of the proposed design over the Eve-aware AN, N = 16 (%)      1.5199   text: 1.5%
+V-D1  gain over the Eve-aware AN decreasing in N (1 = yes)               1.0000   text: decreases
+V-D1  proposed minus Eve-aware AN, N = 16 (paired SE 0.150) (bps/Hz)     0.3423   text: not quoted
 V-D2  Fig. 8(a): M = 1, rate-oriented MA minus FPA (bps/Hz)              0.0000   text: same ESSR
 V-D2  Fig. 8(a): M = 1, gain of the proposed design over the FPA (%)    77.1674   text: 77.2%
 V-D2  Fig. 8(a): M = 1, AN power fraction of the FPA (%)                84.0650   text: 84%
 V-D2  Fig. 8(a): M = 1, AN power fraction of the proposed design (%)    50.4363   text: 50%
+V-D2  Fig. 8(a): M = 1, Eve-aware AN over the FPA (%)                   35.5662   text: 35.6%
+V-D2  Fig. 8(a): M = 6, Eve-aware AN over the FPA (%)                    2.6296   text: 2.6%
+V-D2  Fig. 8(a): Eve-aware AN over the FPA decreasing in M (1 = yes)     1.0000   text: vanishes as M grows
+V-D2  Fig. 8(a): M = 1, gain of the proposed design over the Eve-aware AN (%)    30.6870   text: 30.7%
+V-D2  Fig. 8(a): M = 6, gain of the proposed design over the Eve-aware AN (%)    60.1445   text: 60.1%
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 1 (paired SE 0.007)     1.5015   text: > 0 for M = 1 (not quoted)
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 2 (paired SE 0.109)     0.2001   text: > 0 for M = 1 (not quoted)
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 3 (paired SE 0.200)    -0.6586   text: > 0 for M = 1 (not quoted)
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 4 (paired SE 0.230)    -2.4969   text: > 0 for M = 1 (not quoted)
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 5 (paired SE 0.311)    -5.4606   text: > 0 for M = 1 (not quoted)
+V-D2  Fig. 8(a): Eve-aware AN minus rate-oriented MA, M = 6 (paired SE 0.356)   -10.0585   text: > 0 for M = 1 (not quoted)
 V-D2  Fig. 8(a): gain over the rate-oriented MA, smallest over M (bps/Hz)     2.4725   text: 2.47
 V-D2  Fig. 8(a): gain over the rate-oriented MA, largest over M (bps/Hz)     3.3905   text: 3.39
 V-D2  Fig. 8(a): gains over FPA increasing for M >= 3 (1 = yes)          1.0000   text: grows for M >= 3
 V-D2  Fig. 8(a): gain over the FPA at M = 6 (%)                         64.3557   text: 64.4%
-V-D2  Fig. 8(a): M = 1, |MA_null - proposed|, largest over the drops (bps/Hz)     0.0359   text: not quoted
-V-D2  Fig. 8(a): M = 1, |mean(MA_null - proposed)| (bps/Hz)              0.0005   text: within 0.01 on average
-V-D2  Fig. 8(a): M = 1, |APS - proposed|, largest over the drops (bps/Hz)     0.0402   text: not quoted
-V-D2  Fig. 8(a): M = 1, |mean(APS - proposed)| (bps/Hz)                  0.0005   text: within 0.01 on average
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 1 (paired SE 0.087)     3.2574   text: < 0 for M >= 5
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 2 (paired SE 0.139)     1.8501   text: < 0 for M >= 5
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 3 (paired SE 0.173)     1.1402   text: < 0 for M >= 5
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 4 (paired SE 0.252)    -0.4480   text: < 0 for M >= 5
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 5 (paired SE 0.269)    -2.2790   text: < 0 for M >= 5
-V-D2  Fig. 8(a): Eve-nulling minus rate-oriented MA, M = 6 (paired SE 0.323)    -5.2463   text: < 0 for M >= 5
-V-D2  Fig. 8(a): gain of the proposed design over APS at M = 6 (%)       3.5160   text: 3.5%
-V-D2  Fig. 8(a): FPA, ESSR(M = 6) - ESSR(M = 5) (SE 0.455, independent drops)    -0.2001   text: saturates for M >= 5
-V-D3  common kappa (text): largest ESSR difference between the schemes at kappa = -10 dB (bps/Hz)     0.0333   text: less than 0.04
+V-D2  Fig. 8(a): FPA_full, ESSR(M = 6) - ESSR(M = 5) (SE 0.455 indep., 0.348 paired)    -0.2001   text: saturate for M >= 5
+V-D2  Fig. 8(a): FPA_ean, ESSR(M = 6) - ESSR(M = 5) (SE 0.460 indep., 0.352 paired)    -0.6417   text: saturate for M >= 5
+V-D3  common kappa (text): largest ESSR difference between the MA designs and the FPA at kappa = -10 dB (bps/Hz)     0.0333   text: less than 0.04
+V-D3  common kappa (text): Eve-aware AN over the FPA at kappa = -10 dB (%)    -2.7996   text: -2.8%
 V-D3  common kappa (text): proposed increasing in kappa (1 = yes)        1.0000   text: increases
 V-D3  common kappa (text): FPA decreasing in kappa (1 = yes)             1.0000   text: decreases
 V-D3  common kappa (text): gain over the rate-oriented MA at kappa = 20 dB (%)    19.3130   text: 19.3%
+V-D3  common kappa (text): gain over the Eve-aware AN at kappa = 20 dB (%)    31.4608   text: 31.5%
 V-D3  common kappa (text): gain over the FPA at kappa = 20 dB (%)       49.4119   text: 49.4%
 V-D3  Fig. 8(b): gain over the rate-oriented MA at kappa_e = -10 dB (%)     1.0171   text: 1.0%
 V-D3  Fig. 8(b): gain over the rate-oriented MA at kappa_e = 20 dB (%)    17.0206   text: 17.0%
 V-D3  Fig. 8(b): gain over the FPA at kappa_e = 20 dB (%)               36.3227   text: not quoted
 V-D3  Fig. 8(b): proposed increasing in kappa_e (1 = yes)                1.0000   text: increases
 V-D3  Fig. 8(b): rate-oriented MA and FPA decreasing in kappa_e (1 = yes)     1.0000   text: decrease
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = -10 dB (paired SE 0.104)    -0.8323   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = -5 dB (paired SE 0.112)    -0.5048   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = 0 dB (paired SE 0.132)     0.0744   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = 5 dB (paired SE 0.157)     0.7132   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = 10 dB (paired SE 0.173)     1.1402   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = 15 dB (paired SE 0.180)     1.3346   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): Eve-nulling minus rate-oriented MA, kappa_e = 20 dB (paired SE 0.183)     1.4060   text: > 0 only for kappa_e >= 5 dB
-V-D3  Fig. 8(b): gain of the proposed design over the Eve-nulling MA, smallest over kappa_e (%)     5.4384   text: 5.4%
-V-D3  Fig. 8(b): gain of the proposed design over the Eve-nulling MA, largest over kappa_e (%)     8.4831   text: 8.5%
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = -10 dB (paired SE 0.008)    -0.9426   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = -5 dB (paired SE 0.010)    -0.7932   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = 0 dB (paired SE 0.017)    -0.3255   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = 5 dB (paired SE 0.025)     0.6143   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = 10 dB (paired SE 0.021)     1.5971   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = 15 dB (paired SE 0.014)     2.1563   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN minus FPA, kappa_e = 20 dB (paired SE 0.014)     2.3789   text: < 0 for kappa_e <= 0 dB
+V-D3  Fig. 8(b): Eve-aware AN over the FPA at kappa_e = -10 dB (%)      -5.1968   text: -5.2%
+V-D3  Fig. 8(b): gain of the proposed design over the Eve-aware AN, smallest over kappa_e (%)    16.6084   text: 16.6%
+V-D3  Fig. 8(b): gain of the proposed design over the Eve-aware AN, largest over kappa_e (%)    20.4267   text: 20.4%
 V-D3  Fig. 8(b): ESSR at kappa_e = 10 dB equals Fig. 5 at 20 dB (max |difference|, bps/Hz)     0.0000   text: consistency check

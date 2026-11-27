@@ -254,8 +254,18 @@ and 21 (statuses above). Comments 1, 2, 3, 5, 7, 13, 14, 19, 20, and 22 are not 
 
 | ID | Sev | Location | Finding | Evidence | Decision | Status |
 |---|---|---|---|---|---|---|
-| I174 (1) | M | Figs. 5, 7, 8; V | Eve-nulling MA is an in-house heuristic without literature counterpart | author; plan §1 | remove (code kept as supplementary) | needs-decision (approved in principle) |
-| I175 (2) | M | Figs. 5, 7, 8; V | APS too close to the proposed design | pilot_output.txt (grid check); analysis.txt; Hu et al. Sec. IV | configuration and code consistent with Hu et al.; closeness due to the 2-D region (81 grid points for N = 8) vs. Hu's 1-D span (13–17 points for N = 10); discard | needs-decision |
-| I176 (3) | M | benchmarks | Eve-aware AN as a benchmark | pilot (approximate ESSR): FPA + Eve-aware AN 16.31 vs. FPA 14.21, rate-oriented MA 16.51, proposed 18.98 at 20 dB | proposed: add "FPA with Eve-aware AN" (not MA + Eve-aware AN) | needs-decision |
-| I177 (4) | L | Fig. 6 | six overlapping curves; casual "no AN" labels | figure | split into (a) equal power and (b) without AN; labels "MA/FPA with equal power", "MA/FPA without AN" | needs-decision |
+| I174 (1) | M | Figs. 5, 7, 8; V | Eve-nulling MA is an in-house heuristic without literature counterpart | author; plan §1 | removed (code kept as supplementary) | fixed (rev-8g) |
+| I175 (2) | M | Figs. 5, 7, 8; V | APS too close to the proposed design | pilot_output.txt (grid check); analysis.txt; Hu et al. Sec. IV | configuration and code consistent with Hu et al.; closeness due to the 2-D region (81 grid points for N = 8) vs. Hu's 1-D span (13–17 points for N = 10); discarded (code kept as supplementary) | fixed (rev-8g) |
+| I176 (3) | M | benchmarks | Eve-aware AN as a benchmark | pilot (approximate ESSR): FPA + Eve-aware AN 16.31 vs. FPA 14.21, rate-oriented MA 16.51, proposed 18.98 at 20 dB | "FPA with Eve-aware AN" added (not MA + Eve-aware AN; author approval 2026-11-27) | fixed (rev-8g) |
+| I177 (4) | L | Fig. 6 | six overlapping curves; casual "no AN" labels | figure | split into (a) equal power and (b) without AN; labels "MA/FPA with equal power", "MA/FPA without AN" | fixed (rev-8g) |
 
+## Round rev-8g — final benchmark suite (author's approval of the rev-8f plan, 2026-11-27)
+
+Evidence: `review/verify_numbers_rev8.txt`, `review/experiments/rev8g_benchmarks/` (`analysis.txt`, `check_ean_direction.txt`).
+
+| ID | Sev | Location | Finding | Evidence | Decision | Status |
+|---|---|---|---|---|---|---|
+| I178 | L | V-B 1) | For the rank-one (Eve-aware) AN, (eq:Re) with ψ replaced underestimates the wiretap sum rate (2.18 vs 2.63 bps/Hz at 20 dB), so the approximation gap of this benchmark (1.11) differs from that of the isotropic-AN schemes (1.57–1.76); the rankings of the two FPA schemes swap at 0 dB (0.01 bps/Hz) | table_mechanisms.mat (ReMC/ReApprox), fig5_snr.mat | gap claim restricted to the isotropic-AN schemes; Eve-aware AN gap and its cause stated; AN power of Algorithm 1 shown near-optimal for the benchmark (oracle grid search +0.09%, extra_ean_check.mat); ranking exception stated | fixed (rev-8g) |
+| I179 | M | V-D 1), conclusion, intro | The FPA with Eve-aware AN is 0.9% above the proposed design at A = 1.5λ (paired difference 0.15, SE 0.095) and approaches it for N = 16 (1.5%); the gain over this benchmark does not grow with κ_e (16.6–20.4%) | fig7_region.mat, extra_num_antennas.mat, fig8_rician_b.mat | reported in V-D 1); conclusion qualified ("even with Eve-aware AN unless the movable region is very small"); intro claim narrowed to the gain over the MA design of [ZhengTCOM2025] | fixed (rev-8g) |
+| I180 | L | V-D 3) | The FPA with Eve-aware AN falls below the FPA for κ_e ≤ 0 dB (−5.2% at −10 dB; −2.8% at common κ = −10 dB) | fig8_rician_b.mat, fig8_rician_a.mat; check_ean_direction.txt (same power allocation: −0.95 bps/Hz, SE 0.01) | explained by the AN direction (nearly equal mean AN power at Eve, larger fluctuation of a rank-one AN), not by the power allocation | fixed (rev-8g) |
+| I181 | L | Figs. 5(a), 6(a), 7(b), 8(a) | With the longer label "FPA with Eve-aware AN", the two-column legends covered parts of the curves | figure check | y-axes extended (Figs. 5(a), 6: 0–40; Fig. 7(b): 6–24; Fig. 8(a): 0–45 with the legend in the upper left) | fixed (rev-8g) |

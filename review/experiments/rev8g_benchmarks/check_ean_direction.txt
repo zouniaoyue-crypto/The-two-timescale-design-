@@ -1,0 +1,10 @@
+Output of check_ean_direction.m (40 drops, default point otherwise; ESSR in bps/Hz, Monte Carlo):
+  iso               : FPA with isotropic AN, power allocation of Algorithm 1
+  dir, same (p,q)   : AN steered toward the LoS component of Eve, with the SAME (p, q) as iso
+  FPA_ean           : AN steered toward Eve, (p, q) of Algorithm 1 with psi_dir
+  iso with FPA_ean (p,q): isotropic AN with the (p, q) of FPA_ean
+kappa_e = -10 dB: iso 17.930 | dir, same (p,q) 16.985 (diff -0.946, SE 0.011) | FPA_ean 16.985 | iso with FPA_ean (p,q) 17.935
+kappa_e = 20 dB: iso 15.141 | dir, same (p,q) 17.124 (diff 1.983, SE 0.049) | FPA_ean 17.527 | iso with FPA_ean (p,q) 15.062
+Conclusion: at kappa_e = -10 dB the loss is caused by the AN direction (same power allocation), i.e., by the
+larger fluctuation of the AN power received by Eve when the AN occupies a single dimension (the mean AN powers
+nearly coincide, psi_dir - psi = (N-M-1) kappa_e d); the power allocation is not the cause.

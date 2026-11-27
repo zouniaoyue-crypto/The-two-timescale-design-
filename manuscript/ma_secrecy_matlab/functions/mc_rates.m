@@ -5,6 +5,11 @@ function [Rb, Re, essr, stats] = mc_rates(sc, T, p, q, S, seed)
 %   Re(m)  = E{ log2(1 + p_m |g^H wbar_m|^2 / (q g^H P_H^perp g + sigma_e^2)) }
 %   essr   = sum_m [Rb(m) - Re(m)]^+
 %   stats.leak(m) = E{|g^H wbar_m|^2},  stats.an = E{g^H P_H^perp g}  (for validation)
+%   If sc.anDirG (N x 1) is given, the AN is steered toward the null-space projection of
+%   sc.anDirG (the LoS steering vector of Eve known at the BS; benchmark "FPA with
+%   Eve-aware AN"), i.e., Sigma = (N-M) q a a^H / ||a||^2 with a = P_H^perp gbar_BS, and
+%   g^H P_H^perp g is replaced by (N-M) |g^H a|^2 / ||a||^2 (same AN power, no
+%   interference to the LUs).
 %   stats.Re_tin, stats.essr_tin: the same rates for an eavesdropper that treats the
 %   signals of the other LUs as noise (TIN), i.e., without the worst-case assumption
 %   of Section II-C:  p_m |g^H wbar_m|^2 / (sum_{i~=m} p_i |g^H wbar_i|^2 + q g^H P_H^perp g + sigma_e^2).
@@ -44,6 +49,21 @@ for m = 1:M
 end
 leak = abs(uG).^2 ./ dg;                                     % |g^H wbar_m|^2
 an   = real(reshape(sum(abs(g).^2, 1), 1, S) - sum(uG .* u, 1));   % g^H P_H^perp g
+if isfield(sc, 'anDirG') && ~isempty(sc.anDirG)                % Eve-aware (directional) AN
+    gb = sc.anDirG(:);
+    w  = zeros(M, S);                                            % w = H^H gbar_BS
+    for i = 1:M
+        w(i, :) = reshape(sum(conj(H(:, i, :)) .* repmat(gb, [1 1 S]), 1), 1, S);
+    end
+    wG = zeros(M, S);                                            % [w^H (H^H H)^{-1}]_m
+    for m = 1:M
+        wG(m, :) = sum(conj(w) .* reshape(Gi(:, m, :), M, S), 1);
+    end
+    gHgb = reshape(sum(conj(g) .* repmat(gb, [1 1 S]), 1), 1, S);   % g^H gbar_BS
+    ga   = gHgb - sum(uG .* w, 1);                                  % g^H P_H^perp gbar_BS
+    aa   = real(sum(abs(gb).^2) - sum(wG .* w, 1));                 % ||P_H^perp gbar_BS||^2
+    an   = (N - M) * abs(ga).^2 ./ aa;
+end
 snr  = repmat(p ./ sc.sigma2, 1, S) ./ dg;
 sinr = repmat(p, 1, S) .* leak ./ repmat(q*an + sc.sigma2e, M, 1);
 Rb = mean(log2(1 + snr), 2);

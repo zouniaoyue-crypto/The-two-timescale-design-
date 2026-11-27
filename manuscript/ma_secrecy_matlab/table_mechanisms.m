@@ -11,6 +11,8 @@ function res = table_mechanisms(prm)
 %     xi     normalized information leakage xi_m(t) = kappa_e c_m(t) + 1 (per LU)
 %     psi    normalized AN power received by Eve psi(t) = kappa_e d(t) + N - M
 %     Xi     leakage-to-AN ratio Xi_m(t) = (N-M) xi_m(t) / (M psi(t)) of (eq:highsnr) (per LU)
+%     (for the FPA with Eve-aware AN, psi = psi_dir; rate_coeffs.m)
+%     ReMC / ReApprox  Eve sum rate by Monte Carlo / by (eq:Re) (accuracy of the approximation)
 %   The Monte Carlo ESSR of each drop is stored as well (res.essr) and compared with
 %   fig5_snr.mat at 20 dB as a consistency check (identical designs). Saved in
 %   results/table_mechanisms.mat (about 12 min in Octave).
@@ -22,6 +24,7 @@ D = prm.numDrops;  K = numel(schemes);  M = prm.M;
 res.schemes = schemes;
 res.rho1 = zeros(D, K);  res.etaN = zeros(D, K);  res.psi = zeros(D, K);
 res.xi = zeros(D, K, M);  res.Xi = zeros(D, K, M);  res.essr = zeros(D, K);  res.anfrac = zeros(D, K);
+res.ReMC = zeros(D, K);  res.ReApprox = zeros(D, K);  res.F = zeros(D, K);   % Eve sum rates: Monte Carlo / (eq:Re)
 t0 = tic;
 for dI = 1:D
     sc  = gen_scenario(prm, prm.seed + dI);                    % as in sweep_schemes.m
@@ -30,12 +33,14 @@ for dI = 1:D
     k0 = 2*pi/sc.lambda;
     for k = 1:K
         r = out.(schemes{k});  T = r.T;  N = size(T, 1);
-        [eta, xi, psi] = rate_coeffs(sc, T);
+        scK = sc;  if strcmp(schemes{k}, 'FPA_ean'), scK.anDir = true; end   % psi_dir
+        [eta, xi, psi] = rate_coeffs(scK, T);
         res.rho1(dI, k) = abs(exp(1j*k0*(T*sc.au(:, 1)))' * exp(1j*k0*(T*sc.ae))) / N;
         res.etaN(dI, k) = mean(eta(:) ./ (sc.zeta(:) * (N - M) .* (sc.kappa(:) + 1)));
         res.xi(dI, k, :) = xi;  res.psi(dI, k) = psi;
         res.Xi(dI, k, :) = (N - M) * xi / (M * psi);
         res.essr(dI, k) = r.essr;  res.anfrac(dI, k) = r.anfrac;
+        res.ReMC(dI, k) = sum(r.Re);  res.ReApprox(dI, k) = sum(r.ReApprox);  res.F(dI, k) = r.F;
     end
 end
 fprintf('table_mechanisms: %d drops (%.1f min)\n', D, toc(t0)/60);

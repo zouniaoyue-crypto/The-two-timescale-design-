@@ -2,9 +2,10 @@ function plot_fig5(res, limKeys)
 %PLOT_FIG5  Fig. 5: (a) ESSR and (b) optimized AN power fraction versus the transmit SNR
 %   for the schemes in main_schemes.m, each panel with its own legend inside the axes.
 %   The inset of (a), in the empty lower-right area, enlarges the window [x0 - dx, x0 + dx]
-%   around x0 = 20 dB (the default SNR), where the proposed design and APS nearly overlap. A wider window (e.g., 15-25 dB) is not used, because the ESSRs rise
-%   by about 10 bps/Hz over it, so that an inset of this size would not magnify the
-%   curves. Panel (b) also shows the high-SNR limits 1 - alpha* of the AN power fraction
+%   around x0 = 20 dB (the default SNR), where the rate-oriented MA and the FPA with
+%   Eve-aware AN lie about 0.7 bps/Hz apart. A wider window (e.g., 15-25 dB) is not used,
+%   because the ESSRs rise by about 10 bps/Hz over it, so that an inset of this size would
+%   not magnify the curves. Panel (b) also shows the high-SNR limits 1 - alpha* of the AN power fraction
 %   (eq. (33) of main.tex, an_highsnr.m) for the designs at the highest SNR, i.e., the
 %   predicted saturation levels, as thin black dotted horizontal lines over the high-SNR
 %   part of the axis (15-30 dB; black is reserved for analytical results), with one legend
@@ -19,7 +20,7 @@ s = fig_style();
 [Y, keysA] = pick_schemes(res, 'essr', keys);
 ax = plot_schemes(res.values, Y, keysA);
 label_axes(ax, xl, 'ESSR (bps/Hz)');
-set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 35], 'YTick', 0:5:35);
+set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 40], 'YTick', 0:5:40);
 place_legend(ax, legend_rows(cellfun(@scheme_style, keysA, 'UniformOutput', false), 2), 'nw');
 add_inset(ax, res.values, Y, keysA, s);
 save_figure('fig5a_essr_snr');
@@ -27,7 +28,7 @@ save_figure('fig5a_essr_snr');
 [Y, keysB] = pick_schemes(res, 'anfrac', keys);
 ax = plot_schemes(res.values, Y, keysB);
 st = cellfun(@scheme_style, keysB, 'UniformOutput', false);
-rows = {{st{1}, st{2}}, {st{3}, st{4}}, {st{5}, []}};
+rows = [legend_rows(st, 2), {{[], []}}];
 if isfield(res, 'anpred')
     [P, keysP] = pick_schemes(res, 'anpred', limKeys);   % limits for the designs at 30 dB
     xr = [max(15, res.values(1)), res.values(end)];      % high-SNR part of the axis
@@ -37,7 +38,7 @@ if isfield(res, 'anpred')
     for k = 1:numel(keysP)
         plot(ax, xr, P(end, k)*[1 1], 'LineStyle', pr.ls, 'Color', pr.color, 'LineWidth', pr.lw);
     end
-    rows{3}{2} = pr;
+    rows{end}{1} = pr;
 end
 label_axes(ax, xl, 'AN power fraction');
 set(ax, 'XLim', [res.values(1) res.values(end)], 'XTick', res.values, 'YLim', [0 0.8], 'YTick', 0:0.1:0.8);
@@ -46,11 +47,11 @@ save_figure('fig5b_an_fraction');
 end
 
 function add_inset(ax, x, Y, keys, s)
-% Enlarged view of the proposed design and APS around x0, drawn in the empty area below the
+% Enlarged view of the rate-oriented MA and the FPA with Eve-aware AN around x0, drawn in the empty area below the
 % high-SNR part of the curves; the zoomed window is marked in the main axes. The y-range
 % has extra headroom, so that the label of x0 in the upper-right corner clears the curves.
 x0 = 20;  dx = 0.5;
-inner = {'MA_full', 'APS'};
+inner = {'MA_rate', 'FPA_ean'};
 lo = inf;  hi = -inf;
 for k = 1:numel(inner)
     j = find(strcmp(keys, inner{k}), 1);

@@ -24,8 +24,9 @@ fig3_accuracy(prm);                 % Fig. 3: accuracy of the closed-form rates
 fig4_convergence(prm);              % Fig. 4: convergence of Algorithm 2
 extra_grid_check(prm);              % Sec. V-A: Stage-1 grid spacing halved (20 drops)
 extra_mm_compare(prm);              % Sec. V-B (text): Stage 2 vs. the surrogate of [ZhengTCOM2025]
-fig5_snr(prm);                      % Figs. 5 and 6: ESSR, AN power, and power allocation vs. SNR
-extra_no_an(prm);                   % Fig. 6: ESSR without AN vs. SNR (same drops as fig5_snr)
+fig5_snr(prm);                      % Figs. 5 and 6(a): ESSR, AN power, and power allocation vs. SNR
+extra_no_an(prm);                   % Fig. 6(b): ESSR without AN vs. SNR (same drops as fig5_snr)
+extra_ean_check(prm);               % Sec. V-B (text): AN power of the FPA with Eve-aware AN vs. an oracle search
 table_mechanisms(prm);              % Sec. V-C (text): LoS correlation, leakage, and AN at Eve of the designs (20 dB)
 extra_random_eve(prm, 3);           % Sec. V-C (text): AoDs of Eve independent of the LUs, M = 3
 fig7_region(prm);                   % Fig. 7(a): ESSR vs. region size

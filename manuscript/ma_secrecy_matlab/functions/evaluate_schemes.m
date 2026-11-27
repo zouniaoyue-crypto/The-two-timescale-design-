@@ -10,9 +10,11 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %                  best of prm.numInit initializations)
 %     'MA_rate'  - rate-oriented MA [ZhengTCOM2025]: positions maximize the ergodic sum
 %                  rate (Eve ignored), then {p_m}, q optimized by Algorithm 1
-%     'MA_null'  - Eve-nulling MA: positions minimize the LoS correlations between Eve
-%                  and the LUs (eve_nulling_positions.m), then Algorithm 1
-%     'APS'      - alternating position selection [HuTVT2025]: Algorithm 2 with the MAs
+%     'MA_null'  - Eve-nulling MA (rev-8e, not in main.tex): positions minimize the LoS
+%                  correlations between Eve and the LUs (eve_nulling_positions.m), then
+%                  Algorithm 1
+%     'APS'      - alternating position selection [HuTVT2025] (rev-8e, not in main.tex,
+%                  nearly identical to MA_full in the 2-D region): Algorithm 2 with the MAs
 %                  restricted to the grid over C with spacing prm.apsStep (lambda/2),
 %                  i.e., Stage 1 only, no MM refinement
 %     'MA_noAN'  - MA positions + {p_m}, no AN (q = 0)
@@ -23,6 +25,9 @@ function out = evaluate_schemes(sc, prm, schemes, seed, scTrue)
 %     'FPA_full' - compact lambda/2 UPA + {p_m}, q optimized (Algorithm 1)
 %     'FPA_eq'   - compact lambda/2 UPA + equal power p_m = q = P_tot/N
 %     'FPA_noAN' - compact lambda/2 UPA + {p_m}, no AN (q = 0)
+%     'FPA_ean'  - compact lambda/2 UPA with Eve-aware AN (AN steered toward the LoS
+%                  component of Eve within the null space; rate_coeffs.m, mc_rates.m),
+%                  {p_m}, q by Algorithm 1 with psi_dir
 %     'SPA_full' - sparse UPA spanning the region C + {p_m}, q optimized
 %     'AS'       - antenna selection: N of the 2N antennas of a lambda/2 UPA are selected
 %                  by exhaustive search based on the statistical CSI (as_select.m),
@@ -49,6 +54,7 @@ end
 for k = 1:numel(schemes)
     name = schemes{k};
     hist = [];
+    scObj = sc;  scEval = scTrue;             % scenario for the objective / the evaluation
     switch name
         case {'MA_full', 'MA_EPA', 'MA_noAN', 'MA_fix', 'MA_eq'}
             mode = lower(name(4:end));          % 'full', 'epa', 'noan', 'fix' or 'eq'
@@ -86,6 +92,13 @@ for k = 1:numel(schemes)
         case 'FPA_noAN'
             T = Tupa;
             [p, q] = power_opt(sc, T, prm, 'noan');
+        case 'FPA_ean'
+            % FPA with Eve-aware AN: AN steered toward the LoS component of Eve (as known
+            % at the BS) within the null space; Algorithm 1 with psi_dir (rate_coeffs.m)
+            T = Tupa;
+            scObj = sc;  scObj.anDir = true;
+            scEval.anDirG = exp(1j*2*pi/sc.lambda*(T*sc.ae));
+            [p, q] = power_opt(scObj, T, prm, 'full');
         case 'AS'
             T = as_select(sc, prm);
             [p, q] = power_opt(sc, T, prm, 'full');
@@ -109,7 +122,7 @@ for k = 1:numel(schemes)
     assert(numel(p) == sc.M && all(isfinite(p(:))) && all(p(:) >= -1e-10));
     assert(isscalar(q) && isfinite(q) && q >= -1e-10);
     assert(sum(p) + (sc.N - sc.M)*q <= sc.P + 1e-8*max(1, sc.P));
-    [Rb, Re, essr, st] = mc_rates(scTrue, T, p, q, prm.S, seed);
+    [Rb, Re, essr, st] = mc_rates(scEval, T, p, q, prm.S, seed);
     assert(all(isfinite([Rb(:); Re(:); essr; st.an])));
     assert(all(Rb >= -1e-10) && all(Re >= -1e-10) && st.an >= -1e-8);
     r = struct();
@@ -118,9 +131,9 @@ for k = 1:numel(schemes)
     r.evaluationSamples = prm.S;
     r.seed = seed;
     r.essr_tin = st.essr_tin;                  % eavesdropper treating interference as noise
-    r.F = objective_F(sc, T, p, q, true);      % approximate ESSR as predicted at the BS
+    [r.F, ~, r.ReApprox] = objective_F(scObj, T, p, q, true);   % approximate ESSR (and Eve rates) at the BS
     r.anfrac = (sc.N - sc.M)*q/sc.P;
-    r.anpred = an_highsnr(sc, T);              % high-SNR prediction of r.anfrac (Section III-D)
+    r.anpred = an_highsnr(scObj, T);           % high-SNR prediction of r.anfrac (Section III-D)
     r.T = T;  r.p = p;  r.q = q;  r.hist = hist;
     out.(name) = r;
 end

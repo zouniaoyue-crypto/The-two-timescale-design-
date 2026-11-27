@@ -1,6 +1,7 @@
 function extra_add_schemes(prm, which, schemes)
-%EXTRA_ADD_SCHEMES  Adds the benchmark schemes (default: the Eve-nulling MA 'MA_null' and
-%   APS, introduced in rev-8e) to the stored sweeps without rerunning the other schemes.
+%EXTRA_ADD_SCHEMES  Adds benchmark schemes (default: the FPA with Eve-aware AN 'FPA_ean',
+%   rev-8g; in rev-8e: 'MA_null' and 'APS') to the stored sweeps without rerunning the
+%   other schemes.
 %   sweep_schemes.m uses the same drops (seeds) for every scheme, so that the added
 %   columns are identical to those of a joint run. which: cell array of
 %     'fig5'  results/fig5_snr.mat        (P_dB = 0:5:30; Figs. 5 and 6)
@@ -13,7 +14,7 @@ function extra_add_schemes(prm, which, schemes)
 
 if nargin < 1 || isempty(prm), prm = default_params(); end
 if nargin < 2 || isempty(which), which = {'fig5', 'fig7a', 'fig7b', 'fig8a', 'fig8b', 'kappa'}; end
-if nargin < 3 || isempty(schemes), schemes = {'MA_null', 'APS'}; end
+if nargin < 3 || isempty(schemes), schemes = {'FPA_ean'}; end
 addpath(fullfile(fileparts(mfilename('fullpath')), 'functions'));
 files = struct('fig5', {{'fig5_snr', 'P_dB'}}, 'fig7a', {{'fig7_region', 'A'}}, ...
                'fig8b', {{'fig8_rician_b', 'kappae_dB'}}, 'kappa', {{'fig8_rician_a', 'kappa_common'}});
