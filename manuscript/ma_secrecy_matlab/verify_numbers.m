@@ -45,6 +45,10 @@ show('V-B1', 'max |Eve MC - closed form| versus the SNR (bps/Hz)', max(abs(a.vsP
 show('V-B1', 'max |Eve MC - closed form| versus the Rician factor (bps/Hz)', max(abs(a.vsK(:, 3) - a.vsK(:, 4))), '0.013');
 show('V-B1', 'approximate ESSR of the proposed design at 20 dB', a.vsP(iP, 6), '18.98');
 show('V-B1', 'actual (Monte Carlo) ESSR of the proposed design at 20 dB', a.vsP(iP, 5), '20.75');
+gLU = a.vsK(:, 1) - a.vsK(:, 2);                     % LU sum rate: Monte Carlo minus (eq:Rm), Fig. 3(b)
+show('V-B1', 'LU sum-rate gap of (eq:Rm) increasing in kappa in Fig. 3(b) (1 = yes)', all(diff(gLU) > 0), 'grows with the Rician factor');
+show('V-B1', sprintf('LU sum-rate gap of (eq:Rm) at kappa = %d dB in Fig. 3(b) (bps/Hz)', a.Kvec(end)), gLU(end), '1.99');
+show('V-B1', 'limit M log2(N/(N-M)) of this gap (LoS-dominant, high SNR; Section III-B)', prm.M*log2(prm.N/(prm.N - prm.M)), '2.03');
 withAN = main_schemes();                            % {proposed, rate-oriented MA, FPA with Eve-aware AN, FPA}
 iso = {'MA_full', 'MA_rate', 'FPA_full'};            % schemes with isotropic AN
 gap = zeros(1, numel(iso));

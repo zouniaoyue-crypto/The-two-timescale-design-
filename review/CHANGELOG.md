@@ -361,3 +361,26 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | ID | File:line | What | Why |
 |---|---|---|---|
 | I182–I198 | review/rev9_modeling_review.md (new) | review along modeling → analysis → algorithm with the IEEE modeling and derivation guidelines; 17 recommendations (R1–R17) with draft text; derivations re-checked; equation numbers checked against main.aux | author's request (report only) |
+
+## Round rev-9b — implementation of R1–R14 of the modeling–derivation review (author's approval; R4 and R5: delete)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I182 (R1) | main.tex:333 | III-B: in the LoS-dominant and high-SNR regime, (20) underestimates the rate by a gap independent of t: (18) becomes tight, the Wishart step overestimates [(HᴴH)⁻¹]_{m,m} by a factor approaching N/(N−M), so R_m − R̂_m → log₂(N/(N−M)) | size of the approximation loss at the step that makes it; verified by fig3_accuracy.mat |
+| I182 (R1) | main.tex:591 | V-B 1): the explanatory sentence (moved to III-B) replaced by the check "toward the limit M log₂(N/(N−M)) = 2.03 bps/Hz …, e.g., to 1.99 bps/Hz for κ = 20 dB in Fig. 3(b)" | verify_numbers (new V-B1 lines) |
+| I183 (R2) | main.tex:411 | III-E: (P3) differs from (P2) only by (20) and (27); t-independent gap of (20) and asymptotic exactness of c_m, d (Proposition 1) make (P3) a suitable surrogate for the position design | exact/approximate bookkeeping; Proposition 1 now used in the main text |
+| I184 (R3) | main.tex:~504 | IV-B: backtracking-bound sentence deleted (finite termination already implied; [Beck2017]); removes the italic L vs bold L(t) clash | defensive derivation |
+| I185 (R4) | main.tex:~545 | IV-C: stationarity caveat deleted ("the objective value is guaranteed to converge" kept) | defensive caveat |
+| I186 (R5) | main.tex:~437 | IV-A: multi-Eve footnote deleted (future work lists multiple eavesdroppers) | over-reaching generalization |
+| I187 (R6) | main.tex:293 | III-A: isotropic-AN rationale trimmed to its two operational reasons | defensive clause |
+| I188 (R7) | main.tex:274–275 | (P1): "where (11b) holds for every realization of H(t)" (final period of (11d) → comma) | two timescales visible in the formulation |
+| I189 (R8) | main.tex:357 | III-C: reason for the calibration of d(t) | why of an approximation step |
+| I190 (R9) | main.tex:381, 388 | ρ_m(t) defined in III-D 1) for every LU; III-D 2) uses it | symbol defined where introduced (also used for M = 3 in V) |
+| I191 (R10) | main.tex:439 | IV-A: grid-search decision stated before the stationarity condition (38) | method first, structure second |
+| I192 (R11) | main.tex:431 | IV-A: concavity shown by the explicit second derivative | readability |
+| I193 (R12) | main.tex:319 | III-B: Jensen step without the dummy variable z | one meaning per symbol |
+| I194 (R13) | main.tex:476–480, 530, 549; 655; notation.tex | Γ_n → Φ_{−n}, r_n → v_{−n} ("the parts of Φ(t) and v(t) contributed by the other MAs"); App. B generic matrix A → X; \br, \bGam kept in notation.tex for the archived main_candidates.tex only | one meaning per symbol |
+| I195 (R14) | main.tex:488; 688 | derivatives (dℓ/du, dv/du, dΩ/du) and Λ_u moved from IV-B to App. C (now (54)–(56)); IV-B keeps one sentence, η̇ and the gradient (44) | routine algebra to an appendix; equations ≥ (44) renumbered automatically |
+| — | ma_secrecy_matlab/readme.tex/.pdf | equation numbers updated ((44)–(48), App. C (54)–(63)) | renumbering by R14 |
+| — | verify_numbers.m, review/verify_numbers_rev8.txt | V-B1: gap increasing in κ, 1.991 at κ = 20 dB, limit 2.034 | rule 3 |
+| I196–I198 | — | R15–R17 not adopted | author |

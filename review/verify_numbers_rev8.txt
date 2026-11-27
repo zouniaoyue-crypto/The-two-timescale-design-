@@ -6,6 +6,9 @@ V-B1  max |Eve MC - closed form| versus the SNR (bps/Hz)                 0.0524 
 V-B1  max |Eve MC - closed form| versus the Rician factor (bps/Hz)       0.0128   text: 0.013
 V-B1  approximate ESSR of the proposed design at 20 dB                  18.9848   text: 18.98
 V-B1  actual (Monte Carlo) ESSR of the proposed design at 20 dB         20.7486   text: 20.75
+V-B1  LU sum-rate gap of (eq:Rm) increasing in kappa in Fig. 3(b) (1 = yes)     1.0000   text: grows with the Rician factor
+V-B1  LU sum-rate gap of (eq:Rm) at kappa = 20 dB in Fig. 3(b) (bps/Hz)     1.9910   text: 1.99
+V-B1  limit M log2(N/(N-M)) of this gap (LoS-dominant, high SNR; Section III-B)     2.0342   text: 2.03
 V-B1  actual minus approximate ESSR at 20 dB, smallest over the schemes with isotropic AN     1.5685   text: 1.57
 V-B1  actual minus approximate ESSR at 20 dB, largest over the schemes with isotropic AN     1.7616   text: 1.76
 V-B1  actual minus approximate ESSR at 20 dB, FPA with Eve-aware AN      1.1062   text: 1.11

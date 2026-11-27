@@ -36,7 +36,7 @@
 本代码包（文件夹 \code{ma\_secrecy\_matlab}）复现稿件第 V 节的全部仿真结果：Fig.~3--Fig.~8 以及第~V 节正文引用的全部数值（原第~V-H 节，以及第七轮修改中删除的原 Fig.~7（AoD 偏移）、原 Fig.~8（衰落差异下的功率分配）与原第~V-F、V-G 节，均保留为补充脚本，见 \code{run\_all.m} 中的 \code{SUPPLEMENTARY}）。代码同时兼容 MATLAB（R2018b 及以上；导出矢量 PDF 推荐 R2020a 及以上）与 GNU Octave（$\ge 7$；本版结果用 Octave 8.4 算出），不需要 CVX；除 \code{extra\_mm\_compare.m} 在 MATLAB 中需要 Optimization Toolbox（\code{fmincon}，Octave 用自带的 \code{sqp}）外，不需要任何工具箱：
 \begin{itemize}
 \item 功率分配（算法~1）：保密注水（式 (37)）+ 二分法 + 一维“粗网格 + 细网格”搜索；
-\item 天线位置（算法~2）：逐天线更新，每根天线先在可移动区域的网格上做网格搜索（Stage~1，式 (43)），再做 MM 精修（Stage~2，式 (44)--(51)）；MM 子问题是二维凸 QP，用“枚举边与顶点”的方法精确求解；
+\item 天线位置（算法~2）：逐天线更新，每根天线先在可移动区域的网格上做网格搜索（Stage~1，式 (43)），再做 MM 精修（Stage~2，式 (44)--(48)，导数见附录 C 式 (54)--(63)）；MM 子问题是二维凸 QP，用“枚举边与顶点”的方法精确求解；
 \item 性能评估：所有方案都只用统计 CSI（闭式近似）做优化，然后在真实信道样本上用\textbf{精确的} ZF 预编码 + 零空间 AN（式 (14)、(15)）做蒙特卡洛评估，因此近似误差不会“美化”结果。
 \end{itemize}
 
@@ -127,7 +127,7 @@ geo\_quantities.m & 三个几何量：$\boldsymbol\Phi,\boldsymbol\Omega$（式 
 rate\_coeffs.m & 有效系数 $\eta_m$（式 (20)）、$\xi_m$、$\psi$（式 (27)）；\code{sc.anDir = true} 时（FPA with Eve-aware AN）$\psi$ 换为 $(N-M)(\kappa_e d+1)$。\\
 objective\_F.m & 目标函数 $F(\bt,\mathbf p,q)$（式 (34a)）；第 5 个参数为 \code{true} 时为 $\sum_m[\cdot]^+$（等功率基准）。同时返回各 LU 的近似速率 $\tilde R_m$、$\tilde R_{e,m}$。\\
 objective\_F\_n.m & \textbf{新增。}只改变第 $n$ 根天线位置时，在 $K$ 个候选位置上\textbf{向量化}计算 $F$：利用秩一结构（式 (40)--(42)），每个候选位置只需 $\mathcal O(M^2)$ 运算。用于 Stage~1 的网格搜索。\\
-grad\_F\_n.m & $F$ 对 $\bt_n$ 的解析梯度（式 (44)--(47)，附录 C 式 (57)--(63)）；可只对部分 LU 求导（等功率基准的 $[\cdot]^+$ 目标）。\\
+grad\_F\_n.m & $F$ 对 $\bt_n$ 的解析梯度（式 (44)，附录 C 式 (54)--(63)；rev-9b 起 (54)--(56) 移入附录 C）；可只对部分 LU 求导（等功率基准的 $[\cdot]^+$ 目标）。\\
 analytic\_rates.m & 闭式近似速率（式 (20)、(27)），用于 Fig.~3。\\
 accuracy\_point.m & \textbf{新增。}Fig.~3 的单个横轴点：对 \code{numDrops} 个场景运行所提设计（\code{evaluate\_schemes} 的 \code{'MA\_full'}），返回 LU 和速率、Eve 窃听和速率与 ESSR 的蒙特卡洛值和闭式近似值（均为场景平均）。\\
 \bottomrule
@@ -140,7 +140,7 @@ secrecy\_wf.m & 保密注水（式 (37)）：对网格上所有 $q$ 同时二分
 power\_opt.m & 算法~1：固定位置下的功率分配。模式 \code{'full'}（所提：注水 + 搜索 $q$）、\code{'noan'}（$q=0$）、\code{'epa'}（等功率 + 搜索 $\alpha$）、\code{'fix'}（等功率 + 固定 $\alpha$）、\code{'eq'}（Fig.~6 的等功率基准：$p_m=q=\Ptot/N$，即 $\alpha=M/N$）。\\
 an\_highsnr.m & \textbf{新增。}AN 功率占比的高 SNR 预测 $1-\alpha^\star$：由设计位置的 $\Xi_m(\mathbf t)$ 用二分法求式 (33) 的唯一根（左右两边之差关于 $\alpha$ 严格递减）；$\Xi_m$ 相等时即 $\alpha^\star=1/(1+\sqrt\Xi)$。\\
 position\_sweep.m & 一轮逐天线位置更新（第 IV-B 节）。对每根天线：\textbf{Stage 1} 在间距 \code{gridStep} 的网格中满足最小间距的点上调用 \code{objective\_F\_n}，取最优（候选集合包含当前位置，因此目标值不下降，式 (43)）；\textbf{Stage 2} 从该点出发做至多 \code{mmMaxIter} 次 MM 迭代（梯度 \code{grad\_F\_n}、二次下界 (48)、线性化约束 (56)、投影 \code{proj\_polygon}、回溯 $\delta_n\leftarrow2\delta_n$），相对增量小于 \code{mmTol} 时停止。\code{gridStep = 0} 时跳过 Stage 1（即纯 MM，Fig.~4 中的 “MM only”）。\\
-lin\_constraints.m & 子问题 (50) 的线性约束：区域盒约束 + 线性化最小间距（式 (49)）。\\
+lin\_constraints.m & 子问题 (47) 的线性约束：区域盒约束 + 线性化最小间距（式 (46)）。\\
 proj\_polygon.m & 二维凸 QP 的精确解（点到凸多边形的投影：枚举各约束线上的投影与两两交点）。若舍入误差使所有候选点都不可行（天线很密、多个相邻 MA 恰好相距 $D_{\min}$ 时多边形退化为线段），返回当前位置（可行，MM 步长为零，目标值不下降）；$N=16$ 时出现过这种情况。\\
 ao\_optimize.m & 算法~2：\code{position\_sweep} 与 \code{power\_opt} 交替迭代；新功率分配只在目标值不下降时接受；相对增量小于 \code{aoTol} 或达到 \code{aoMaxIter} 时停止。返回位置、功率与目标值历史 \code{hist}。\\
 rate\_oriented\_positions.m & 基准“速率导向 MA”：最大化 LU 的近似遍历和速率（等功率、忽略 Eve，即令 $\kappa_e=0$、$q=0$），使用与所提方案\textbf{相同}的位置更新与初始化（公平比较）。\\
@@ -257,7 +257,7 @@ seed & 2026 & -- & 随机种子（第 $i$ 个场景用 \code{seed}$+i$，结果�
 \item \textbf{位置更新}（\code{position\_sweep}），对 $n=1,\dots,N$：
   \begin{enumerate}
   \item \textbf{Stage 1（网格搜索）：}生成间距 \code{gridStep} 的网格，去掉与其他天线距离小于 $D_{\min}$ 的点，再加入当前位置；\code{objective\_F\_n} 一次性计算所有候选点的 $F$，取最大者（式 (49)）。
-  \item \textbf{Stage 2（MM 精修）：}\code{grad\_F\_n} 计算梯度（式 (47)）；\code{lin\_constraints} 生成盒约束与线性化间距约束（式 (49)）；\code{proj\_polygon} 把 $\bt_n+\nabla F/\delta_n$ 投影到凸多边形（式 (50)）；若新点不满足 $F\ge$ 二次下界（式 (48)）则 $\delta_n\leftarrow2\delta_n$ 重新求解。重复至相对增量 $<$ \code{mmTol} 或 \code{mmMaxIter} 次。
+  \item \textbf{Stage 2（MM 精修）：}\code{grad\_F\_n} 计算梯度（式 (44)）；\code{lin\_constraints} 生成盒约束与线性化间距约束（式 (46)）；\code{proj\_polygon} 把 $\bt_n+\nabla F/\delta_n$ 投影到凸多边形（式 (47)）；若新点不满足 $F\ge$ 二次下界（式 (45)）则 $\delta_n\leftarrow2\delta_n$ 重新求解。重复至相对增量 $<$ \code{mmTol} 或 \code{mmMaxIter} 次。
   \end{enumerate}
 \item \textbf{功率更新}（\code{power\_opt}，算法~1）：对 $q$ 做“粗网格 + 细网格”搜索，每个 $q$ 下用保密注水得到 $\mathbf p$；只有目标值不下降时才接受。
 \item 若相对增量 $<$ \code{aoTol}，或达到 \code{aoMaxIter}，停止；否则回到第 2 步。
@@ -298,10 +298,10 @@ Eve 近似速率 $\tilde R_{e,m}$、$\xi_m$、$\psi$ & (27) & \code{rate\_coeffs
 $q$ 的一维搜索、最优 $q$ 的驻点条件 & 算法~1、(38) & \code{power\_opt.m}（\code{'full'}）\\
 秩一结构（Sherman--Morrison）& (40)--(42) & \code{objective\_F\_n.m} \\
 Stage 1 网格搜索 & (43) & \code{position\_sweep.m}, \code{objective\_F\_n.m} \\
-梯度 & (44)--(47)；附录 C & \code{grad\_F\_n.m} \\
-二次下界、回溯 & (48) & \code{position\_sweep.m} \\
-线性化最小间距 & (49) & \code{lin\_constraints.m} \\
-MM 子问题（投影） & (50) & \code{proj\_polygon.m} \\
+梯度 & (44)；附录 C (54)--(63) & \code{grad\_F\_n.m} \\
+二次下界、回溯 & (45) & \code{position\_sweep.m} \\
+线性化最小间距 & (46) & \code{lin\_constraints.m} \\
+MM 子问题（投影） & (47) & \code{proj\_polygon.m} \\
 AO 总算法 & 算法~2 & \code{ao\_optimize.m} \\
 TIN Eve 的 SINR & 补充结果（正文不再引用） & \code{mc\_rates.m}（\code{essr\_tin}）\\
 \bottomrule

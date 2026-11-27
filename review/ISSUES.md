@@ -274,20 +274,20 @@ Evidence: `review/verify_numbers_rev8.txt`, `review/experiments/rev8g_benchmarks
 
 | ID | Rec. | Sev | Location | Finding | Evidence | Proposal | Status |
 |---|---|---|---|---|---|---|---|
-| I182 | R1 | M | III-B l. 332; V-B 1) l. 596 | loss of the LU-rate approximation (20) not quantified where it is derived; the analytical cause sits in V-B 1) | fig3_accuracy.mat: MC − (20) → 1.99 bps/Hz at κ = 20 dB vs limit M log2(N/(N−M)) = 2.03 | add the closed-form, t-independent limit log2(N/(N−M)) per LU to III-B; V-B 1) checks it | needs-decision |
-| I183 | R2 | M | III-E after (P3) | no summary of what the surrogate (P3) costs; Proposition 1 unused in the main text | chain map in the report | two sentences after (P3) using R1 and Proposition 1 | needs-decision |
-| I184 | R3 | L | IV-B l. 503 | backtracking-bound sentence re-proves a standard result (defensive); italic L clashes with bold L(t) | guideline §1 | delete (finite termination already implied; [Beck2017]) | needs-decision |
-| I185 | R4 | L | IV-C l. 544 | stationarity caveat is defensive; the preceding sentence is already precise | guideline §1 | delete, or fold into one clause | needs-decision |
-| I186 | R5 | L | IV-A l. 436 (footnote) | multi-Eve generalization misplaced; 'maximum over the Eves' makes F nonsmooth, which Stage 2 does not handle | guideline §1 | delete (or move a shortened pointer to III-C) | needs-decision |
-| I187 | R6 | L | III-A l. 292 | experimental-attribution clause defends the evaluation, not the model | guideline §1 | keep the two operational reasons only | needs-decision |
-| I188 | R7 | L | II-D (P1) | short-term variables not shown as functions of H(t); (P1) lacks final punctuation | CLAUDE.md punctuation rule | one sentence after (P1) and a final period | needs-decision |
-| I189 | R8 | L | III-C l. 351 | reason for calibrating d(t) only in App. B | guideline §2 (why) | half-sentence in the main text | needs-decision |
-| I190 | R9 | L | III-D 1)–2) l. 382 | ρ₁(t) defined inside the single-LU case but used for M = 3 in V | notation flow | define ρ_m(t) after (29) | needs-decision |
-| I191 | R10 | L | IV-A l. 438–442 | algorithmic decision (grid search) stated after a derivation the algorithm does not use | guideline §2 | reorder: method first, structure (38) second | needs-decision |
-| I192 | R11 | L | IV-A l. 430 | verbal concavity argument hard to read | — | replace by the explicit second derivative | needs-decision |
-| I193 | R12 | L | III-B l. 318 | dummy variable z clashes with the AN vector z | CLAUDE.md one meaning per symbol | reword the Jensen sentence without a dummy variable | needs-decision |
-| I194 | R13 | L | App. B l. 660; IV-B l. 475 | A (matrix) vs side length A; bold r_n vs received signal r_m | CLAUDE.md one meaning per symbol | use X; optionally v_{−n}, Φ_{−n} | needs-decision |
-| I195 | R14 | L | IV-B l. 487–493 | routine derivative displays (44)–(46) in the main text | guideline §2 | optional: move to App. C | needs-decision |
-| I196 | R15 | L | V-B 1) l. 596 | rank-one AN explanation stated qualitatively | App. A moments | optional: relative-variance comparison in one clause | needs-decision |
-| I197 | R16 | L | Intro l. 80 | high-SNR AN-power result (α⋆) not credited among the contributions | — | optional clause | needs-decision |
-| I198 | R17 | L | II–III | (P1) → (P2) restriction step could be avoided by formulating with ZF-AN directly | — | not recommended (keep chain, apply R7) | needs-decision |
+| I182 | R1 | M | III-B l. 332; V-B 1) l. 596 | loss of the LU-rate approximation (20) not quantified where it is derived; the analytical cause sits in V-B 1) | fig3_accuracy.mat: MC − (20) → 1.99 bps/Hz at κ = 20 dB vs limit M log2(N/(N−M)) = 2.03 | add the closed-form, t-independent limit log2(N/(N−M)) per LU to III-B; V-B 1) checks it | fixed (rev-9b) |
+| I183 | R2 | M | III-E after (P3) | no summary of what the surrogate (P3) costs; Proposition 1 unused in the main text | chain map in the report | two sentences after (P3) using R1 and Proposition 1 | fixed (rev-9b) |
+| I184 | R3 | L | IV-B l. 503 | backtracking-bound sentence re-proves a standard result (defensive); italic L clashes with bold L(t) | guideline §1 | delete (finite termination already implied; [Beck2017]) | fixed (rev-9b) |
+| I185 | R4 | L | IV-C l. 544 | stationarity caveat is defensive; the preceding sentence is already precise | guideline §1 | delete, or fold into one clause | fixed (rev-9b) |
+| I186 | R5 | L | IV-A l. 436 (footnote) | multi-Eve generalization misplaced; 'maximum over the Eves' makes F nonsmooth, which Stage 2 does not handle | guideline §1 | delete (or move a shortened pointer to III-C) | fixed (rev-9b) |
+| I187 | R6 | L | III-A l. 292 | experimental-attribution clause defends the evaluation, not the model | guideline §1 | keep the two operational reasons only | fixed (rev-9b) |
+| I188 | R7 | L | II-D (P1) | short-term variables not shown as functions of H(t); (P1) lacks final punctuation | CLAUDE.md punctuation rule | one sentence after (P1) and a final period | fixed (rev-9b) |
+| I189 | R8 | L | III-C l. 351 | reason for calibrating d(t) only in App. B | guideline §2 (why) | half-sentence in the main text | fixed (rev-9b) |
+| I190 | R9 | L | III-D 1)–2) l. 382 | ρ₁(t) defined inside the single-LU case but used for M = 3 in V | notation flow | define ρ_m(t) after (29) | fixed (rev-9b) |
+| I191 | R10 | L | IV-A l. 438–442 | algorithmic decision (grid search) stated after a derivation the algorithm does not use | guideline §2 | reorder: method first, structure (38) second | fixed (rev-9b) |
+| I192 | R11 | L | IV-A l. 430 | verbal concavity argument hard to read | — | replace by the explicit second derivative | fixed (rev-9b) |
+| I193 | R12 | L | III-B l. 318 | dummy variable z clashes with the AN vector z | CLAUDE.md one meaning per symbol | reword the Jensen sentence without a dummy variable | fixed (rev-9b) |
+| I194 | R13 | L | App. B l. 660; IV-B l. 475 | A (matrix) vs side length A; bold r_n vs received signal r_m | CLAUDE.md one meaning per symbol | use X; optionally v_{−n}, Φ_{−n} | fixed (rev-9b) |
+| I195 | R14 | L | IV-B l. 487–493 | routine derivative displays (44)–(46) in the main text | guideline §2 | optional: move to App. C | fixed (rev-9b) |
+| I196 | R15 | L | V-B 1) l. 596 | rank-one AN explanation stated qualitatively | App. A moments | optional: relative-variance comparison in one clause | not adopted (author, rev-9b) |
+| I197 | R16 | L | Intro l. 80 | high-SNR AN-power result (α⋆) not credited among the contributions | — | optional clause | not adopted (author, rev-9b) |
+| I198 | R17 | L | II–III | (P1) → (P2) restriction step could be avoided by formulating with ZF-AN directly | — | not recommended (keep chain, apply R7) | not adopted (author, rev-9b) |
