@@ -291,3 +291,21 @@ Evidence: `review/verify_numbers_rev8.txt`, `review/experiments/rev8g_benchmarks
 | I196 | R15 | L | V-B 1) l. 596 | rank-one AN explanation stated qualitatively | App. A moments | optional: relative-variance comparison in one clause | not adopted (author, rev-9b) |
 | I197 | R16 | L | Intro l. 80 | high-SNR AN-power result (α⋆) not credited among the contributions | — | optional clause | not adopted (author, rev-9b) |
 | I198 | R17 | L | II–III | (P1) → (P2) restriction step could be avoided by formulating with ZF-AN directly | — | not recommended (keep chain, apply R7) | not adopted (author, rev-9b) |
+
+## Round rev-10a — diagnostic review in Review mode (ieee-wireless-writing; see `review/rev10_writing_review.md`)
+
+| ID | Item | Sev | Location | Finding | Basis | Proposal | Status |
+|---|---|---|---|---|---|---|---|
+| I199 | [R1] | L | Abstract l. 62 | role of each algorithmic component implicit | skill §2.1; supervisor rule | state that water-filling gives the power allocation and grid search + MM update each position | needs-decision |
+| I200 | [R2] | L | I ¶2 l. 76 | 'most MA-enabled PLS designs assume …' rests on one reference | skill §2.2 Iron Law | check [YuArxiv2025]; otherwise soften or cite already-referenced designs | needs-decision |
+| I201 | [R3] | L | II-A l. 176; (11c)–(11d) | feasibility of region + minimum-distance constraints not stated (Fig. 7(a) starts at the boundary A = 1.5λ) | skill §2.3 | one clause: feasible if A ≥ (N/2−1)D_min for even N | needs-decision |
+| I202 | [R4] | M | II-B l. 225 | protocol realizes the Section I pain points (one movement per frame, CSI only at current positions) but does not say so | skill §1 | one sentence after the protocol | needs-decision |
+| I203 | [R5] | L | III-B l. 315–319 | decomposition (17) introduced before its motivation | skill §2.4-A | motivation and (18) first, then B, L, (17) at the Wishart step | needs-decision |
+| I204 | [R6] | L | V l. 546–566 | no evaluation-objective sentence at the start of Section V | skill §2.5 | one roadmap sentence | needs-decision |
+| I205 | [R7] | M | V-B 1) l. 591; V-C l. 615; V-D 3) l. 639 | three ~300-word paragraphs with two topics each | skill §2.5 pacing | paragraph breaks; move the 2.8% common-κ clause | needs-decision |
+| I206 | [R8] | L | Fig. 5 caption l. 587 | inset of Fig. 5(a) not mentioned | figure–text | one caption sentence | needs-decision |
+| I207 | [R9] | L | V-C l. 617 | colon-joined 60-word sentence | readability | split at the colon | needs-decision |
+| I208 | [R10] | L | V-D 1) l. 635; Fig. 7(b) | 'for N ≥ 12' vs. crossing between N = 8 and 10 in the figure | figure–text | 'for N ≥ 10' or 'between N = 8 and 10' | needs-decision |
+| I209 | [R11] | L | Conclusion l. 644 | nested qualifications in one list sentence | readability | split into two sentences, same claim | needs-decision |
+| I210 | [R12] | M | Conclusion l. 644; II-B l. 223 | known statistical CSI of Eve not revisited (only open assumption loop) | skill §1 evidence boundary | add to future work (minimal) or one re-verified AoD-error sentence (stronger) | needs-decision |
+| I211 | [R13] | L | App. B l. 669, 675, 681 | 'due to' + mathematical relation (clause) | skill §3.2 hard error | replace by 'since' | needs-decision |

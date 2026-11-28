@@ -384,3 +384,9 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | — | ma_secrecy_matlab/readme.tex/.pdf | equation numbers updated ((44)–(48), App. C (54)–(63)) | renumbering by R14 |
 | — | verify_numbers.m, review/verify_numbers_rev8.txt | V-B1: gap increasing in κ, 1.991 at κ = 20 dB, limit 2.034 | rule 3 |
 | I196–I198 | — | R15–R17 not adopted | author |
+
+## Round rev-10a — diagnostic review in Review mode (no manuscript or code changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I199–I211 | review/rev10_writing_review.md (new) | ieee-wireless-writing Review mode: macro audit of the problem-solving thread, writing quality, figure–text and layout; checklist [R1]–[R13] with excerpts and revision approaches | author's request (review only) |
