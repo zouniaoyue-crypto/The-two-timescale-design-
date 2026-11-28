@@ -427,3 +427,9 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | I211 (R13), I213 | main.tex:674–692 | App. B: three "due to" + relation → "since"; heavy-subject sentences in active voice ("We replace … and use …, which yields"; "we apply … and use N ≥ 1, which bounds"); "this implies" → "(51) implies"; double-counting, uniform-sphere and dominated-convergence sentences split | hard grammar error; readability |
 | — | ma_secrecy_matlab/readme.tex:291 (+ readme.pdf) | L, Φ, Ω: (17) → (18) | renumbering by R5 |
 | — | ma_secrecy_matlab/verify_numbers.m; review/verify_numbers_rev8.txt | R10 text string "> 0 for N >= 10"; four new V-C lines for the AoD-error statements (consistency with Fig. 5, 2.9503%, 11.712%, 4.4269% with paired SE) | CLAUDE.md rule 3 |
+
+## Round rev-11a — independent screening of the GPT review report (no manuscript, code or figure changes)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| I214–I257 | review/rev11_gpt_screening.txt (new) | GPT report (IEEE_TWC_TCOM_Review_ZH.md, written against 3d32e13) screened item by item against rev-10b (f7534ab), the code and the stored results: 10 should-fix, 21 recommended, 6 optional, 4 resolved in rev-10b, 8 rejected; 8 additional issues in the rev-10b text (O1–O8); ICC 2026 FAS paper and published versions of [14], [21], [22] verified via OpenAlex | author's request (screening only; first attachment identical to rev10_writing_review.md) |

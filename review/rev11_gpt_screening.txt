@@ -1,0 +1,528 @@
+REV-11A  INDEPENDENT SCREENING OF THE GPT REVIEW REPORT
+===================================================================================================
+
+Report screened : IEEE_TWC_TCOM_Review_ZH.md (GPT), items [R1]-[R49], written against commit
+                  3d32e13 (rev-9b).
+Checked against : the LATEST manuscript, rev-10b (commit f7534ab). All line numbers "l. xxx" below
+                  refer to manuscript/main.tex at f7534ab. Also checked: the code in
+                  manuscript/ma_secrecy_matlab/, the stored results (results/*.mat, recomputed in
+                  Octave), and the bibliographic records (OpenAlex DOI lookups).
+Round           : review only. No manuscript, code or figure changes.
+Item names      : GPT's items are written G1-G49 below (G1 = GPT [R1], ...), to keep them apart
+                  from our own [R1]-[R13] of rev-10a. O1-O8 are additional issues I found in the
+                  rev-10b text.
+
+Note on the first attachment: "ef11209e-rev10_writing_review.md" is byte-identical to
+review/rev10_writing_review.md (md5 637866974f12259b90c785c2d2cbabe6), i.e., our own rev-10a report,
+all of whose items were implemented in rev-10b. It is not a GPT report and is not screened again.
+
+
+1. SUMMARY
+---------------------------------------------------------------------------------------------------
+
+Verdicts on the 49 GPT items:
+
+  A  Confirmed, should be fixed (wrong or unsupported statement)  10 : G1, G2, G7, G9(ii), G13,
+                                                                       G15, G36, G37, G43, G44
+  B  Confirmed, recommended (precision or rigor, low cost)       21 : G3, G5, G6, G8, G11, G12,
+                                                                       G14, G17, G19, G22, G24,
+                                                                       G26, G28, G30, G39, G40,
+                                                                       G41, G42, G46, G48, G49
+  C  Optional (valid but small benefit; your call)                 6 : G4, G23, G25, G31, G32, G45
+  D  Already resolved by rev-10b                                   4 : G16, G29, G34, G38
+  E  Rejected (unfounded, already accurate, or against the
+     supervisor's style rules)                                     8 : G10, G18, G20, G21, G27,
+                                                                       G33, G35, G47
+
+Overall judgment
+  - GPT recommends a major revision for rev-9b. For rev-10b, the only item with major-revision
+    weight is G2: a 2026 ICC paper already combines a two-timescale design, statistical-CSI port
+    selection of fluid antennas, ZF/RZF precoding and the ESSR. The sentence "the two-timescale MA
+    design for multiuser secure transmission remains unexplored" (l. 78) cannot stay as written.
+  - All other confirmed items are minor or moderate. With G2 handled, I would expect a minor
+    revision.
+  - I disagree with GPT's severity for G6 and G8 (Major -> Moderate): both concern how a
+    justification or a curve is labelled; no result changes.
+  - All numbers quoted by GPT were recomputed and are correct (ESSRs 20.75/18.08/17.42/15.82; AN
+    fractions 0.321/0.278 at N = 16; gain ratio 0.458/0.603; 13.61/13.85; 0.151 (SE 0.095);
+    99% within 10-15 iterations; median curvature ratio 11.87; 17.75 and 20.59 bps/Hz).
+
+Highest-priority actions: G2, G1, G37 (+ the same wording in the contributions), G8 + O4, G43,
+G44, G15, G13, G6, G11.
+
+
+2. EVIDENCE BASE
+---------------------------------------------------------------------------------------------------
+
+- Text: every GPT excerpt was located in f7534ab. Where rev-10b had changed the passage, the new
+  text was judged.
+- Data (Octave, from results/*.mat): fig5_snr, extra_num_antennas, fig7_region, extra_num_users,
+  fig8_rician_b, fig4_convergence, extra_random_eve_M3, extra_no_an, extra_eve_aod_error,
+  and review/verify_numbers_rev8.txt.
+- Code: rate_oriented_positions.m, power_opt.m (search1d), position_sweep.m, grad_F_n.m,
+  mmcmp_hess_sup.m, accuracy_point.m, fig4_convergence.m, evaluate_schemes.m.
+- References (OpenAlex): doi:10.1109/ICC59461.2026.11587658, doi:10.1109/ICASSP49660.2025.10887653,
+  doi:10.1109/TCOMM.2025.3547783, doi:10.1109/TCOMM.2025.3638653. The ICC abstract was
+  reconstructed from OpenAlex. No full text was available, and no arXiv version was found.
+
+
+3. ITEM-BY-ITEM SCREENING (manuscript order)
+---------------------------------------------------------------------------------------------------
+Format:  Gk [GPT severity] location in rev-10b -- VERDICT
+         Check: what I verified.   Fix: my proposed revision (exact text where useful).
+
+--- Abstract and Introduction ---------------------------------------------------------------------
+
+G1 [Moderate] Abstract l. 62 (conclusion l. 653) -- A, SHOULD FIX
+  Check:
+  - The rev-10b abstract ends "...outperforms the benchmark schemes and reduces the AN power and
+    the number of antennas required for secure transmission", with no comparator.
+  - AN power: the proposed design uses less than the rate-oriented MA in every sweep (SNR >= 5 dB,
+    N = 4-16, M = 1-6, A = 1.5-6 lambda, kappa_e = -10...20 dB). But it uses MORE than the FPA
+    with Eve-aware AN for N >= 14 (0.311 vs 0.292 at N = 14; 0.321 vs 0.278 at N = 16) and for
+    A <= 2 lambda (0.426 and 0.393 vs 0.353). At 5 dB it also uses slightly more than the FPA
+    (0.039 vs 0.028).
+  - "Fewer antennas" holds against the FPA (N = 4 vs 12) and the rate-oriented MA (N = 8 vs 16).
+  - The rev-10b conclusion already ties the claim to the rate-oriented MA, which is correct.
+  Fix: name the comparator in the abstract, without a coined label:
+    "Simulation results show that the proposed design outperforms the benchmark schemes and,
+     compared with the MA design that ignores Eve, requires less AN power and fewer antennas."
+  Keep the conclusion as is.
+
+G18 [Minor] Abstract l. 62, first sentence (where ..., whereas ...) -- E, REJECTED
+  The sentence follows the supervisor's abstract template (scope sentence ending in a
+  where-clause) and is grammatical. GPT's two-sentence version abandons that template.
+
+G19 [Moderate] I, l. 74 "degrade the channel of the eavesdropper (Eve)" -- B, RECOMMENDED
+  AN does not change the propagation channel g(t) in (3); it adds interference to Eve's received
+  signal (the denominator of (15)).
+  Fix: "... which steer the confidential signals toward the legitimate users (LUs) and impair the
+        reception of the eavesdropper (Eve), respectively."
+
+G20 [Moderate] I, l. 76 "the antennas have to be repositioned in each ... (CI)" -- E, REJECTED
+  The positions are optimized from instantaneous CSI, and the small-scale fading is i.i.d. across
+  CIs. So the optimized positions change from one CI to the next with probability one, and
+  repositioning in each CI is the actual consequence. [16] states it the same way ("frequent MA
+  position adjustments based on instantaneous CSI incur high operational complexity").
+
+G21 [Minor] I, l. 76 "the CSI has to be acquired over the entire movable region" -- E, REJECTED
+  This is what [17] states ("collect all instantaneous CSI by traversing all possible antenna
+  positions at the BS"). GPT's rewording says the same thing.
+
+G2 [Major] I, l. 78 "... remains unexplored" -- A, MUST FIX (new citation: needs your approval)
+  Check:
+  - The paper exists: X. Zhang, J. Wang, S. Song, and M. Debbah, "Broadcast confidential messages
+    with FASs: Fundamental limits and two-timescale design," in Proc. IEEE ICC, 2026, pp. 1-6,
+    doi:10.1109/ICC59461.2026.11587658.
+  - What its abstract states: fluid antenna systems (FASs); port selection that uses only the
+    statistical CSI (two-timescale design); RZF/ZF precoding; the ESSR derived by random matrix
+    theory; port selection and the RZF regularization factor optimized.
+  - What its abstract does not state: AN, the eavesdropper model, or the numbers of users and
+    eavesdroppers. The title suggests a broadcast channel with confidential messages.
+  - Port selection in an FAS is a discrete counterpart of MA positioning, so a reviewer who knows
+    this paper will contest l. 78 as written.
+  Fix:
+  (1) Obtain the full text (IEEE Xplore; an HKUST repository record exists). Confirm (a) whether
+      AN is used, (b) whether Eve is an external node or the other users, (c) the fading model,
+      and (d) whether the ESSR depends on Eve's LoS correlations.
+  (2) Cite it in I, para. 3, and narrow the novelty statement to what is verifiably new. Draft,
+      to be checked against the full text first:
+        "Recently, a two-timescale design has been developed for confidential broadcasting with
+         fluid antenna systems [new], where the ports are selected based on the statistical CSI
+         and ZF or regularized ZF precoding is adopted. However, the ports are selected from a
+         discrete set, and AN is not considered. To the best of our knowledge, the joint design
+         of continuous antenna positions and AN-aided ZF transmission based on the statistical
+         CSI of the LUs and Eve remains unexplored."
+  (3) Add [new] to "Unlike the approximations in [16], [17], ..." (l. 80) only if its ESSR
+      analysis does not capture the Eve-LU correlations. Check this first.
+  CLAUDE.md rule 4: the citation enters only after your approval.
+
+G22 [Moderate] Abstract l. 62 and contributions l. 80 "decomposing ... along ... each ZF direction
+    and within the AN subspace" -- B, RECOMMENDED
+  For each m, [w_m, U] is orthonormal, but the ZF directions of different LUs are not mutually
+  orthogonal. "Decomposing" therefore suggests a single orthogonal decomposition that does not
+  exist. "Projecting" is exact.
+  Fix (abstract): "..., where the information leakage and the AN power received by Eve are
+                   characterized by projecting its channel onto each ZF direction and onto the
+                   AN subspace."
+  Fix (contributions): "First, by projecting the channel of Eve onto each ZF direction and onto
+                        the AN subspace, we derive closed-form approximations of ..."
+
+G23 [Minor] Notations l. 84 "diag(.) ... a diagonal matrix" -- C, OPTIONAL
+  Harmless. If changed: "diag(.) denotes the diagonal matrix with the arguments on its main
+  diagonal".
+
+--- Section II: system model and protocol ----------------------------------------------------------
+
+G24 [Minor] II-A l. 176 "separated by at least a minimum distance D_min" -- B, RECOMMENDED
+  "At least" and "minimum" repeat the same bound.
+  Fix: "any two MAs must be separated by at least D_min".
+
+G25 [Minor] II-A l. 178 "differs from that from the origin" -- C, OPTIONAL
+  Readable as is. If changed: "Relative to the origin of C, the propagation distance of the LoS
+  path from the n-th MA differs by t_n^T a_m [8], which ...". Keep "differs" rather than "is
+  shorter", to avoid fixing a sign convention.
+
+G3 [Minor] Fig. 2, l. 207-208 brace "One frame (large timescale): t and powers fixed" -- B
+  The brace also spans the "Optimize" and "Move MAs" blocks, during which t is not yet fixed.
+  Fix (TikZ only): brace label "One frame (large timescale)", plus a short label over
+  CI 1 ... CI N_CI: "t and powers fixed".
+
+G4 [Moderate] II-B footnote l. 223 -- partly resolved by rev-10b; residual C, OPTIONAL
+  rev-10b added the AoD-error result in V-C (l. 622), which answers the main concern (sensitivity
+  to Eve's statistical CSI). The residual point is valid: sensing yields the AoDs, but not
+  beta_e and kappa_e.
+  Optional footnote (no new citation): "The AoDs of Eve can be obtained, e.g., by sensing [20],
+  whereas its large-scale fading coefficient and Rician factor can be estimated from its location
+  or, if Eve is an untrusted node, from its historical signals."
+
+G26 [Moderate] II-B l. 225 "For ease of exposition, the channels of the LUs are assumed to be
+    perfectly estimated" -- B, RECOMMENDED
+  Perfect LU CSI is what makes the ZF interference-free and the null-space AN harmless to the
+  LUs; "for ease of exposition" undersells its role.
+  Fix: "The channels of the LUs are assumed to be perfectly estimated, so that the ZF precoding
+        and the null-space AN in Section III-A cause no interference to the LUs, whereas the NLoS
+        component g~ of Eve is unknown to the BS."  (Imperfect CSI stays in future work.)
+
+G27 [Minor] II-C l. 247 Eve receiver model -- E, REJECTED
+  The current sentence already gives the worst-case rationale and its source.
+
+G28 [Moderate] II-C l. 253 "For N_CI >> 1, this coding scheme achieves ..." -- B, RECOMMENDED
+  (9) is achievable as the number of CIs per codeword grows. "For N_CI >> 1 ... achieves" reads
+  like an exact statement for a finite frame.
+  Fix: "As N_CI -> infinity, this coding scheme achieves the following ergodic secrecy rate for
+        the m-th LU [24], [26]:"
+
+G29 [Minor] (P1), l. 265 and 275 -- D, RESOLVED (GPT agrees). No action.
+
+--- Section III -------------------------------------------------------------------------------------
+
+G5 [Moderate] III-A l. 293 "the isotropic AN does not depend on the CSI of Eve" -- B, RECOMMENDED
+  In Sigma = q P_perp, the subspace and the isotropy do not use Eve's CSI, but q is optimized with
+  Eve's statistical CSI.
+  Fix: "... the spatial distribution of the isotropic AN does not depend on the CSI of Eve, so
+        that the AN also impairs eavesdroppers unknown to the BS."
+  GPT's second remark (decomposing the gain over the FPA) is not needed.
+
+G30 [Minor] III-B l. 319 "the expectation in (17) has no closed-form expression" (also l. 352) --
+    B, RECOMMENDED (one word each)
+  For a noncentral Wishart matrix with a mean of arbitrary rank, exact expressions exist only in
+  special cases or through hypergeometric functions of matrix argument. Neither is usable for
+  position optimization.
+  Fix: "has no tractable closed-form expression" (l. 319); likewise l. 352.
+
+G31 [Moderate] III-C l. 341 "the information leakage X_m ... and the AN power Y ... received by
+    Eve" -- C, OPTIONAL
+  Strictly, X_m and Y are gains; the received powers are p_m X_m and q Y. The definitions are
+  explicit and xi_m, psi are named consistently, so the risk of confusion is low.
+  If changed: "we first characterize the gains X_m := ... and Y := ... of the information leakage
+  and the AN received by Eve, i.e., the received powers per unit of p_m and q, for a given H(t)."
+
+G6 [Major] III-C l. 346 with App. A (conditional moments vs. unconditional means) --
+    B, RECOMMENDED; severity Moderate, not Major
+  Check:
+  - l. 346 justifies the moment replacement by concentration, "e.g., for weak NLoS components
+    (see Appendix A)". App. A bounds only the variance conditioned on H(t), i.e., the part due to
+    Eve's NLoS component.
+  - By the law of total variance,
+      Var{X_m} = E{Var{X_m|H}} + Var{E{X_m|H}}
+               = beta~_e^2 (2 kappa_e E{Xbar_m} + 1) + beta~_e^2 kappa_e^2 Var{Xbar_m}.
+    The second term comes from the random rotation of w_m by the LUs' NLoS components; Y has the
+    same structure.
+  - The accuracy itself is validated numerically (Fig. 3: at most 0.052 and 0.013 bps/Hz for
+    Eve's sum rate). The proof of Proposition 1 shows that Xbar_m and Ybar converge to constants
+    as the LoS components of the LUs dominate. So the gap is in the justification, not the result.
+  Fix:
+  - Append after "(see Appendix A).": "By the law of total variance, the variance of X_m also
+    contains the variance of E{X_m|H(t)} = beta~_e(kappa_e Xbar_m + 1) over H~, which vanishes as
+    the LoS components of the LUs dominate, since Xbar_m then converges to a constant (see the
+    proof of Proposition 1); the same holds for Y."
+  - Change "e.g., for weak NLoS components" to "e.g., if the LoS components of the LUs and Eve are
+    strong".
+  - l. 411 needs no change; it already says "as confirmed in Section V-B".
+
+G7 [Moderate] III-D 2) l. 388 and V-D 2) l. 644 -- A, SHOULD FIX (two qualifiers)
+  (a) By (30)-(31), c_1 and d vary with rho_1 only if kappa_1 > 0, and xi_1, psi depend on them
+      only if kappa_e > 0. So the sentence "c_1(t) increases and d(t) decreases with rho_1(t), so
+      that the approximate wiretap rate ... increases with rho_1(t) for any p_1 > 0 and q >= 0"
+      needs "if kappa_1 > 0 and kappa_e > 0". The next sentence (any t with rho_1 = 0 is optimal)
+      stays true in all cases.
+  (b) l. 644: for M = 1 the rate-oriented objective is constant in t, and
+      rate_oriented_positions.m then returns its first initialization, the UPA (= the FPA).
+      "because the approximate rate of a single LU does not depend on t" explains the tie but not
+      why the result equals the FPA.
+      Fix: "..., because the approximate rate of a single LU does not depend on t (see Section
+            III-D), so that its position update retains the initial UPA."
+
+G32 [Minor] III-D 2) footnote l. 383 (exact single-LU rate independent of t) -- C, OPTIONAL
+  The footnote is the evidence that the single-LU insensitivity is physical rather than an
+  artifact of (20). Moving its first sentence into the text gives it more weight; keep the
+  reason in the footnote.
+
+G8 [Major] Fig. 5(b) legend and caption l. 588, text l. 624 -- B, RECOMMENDED; severity Moderate
+  (33) gives 1 - alpha* for equal power among the LUs and fixed positions. It is therefore a
+  high-SNR prediction, not a limit of the designed (water-filled) schemes.
+  - IV-A (l. 443) already says "predicted by".
+  - l. 588 and l. 624 say "high-SNR limits", and the legend reads "High-SNR limit, (33)".
+  - rev-10b already states the caveat ("Although (33) assumes equal power among the LUs, ...").
+  Fix: use "high-SNR prediction" throughout:
+  - caption: "The high-SNR predictions 1 - alpha* in (b) are evaluated by (33) ...";
+  - l. 624: "The saturation levels agree with the high-SNR predictions 1 - alpha* by (33), ...";
+  - legend: "High-SNR prediction, (33)" (plot_fig5.m l. 36; replot from the stored results, no
+    new simulation).
+  See also O4 (the same qualifier is missing in the contributions).
+
+G33 [Minor] III-D 3) l. 395 "constant terms" -- E, REJECTED
+  The constant term (offset) of a high-SNR expansion is standard, and (32) defines it.
+
+--- Section IV --------------------------------------------------------------------------------------
+
+G9 [Moderate] IV-A, Algorithm 1, V-B 1) -- part (ii) A, SHOULD FIX; (i) C, OPTIONAL; (iii) E
+  (ii) Algorithm 1 l. 454 refines "between the two neighbors of the best grid point". At an
+       endpoint (q = 0 or q_max) there is only one neighbor, and power_opt.m/search1d uses
+       [endpoint, neighbor].
+       Fix: "Repeat Lines 1-4 over a uniform grid of Q points between the neighbors of the best
+             grid point (or between this point and its neighbor if it is an endpoint)."
+  (i)  q* denotes both the maximizer in (38) and the grid output of Algorithm 1. Optional: in
+       IV-A add "where q* denotes a maximizer of F*(q)", and in Algorithm 1 "Return the best q as
+       q* (approximately)". Otherwise leave it.
+  (iii) The 0.09% check (l. 594) already names its grid (step 0.05). No change.
+
+G34 [Minor] IV-A l. 431 -- D, RESOLVED (restructured in rev-10b). No action.
+
+G35 [Minor] IV-A l. 433 "the set of LUs that can achieve positive secrecy rates" -- E, REJECTED
+  This is accurate: eta_m > eta_e,m is exactly the condition for a positive secrecy rate.
+  l. 439 already distinguishes the LUs with positive power.
+
+G36 [Moderate] IV-A l. 437 "(37) is the positive root of the KKT stationarity condition" -- A
+  (1 + eta_m p)(1 + eta_e,m p) = mu_m has a positive root only if mu_m(nu) > 1. Otherwise (37)
+  gives 0 through [.]^+.
+  Fix: "Specifically, for mu_m(nu) > 1, (37) is the positive root of the KKT stationarity
+        condition [29] (1+eta_m p)(1+eta_e,m p) = mu_m(nu) obtained from (36), whereas
+        p_m*(nu) = 0 otherwise."
+
+G37 [Moderate] IV-B l. 461 "oscillates over distances on the order of a wavelength and has many
+    local maxima"; the same idea in the rev-10b contributions (l. 80: "oscillates ... on the scale
+    of a wavelength") -- A, SHOULD FIX
+  The periods lambda/||a_m - a_i|| range from lambda/2 to many wavelengths. For the default Eve
+  offset (0.1 rad), ||a_e - a_1|| is at most about 0.1, i.e., a period of at least about
+  10 lambda, larger than the side length A = 4 lambda of C.
+  Fix (l. 461): "Since each phase varies with the period lambda/||a_m - a_i|| >= lambda/2 along
+                 a_m - a_i, F(t) oscillates with periods ranging from half a wavelength to
+                 several wavelengths and generally has many local maxima within C."
+  Fix (l. 80):  "Since the objective function oscillates with the antenna positions and has
+                 many local maxima, each antenna position is selected by a grid search ..."
+
+G38 [Minor] IV-B l. 498 backtracking -- D, RESOLVED (split into three sentences in rev-10b).
+
+G39 [Minor] IV-B l. 508 enumeration of the projection -- B, RECOMMENDED (one clause)
+  Fix: "Hence, the exact solution is the feasible point closest to t_n^(k) + grad F/delta_n among
+        its projections onto the N+3 constraint lines and the pairwise intersections of these
+        lines."
+
+G40 [Minor] IV-C l. 537 "... for (P3), which terminates ..." -- B, RECOMMENDED (trivial)
+  Here "which" attaches to (P3).
+  Fix: "Algorithm 2 summarizes the overall AO algorithm for (P3). It terminates when ..."
+
+G10 [Moderate] IV-C complexity l. 543 vs. the code -- E, REJECTED for the paper (code note only)
+  The paper analyzes the algorithm as described, with the rank-one evaluation (42). In the code,
+  Stage 2 recomputes Phi and Omega from scratch (grad_F_n.m via geo_quantities.m; objective_F in
+  the backtracking), which costs O(NM^2 + M^3) instead of O(M^2) per evaluation. The O(N^3)
+  enumeration of (47) dominates both, so the overall order in l. 543 is unchanged.
+  Optional: one line in readme.tex stating this.
+
+--- Section V ---------------------------------------------------------------------------------------
+
+G41 [Moderate] V-A l. 571 "All the results are averaged over 100 ..." -- B, RECOMMENDED (trivial)
+  The preceding sentence uses 20 realizations (the grid check).
+  Fix: "Unless otherwise specified, the results are averaged over 100 random AoD realizations, ..."
+
+G11 [Moderate] V-A benchmarks (l. 573-575) and V-C -- B, RECOMMENDED (needs your decision)
+  A reviewer may ask whether the gain over the compact FPA simply comes from the larger aperture.
+  - fig5_snr.mat (20 dB) still contains a sparse 2x4 UPA spanning C, removed from the plotted
+    suite in rev-8e. ESSRs: sparse UPA 17.75, compact FPA 15.82, rate-oriented MA 18.08, proposed
+    20.75 bps/Hz.
+  - Paired differences: proposed - sparse UPA = 3.00 bps/Hz (SE 0.20); rate-oriented MA - sparse
+    UPA = 0.33 (SE 0.22, not significant).
+  - So the enlarged aperture alone gives 39% of the proposed design's gain over the compact FPA,
+    and the rate-oriented MA is no better than a fixed array of the same aperture. This is strong
+    evidence for the paper, for two sentences and no new curve.
+  Fix (V-C, end of the first paragraph):
+    "The enlarged aperture alone does not explain these gains: a sparse 2x4 UPA spanning C
+     achieves 17.75 bps/Hz at 20 dB, which is 3.00 bps/Hz below the proposed design but
+     statistically indistinguishable from the rate-oriented MA."
+  (+ verify_numbers lines.) GPT's APS remark (grid-only 20.59 vs 20.75 bps/Hz) concerns no claim
+  in the paper and is not needed.
+
+G42 [Minor] V-A l. 575 "The antenna positions maximize ... and ignore Eve" -- B, RECOMMENDED
+  Fix: "The antenna positions are optimized to maximize the approximate ergodic sum rate ... of
+        the LUs with equal power, without considering Eve [16]."
+
+G12 [Moderate] V-B 1) l. 592 error statement; Fig. 3 legend -- B, RECOMMENDED (low cost)
+  accuracy_point.m sums over the LUs in each drop and averages over the 100 drops. The quoted
+  errors are the largest differences between the plotted curves. The sentence is correct for the
+  curves, but it can be read as per-realization accuracy.
+  Fix: "... within maximum absolute errors of 0.052 and 0.013 bps/Hz between the average sum rates
+        in Fig. 3(a) and Fig. 3(b), respectively, ..."
+  Optional: legend "LUs/Eve, closed form" -> "LUs/Eve, approx. (20)/(27)" (replot only).
+
+G13 [Moderate] Fig. 4 caption l. 559; V-B 2) l. 596 -- A, SHOULD FIX
+  (a) fig4_convergence.m initializes N = 12 with a 3x4 UPA (ceil(N/4) x 4), whereas V-A states a
+      2x(N/2) UPA. The caption says only "UPA initialization".
+      Fix (caption): "(2x4 and 3x4 UPA initializations for N = 8 and 12)".
+  (b) The average curves reach 99% of their total increase after 10-15 iterations. Individual
+      runs meet the stopping rule epsilon = 1e-4 after a median of 10-14 iterations, and after at
+      most 40-50. "converges within about 15 iterations" therefore holds for the averages only.
+      Fix: "... the average objective value increases monotonically, attains more than 95% of its
+            total increase within three iterations, and 99% within 15 iterations."
+
+G14 [Moderate] V-B 2) l. 598 surrogate comparison -- B, RECOMMENDED
+  mmcmp_hess_sup.m takes the largest finite-difference Hessian norm over sample points of C. This
+  underestimates the true supremum and thus favors the competing surrogate (larger steps), so the
+  comparison is conservative. "About 12 times" is a ratio of medians (verify_numbers: 11.87).
+  Fix: "... bound the Eve terms by a quadratic with their largest curvature over a fine grid of C,
+        estimated by finite differences, which favors this surrogate. ... However, the median of
+        its curvature is about 12 times that of the delta_n accepted by the backtracking, ..."
+
+G43 [Moderate] V-C l. 618 "its gain over the FPA is less than half of that of the proposed
+    design" -- A, SHOULD FIX
+  The ratio (rate-oriented MA - FPA)/(proposed - FPA) from fig5_snr.mat is 0.60 at 0 dB and
+  0.42-0.47 for 5-30 dB. The sentence follows "over the entire SNR range", so it reads as
+  applying to all SNRs.
+  Fix: "Although the rate-oriented MA exploits the same movable region, its gain over the FPA is
+        less than half of that of the proposed design for P/sigma^2 >= 5 dB."  (+ verify line)
+
+G44 [Minor] V-C l. 622 "The gains of the proposed design do not rely on the proximity of Eve to
+    LU 1" -- A, SHOULD FIX
+  The evidence covers 20 dB only. It quotes the rate-oriented MA (10.3%); the same file also gives
+  the FPA (21.8%, not quoted). The FPA with Eve-aware AN is not in that run.
+  Fix: "The gains of the proposed design are not limited to an Eve close to LU 1. If the AoDs of
+        Eve are drawn independently of those of the LUs, the proposed design still outperforms the
+        rate-oriented MA and the FPA by 10.3% and 21.8% at 20 dB, respectively."  (+ verify line)
+
+G45 [Minor] V-C l. 628 saturation without AN -- C, OPTIONAL
+  Confirmed: 13.61 -> 13.85 bps/Hz from 25 to 30 dB (extra_no_an.mat). The quoted AN gains
+  (58.9%, 121.1%) already quantify the saturation, so the added value is small.
+
+G15 [Moderate] V-D 1) l. 640 "achieves a 0.9% higher ESSR than the proposed design" (A = 1.5
+    lambda) -- A, SHOULD FIX
+  FPA with Eve-aware AN - proposed = 0.151 bps/Hz with a paired SE of 0.095 (95% CI about
+  [-0.04, 0.34]), which is not significant. The comparison with the rate-oriented MA is
+  significant (0.599, SE 0.109).
+  Fix: "For A = 1.5 lambda, the FPA with Eve-aware AN outperforms the rate-oriented MA and performs
+        comparably to the proposed design (0.9% higher on average, within two standard errors),
+        because ..."
+  The conclusion's "unless the movable region is very small" remains correct.
+
+G46 [Moderate] V-D 1) l. 642 "scales with the dimension N - M of the null space" -- B, RECOMMENDED
+  psi_dir = (N - M)(kappa_e d(t) + 1) contains N - M explicitly, but d(t) also changes with N, and
+  the received AN power also depends on q.
+  Fix: "... because its normalized AN power received by Eve, (N - M)(kappa_e d(t) + 1), grows with
+        the dimension N - M of the null space."
+
+G16 [Minor] V-D 3) 2.8% and 5.2% -- D, RESOLVED by rev-10b (2.8% moved to the common-kappa
+    paragraph). The residual wording is covered by O3.
+
+G47 [Minor] conclusion opening -- E, REJECTED
+  The opening is conventional, and the single-LU insight is already in the second sentence.
+
+--- Appendices and references ------------------------------------------------------------------------
+
+G48 [Minor] l. 352 and App. B l. 664 "invariant to the scaling of the columns" -- B, RECOMMENDED
+  A complex column scaling multiplies w_m by a phase (|g^H w_m|^2 is unchanged). The derivations
+  use B^(1/2), which is positive.
+  Fix: "invariant to positive scaling of the columns of H(t)" at l. 352 and l. 664.
+  l. 692 concerns positive scalar scaling by sqrt(kappa_1) and is unchanged.
+
+G49 [Moderate] App. B l. 674 "the complement of Pi" -- B, RECOMMENDED
+  Pi = L Omega L^H is not a projector (0 <= Pi < I by (52)), so "complement" is imprecise.
+  Fix: "we let the NLoS component capture a fraction chi in [0,1] of the residual matrix
+        I_N - Pi only, i.e., ..."  The double-counting motivation stays.
+
+G17 [Minor] references [14], [21], [22] -- B, RECOMMENDED (update of existing entries; your OK)
+  Verified with OpenAlex:
+  [14] Z. Cheng, C. Ouyang, and X. Zhang, "Movable antenna aided physical layer security with no
+       eavesdropper CSI," in Proc. IEEE ICASSP, 2025, pp. 1-5,
+       doi: 10.1109/ICASSP49660.2025.10887653.
+  [21] L. Zhu, W. Ma, Z. Xiao, and R. Zhang, "Movable antenna enabled near-field communications:
+       Channel modeling and performance optimization," IEEE Trans. Commun., vol. 73, no. 9,
+       pp. 7240-7256, Sep. 2025.
+  [22] G. Yan, L. Zhu, and R. Zhang, "Movable antenna aided multiuser communications: Antenna
+       position optimization based on statistical channel information," IEEE Trans. Commun.,
+       vol. 74, pp. 1793-1810, 2026. (The record has no issue or month; confirm on IEEE Xplore.)
+  Not checked here: the remaining arXiv entries [15], [18], [19]. Check them before submission.
+
+
+4. ADDITIONAL ISSUES IN THE REV-10B TEXT (not in GPT's report)
+---------------------------------------------------------------------------------------------------
+
+O1 [Minor] V-D 1) l. 640 "... of the movable region, which starts from A = (N/2-1)D_min = 1.5
+   lambda, ..." -- "which" can attach to "the movable region".
+   Fix: "Fig. 7(a) shows the ESSR versus the side length A of the movable region for
+         A >= (N/2-1)D_min = 1.5 lambda, the smallest side length for which the FPA fits in C."
+
+O2 [Minor] V-D 1) l. 642 "Meanwhile, the gain of the proposed design over this benchmark ..." --
+   "this benchmark" follows "the rate-oriented MA" but means the FPA with Eve-aware AN.
+   Fix: "... over the FPA with Eve-aware AN decreases from 70.9% for N = 4 to 1.5% for N = 16."
+
+O3 [Minor] V-D 3) l. 646 "In this case, the FPA with Eve-aware AN falls 2.8% below the FPA, as
+   discussed for a weak LoS component of Eve in Fig. 8(b)." -- "In this case" is two sentences
+   away from kappa = -10 dB, and the reason is given in the text, not in the figure.
+   Fix: "For kappa = -10 dB, the FPA with Eve-aware AN also falls 2.8% below the FPA, for the
+         reason given below for Fig. 8(b)."
+
+O4 [Moderate] contributions l. 80 "We further show that, in the high SNR regime, the MAs reduce the
+   optimal fraction of the transmit power allocated to the AN ..." -- the analysis in III-D 3)
+   assumes equal power among the LUs (same issue as G8).
+   Fix: "We further show that, for equal power among the LUs in the high-SNR regime, the MAs reduce
+         the optimal fraction of the transmit power allocated to the AN ..."
+
+O5 [Minor] Terminology:
+   - "the AN received by Eve" (l. 381, l. 653) vs. "the AN power received by Eve" elsewhere;
+   - "secrecy-aware positioning" (l. 642) vs. "Eve-aware positioning" (l. 648) for the same design.
+   Fix: "AN power received by Eve" throughout, and one term for the positioning, e.g., "the
+   proposed positioning" (no new coined label).
+
+O6 [Moderate] V-C l. 622 robustness paragraph
+   - The loss of the proposed design at 0.1 rad (9.73%, extra_eve_aod_error.mat) is not reported.
+   - The FPA with Eve-aware AN, which also relies on Eve's AoD (the AN is steered toward it), was
+     not run with AoD errors (extra_eve_aod_error.mat predates this benchmark). A reviewer will
+     ask.
+   Fix: add "(its ESSR then decreases by 9.7%)" to the 0.1 rad sentence (+ verify line).
+   Optional new run: add FPA_ean to extra_eve_aod_error with extra_add_schemes.m (Algorithm 1
+   only, roughly 10 min in Octave) and report its loss. Needs your OK (approved experiments only).
+
+O7 [Minor] IV opening l. 416 -- (P3) is also not jointly concave in (p, q); IV-A states this for
+   (P3.1).
+   Optional: "... because F is nonconcave with respect to t and not jointly concave in p and q,
+              and the minimum-distance constraints in (11d) are nonconvex."
+
+O8 [Info] The abstract has 218 words, within IEEE's 250-word limit. The G1 and G22 changes keep
+   it about the same length.
+
+
+5. PROPOSED IMPLEMENTATION (rev-11b, after your decisions)
+---------------------------------------------------------------------------------------------------
+
+Batch A (text only, no decision needed):
+  G1, G5, G6, G7, G9(ii), G13, G14, G15, G19, G22, G24, G26, G28, G30, G36, G37, G39, G40, G41,
+  G42, G43, G44, G46, G48, G49; O1-O5.
+Batch B (figures, replotted from the stored results; no new simulation):
+  G3 (Fig. 2 TikZ); G8 (Fig. 5 legend, caption and text); optionally the G12 legend of Fig. 3.
+Batch C (your decision): G2, G17, G11, O6, and the optional items.
+verify_numbers.m: new lines for G11, G15 (confidence interval), G43, G44 (21.8%), G13 (99% within
+  15 iterations; stopping-iteration statistics) and O6 (9.7%).
+All changes in red (\rev{}), with records in ISSUES/CHANGELOG, as in rev-10b.
+
+
+6. DECISIONS NEEDED FROM YOU
+---------------------------------------------------------------------------------------------------
+
+1) G2:  approve citing Zhang et al. (ICC 2026). Please provide the full text, or let me look for
+        an open copy, so that the comparison sentence states only verified differences.
+2) G17: approve updating [14], [21], [22] to the published versions in Section 3.
+3) G11: approve the two-sentence same-aperture comparison with the sparse UPA (text only; the
+        sparse FPA was removed from the plotted suite in rev-8e).
+4) O6:  report the 9.7% loss at 0.1 rad (recommended); run the FPA with Eve-aware AN under AoD
+        errors (yes/no).
+5) Optional items: which of G4, G9(i), G23, G25, G31, G32, G45 and O7 to adopt.

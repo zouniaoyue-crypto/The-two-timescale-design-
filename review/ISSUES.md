@@ -311,3 +311,48 @@ Evidence: `review/verify_numbers_rev8.txt`, `review/experiments/rev8g_benchmarks
 | I211 | [R13] | L | App. B l. 669, 675, 681 | 'due to' + mathematical relation (clause) | skill §3.2 hard error | replace by 'since' | fixed (rev-10b) |
 | I212 | rev-10b item 2 | M | Abstract l. 61–63; I l. 74–82 | abstract and introduction too compressed after earlier length cuts; contributions packed model and problem into one sentence and omitted the high-SNR AN insight | author's request (rev-10b) | abstract in the supervisor template (constraints named generically, algorithm purpose stated); intro: verified descriptions of [ChenArxiv2026], [ZhengTCOM2025], [HuTVT2025]; contributions split, AN insight added, AO purpose, guarantee and rationale of the grid search | fixed (rev-10b) |
 | I213 | rev-10b item 3 | M | whole manuscript | long sentences, nested clauses, sentences with several ideas | author's request (rev-10b) | about 45 sentence splits or restructurings without change of claims (see CHANGELOG rev-10b) | fixed (rev-10b) |
+| I214 | G2 (rev-11a) | H | I l. 78 | novelty: ICC 2026 FAS two-timescale ESSR paper (Zhang et al., doi 10.1109/ICC59461.2026.11587658) | review/rev11_gpt_screening.txt | cite (after approval + full text) and narrow 'remains unexplored' | needs-decision |
+| I215 | G1 (rev-11a) | M | Abstract l. 62 | 'reduces the AN power' false vs. FPA with Eve-aware AN for N>=14, A<=2 lambda | review/rev11_gpt_screening.txt | name the comparator (MA design that ignores Eve) | open |
+| I216 | G7 (rev-11a) | M | III-D l. 388; V-D l. 644 | monotonicity in rho_1 needs kappa_1, kappa_e > 0; rate-oriented MA keeps the initial UPA for M = 1 | review/rev11_gpt_screening.txt | two qualifiers | open |
+| I217 | G9 (rev-11a) | L | Alg. 1 l. 454 | endpoint refinement rule differs from code (search1d) | review/rev11_gpt_screening.txt | state the endpoint case; q* notation optional | open |
+| I218 | G13 (rev-11a) | M | Fig. 4 caption l. 559; l. 596 | N = 12 uses a 3x4 UPA; 'converges within 15' holds for averages | review/rev11_gpt_screening.txt | caption + '99% within 15 iterations' | open |
+| I219 | G15 (rev-11a) | M | V-D l. 640 | A = 1.5 lambda: +0.151 (SE 0.095) not significant | review/rev11_gpt_screening.txt | 'performs comparably (0.9% higher on average, within two SE)' | open |
+| I220 | G36 (rev-11a) | L | IV-A l. 437 | positive root only for mu_m > 1 | review/rev11_gpt_screening.txt | add condition | open |
+| I221 | G37 (rev-11a) | M | IV-B l. 461; contributions l. 80 | 'on the order/scale of a wavelength' too strong (Eve-LU1 period ~10 lambda) | review/rev11_gpt_screening.txt | periods from lambda/2 to several wavelengths | open |
+| I222 | G43 (rev-11a) | M | V-C l. 618 | 'less than half' false at 0 dB (ratio 0.60) | review/rev11_gpt_screening.txt | restrict to SNR >= 5 dB | open |
+| I223 | G44 (rev-11a) | L | V-C l. 622 | 'gains do not rely' broader than evidence | review/rev11_gpt_screening.txt | state both gains (10.3%, 21.8%) at 20 dB | open |
+| I224 | G3 (rev-11a) | L | Fig. 2 l. 208 | brace 't and powers fixed' spans optimization and movement | review/rev11_gpt_screening.txt | relabel (TikZ) | open |
+| I225 | G5 (rev-11a) | L | III-A l. 293 | q depends on Eve's statistical CSI | review/rev11_gpt_screening.txt | 'spatial distribution of the isotropic AN' | open |
+| I226 | G6 (rev-11a) | M | III-C l. 346; App. A | total variance: LU-induced variance of E{X|H} not discussed | review/rev11_gpt_screening.txt | one sentence + condition wording | open |
+| I227 | G8 (rev-11a) | M | Fig. 5(b) l. 588, l. 624 | (33) is an equal-power prediction, not a limit | review/rev11_gpt_screening.txt | 'high-SNR prediction' in text, caption, legend | open |
+| I228 | G11 (rev-11a) | M | V-A/V-C | aperture question; sparse UPA 17.75 vs rate MA 18.08 (n.s.) vs proposed 20.75 | review/rev11_gpt_screening.txt | two sentences (sparse UPA removed in rev-8e) | needs-decision |
+| I229 | G12 (rev-11a) | L | V-B l. 592; Fig. 3 legend | errors are between averaged curves | review/rev11_gpt_screening.txt | wording; legend optional | open |
+| I230 | G14 (rev-11a) | L | V-B l. 598 | sampled curvature (favors the benchmark); ratio of medians | review/rev11_gpt_screening.txt | precise wording | open |
+| I231 | G17 (rev-11a) | L | refs [14], [21], [22] | published versions exist (verified via OpenAlex) | review/rev11_gpt_screening.txt | update entries | needs-decision |
+| I232 | G19 (rev-11a) | L | I l. 74 | AN does not degrade the channel | review/rev11_gpt_screening.txt | 'impair the reception of Eve' | open |
+| I233 | G22 (rev-11a) | L | Abstract l. 62; l. 80 | ZF directions not mutually orthogonal | review/rev11_gpt_screening.txt | 'projecting ... onto' | open |
+| I234 | G24 (rev-11a) | L | II-A l. 176 | 'at least a minimum distance' | review/rev11_gpt_screening.txt | 'at least D_min' | open |
+| I235 | G26 (rev-11a) | L | II-B l. 225 | role of perfect LU CSI undersold | review/rev11_gpt_screening.txt | state its role | open |
+| I236 | G28 (rev-11a) | L | II-C l. 253 | achievability is asymptotic | review/rev11_gpt_screening.txt | 'As N_CI -> infinity' | open |
+| I237 | G30 (rev-11a) | L | l. 319, 352 | 'no closed-form expression' too strong | review/rev11_gpt_screening.txt | 'no tractable closed-form' | open |
+| I238 | G39 (rev-11a) | L | IV-B l. 508 | selection rule of the enumeration implicit | review/rev11_gpt_screening.txt | closest feasible candidate | open |
+| I239 | G40 (rev-11a) | L | IV-C l. 537 | 'which' attaches to (P3) | review/rev11_gpt_screening.txt | split | open |
+| I240 | G41 (rev-11a) | L | V-A l. 571 | 'All the results' vs 20-realization check | review/rev11_gpt_screening.txt | 'Unless otherwise specified' | open |
+| I241 | G42 (rev-11a) | L | V-A l. 575 | positions 'ignore Eve' | review/rev11_gpt_screening.txt | 'without considering Eve' | open |
+| I242 | G46 (rev-11a) | L | V-D l. 642 | 'scales with' N - M overstated | review/rev11_gpt_screening.txt | 'grows with' | open |
+| I243 | G48 (rev-11a) | L | l. 352, 664 | only positive column scaling is invariant | review/rev11_gpt_screening.txt | 'positive scaling' | open |
+| I244 | G49 (rev-11a) | L | App. B l. 674 | Pi is not a projector | review/rev11_gpt_screening.txt | 'residual matrix I - Pi' | open |
+| I245 | G4 (rev-11a) | L | II-B footnote l. 223 | sensing gives AoDs, not beta_e, kappa_e (main concern resolved in rev-10b) | review/rev11_gpt_screening.txt | optional footnote | optional |
+| I246 | G23 (rev-11a) | L | l. 84 | diag(.) definition | review/rev11_gpt_screening.txt | optional | optional |
+| I247 | G25 (rev-11a) | L | II-A l. 178 | double 'from' | review/rev11_gpt_screening.txt | optional | optional |
+| I248 | G31 (rev-11a) | L | III-C l. 341 | X_m, Y are gains | review/rev11_gpt_screening.txt | optional | optional |
+| I249 | G32 (rev-11a) | L | III-D footnote l. 383 | exact single-LU result in a footnote | review/rev11_gpt_screening.txt | optional move | optional |
+| I250 | G45 (rev-11a) | L | V-C l. 628 | saturation numbers | review/rev11_gpt_screening.txt | optional | optional |
+| I251 | O1 (rev-11a) | L | V-D l. 640 | 'which starts' ambiguous (rev-10b) | review/rev11_gpt_screening.txt | 'for A >= 1.5 lambda' | open |
+| I252 | O2 (rev-11a) | L | V-D l. 642 | 'this benchmark' ambiguous (rev-10b) | review/rev11_gpt_screening.txt | name the FPA with Eve-aware AN | open |
+| I253 | O3 (rev-11a) | L | V-D l. 646 | 'In this case ... in Fig. 8(b)' (rev-10b) | review/rev11_gpt_screening.txt | 'For kappa = -10 dB, ... for the reason given below' | open |
+| I254 | O4 (rev-11a) | M | contributions l. 80 | high-SNR AN claim lacks equal-power qualifier (rev-10b) | review/rev11_gpt_screening.txt | add qualifier | open |
+| I255 | O5 (rev-11a) | L | l. 381, 653, 642, 648 | 'AN received' vs 'AN power received'; two positioning labels | review/rev11_gpt_screening.txt | unify | open |
+| I256 | O6 (rev-11a) | M | V-C l. 622 | 9.7% loss at 0.1 rad unreported; FPA with Eve-aware AN not run with AoD errors | review/rev11_gpt_screening.txt | report 9.7%; optional run | needs-decision |
+| I257 | O7 (rev-11a) | L | IV l. 416 | (P3) also not jointly concave in (p, q) | review/rev11_gpt_screening.txt | optional clause | optional |
+| — | G10, G18, G20, G21, G27, G33, G35, G47 (rev-11a) | — | — | GPT items rejected after verification (see the screening file); G16, G29, G34, G38 resolved in rev-10b | review/rev11_gpt_screening.txt | none | rejected / resolved |
