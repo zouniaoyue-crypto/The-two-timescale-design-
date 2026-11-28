@@ -128,6 +128,17 @@ show('V-C', 'random Eve (M = 3): gain over the rate-oriented MA at 20 dB (%)', .
      100*(val(re, 1, 'MA_full')/val(re, 1, 'MA_rate') - 1), '10.3%');
 show('V-C', 'random Eve (M = 3): gain over the FPA at 20 dB (%)', ...
      100*(val(re, 1, 'MA_full')/val(re, 1, 'FPA_full') - 1), 'not quoted');
+ae = ld('extra_eve_aod_error');                      % designs with an erroneous AoD of Eve (20 dB)
+iE0 = find(ae.values == 0);  iE5 = find(abs(ae.values - 0.05) < 1e-9);  iE10 = find(abs(ae.values - 0.1) < 1e-9);
+show('V-C', 'AoD error 0: proposed ESSR minus Fig. 5 at 20 dB (bps/Hz)', ...
+     val(ae, iE0, 'MA_full') - val(f5, i20, 'MA_full'), 'consistency check (0)');
+show('V-C', 'AoD error 0.05 rad: ESSR loss of the proposed design (%)', ...
+     100*(1 - val(ae, iE5, 'MA_full')/val(ae, iE0, 'MA_full')), '2.95%');
+show('V-C', 'AoD error 0.05 rad: gain over the rate-oriented MA (%)', ...
+     100*(val(ae, iE5, 'MA_full')/val(ae, iE5, 'MA_rate') - 1), '11.7%');
+d = squeeze(ae.essrDrops(iE10, col(ae, 'MA_full'), :) - ae.essrDrops(iE10, col(ae, 'MA_rate'), :));
+show('V-C', sprintf('AoD error 0.1 rad: gain over the rate-oriented MA (%%) (paired SE %.3f of %.3f bps/Hz)', ...
+     std(d)/sqrt(numel(d)), mean(d)), 100*(val(ae, iE10, 'MA_full')/val(ae, iE10, 'MA_rate') - 1), '4.4%');
 show('V-C', 'AN power fraction of the proposed design at 20 dB', f5.anfrac(i20, col(f5, 'MA_full')), '0.27');
 show('V-C', 'AN power fraction of the FPA at 20 dB', f5.anfrac(i20, col(f5, 'FPA_full')), '0.47');
 show('V-C', 'AN power fraction of the FPA with Eve-aware AN at 20 dB', f5.anfrac(i20, col(f5, 'FPA_ean')), '0.35');
@@ -225,7 +236,7 @@ show('V-D1', 'gain of the Eve-aware AN over the FPA increasing in N (1 = yes)', 
 for v = n.values
     d = pdiff(n, iN(v), 'FPA_ean', 'MA_rate');
     show('V-D1', sprintf('Eve-aware AN minus rate-oriented MA, N = %d (paired SE %.3f)', v, std(d)/sqrt(numel(d))), ...
-         mean(d), '> 0 for N >= 12');
+         mean(d), '> 0 for N >= 10');
 end
 gE = 100*(n.essr(:, col(n, 'MA_full'))./n.essr(:, col(n, 'FPA_ean')) - 1);
 show('V-D1', 'gain of the proposed design over the Eve-aware AN, N = 4 (%)', gE(iN(4)), '70.9%');
