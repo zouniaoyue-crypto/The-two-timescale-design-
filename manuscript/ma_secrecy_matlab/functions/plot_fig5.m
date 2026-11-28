@@ -5,12 +5,12 @@ function plot_fig5(res, limKeys)
 %   around x0 = 20 dB (the default SNR), where the rate-oriented MA and the FPA with
 %   Eve-aware AN lie about 0.7 bps/Hz apart. A wider window (e.g., 15-25 dB) is not used,
 %   because the ESSRs rise by about 10 bps/Hz over it, so that an inset of this size would
-%   not magnify the curves. Panel (b) also shows the high-SNR limits 1 - alpha* of the AN power fraction
+%   not magnify the curves. Panel (b) also shows the high-SNR predictions 1 - alpha* of the AN power fraction
 %   (eq. (33) of main.tex, an_highsnr.m) for the designs at the highest SNR, i.e., the
 %   predicted saturation levels, as thin black dotted horizontal lines over the high-SNR
 %   part of the axis (15-30 dB; black is reserved for analytical results), with one legend
-%   entry. By default, the limits are drawn for the proposed design and the FPA (limKeys),
-%   which bracket the other schemes; the limits of all the schemes are quoted in the text
+%   entry. By default, the predictions are drawn for the proposed design and the FPA (limKeys),
+%   which bracket the other schemes; the predictions of all the schemes are quoted in the text
 %   (verify_numbers.m). The equal-power schemes of Fig. 6 are plotted by plot_fig6.m.
 if nargin < 2 || isempty(limKeys), limKeys = {'MA_full', 'FPA_full'}; end
 xl = 'Transmit SNR {\itP}_{tot}/{\it\sigma}^2 (dB)';
@@ -30,10 +30,10 @@ ax = plot_schemes(res.values, Y, keysB);
 st = cellfun(@scheme_style, keysB, 'UniformOutput', false);
 rows = [legend_rows(st, 2), {{[], []}}];
 if isfield(res, 'anpred')
-    [P, keysP] = pick_schemes(res, 'anpred', limKeys);   % limits for the designs at 30 dB
+    [P, keysP] = pick_schemes(res, 'anpred', limKeys);   % predictions for the designs at 30 dB
     xr = [max(15, res.values(1)), res.values(end)];      % high-SNR part of the axis
     c = fig_palette();
-    pr = struct('name', 'High-SNR limit, (33)', 'color', c.black, 'ls', ':', ...
+    pr = struct('name', 'High-SNR prediction, (33)', 'color', c.black, 'ls', ':', ...
                 'marker', 'none', 'lw', 1.0);
     for k = 1:numel(keysP)
         plot(ax, xr, P(end, k)*[1 1], 'LineStyle', pr.ls, 'Color', pr.color, 'LineWidth', pr.lw);

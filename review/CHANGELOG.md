@@ -433,3 +433,38 @@ Simulations: all Section V results rerun in Octave 8.4 (100 drops, 10³ channel 
 | ID | File:line | What | Why |
 |---|---|---|---|
 | I214–I257 | review/rev11_gpt_screening.txt (new) | GPT report (IEEE_TWC_TCOM_Review_ZH.md, written against 3d32e13) screened item by item against rev-10b (f7534ab), the code and the stored results: 10 should-fix, 21 recommended, 6 optional, 4 resolved in rev-10b, 8 rejected; 8 additional issues in the rev-10b text (O1–O8); ICC 2026 FAS paper and published versions of [14], [21], [22] verified via OpenAlex | author's request (screening only; first attachment identical to rev10_writing_review.md) |
+
+## Round rev-11b — implementation of the screened GPT items (author: G2 and G17 reserved for the author's decision; all other items by Claude's judgment; changes in red)
+
+| ID | File:line | What | Why |
+|---|---|---|---|
+| — | main.tex:39; whole body | red marks of rev-10b accepted (text unchanged); only rev-11b changes are red; rev-10b marked version: commit f7534ab | file convention |
+| I215 (G1) | main.tex:62 | abstract: "… outperforms the benchmark schemes. Compared with the MA design that ignores Eve, it requires fewer antennas to achieve a given ergodic secrecy sum rate and allocates less power to the AN." | unqualified AN-power claim false vs. the FPA with Eve-aware AN for N ≥ 14 and A ≤ 2λ; true vs. the rate-oriented MA in all sweeps |
+| I233 (G22) | main.tex:62, 80 | "decomposing … along/into components" → "projecting … onto each ZF direction and onto the AN subspace" | ZF directions are not mutually orthogonal |
+| I254 (O4) | main.tex:80 | high-SNR AN claim: "in the high-SNR regime with equal power among the LUs" | assumption of (33) |
+| I221 (G37) | main.tex:80, 461 | "on the scale/order of a wavelength … has many local maxima" → "oscillates (with each t_n) and can have many local maxima" | periods range up to ≈10λ for Eve near LU 1 |
+| I224 (G3) | main.tex:208 (Fig. 2) | brace: "t and powers fixed" → "t and powers updated once" (parallel to the CI brace) | the brace spans the optimization and movement |
+| I236 (G28) | main.tex:253 | "achieves" → "approaches" (N_CI ≫ 1) | achievability is asymptotic |
+| I225 (G5) | main.tex:293 | "the spatial distribution of the isotropic AN does not depend on the CSI of Eve, so that the AN also impairs …" | q depends on Eve's statistical CSI |
+| I237 (G30) | main.tex:319 | "no tractable closed-form expression" | special-case closed forms exist |
+| I226 (G6) | main.tex:346 | concentration condition "if the LoS components of the LUs and Eve are strong (see Appendix A and the proof of Proposition 1)" | App. A covers only the conditional (Eve-side) variance |
+| I243 (G48) | main.tex:352, 664 | "invariant to a positive scaling of the columns" | complex scaling changes the phase of w̄_m |
+| I255 (O5) | main.tex:381, 653; 642, 648 | "AN power received by Eve"; "secrecy-aware/Eve-aware positioning" → "the proposed positioning" | terminology consistency, no coined labels |
+| I216 (G7) | main.tex:388; 644 | "if κ_1 > 0 and κ_e > 0, then c_1 increases …"; M = 1: "so that its position update retains the UPA initialization" | monotonicity conditions; tie handling (rate_oriented_positions.m) |
+| I220 (G36) | main.tex:437 | "for μ_m(ν) > 1, (37) is the positive root …, whereas p_m⋆(ν) = 0 otherwise" | no positive root for μ_m ≤ 1 |
+| I217 (G9) | main.tex:454 (Alg. 1) | refinement "in the interval spanned by the best grid point and its neighbors" | endpoint case as in power_opt.m/search1d (q⋆ at q = 0 at low SNR) |
+| I238 (G39) | main.tex:508 | "… and selecting the feasible candidate closest to this point" | complete selection rule |
+| I239 (G40) | main.tex:537 | "…for (P3). It terminates when …" | "which" attached to (P3) |
+| I218 (G13) | main.tex:560, 596 | Fig. 4 caption: "2×4 and 3×4 UPA initializations for N = 8 and 12, respectively"; text: "the average objective value … attains more than 95% and 99% of its total increase within three and 15 iterations, respectively" | fig4_convergence.m uses a 3×4 UPA for N = 12; individual runs need up to 40–50 iterations |
+| I227 (G8) | main.tex:588, 624; functions/plot_fig5.m; results/fig5b_an_fraction.png | "high-SNR limits" → "high-SNR predictions" (caption, text, legend "High-SNR prediction, (33)"); Fig. 5(b) replotted from fig5_snr.mat (Fig. 5(a) pixel-identical) | (33) assumes equal power among the LUs |
+| I240 (G41), I241 (G42) | main.tex:571, 575 | "Unless otherwise specified, the results …"; rate-oriented MA: "positions are optimized to maximize … without considering Eve" | 20-realization grid check; subject–verb |
+| I229 (G12) | main.tex:592 | "The sum of the approximate wiretap rates in (27) agrees …, which confirms the accuracy of (27) …" | Fig. 3 shows sum rates |
+| I230 (G14) | main.tex:598 | curvature "estimated numerically on a fine grid"; "the median of its curvature is about 12 times that of the δ_n accepted …" | sampled estimate; ratio of medians (11.87) |
+| I222 (G43) | main.tex:618 | "less than half … for P/σ² ≥ 5 dB" | ratio 0.60 at 0 dB, ≤ 0.47 for 5–30 dB |
+| I223 (G44), I256 (O6) | main.tex:622 | "The gains … over the rate-oriented MA and the FPA are not limited to an Eve close to LU 1. If … independently …, these gains are still 10.3% and 21.8% at 20 dB, respectively."; 0.1 rad: "the ESSR of the proposed design decreases by 9.73%, and its gain over the rate-oriented MA reduces to 4.4%" | claim scope; selective reporting; extra_random_eve_M3, extra_eve_aod_error |
+| I251 (O1), I219 (G15), I242 (G46), I252 (O2) | main.tex:640, 642 | "for 1.5λ ≤ A ≤ 6λ, where A = (N/2−1)D_min = 1.5λ is the smallest …"; A = 1.5λ: "achieves an ESSR comparable to that of the proposed design (0.9% higher on average)"; "grows with the dimension"; "over the FPA with Eve-aware AN" | ambiguous "which"/"this benchmark"; +0.151 (SE 0.095) not significant |
+| I253 (O3) | main.tex:646 | "As explained below for Fig. 8(b), the FPA with Eve-aware AN falls 2.8% below the FPA for κ = −10 dB." | "In this case" two sentences away |
+| I244 (G49) | main.tex:674 | "a fraction χ of I_N − Π only" | Π is not a projector |
+| — | ma_secrecy_matlab/verify_numbers.m; review/verify_numbers_rev8.txt | text strings (99% within 15, 21.8%, comparable at 1.5λ); new lines: gain ratio ≤ 0.47 for SNR ≥ 5 dB and 0.60 at 0 dB; 9.73% at 0.1 rad | rule 3 |
+| I228, I232, I234, I235, I245–I250, I257 | — | not adopted (reasons in ISSUES.md); G2, G17 (I214, I231) reserved for the author | judgment criteria: no new ambiguity, no unintroduced content, standard wording |
+| — | — | build: 0 errors, no undefined references, no overfull boxes; 16 pages (references [24]–[32] on p. 16) | — |

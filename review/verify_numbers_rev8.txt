@@ -27,7 +27,7 @@ V-B1  20 dB: approximate and actual rankings coincide (1 = yes)          1.0000 
 V-B1  25 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
 V-B1  30 dB: approximate and actual rankings coincide (1 = yes)          1.0000   text: coincide
 V-B2  all trajectories monotone (1 = yes)                                1.0000   text: increases monotonically
-V-B2  iterations for the average curves to reach 99% of their increase    15.0000   text: converges within about 15
+V-B2  iterations for the average curves to reach 99% of their increase    15.0000   text: 99% within 15 iterations
 V-B2  smallest fraction of the total increase reached after three iterations     0.9575   text: more than 95%
 V-B2  surrogate of [6] minus Stage 2: average objective (%, 100 drops, paired SE 0.062%)    -0.0525   text: within 0.1%
 V-B2  surrogate of [6]: ratio of the numbers of MM iterations            2.6494   text: 2.6 times
@@ -38,6 +38,8 @@ V-C   gain over the FPA with Eve-aware AN at 20 dB (%)                  19.1077 
 V-C   gain over the FPA at 20 dB (%)                                    31.1315   text: 31.1%
 V-C   gain over FPA at 20 dB: proposed                                   4.9253   text: reference
 V-C   gain over FPA at 20 dB: rate-oriented MA (ratio to the proposed)     0.4580   text: less than half
+V-C   ratio of the two gains over the FPA, largest for SNR >= 5 dB       0.4662   text: < 0.5 for SNR >= 5 dB
+V-C   ratio of the two gains over the FPA at 0 dB                        0.6027   text: not < 0.5 (hence the 5 dB bound)
 V-C   FPA with Eve-aware AN over the FPA at 20 dB (%)                   10.0949   text: 10.1%
 V-C   rate-oriented MA minus FPA with Eve-aware AN at 0 dB (paired SE 0.092)     0.5752   text: below both MA designs
 V-C   rate-oriented MA minus FPA with Eve-aware AN at 5 dB (paired SE 0.135)     0.7675   text: below both MA designs
@@ -48,11 +50,12 @@ V-C   rate-oriented MA minus FPA with Eve-aware AN at 25 dB (paired SE 0.202)   
 V-C   rate-oriented MA minus FPA with Eve-aware AN at 30 dB (paired SE 0.204)     0.6593   text: below both MA designs
 V-C   proposed above all benchmarks of Fig. 5 at every SNR (1 = yes)     1.0000   text: highest ESSR
 V-C   random Eve (M = 3): gain over the rate-oriented MA at 20 dB (%)    10.2537   text: 10.3%
-V-C   random Eve (M = 3): gain over the FPA at 20 dB (%)                21.8024   text: not quoted
+V-C   random Eve (M = 3): gain over the FPA at 20 dB (%)                21.8024   text: 21.8%
 V-C   AoD error 0: proposed ESSR minus Fig. 5 at 20 dB (bps/Hz)          0.0000   text: consistency check (0)
 V-C   AoD error 0.05 rad: ESSR loss of the proposed design (%)           2.9503   text: 2.95%
 V-C   AoD error 0.05 rad: gain over the rate-oriented MA (%)            11.7120   text: 11.7%
 V-C   AoD error 0.1 rad: gain over the rate-oriented MA (%) (paired SE 0.129 of 0.794 bps/Hz)     4.4269   text: 4.4%
+V-C   AoD error 0.1 rad: ESSR loss of the proposed design (%)            9.7340   text: 9.73%
 V-C   AN power fraction of the proposed design at 20 dB                  0.2699   text: 0.27
 V-C   AN power fraction of the FPA at 20 dB                              0.4712   text: 0.47
 V-C   AN power fraction of the FPA with Eve-aware AN at 20 dB            0.3525   text: 0.35
@@ -117,7 +120,7 @@ V-D1  Eve-aware AN minus rate-oriented MA, A = 3.0 lambda (paired SE 0.179)    -
 V-D1  Eve-aware AN minus rate-oriented MA, A = 4.0 lambda (paired SE 0.200)    -0.6586   text: > 0 for small regions
 V-D1  Eve-aware AN minus rate-oriented MA, A = 5.0 lambda (paired SE 0.201)    -0.9293   text: > 0 for small regions
 V-D1  Eve-aware AN minus rate-oriented MA, A = 6.0 lambda (paired SE 0.187)    -1.4277   text: > 0 for small regions
-V-D1  Eve-aware AN minus proposed, A = 1.5 lambda (paired SE 0.095) (bps/Hz)     0.1511   text: slightly exceeds
+V-D1  Eve-aware AN minus proposed, A = 1.5 lambda (paired SE 0.095) (bps/Hz)     0.1511   text: comparable (within 2 SE)
 V-D1  Eve-aware AN over the proposed design, A = 1.5 lambda (%)          0.8751   text: 0.9%
 V-D1  gain of the proposed design over the Eve-aware AN, A = 6 lambda (%)    26.1892   text: 26.2%
 V-D1  gain of the proposed design over the FPA, A = 1.5 / 6 lambda (%)     9.1398   text: grows (38.9% at 6)

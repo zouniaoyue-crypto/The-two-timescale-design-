@@ -96,7 +96,7 @@ for i = 1:numel(c.Nlist)
     end
 end
 show('V-B2', 'all trajectories monotone (1 = yes)', mono, 'increases monotonically');
-show('V-B2', 'iterations for the average curves to reach 99% of their increase', itMax, 'converges within about 15');
+show('V-B2', 'iterations for the average curves to reach 99% of their increase', itMax, '99% within 15 iterations');
 show('V-B2', 'smallest fraction of the total increase reached after three iterations', frac3, 'more than 95%');
 mm = ld('extra_mm_compare');  dF = mm.S1zheng.F - mm.S0.F;
 show('V-B2', sprintf('surrogate of [6] minus Stage 2: average objective (%%, %d drops, paired SE %.3f%%)', numel(dF), ...
@@ -114,6 +114,9 @@ gFPA = @(key) f5.essr(:, col(f5, key)) - f5.essr(:, col(f5, 'FPA_full'));
 gMA = gFPA('MA_full');  gRate = gFPA('MA_rate');
 show('V-C', 'gain over FPA at 20 dB: proposed', gMA(i20), 'reference');
 show('V-C', 'gain over FPA at 20 dB: rate-oriented MA (ratio to the proposed)', gRate(i20)/gMA(i20), 'less than half');
+i5 = f5.values >= 5;
+show('V-C', 'ratio of the two gains over the FPA, largest for SNR >= 5 dB', max(gRate(i5)./gMA(i5)), '< 0.5 for SNR >= 5 dB');
+show('V-C', 'ratio of the two gains over the FPA at 0 dB', gRate(1)/gMA(1), 'not < 0.5 (hence the 5 dB bound)');
 show('V-C', 'FPA with Eve-aware AN over the FPA at 20 dB (%)', 100*(val(f5, i20, 'FPA_ean')/val(f5, i20, 'FPA_full') - 1), '10.1%');
 for v = f5.values
     iv = f5.values == v;
@@ -127,7 +130,7 @@ re = ld('extra_random_eve_M3');
 show('V-C', 'random Eve (M = 3): gain over the rate-oriented MA at 20 dB (%)', ...
      100*(val(re, 1, 'MA_full')/val(re, 1, 'MA_rate') - 1), '10.3%');
 show('V-C', 'random Eve (M = 3): gain over the FPA at 20 dB (%)', ...
-     100*(val(re, 1, 'MA_full')/val(re, 1, 'FPA_full') - 1), 'not quoted');
+     100*(val(re, 1, 'MA_full')/val(re, 1, 'FPA_full') - 1), '21.8%');
 ae = ld('extra_eve_aod_error');                      % designs with an erroneous AoD of Eve (20 dB)
 iE0 = find(ae.values == 0);  iE5 = find(abs(ae.values - 0.05) < 1e-9);  iE10 = find(abs(ae.values - 0.1) < 1e-9);
 show('V-C', 'AoD error 0: proposed ESSR minus Fig. 5 at 20 dB (bps/Hz)', ...
@@ -139,6 +142,8 @@ show('V-C', 'AoD error 0.05 rad: gain over the rate-oriented MA (%)', ...
 d = squeeze(ae.essrDrops(iE10, col(ae, 'MA_full'), :) - ae.essrDrops(iE10, col(ae, 'MA_rate'), :));
 show('V-C', sprintf('AoD error 0.1 rad: gain over the rate-oriented MA (%%) (paired SE %.3f of %.3f bps/Hz)', ...
      std(d)/sqrt(numel(d)), mean(d)), 100*(val(ae, iE10, 'MA_full')/val(ae, iE10, 'MA_rate') - 1), '4.4%');
+show('V-C', 'AoD error 0.1 rad: ESSR loss of the proposed design (%)', ...
+     100*(1 - val(ae, iE10, 'MA_full')/val(ae, iE0, 'MA_full')), '9.73%');
 show('V-C', 'AN power fraction of the proposed design at 20 dB', f5.anfrac(i20, col(f5, 'MA_full')), '0.27');
 show('V-C', 'AN power fraction of the FPA at 20 dB', f5.anfrac(i20, col(f5, 'FPA_full')), '0.47');
 show('V-C', 'AN power fraction of the FPA with Eve-aware AN at 20 dB', f5.anfrac(i20, col(f5, 'FPA_ean')), '0.35');
@@ -216,7 +221,7 @@ for v = r7.values
          mean(d), '> 0 for small regions');
 end
 d = pdiff(r7, iA(1.5), 'FPA_ean', 'MA_full');
-show('V-D1', sprintf('Eve-aware AN minus proposed, A = 1.5 lambda (paired SE %.3f) (bps/Hz)', std(d)/sqrt(numel(d))), mean(d), 'slightly exceeds');
+show('V-D1', sprintf('Eve-aware AN minus proposed, A = 1.5 lambda (paired SE %.3f) (bps/Hz)', std(d)/sqrt(numel(d))), mean(d), 'comparable (within 2 SE)');
 show('V-D1', 'Eve-aware AN over the proposed design, A = 1.5 lambda (%)', ...
      100*(val(r7, iA(1.5), 'FPA_ean')/val(r7, iA(1.5), 'MA_full') - 1), '0.9%');
 show('V-D1', 'gain of the proposed design over the Eve-aware AN, A = 6 lambda (%)', ...
